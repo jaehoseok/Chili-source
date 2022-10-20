@@ -1,0 +1,60 @@
+server:
+  port: 0
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    # TODO : CONTEXT-PATH가 해당 서비스명과 같은지 확인
+    context-path: /user-service
+#    encoding:
+#      charset: UTF-8
+#      enabled: true
+#      force: true
+
+spring:
+  application:
+    name: user-service
+
+  zipkin:
+    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
+    base-url: http://j7b305.p.ssafy.io:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+  rabbitmq:
+    host: j7b305.p.ssafy.io
+    port: 5672
+    username: guest
+    password: guest
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+#eureka:
+#  instance:
+#    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://j7b305.p.ssafy.io:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, busrefresh
+client:
+  key: 653c5c4f76acf44b796a7c0e107d3d6f
+google:
+  auth:
+    url: https://oauth2.googleapis.com
+    scope: profile,email,openid
+  login:
+    url: https://accounts.google.com
+  redirect:
+    url: http://localhost:8080/google/login/redirect
+  client:
+    id: 1073863021513-50pq7vsg8kss0ooavsmptvguqhk171me.apps.googleusercontent.com
+    secret: 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
