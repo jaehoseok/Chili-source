@@ -1,0 +1,13 @@
+rootProject.name = 'chilisource'
+include 'microservices'
+include 'springcloud'
+include 'common'
+include 'springcloud:config-service'
+findProject(':springcloud:config-service')?.name = 'config-service'
+include 'springcloud:discovery-service'
+findProject(':springcloud:discovery-service')?.name = 'discovery-service'
+include 'springcloud:gateway-service'
+findProject(':springcloud:gateway-service')?.name = 'gateway-service'
+include 'microservices:user-service'
+findProject(':microservices:user-service')?.name = 'user-service'
+

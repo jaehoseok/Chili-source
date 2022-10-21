@@ -1,0 +1,89 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
+    id 'java'
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+bootJar {
+    enabled = false
+}
+jar {
+    enabled = true
+}
+
+// 하위 모든 프로젝트 공통 세팅
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'jacoco'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+    }
+
+    // 하위 모듈에서 공통으로 사용하는 세팅 추가
+    dependencies {
+        annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        //implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+        //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        //implementation 'org.springframework.boot:spring-boot-starter-security'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        //runtimeOnly 'mysql:mysql-connector-java'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testImplementation 'org.springframework.security:spring-security-test'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':microservices') {
+    bootJar {
+        enabled = false
+    }
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+    }
+}
+
+project(':springcloud') {
+    bootJar {
+        enabled = false
+    }
+}
+
+project(':common'){
+    bootJar {
+        enabled = false
+    }
+    jar {
+        enabled = true
+    }
+}
