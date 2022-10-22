@@ -1,13 +1,11 @@
 package com.ssafy.entity;
 
 import lombok.Getter;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@EnableJpaAuditing
 public class UserProject extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
