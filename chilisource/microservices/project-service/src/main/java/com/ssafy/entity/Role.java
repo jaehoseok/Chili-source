@@ -1,12 +1,17 @@
 package com.ssafy.entity;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class Role extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +28,17 @@ public class Role extends BaseEntity {
 
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserProject> userProjects;
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserProject> userProjects = new ArrayList<>();
+
+    @Builder
+    public Role(Long id, Boolean modify, Boolean invite, Boolean fire, Boolean delete, String name, List<UserProject> userProjects) {
+        this.id = id;
+        this.modify = modify;
+        this.invite = invite;
+        this.fire = fire;
+        this.delete = delete;
+        this.name = name;
+        this.userProjects = userProjects;
+    }
 }
