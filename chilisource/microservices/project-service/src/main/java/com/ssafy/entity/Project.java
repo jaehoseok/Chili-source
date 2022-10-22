@@ -3,6 +3,7 @@ package com.ssafy.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,4 +20,13 @@ public class Project extends BaseEntity {
     private String image;
 
     private String jiraProject;
+
+    @OneToMany(mappedBy = "project")
+    private Set<GanttChart> ganttCharts;
+
+    @OneToMany(mappedBy = "project")
+    private Set<ProjectToken> projectTokens;
+
+    @OneToMany(mappedBy = "project")
+    private Set<UserProject> userProjects;
 }

@@ -3,6 +3,7 @@ package com.ssafy.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,4 +22,7 @@ public class Role extends BaseEntity {
     private Boolean delete;
 
     private String name;
+
+    @OneToMany(mappedBy = "role")
+    private Set<UserProject> userProjects;
 }
