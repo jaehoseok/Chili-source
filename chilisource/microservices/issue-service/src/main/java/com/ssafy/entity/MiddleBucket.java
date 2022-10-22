@@ -25,7 +25,7 @@ public class MiddleBucket extends BaseEntity {
 
     private Long projectId;
 
-    @OneToMany(mappedBy = "middleBucket", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "middleBucket", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MiddleBucketIssue> middleBucketIssues = new ArrayList<>();
 
     @Builder
