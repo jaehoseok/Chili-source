@@ -3,7 +3,7 @@ package com.ssafy.entity;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -14,10 +14,10 @@ public class GanttChart extends BaseEntity {
     private Long id;
 
     @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDateTime startDate;
 
     @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private LocalDateTime endDate;
 
     private String content;
 
