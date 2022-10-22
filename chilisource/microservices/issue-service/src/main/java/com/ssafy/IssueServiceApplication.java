@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableDiscoveryClient
 @SpringBootApplication
 public class IssueServiceApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(IssueServiceApplication.class, args);
     }
