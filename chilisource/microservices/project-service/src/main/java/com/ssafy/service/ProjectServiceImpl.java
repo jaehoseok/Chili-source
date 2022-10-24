@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
 
@@ -37,21 +36,17 @@ public class ProjectServiceImpl implements ProjectService {
 
     // 프로젝트 수정
     @Override
-    public void updateProject(Project project) {
-        Project project = projectRepo.findById(project.getId())
+    public void updateProject(ProjectCreateRequest request) {
+        Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-
-
+        project.update(request.getName(), request.getTeamName(), request.getImage());
     }
 
     // 프로젝트 삭제
     @Override
-    public void deleteProject(Project project) {
-        Optional<Project> p = projectRepo.findById(project.getId());
-        if (p == null) {
-            // 해당 프로젝트가 없음
-            return;
-        }
-        projectRepo.delete(p.get());
+    public void deleteProject(Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+        projectRepo.delete(project);
     }
 }
