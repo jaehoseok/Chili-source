@@ -6,8 +6,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://j7b305.p.ssafy.io:8761/eureka
-      #defaultZone: http://localhost:8761/eureka
+#      defaultZone: http://j7b305.p.ssafy.io:8761/eureka
+      defaultZone: http://localhost:8761/eureka
 
 spring:
   # bean중복 에러 해결
@@ -69,7 +69,7 @@ spring:
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
         #---------------------------------------------USER FILTER END---------------------------------------------------------------
 
-        #---------------------------------------------FESTIVAL FILTER START---------------------------------------------------------------
+        #---------------------------------------------ISSUE FILTER START---------------------------------------------------------------
         #        - id: festival-service
         #          uri: lb://FESTIVAL-SERVICE
         #          predicates:
@@ -118,12 +118,12 @@ spring:
         #          filters:
         #            - AuthorizationFilter
 
-        - id: festival-service
-          uri: lb://FESTIVAL-SERVICE
+        - id: issue-service
+          uri: lb://ISSUE-SERVICE
           predicates:
-            - Path=/api/festival-service/**
+            - Path=/api/issue-service/**
             - Method=GET,POST,PUT,DELETE
-        #---------------------------------------------FESTIVAL FILTER END---------------------------------------------------------------
+        #---------------------------------------------ISSUE FILTER END---------------------------------------------------------------
 
         #---------------------------------------------MAIN FILTER START---------------------------------------------------------------
         #        - id: main-service

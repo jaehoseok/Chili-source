@@ -12,7 +12,7 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: issue-service
 
   zipkin:
     # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
