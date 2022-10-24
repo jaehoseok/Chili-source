@@ -24,7 +24,7 @@ public class Role extends BaseEntity {
 
     private Boolean fire;
 
-    private Boolean delete;
+    private Boolean remove;
 
     private String name;
 
@@ -32,12 +32,12 @@ public class Role extends BaseEntity {
     private List<UserProject> userProjects = new ArrayList<>();
 
     @Builder
-    public Role(Long id, Boolean modify, Boolean invite, Boolean fire, Boolean delete, String name, List<UserProject> userProjects) {
+    public Role(Long id, Boolean modify, Boolean invite, Boolean fire, Boolean remove, String name, List<UserProject> userProjects) {
         this.id = id;
         this.modify = modify;
         this.invite = invite;
         this.fire = fire;
-        this.delete = delete;
+        this.remove = remove;
         this.name = name;
         this.userProjects = userProjects;
     }
