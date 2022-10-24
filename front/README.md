@@ -10,3 +10,10 @@
     + router 경로 초기 설정
     + css formatinog library 설정
     + eslint + prettier 설정 완료
+
+## 221024
+### 종현
+  + 파일 디렉토리 수정
+    + 누락 페이지 생성 ProjectCreatePage, WidgetSelectPage
+    + 페이지 수정 issuePage -> BucketPage
+  
