@@ -1,12 +1,10 @@
 package com.ssafy.repository;
 
-import com.ssafy.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.ssafy.entity.Auth;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface AuthRepo extends JpaRepository<User, Long> {
-    Optional<User> findByGoogle(String google);
-    Optional<User> findByNaver(String naver);
-    Optional<User> findByKakao(String kakao);
+public interface AuthRepo extends CrudRepository<Auth, Long> {
+    Optional<Auth> findById(Long userId);
 }

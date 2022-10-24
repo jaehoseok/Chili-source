@@ -1,4 +1,4 @@
-package com.ssafy.dto.response;
+package com.ssafy.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class TokenResponse {
-    private Long id;
+public class TokenCreateRequest {
     private String value;
     private Long tokenCodeId;
 
     @Builder
-    public TokenResponse(Long id, String value, Long tokenCodeId){
-        this.id = id;
+    public TokenCreateRequest(String value, Long tokenCodeId){
         this.value = value;
         this.tokenCodeId = tokenCodeId;
     }

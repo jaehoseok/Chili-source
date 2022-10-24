@@ -21,7 +21,7 @@ public class JwtUtil {
 
     // 엑세스 토큰 생성 키
     @Value("${token.secret}")
-    private String SECRET_KEY;
+    private String ACCESS_KEY;
     // 액세스 토큰 만료 기간
     @Value("${token.access_token.expiration_time}")
     private Long ACCESS_EXPIRATION;
@@ -32,7 +32,6 @@ public class JwtUtil {
     @Value("${token.refresh_token.expiration_time}")
     private Long REFRESH_EXPIRATION;
 
-
     // AceessToken 생성
     public String createAccessToken(Long userId) {
         Date now = new Date();
@@ -40,10 +39,9 @@ public class JwtUtil {
                 .setHeader(createHeader("ACCESS_TOKEN"))
                 .setClaims(createClaims(userId))
                 .setExpiration(createExpireDate(ACCESS_EXPIRATION)) // 12시간
-                .signWith(SignatureAlgorithm.HS256, createSigningKey(SECRET_KEY))
+                .signWith(SignatureAlgorithm.HS256, createSigningKey(ACCESS_KEY))
                 .compact();
     }
-
     // RefreshToekn 생성
     public String createRefreshToken(Long userId) {
         Date now = new Date();
@@ -54,7 +52,6 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, createSigningKey(REFRESH_KEY))
                 .compact();
     }
-
     // 헤더 부분 생성
     private Map<String, Object> createHeader(String typ) {
         Map<String, Object> header = new HashMap<>();
@@ -64,34 +61,29 @@ public class JwtUtil {
         System.out.println("헤더:" + header.get("typ"));
         return header;
     }
-
     // 유효시간 설정
     private Date createExpireDate(long expireDate) {
         long curTime = System.currentTimeMillis();
         return new Date(curTime + expireDate);
     }
-
     // payload 부분 생성
     private Map<String, Object> createClaims(Long userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userId);
         return claims;
     }
-
     // 해당 key로 암호화
     private Key createSigningKey(String key) {
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(key);
         return new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
     }
-
     // 유효성 검색, token정보 읽기
     public Claims getClaimsFormToken(String token) {
         return Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                .setSigningKey(DatatypeConverter.parseBase64Binary(ACCESS_KEY))
                 .parseClaimsJws(token)
                 .getBody();
     }
-
     // 유효성 검색, refreshtoken정보 읽기
     public Claims getClaimsToken(String token) {
         return Jwts.parser()
@@ -99,31 +91,24 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
-    // AT토큰 유효시간체킹
-    public boolean validateAT(String AT) {
+    // AccessToken 유효시간 검증
+    public boolean validateAccessToken(String accessToken) {
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
-                    .parseClaimsJws(AT);
-            // System.out.println("현재시간 : " + new Date());
-            // System.out.println("만료시간 : " + claims.getBody().getExpiration());
+                    .setSigningKey(ACCESS_KEY)
+                    .parseClaimsJws(accessToken);
             return !claims.getBody().getExpiration().before(new Date());
-
         } catch (Exception e) {
             return false;
         }
     }
-    // RT토큰 유효시간체킹
-    public boolean validateRT(String RT) {
+    // RefreshToken 유효시간 검증
+    public boolean validateRefreshToken(String refreshToken) {
         try {
             Jws<Claims> claims = Jwts.parser()
                     .setSigningKey(REFRESH_KEY)
-                    .parseClaimsJws(RT);
-            // System.out.println("현재시간 : " + new Date());
-            // System.out.println("만료시간 : " + claims.getBody().getExpiration());
+                    .parseClaimsJws(refreshToken);
             return !claims.getBody().getExpiration().before(new Date());
-
         } catch (Exception e) {
             return false;
         }

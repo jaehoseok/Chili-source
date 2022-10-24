@@ -4,13 +4,15 @@ import com.ssafy.client.UserServiceClient;
 import com.ssafy.config.Constant;
 import com.ssafy.config.JwtUtil;
 import com.ssafy.dto.request.UserCreateRequest;
-import com.ssafy.dto.response.TokenResponse;
+import com.ssafy.dto.response.ServiceTokenResponse;
 import com.ssafy.dto.response.UserResponse;
+import com.ssafy.entity.Auth;
 import com.ssafy.repository.AuthRepo;
 import com.ssafy.social.google.GoogleOAuth;
 import com.ssafy.social.google.GoogleOAuthToken;
 import com.ssafy.social.google.GoogleUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +24,13 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OAuthServiceImpl implements OAuthService {
-    private final AuthRepo userRepo;
+    private final AuthRepo authRepo;
     private final GoogleOAuth googleOauth;
     private final HttpServletResponse response;
     private final UserServiceClient userServiceClient;
     private final JwtUtil jwtUtil;
+    @Value("${token.refresh_token.expiration_time}")
+    private Long REFRESH_EXPIRATION;
 
     @Override
     public void request(Constant.SocialLoginType socialLoginType) throws IOException {
@@ -44,7 +48,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     @Transactional
     @Override
-    public TokenResponse oAuthLogin(Constant.SocialLoginType socialLoginType, String code) throws IOException{
+    public ServiceTokenResponse oAuthLogin(Constant.SocialLoginType socialLoginType, String code) throws IOException{
         switch (socialLoginType){
             case GOOGLE:{
                 //구글로 일회성 코드를 보내 액세스 토큰이 담긴 응답객체를 받아옴
@@ -64,9 +68,17 @@ public class OAuthServiceImpl implements OAuthService {
                 UserResponse user = userServiceClient.findUser(socialLoginType.name(), request);
                 System.out.println("AUTH : " + user.getName());
                 // TODO : HTTP ONLY로 accessToken 및 refreshToken 발급 및 REDIS에 저장
-                return TokenResponse.builder()
-                        .accessToken(jwtUtil.createAccessToken(user.getId()))
-                        .refreshToken(jwtUtil.createRefreshToken(user.getId()))
+                String accessToken = jwtUtil.createAccessToken(user.getId());
+                String refreshToken = jwtUtil.createRefreshToken(user.getId());
+                Auth auth = Auth.builder()
+                        .userId(user.getId())
+                        .refreshToken(refreshToken)
+                        .expiration(REFRESH_EXPIRATION)
+                        .build();
+                authRepo.save(auth);
+                return ServiceTokenResponse.builder()
+                        .accessToken(accessToken)
+                        .refreshToken(refreshToken)
                         .build();
             }
             default:{
