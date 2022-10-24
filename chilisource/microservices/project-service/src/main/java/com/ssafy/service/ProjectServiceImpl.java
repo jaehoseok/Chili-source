@@ -1,25 +1,44 @@
 package com.ssafy.service;
 
 import com.ssafy.dto.request.ProjectCreateRequest;
+import com.ssafy.dto.request.ProjectUpdateRequest;
+import com.ssafy.dto.response.ProjectResponse;
 import com.ssafy.entity.Project;
+import com.ssafy.entity.UserProject;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ssafy.repository.RoleRepo;
+import com.ssafy.repository.UserProjectRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
 
+@RequiredArgsConstructor
 @Service
 public class ProjectServiceImpl implements ProjectService {
-    @Autowired
-    ProjectRepo projectRepo;
+    private final ProjectRepo projectRepo;
+    private final UserProjectRepo userProjectRepo;
+    private final RoleRepo roleRepo;
+    private final String DEFAULT_COLOR = "FFFFFF";
 
     // 프로젝트 조회
     @Override
-    public List<Project> getProjectByUserId(Long userId) {
-        return projectRepo.findProjectByUserId(userId);
+    public List<ProjectResponse> getProjectByUserId(Long userId) {
+        List<Project> responses = projectRepo.findProjectByUserId(userId);
+
+        return responses.stream()
+                .map(project -> ProjectResponse.builder()
+                        .id(project.getId())
+                        .name(project.getName())
+                        .teamName(project.getTeamName())
+                        .image(project.getImage())
+                        .jiraProject(project.getJiraProject())
+                        .build()
+                ).collect(Collectors.toList());
     }
 
     // 프로젝트 생성
@@ -30,13 +49,22 @@ public class ProjectServiceImpl implements ProjectService {
                 .teamName(request.getName())
                 .image(request.getImage())
                 .build();
+        projectRepo.save(project);
+
+        UserProject userProject = UserProject.builder()
+                .userColor(DEFAULT_COLOR)
+                .userId(userId)
+                .project(project)
+                .role(roleRepo.findById(1L).get())
+                .build();
+        userProjectRepo.save(userProject);
 
         return;
     }
 
     // 프로젝트 수정
     @Override
-    public void updateProject(ProjectCreateRequest request) {
+    public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
         project.update(request.getName(), request.getTeamName(), request.getImage());
@@ -44,7 +72,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     // 프로젝트 삭제
     @Override
-    public void deleteProject(Long projectId) {
+    public void deleteProject(Long projectId, Long userId) {
+        // 프로젝트 삭제 권한 체크
+
+        // 삭제
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
         projectRepo.delete(project);
