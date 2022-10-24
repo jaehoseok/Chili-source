@@ -1,8 +1,17 @@
 package com.ssafy.service;
 
+import com.ssafy.dto.request.ProjectCreateRequest;
+import com.ssafy.entity.Project;
+
+import java.util.List;
+
 public interface ProjectService {
     // 프로젝트 조회
+    public List<Project> getProjectByUserId(Long userId);
     // 프로젝트 생성
-    // 프로젝트 수정
-    // 프로젝트 나가기
+    public void createProject(ProjectCreateRequest request, Long userId);
+    // 프로젝트 내용 수정
+    public void updateProject(Project project);
+    // 프로젝트 삭제
+    public void deleteProject(Project project);
 }
