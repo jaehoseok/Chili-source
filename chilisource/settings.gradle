@@ -10,4 +10,6 @@ include 'springcloud:gateway-service'
 findProject(':springcloud:gateway-service')?.name = 'gateway-service'
 include 'microservices:user-service'
 findProject(':microservices:user-service')?.name = 'user-service'
+include 'microservices:issue-service'
+findProject(':microservices:issue-service')?.name = 'issue-service'
 
