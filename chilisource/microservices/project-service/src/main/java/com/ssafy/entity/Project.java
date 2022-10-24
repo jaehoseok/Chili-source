@@ -46,4 +46,10 @@ public class Project extends BaseEntity {
         this.projectTokens = projectTokens;
         this.userProjects = userProjects;
     }
+
+    public void update(String name, String teamName, String image) {
+        this.name = name;
+        this.teamName = teamName;
+        this.image = image;
+    }
 }
