@@ -18,12 +18,16 @@ public class Role extends BaseEntity {
     @Column(name = "role_id")
     private Long id;
 
+    @Column(nullable = false, columnDefinition = "TINYINT", length=1)
     private Boolean modify;
 
+    @Column(nullable = false, columnDefinition = "TINYINT", length=1)
     private Boolean invite;
 
+    @Column(nullable = false, columnDefinition = "TINYINT", length=1)
     private Boolean fire;
 
+    @Column(nullable = false, columnDefinition = "TINYINT", length=1)
     private Boolean remove;
 
     private String name;
