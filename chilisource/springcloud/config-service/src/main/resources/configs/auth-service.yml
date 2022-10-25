@@ -20,13 +20,15 @@ spring:
       url : https://accounts.google.com/o/oauth2/v2/auth
       client-id : 772414000810-4sp08rireoj3p28fvpklud1cf142vcbg.apps.googleusercontent.com
       client-secret : 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
-      callback-url : http://localhost:8000/api/user-service/login/google/callback
+      callback-url : http://localhost:8000/api/auth-service/login/google/callback
       scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
 
 token:
   access_token:
-    expiration_time: 86400000
+    # 12시간
+    expiration_time: 43200000
   refresh_token:
+    # 7일
     expiration_time: 604800000
   secret: secretKey
   refresh: refreshKey
