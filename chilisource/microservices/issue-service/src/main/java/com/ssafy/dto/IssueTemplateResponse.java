@@ -6,7 +6,7 @@ import lombok.*;
 @NoArgsConstructor
 public class IssueTemplateResponse {
     private Long issueTemplateId;
-    private Long issueTypeId;
+    private String issueType;
     private String summary;
     private String description;
     private String assignee;
@@ -16,9 +16,9 @@ public class IssueTemplateResponse {
     private Double storyPoints;
 
     @Builder
-    public IssueTemplateResponse(Long issueTemplateId, Long issueTypeId, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
+    public IssueTemplateResponse(Long issueTemplateId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
         this.issueTemplateId = issueTemplateId;
-        this.issueTypeId = issueTypeId;
+        this.issueType = issueType;
         this.summary = summary;
         this.description = description;
         this.assignee = assignee;
