@@ -104,10 +104,12 @@ public class IssueController {
     }
 
     // 미들 버킷 내의 이슈 삭제
-//    @DeleteMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
-//    public ResponseEntity<?> deleteIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId) {
-//
-//    }
+    @DeleteMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
+    public ResponseEntity<?> deleteIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId) {
+        issueService.deleteIssueInMiddleBucket(user.getId(), middleBucketId, middleBucketIssueId);
+        return ResponseEntity.ok()
+                .build();
+    }
 
     // 미들 버킷에 이슈 템플릿 추가
     // 이슈 템플릿을 지라의 이슈로 생성

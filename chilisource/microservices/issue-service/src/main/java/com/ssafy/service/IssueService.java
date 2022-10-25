@@ -37,4 +37,7 @@ public interface IssueService {
 
     // 미들 버킷의 이슈 수정
     void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest);
+
+    // 미들 버킷의 이슈 삭제
+    void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
 }

@@ -243,4 +243,16 @@ public class IssueServiceImpl implements IssueService {
                 issueType
         );
     }
+
+    @Transactional
+    @Override
+    public void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
+
+        middleBucketIssueRepo.delete(middleBucketIssue);
+    }
+
 }
