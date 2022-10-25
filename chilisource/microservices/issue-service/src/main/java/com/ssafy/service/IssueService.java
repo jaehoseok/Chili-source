@@ -28,4 +28,7 @@ public interface IssueService {
 
     // 미들 버킷 수정
     void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest);
+
+    // 미들 버킷 삭제
+    void deleteMiddleBucket(Long userId, Long middleBucketId);
 }

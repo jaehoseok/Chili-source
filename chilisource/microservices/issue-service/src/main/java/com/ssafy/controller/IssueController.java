@@ -80,6 +80,13 @@ public class IssueController {
     }
 
     // 미들 버킷 삭제
+    @DeleteMapping("/middle-buckets/{middleBucketId}")
+    public ResponseEntity<?> deleteMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId) {
+        issueService.deleteMiddleBucket(user.getId(), middleBucketId);
+        return ResponseEntity.ok()
+                .build();
+    }
+
     // 미들 버킷에 이슈 추가
     // 미들 버킷 내의 이슈 수정
     // 미들 버킷 내의 이슈 삭제

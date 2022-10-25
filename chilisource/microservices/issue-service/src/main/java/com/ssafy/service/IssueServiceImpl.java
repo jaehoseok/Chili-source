@@ -146,4 +146,11 @@ public class IssueServiceImpl implements IssueService {
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         middleBucket.update(middleBucketUpdateRequest.getName());
     }
+
+    @Override
+    public void deleteMiddleBucket(Long userId, Long middleBucketId) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        middleBucketRepo.delete(middleBucket);
+    }
 }
