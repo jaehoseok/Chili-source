@@ -86,7 +86,21 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
+        IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
+                .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
+        IssueType issueType = issueTypeRepo.findByName(issueTemplateUpdateRequest.getIssueType())
+                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
+        issueTemplate.update(
+                issueTemplateUpdateRequest.getSummary(),
+                issueTemplateUpdateRequest.getDescription(),
+                issueTemplateUpdateRequest.getAssignee(),
+                issueTemplateUpdateRequest.getPriority(),
+                issueTemplateUpdateRequest.getEpicLink(),
+                issueTemplateUpdateRequest.getSprint(),
+                issueTemplateUpdateRequest.getStoryPoints(),
+                issueType
+        );
     }
 
     @Override
