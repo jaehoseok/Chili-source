@@ -32,7 +32,7 @@ public class IssueController {
     }
 
     // 이슈 템플릿 수정
-    @PutMapping("{issueTemplateId}")
+    @PutMapping("/{issueTemplateId}")
     public ResponseEntity<?> updateIssueTemplate(@LoginUser User user, @PathVariable Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
         issueService.updateIssueTemplate(user.getId(), issueTemplateId, issueTemplateUpdateRequest);
         return ResponseEntity.ok()
@@ -40,7 +40,7 @@ public class IssueController {
     }
 
     // 이슈 템플릿 삭제
-    @DeleteMapping("{issueTemplateId}")
+    @DeleteMapping("/{issueTemplateId}")
     public ResponseEntity<?> deleteIssueTemplate(@LoginUser User user, @PathVariable Long issueTemplateId) {
         issueService.deleteIssueTemplate(issueTemplateId);
         return ResponseEntity.ok()
