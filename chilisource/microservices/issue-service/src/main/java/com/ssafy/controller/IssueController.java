@@ -88,6 +88,12 @@ public class IssueController {
     }
 
     // 미들 버킷에 이슈 추가
+    @PostMapping("/middle-buckets/{middleBucketId}")
+    public ResponseEntity<?> addIssueIntoMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest)  {
+        issueService.addIssueIntoMiddleBucket(user.getId(), middleBucketId, middleBucketIssueCreateRequest);
+        return ResponseEntity.ok()
+                .build();
+    }
     // 미들 버킷 내의 이슈 수정
     // 미들 버킷 내의 이슈 삭제
     // 미들 버킷에 이슈 템플릿 추가

@@ -5,9 +5,11 @@ import com.ssafy.dto.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
+import com.ssafy.entity.MiddleBucketIssue;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
+import com.ssafy.repository.MiddleBucketIssueRepo;
 import com.ssafy.repository.MiddleBucketRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class IssueServiceImpl implements IssueService {
     private final IssueTemplateRepo issueTemplateRepo;
     private final IssueTypeRepo issueTypeRepo;
     private final MiddleBucketRepo middleBucketRepo;
+    private final MiddleBucketIssueRepo middleBucketIssueRepo;
     private final ProjectServiceClient projectServiceClient;
 
     @Override
@@ -152,5 +155,28 @@ public class IssueServiceImpl implements IssueService {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         middleBucketRepo.delete(middleBucket);
+    }
+
+    @Override
+    public void addIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        IssueType issueType = issueTypeRepo.findByName(middleBucketIssueCreateRequest.getIssueType())
+                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+
+        MiddleBucketIssue middleBucketIssue = MiddleBucketIssue.builder()
+                .summary(middleBucketIssueCreateRequest.getSummary())
+                .description(middleBucketIssueCreateRequest.getDescription())
+                .assignee(middleBucketIssueCreateRequest.getAssignee())
+                .priority(middleBucketIssueCreateRequest.getPriority())
+                .epicLink(middleBucketIssueCreateRequest.getEpicLink())
+                .sprint(middleBucketIssueCreateRequest.getSprint())
+                .storyPoints(middleBucketIssueCreateRequest.getStoryPoints())
+                .middleBucket(middleBucket)
+                .issueType(issueType)
+                .build();
+        middleBucketIssueRepo.save(middleBucketIssue);
+
+        middleBucket.addIssue(middleBucketIssue);
     }
 }
