@@ -74,6 +74,9 @@ dependencies {
     // 서버간 API, 외부 API 사용 가능
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+    //S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
     // 서킷 브레이커 ( 회로차단, 벌크헤드, 재시도, 속도제한, 폴백 등 )
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
     // 슬루스, 집킨을 사용한 분산 추적

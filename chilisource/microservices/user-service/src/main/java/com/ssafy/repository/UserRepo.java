@@ -3,6 +3,7 @@ package com.ssafy.repository;
 import com.ssafy.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Long> {
@@ -11,4 +12,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     Optional<User> findByNaver(String naver);
 
     Optional<User> findByKakao(String kakao);
+
+    List<User> findByIdIn(List<Long> userIds);
 }

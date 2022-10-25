@@ -75,8 +75,8 @@ public class AuthController {
     }
 
     @GetMapping("/token-codes")
-    public ResponseEntity<?> findTokenCodeList() {
-        return ResponseEntity.ok(authService.findTokenCodeList());
+    public ResponseEntity<?> getTokenCodeList() {
+        return ResponseEntity.ok(authService.getTokenCodeList());
     }
 
     @PostMapping("/token-codes")
@@ -105,10 +105,10 @@ public class AuthController {
     }
 
     @GetMapping("/tokens")
-    public ResponseEntity<?> findToken(
+    public ResponseEntity<?> getToken(
             @LoginUser User user
     ) {
-        return ResponseEntity.ok(authService.findToken(user.getId()));
+        return ResponseEntity.ok(authService.getToken(user.getId()));
     }
 
     @PostMapping("/tokens")

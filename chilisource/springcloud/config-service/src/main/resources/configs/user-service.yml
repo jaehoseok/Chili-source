@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/user?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3307/user?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: root
   jpa:
@@ -11,13 +11,18 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: create
-  OAuth2:
-    google:
-      url : https://accounts.google.com/o/oauth2/v2/auth
-      client-id : 772414000810-4sp08rireoj3p28fvpklud1cf142vcbg.apps.googleusercontent.com
-      client-secret : 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
-      callback-url : http://localhost:8000/api/user-service/login/google/callback
-      scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
+cloud:
+  aws:
+    s3:
+      bucket: chilisource
+    credentials:
+      access-key: AKIAXELMJ3LZ22BCAJNG
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 token:
   secret: secretKey

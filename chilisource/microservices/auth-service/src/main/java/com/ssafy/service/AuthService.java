@@ -14,7 +14,7 @@ public interface AuthService {
     public ServiceTokenResponse refresh(String refreshToken, Long userId);
 
     // 토큰 코드 리스트 조회
-    public List<TokenCodeResponse> findTokenCodeList();
+    public List<TokenCodeResponse> getTokenCodeList();
 
     // 토큰 코드 추가
     public void createTokenCode(TokenCodeCreateRequest request);
@@ -26,7 +26,7 @@ public interface AuthService {
     public void deleteTokenCode(Long tokenCodeId);
 
     // 유저에 연결된 토큰 정보 반환
-    public List<TokenResponse> findToken(Long userId);
+    public List<TokenResponse> getToken(Long userId);
 
     // 유저에 토큰 연동
     public void createToken(TokenCreateRequest request, Long userId);

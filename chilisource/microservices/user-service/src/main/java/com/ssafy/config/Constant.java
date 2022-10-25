@@ -1,7 +1,7 @@
 package com.ssafy.config;
 
 public class Constant {
-    public enum SocialLoginType{
+    public enum SocialLoginType {
         GOOGLE,
         KAKAO,
         NAVER

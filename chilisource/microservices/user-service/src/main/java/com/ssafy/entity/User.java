@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -25,18 +25,18 @@ public class User extends BaseEntity{
     private boolean active;
 
     @Builder
-    public User (String name, Constant.SocialLoginType socialLoginType, String email, String image){
+    public User(String name, Constant.SocialLoginType socialLoginType, String email, String image) {
         this.name = name;
-        switch (socialLoginType){
-            case GOOGLE:{
+        switch (socialLoginType) {
+            case GOOGLE: {
                 this.google = email;
                 break;
             }
-            case NAVER:{
+            case NAVER: {
                 this.naver = email;
                 break;
             }
-            case KAKAO:{
+            case KAKAO: {
                 this.kakao = email;
                 break;
             }
@@ -44,26 +44,20 @@ public class User extends BaseEntity{
         this.image = image;
         this.active = true;
     }
-    public void update(String name, Constant.SocialLoginType socialLoginType,  String email, String image){
+
+    public void updateInfo(String name) {
         this.name = name;
-        switch (socialLoginType){
-            case GOOGLE:{
-                this.google = email;
-                break;
-            }
-            case NAVER:{
-                this.naver = email;
-                break;
-            }
-            case KAKAO:{
-                this.kakao = email;
-                break;
-            }
-        }
+    }
+
+    public void updateImage(String image) {
         this.image = image;
     }
 
-    public void withdrawal(){
+    public void setActive() {
+        this.active = true;
+    }
+
+    public void withdrawal() {
         this.active = false;
     }
 }

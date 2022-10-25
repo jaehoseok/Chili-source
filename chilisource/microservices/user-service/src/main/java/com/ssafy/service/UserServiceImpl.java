@@ -2,14 +2,19 @@ package com.ssafy.service;
 
 import com.ssafy.config.Constant;
 import com.ssafy.dto.request.UserCreateRequest;
+import com.ssafy.dto.request.UserUpdateRequest;
 import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.User;
+import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.ssafy.exception.NotFoundException.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -19,29 +24,65 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserResponse findUser(Constant.SocialLoginType socialLoginType, UserCreateRequest request) {
-        switch (socialLoginType){
-            case GOOGLE:{
+    public UserResponse getUser(Constant.SocialLoginType socialLoginType, UserCreateRequest request) {
+        switch (socialLoginType) {
+            case GOOGLE: {
                 User user = userRepo.findByGoogle(request.getEmail())
-                        .orElseGet(()->{
+                        .orElseGet(() -> {
                             User newUser = User.builder()
-                                .name(request.getName())
-                                .socialLoginType(socialLoginType)
-                                .email(request.getEmail())
-                                .image(request.getImage())
-                                .build();
+                                    .name(request.getName())
+                                    .socialLoginType(socialLoginType)
+                                    .email(request.getEmail())
+                                    .image(request.getImage())
+                                    .build();
                             userRepo.save(newUser);
                             return newUser;
                         });
+                if (!user.isActive()) user.setActive();
                 return UserResponse.builder()
                         .id(user.getId())
                         .name(user.getName())
                         .image(user.getImage())
                         .build();
             }
-            default:{
+            default: {
                 throw new IllegalArgumentException("알 수 없는 소셜 유저 형식입니다.");
             }
         }
+    }
+
+    @Override
+    public void updateUserInfo(UserUpdateRequest request, Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        user.updateInfo(request.getName());
+    }
+
+    @Override
+    public void updateUserImage(String image, Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        user.updateImage(image);
+    }
+
+    @Override
+    public void withdrawal(Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        user.withdrawal();
+    }
+
+    @Override
+    public List<UserResponse> getUserList(List<Long> userIds) {
+        List<UserResponse> userResponses = userRepo.findByIdIn(userIds).stream()
+                .map(user -> {
+                    return UserResponse.builder()
+                            .id(user.getId())
+                            .name(user.getName())
+                            .image(user.getImage())
+                            .build();
+                })
+                .collect(Collectors.toList());
+        return userResponses;
     }
 }

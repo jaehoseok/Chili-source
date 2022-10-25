@@ -16,6 +16,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Value("${token.secret}")
     private String SecretKey;
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         //return parameter.getParameterAnnotation(LoginUser.class) != null;
@@ -38,7 +39,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
                     Long.valueOf(String.valueOf(body.get("id"))),
                     String.valueOf(body.get("gender")),
                     Integer.valueOf(String.valueOf(body.get("age"))));
-            System.out.println("jwt getId : " + user.getId() );
+            System.out.println("jwt getId : " + user.getId());
             return user;
         } catch (ClassCastException e) {
             //throw new NotMatchException(TOKEN_NOT_MATCH);

@@ -52,7 +52,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<TokenCodeResponse> findTokenCodeList() {
+    public List<TokenCodeResponse> getTokenCodeList() {
         List<TokenCodeResponse> tokenCodeResponses = tokenCodeRepo.findAll().stream()
                 .map(tokenCode -> {
                     return TokenCodeResponse.builder()
@@ -90,7 +90,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<TokenResponse> findToken(Long userId) {
+    public List<TokenResponse> getToken(Long userId) {
         List<TokenResponse> tokenResponses = tokenRepo.findByUserId(userId).stream()
                 .map(token -> {
                     return TokenResponse.builder()
