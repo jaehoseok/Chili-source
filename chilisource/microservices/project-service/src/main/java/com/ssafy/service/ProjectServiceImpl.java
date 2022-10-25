@@ -11,6 +11,7 @@ import com.ssafy.repository.RoleRepo;
 import com.ssafy.repository.UserProjectRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
@@ -56,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     // 프로젝트 생성
     @Override
+    @Transactional
     public void createProject(ProjectCreateRequest request, Long userId) {
         Project project = Project.builder()
                 .name(request.getName())
@@ -77,6 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     // 프로젝트 수정
     @Override
+    @Transactional
     public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
@@ -85,6 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     // 프로젝트 삭제
     @Override
+    @Transactional
     public void deleteProject(Long projectId, Long userId) {
         // 프로젝트 삭제 권한 체크
 
