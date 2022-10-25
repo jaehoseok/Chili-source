@@ -94,10 +94,20 @@ public class IssueController {
         return ResponseEntity.ok()
                 .build();
     }
-    // 미들 버킷 내의 이슈 수정
-    // 미들 버킷 내의 이슈 삭제
-    // 미들 버킷에 이슈 템플릿 추가
 
+    // 미들 버킷 내의 이슈 수정
+//    @PutMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
+//    public ResponseEntity<?> updateIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId) {
+//
+//    }
+
+    // 미들 버킷 내의 이슈 삭제
+//    @DeleteMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
+//    public ResponseEntity<?> deleteIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId) {
+//
+//    }
+
+    // 미들 버킷에 이슈 템플릿 추가
     // 이슈 템플릿을 지라의 이슈로 생성
     // 미들 버킷을 지라의 이슈로 생성
 }
