@@ -1,7 +1,3 @@
-import React from 'react';
-
-const LandingPage = () => {
-  return <div>LandingPage</div>;
-};
+const LandingPage = () => <div>LandingPage</div>;
 
 export default LandingPage;
