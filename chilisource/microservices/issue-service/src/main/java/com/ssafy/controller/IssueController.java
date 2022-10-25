@@ -64,6 +64,13 @@ public class IssueController {
     }
 
     // 미들 버킷 생성
+    @PostMapping("/middle-buckets")
+    public ResponseEntity<?> createMiddleBucket(@LoginUser User user, MiddleBucketCreateRequest middleBucketCreateRequest) {
+        issueService.createMiddleBucket(user.getId(), middleBucketCreateRequest);
+        return ResponseEntity.ok()
+                .build();
+    }
+
     // 미들 버킷 수정
     // 미들 버킷 삭제
     // 미들 버킷에 이슈 추가

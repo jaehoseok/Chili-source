@@ -123,4 +123,20 @@ public class IssueServiceImpl implements IssueService {
         // TODO 여기까지
         return null;
     }
+
+    @Override
+    public void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest) {
+        Long projectId = middleBucketCreateRequest.getProjectId();
+        if (!projectServiceClient.findProjectById(projectId)) {
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+
+        MiddleBucket middleBucket = MiddleBucket.builder()
+                .name(middleBucketCreateRequest.getName())
+                .userId(userId)
+                .projectId(projectId)
+                .build();
+
+        middleBucketRepo.save(middleBucket);
+    }
 }
