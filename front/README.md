@@ -14,6 +14,16 @@
 ## 221024
 ### 종현
   + 파일 디렉토리 수정
-    + 누락 페이지 생성 ProjectCreatePage, WidgetSelectPage
-    + 페이지 수정 issuePage -> BucketPage
-  
+    + 누락 페이지 생성 `ProjectCreatePage, WidgetSelectPage`
+    + 페이지 수정 `issuePage` -> `BucketPage`
+  + Text 컴포넌트 구현
+    + `index.tsx`, `style.ts` 생성
+    + 동적 `props` 할당
+
+## 221025
+### 종현
+  + Text 컴포넌트 구현
+    + `isFill` 적용, `true` 시 `Fill` 컴포넌트가 `false` 시 `Text` 컴포넌트가 생성됨
+    + `Text` 전체 `props` 설정완료
+    + `Fill` 컴포넌트 `width`를 통해, 자동 형태 구축할 수 있도록 조정 
+    + `defaultProps` 수정 완료
