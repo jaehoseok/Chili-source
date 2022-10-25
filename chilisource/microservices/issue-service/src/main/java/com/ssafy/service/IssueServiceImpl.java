@@ -139,4 +139,11 @@ public class IssueServiceImpl implements IssueService {
 
         middleBucketRepo.save(middleBucket);
     }
+
+    @Override
+    public void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        middleBucket.update(middleBucketUpdateRequest.getName());
+    }
 }

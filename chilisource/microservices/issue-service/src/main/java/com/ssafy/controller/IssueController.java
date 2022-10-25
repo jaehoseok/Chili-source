@@ -72,6 +72,13 @@ public class IssueController {
     }
 
     // 미들 버킷 수정
+    @PutMapping("/middle-buckets/{middleBucketId}")
+    public ResponseEntity<?> updateMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest) {
+        issueService.updateMiddleBucket(user.getId(), middleBucketId, middleBucketUpdateRequest);
+        return ResponseEntity.ok()
+                .build();
+    }
+
     // 미들 버킷 삭제
     // 미들 버킷에 이슈 추가
     // 미들 버킷 내의 이슈 수정

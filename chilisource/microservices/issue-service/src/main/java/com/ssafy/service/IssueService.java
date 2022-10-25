@@ -25,4 +25,7 @@ public interface IssueService {
 
     // 미들 버킷 생성
     void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest);
+
+    // 미들 버킷 수정
+    void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest);
 }
