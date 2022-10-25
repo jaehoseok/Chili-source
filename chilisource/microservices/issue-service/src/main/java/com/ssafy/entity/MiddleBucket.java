@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +34,10 @@ public class MiddleBucket extends BaseEntity {
         this.userId = userId;
         this.projectId = projectId;
         this.middleBucketIssues = middleBucketIssues;
+    }
+
+    public void update(String name) {
+        this.name = name;
     }
 
     public void addIssue(MiddleBucketIssue middleBucketIssue) {
