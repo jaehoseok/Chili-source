@@ -11,8 +11,10 @@ import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
 import com.ssafy.repository.MiddleBucketRepo;
+import feign.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +37,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
-        if (!projectServiceClient.findProjectById(projectId)) {
+        Response response = projectServiceClient.findProjectById(projectId);
+        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -66,9 +69,11 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     @Override
     public void createIssueTemplate(Long userId, IssueTemplateCreateRequest issueTemplateCreateRequest) {
-        if (!projectServiceClient.findProjectById(issueTemplateCreateRequest.getProjectId())) {
+        Response response = projectServiceClient.findProjectById(issueTemplateCreateRequest.getProjectId());
+        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
+
         IssueType issueType = issueTypeRepo.findByName(issueTemplateCreateRequest.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
@@ -117,7 +122,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me) {
-        if (!projectServiceClient.findProjectById(projectId)) {
+        Response response = projectServiceClient.findProjectById(projectId);
+        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -169,7 +175,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest) {
         Long projectId = middleBucketCreateRequest.getProjectId();
-        if (!projectServiceClient.findProjectById(projectId)) {
+        Response response = projectServiceClient.findProjectById(projectId);
+        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -254,5 +261,4 @@ public class IssueServiceImpl implements IssueService {
 
         middleBucketIssueRepo.delete(middleBucketIssue);
     }
-
 }
