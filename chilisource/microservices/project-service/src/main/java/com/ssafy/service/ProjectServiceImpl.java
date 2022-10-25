@@ -25,7 +25,20 @@ public class ProjectServiceImpl implements ProjectService {
     private final RoleRepo roleRepo;
     private final String DEFAULT_COLOR = "FFFFFF";
 
-    // 프로젝트 조회
+    @Override
+    public ProjectResponse getProject(Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+        return ProjectResponse.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .teamName(project.getTeamName())
+                .image(project.getImage())
+                .jiraProject(project.getJiraProject())
+                .build();
+    }
+
+    // 프로젝트 목록 조회
     @Override
     public List<ProjectResponse> getProjectByUserId(Long userId) {
         List<Project> responses = projectRepo.findProjectByUserId(userId);
@@ -67,7 +80,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-        project.update(request.getName(), request.getTeamName(), request.getImage());
+        project.update(request.getName(), request.getTeamName(), request.getImage(), request.getJiraProject(), null, null);
     }
 
     // 프로젝트 삭제

@@ -16,10 +16,18 @@ import java.util.List;
 @RestController
 public class ProjectController {
     private final ProjectService projectService;
-    
+
     // 프로젝트 조회
+    @GetMapping("{projectId}")
+    public ResponseEntity<?> getProject(@PathVariable Long projectId) {
+        ProjectResponse response = projectService.getProject(projectId);
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    // 프로젝트 목록 조회
     @GetMapping
-    public ResponseEntity<?> getProject(@LoginUser User user) {
+    public ResponseEntity<?> getProjectByUserId(@LoginUser User user) {
         List<ProjectResponse> responses = projectService.getProjectByUserId(user.getId());
         return ResponseEntity.ok()
                 .body(responses);
