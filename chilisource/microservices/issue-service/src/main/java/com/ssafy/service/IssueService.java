@@ -21,7 +21,7 @@ public interface IssueService {
     List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me);
 
     // 미들 버킷 상세 조회
-    List<MiddleBucketListResponse> getMiddleBucket(Long userId, Long middleBucketId);
+    IssueListResponse getMiddleBucket(Long userId, Long middleBucketId);
 
     // 미들 버킷 생성
     void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest);

@@ -58,9 +58,9 @@ public class IssueController {
     // 미들 버킷 조회
     @GetMapping("/middle-buckets/{middleBucketId}")
     public ResponseEntity<?> getMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId) {
-        List<MiddleBucketListResponse> responses = issueService.getMiddleBucket(user.getId(), middleBucketId);
+        IssueListResponse response = issueService.getMiddleBucket(user.getId(), middleBucketId);
         return ResponseEntity.ok()
-                .body(responses);
+                .body(response);
     }
 
     // 미들 버킷 생성
