@@ -1,13 +1,14 @@
 package com.ssafy.service;
 
 import com.ssafy.client.ProjectServiceClient;
-import com.ssafy.dto.IssueTemplateCreateRequest;
-import com.ssafy.dto.IssueTemplateResponse;
+import com.ssafy.dto.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
+import com.ssafy.entity.MiddleBucket;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
+import com.ssafy.repository.MiddleBucketRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.exception.NotFoundException.ISSUE_TYPE_NOT_FOUND;
-import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
+import static com.ssafy.exception.NotFoundException.*;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class IssueTemplateServiceImpl implements IssueTemplateService{
+public class IssueServiceImpl implements IssueService {
     private final IssueTemplateRepo issueTemplateRepo;
     private final IssueTypeRepo issueTypeRepo;
+    private final MiddleBucketRepo middleBucketRepo;
     private final ProjectServiceClient projectServiceClient;
 
     @Override
@@ -78,5 +79,48 @@ public class IssueTemplateServiceImpl implements IssueTemplateService{
                 .projectId(issueTemplateCreateRequest.getProjectId())
                 .build();
         issueTemplateRepo.save(issueTemplate);
+    }
+
+    @Override
+    public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
+
+    }
+
+    @Override
+    public void deleteIssueTemplate(Long issueTemplateId) {
+        IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
+                .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
+        issueTemplateRepo.delete(issueTemplate);
+    }
+
+    @Override
+    public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me) {
+        if (!projectServiceClient.findProjectById(projectId)) {
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+
+        List<MiddleBucket> responses = new ArrayList<>();
+        if (projectId != null && !me) {
+            responses = middleBucketRepo.findByProjectId(projectId);
+        } else if (projectId == null && me) {
+            responses = middleBucketRepo.findByUserId(userId);
+        } else if (projectId != null && me) {
+            responses = middleBucketRepo.findByProjectIdAndUserId(projectId, userId);
+        }
+
+        return responses.stream()
+                .map(middleBucket -> MiddleBucketResponse.builder()
+                        .middleBucketId(middleBucket.getId())
+                        .name(middleBucket.getName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MiddleBucketListResponse> getMiddleBucket(Long userId, Long middleBucketId) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        // TODO 여기까지
+        return null;
     }
 }
