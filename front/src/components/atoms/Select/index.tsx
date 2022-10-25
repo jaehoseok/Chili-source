@@ -10,11 +10,10 @@ interface propTypes extends StyleTypes {
  *
  * @description
  * Select 재사용 컴포넌트
- * 이후 만들어질 Option 재사용 컴포넌트와 함께 쓰인다.
  *
  * @param {string?}   width     - 컴포넌트 안에 쓰이는 내용
  * @param {string?}   fontSize  - 폰트 크기 변경, default 시 0.85rem;
- * @param {ReactNode} children  -
+ * @param {ReactNode} children  - 자식 컴포넌트를 감싸기 위한 props
  *
  * @author bell
  */
