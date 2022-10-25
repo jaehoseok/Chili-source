@@ -49,7 +49,7 @@ public class IssueServiceImpl implements IssueService {
         return responses.stream()
                 .map(issueTemplate -> IssueTemplateResponse.builder()
                         .issueTemplateId(issueTemplate.getId())
-                        .issueTypeId(issueTemplate.getIssueType().getId())
+                        .issueType(issueTemplate.getIssueType().getName())
                         .summary(issueTemplate.getSummary())
                         .description(issueTemplate.getDescription())
                         .assignee(issueTemplate.getAssignee())
@@ -66,7 +66,7 @@ public class IssueServiceImpl implements IssueService {
         if (!projectServiceClient.findProjectById(issueTemplateCreateRequest.getProjectId())) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
-        IssueType issueType = issueTypeRepo.findById(issueTemplateCreateRequest.getIssueTypeId())
+        IssueType issueType = issueTypeRepo.findByName(issueTemplateCreateRequest.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         IssueTemplate issueTemplate = IssueTemplate.builder()
