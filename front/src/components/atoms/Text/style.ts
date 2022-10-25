@@ -11,18 +11,32 @@ export interface StyleTypes {
 }
 
 export const StyledText = styled.div<StyleTypes>`
-  color: ${({ color }) => color || '#000000'};
-  font-weight: ${({ fontWeight }) => fontWeight || '400'};
-  font-size: ${({ fontSize }) => fontSize || '1rem'};
-  font-family: ${({ fontFamily }) => fontFamily || 'pretendard'};
+  color: ${({ color }) => color};
+  font-weight: ${({ fontWeight }) => fontWeight};
+  font-size: ${({ fontSize }) => fontSize};
+  font-family: ${({ fontFamily }) => fontFamily};
 `;
+
+StyledText.defaultProps = {
+  color: '#000000',
+  fontWeight: '400',
+  fontSize: '1rem',
+  fontFamily: 'pretendard',
+};
 
 export const StyledFill = styled.div<StyleTypes>`
   ${tw`inline-block`}
-  background-color: ${({ backgroundColor }) => backgroundColor || '#d6d6d6'};
-  font-family: ${({ fontFamily }) => fontFamily || 'pretendard'};
-  font-weight: ${({ fontWeight }) => fontWeight || '700'};
-  font-size: ${({ fontSize }) => fontSize || '0.85rem'};
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  font-family: ${({ fontFamily }) => fontFamily};
+  font-weight: ${({ fontWeight }) => fontWeight};
+  font-size: ${({ fontSize }) => fontSize};
   ${({ width }) => width && `border-radius: ${width * 0.4}px`};
   ${({ width }) => width && `padding: ${width * 0.2}px ${width * 0.5}px`};
 `;
+
+StyledFill.defaultProps = {
+  backgroundColor: '#d6d6d6',
+  fontFamily: 'pretendard',
+  fontWeight: '700',
+  fontSize: '0.85rem',
+};
