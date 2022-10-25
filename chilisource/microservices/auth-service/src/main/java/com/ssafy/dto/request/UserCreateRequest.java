@@ -12,7 +12,7 @@ public class UserCreateRequest {
     private String image;
 
     @Builder
-    public UserCreateRequest(String name, String email, String image){
+    public UserCreateRequest(String name, String email, String image) {
         this.name = name;
         this.email = email;
         this.image = image;

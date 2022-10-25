@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Token extends BaseEntity{
+public class Token extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "token_id")
@@ -24,13 +24,13 @@ public class Token extends BaseEntity{
     private Long userId;
 
     @Builder
-    public Token(String value, TokenCode tokenCode, Long userId){
+    public Token(String value, TokenCode tokenCode, Long userId) {
         this.value = value;
         this.tokenCode = tokenCode;
         this.userId = userId;
     }
 
-    public void update(String value){
+    public void update(String value) {
         this.value = value;
     }
 }

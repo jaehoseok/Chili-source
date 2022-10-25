@@ -11,7 +11,7 @@ public class TokenCreateRequest {
     private Long tokenCodeId;
 
     @Builder
-    public TokenCreateRequest(String value, Long tokenCodeId){
+    public TokenCreateRequest(String value, Long tokenCodeId) {
         this.value = value;
         this.tokenCodeId = tokenCodeId;
     }

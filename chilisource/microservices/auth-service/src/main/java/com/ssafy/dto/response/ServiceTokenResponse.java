@@ -11,7 +11,7 @@ public class ServiceTokenResponse {
     private String refreshToken;
 
     @Builder
-    public ServiceTokenResponse(String accessToken, String refreshToken){
+    public ServiceTokenResponse(String accessToken, String refreshToken) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }

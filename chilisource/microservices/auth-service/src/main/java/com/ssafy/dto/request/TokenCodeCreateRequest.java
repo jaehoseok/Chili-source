@@ -10,7 +10,7 @@ public class TokenCodeCreateRequest {
     private String name;
 
     @Builder
-    public TokenCodeCreateRequest(String name){
+    public TokenCodeCreateRequest(String name) {
         this.name = name;
     }
 }

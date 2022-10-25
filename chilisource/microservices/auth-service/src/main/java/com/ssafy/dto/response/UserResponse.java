@@ -12,7 +12,7 @@ public class UserResponse {
     private String image;
 
     @Builder
-    public UserResponse(Long id, String name, String image){
+    public UserResponse(Long id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;

@@ -12,7 +12,7 @@ public class TokenResponse {
     private Long tokenCodeId;
 
     @Builder
-    public TokenResponse(Long id, String value, Long tokenCodeId){
+    public TokenResponse(Long id, String value, Long tokenCodeId) {
         this.id = id;
         this.value = value;
         this.tokenCodeId = tokenCodeId;

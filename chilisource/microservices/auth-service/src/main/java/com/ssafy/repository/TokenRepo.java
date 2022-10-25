@@ -8,5 +8,6 @@ import java.util.Optional;
 
 public interface TokenRepo extends JpaRepository<Token, Long> {
     List<Token> findByUserId(Long userId);
+
     Optional<Token> findByTokenCodeIdAndUserId(Long tokenCodeId, Long userId);
 }

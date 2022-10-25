@@ -23,7 +23,7 @@ public class Auth {
     private Long expiration;
 
     @Builder
-    public Auth(Long userId, String refreshToken, Long expiration){
+    public Auth(Long userId, String refreshToken, Long expiration) {
         this.userId = userId;
         this.refreshToken = refreshToken;
         this.expiration = expiration;

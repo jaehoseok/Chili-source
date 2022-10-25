@@ -41,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     public ServiceTokenResponse refresh(String refreshToken, Long userId) {
         Auth auth = authRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException(AUTH_NOT_FOUND));
-        if(!auth.getRefreshToken().equals(refreshToken)){
+        if (!auth.getRefreshToken().equals(refreshToken)) {
             throw new NotMatchException(AUTH_NOT_MATCH);
         }
         ServiceTokenResponse response = ServiceTokenResponse.builder()
@@ -77,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void updateTokenCode(Long tokenCodeId, TokenCodeUpdateRequest request) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId)
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenCode.update(request.getName());
     }
 
@@ -85,14 +85,14 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteTokenCode(Long tokenCodeId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId)
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenCodeRepo.delete(tokenCode);
     }
 
     @Override
     public List<TokenResponse> findToken(Long userId) {
         List<TokenResponse> tokenResponses = tokenRepo.findByUserId(userId).stream()
-                .map(token->{
+                .map(token -> {
                     return TokenResponse.builder()
                             .id(token.getId())
                             .value(token.getValue())
@@ -107,15 +107,15 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void createToken(TokenCreateRequest request, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(request.getTokenCodeId())
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Optional<Token> token = tokenRepo.findByTokenCodeIdAndUserId(tokenCode.getId(), userId);
-        if(!token.isPresent()){
+        if (!token.isPresent()) {
             Token newToken = Token.builder()
                     .value(request.getValue())
                     .tokenCode(tokenCode)
                     .build();
             tokenRepo.save(newToken);
-        }else{
+        } else {
             token.ifPresent(findToken -> findToken.update(request.getValue()));
         }
     }
@@ -124,7 +124,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteToken(Long tokenCodeId, Long userId) {
         Token token = tokenRepo.findByTokenCodeIdAndUserId(tokenCodeId, userId)
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenRepo.delete(token);
     }
 

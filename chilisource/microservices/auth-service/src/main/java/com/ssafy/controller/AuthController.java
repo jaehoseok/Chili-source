@@ -33,7 +33,7 @@ public class AuthController {
     // KAKAO - 미구현
     // NAVER - 미구현
     @GetMapping("/login/{socialLoginType}")
-    public void socialLoginRedirect(@PathVariable(name = "socialLoginType") String SocialLoginPath) throws IOException{
+    public void socialLoginRedirect(@PathVariable(name = "socialLoginType") String SocialLoginPath) throws IOException {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
         System.out.println(socialLoginType);
         oAuthService.request(socialLoginType);
@@ -44,7 +44,7 @@ public class AuthController {
             @PathVariable(name = "socialLoginType") String socialLoginPath,
             @RequestParam(name = "code") String code,
             HttpServletResponse response
-    ) throws IOException{
+    ) throws IOException {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(socialLoginPath.toUpperCase());
         ServiceTokenResponse tokenResponse = oAuthService.oAuthLogin(socialLoginType, code);
         // TODO : TOKEN 처리 어떻게 할 것인가 -> 쿠키? 세션? 로컬? 액세스는? 리프레쉬는?
@@ -65,24 +65,24 @@ public class AuthController {
             @CookieValue(value = "refresh-token", required = false) Cookie cookie,
             @LoginUser User user,
             HttpServletResponse response
-    ){
-        try{
+    ) {
+        try {
             return ResponseEntity.ok(authService.refresh(cookie.getValue(), user.getId()));
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 만료");
         }
     }
 
     @GetMapping("/token-codes")
-    public ResponseEntity<?> findTokenCodeList(){
+    public ResponseEntity<?> findTokenCodeList() {
         return ResponseEntity.ok(authService.findTokenCodeList());
     }
 
     @PostMapping("/token-codes")
     public ResponseEntity<?> createTokenCode(
             @RequestBody TokenCodeCreateRequest request
-            ){
+    ) {
         authService.createTokenCode(request);
         return ResponseEntity.ok().build();
     }
@@ -91,7 +91,7 @@ public class AuthController {
     public ResponseEntity<?> updateTokenCode(
             @PathVariable(name = "tokenCodeId") Long tokenCodeId,
             @RequestBody TokenCodeUpdateRequest request
-            ){
+    ) {
         authService.updateTokenCode(tokenCodeId, request);
         return ResponseEntity.ok().build();
     }
@@ -99,7 +99,7 @@ public class AuthController {
     @DeleteMapping("/token-codes/{tokenCodeId}")
     public ResponseEntity<?> deleteTokenCode(
             @PathVariable(name = "tokenCodeId") Long tokenCodeId
-    ){
+    ) {
         authService.deleteTokenCode(tokenCodeId);
         return ResponseEntity.ok().build();
     }
@@ -107,7 +107,7 @@ public class AuthController {
     @GetMapping("/tokens")
     public ResponseEntity<?> findToken(
             @LoginUser User user
-    ){
+    ) {
         return ResponseEntity.ok(authService.findToken(user.getId()));
     }
 
@@ -115,7 +115,7 @@ public class AuthController {
     public ResponseEntity<?> createToken(
             @LoginUser User user,
             @RequestBody TokenCreateRequest request
-            ){
+    ) {
         authService.createToken(request, user.getId());
         return ResponseEntity.ok().build();
     }
@@ -124,7 +124,7 @@ public class AuthController {
     public ResponseEntity<?> deleteToken(
             @LoginUser User user,
             @PathVariable(name = "tokenCodeId") Long tokenCodeId
-    ){
+    ) {
         authService.deleteToken(tokenCodeId, user.getId());
         return ResponseEntity.ok().build();
     }
