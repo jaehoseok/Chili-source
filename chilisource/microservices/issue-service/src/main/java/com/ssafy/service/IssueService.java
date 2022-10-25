@@ -33,5 +33,5 @@ public interface IssueService {
     void deleteMiddleBucket(Long userId, Long middleBucketId);
 
     // 미들 버킷에 이슈 추가
-    void addIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest issueCreateRequest);
+    void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest issueCreateRequest);
 }

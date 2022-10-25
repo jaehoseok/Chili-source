@@ -200,7 +200,7 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void addIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
+    public void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         IssueType issueType = issueTypeRepo.findByName(middleBucketIssueCreateRequest.getIssueType())
