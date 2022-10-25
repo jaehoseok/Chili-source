@@ -221,4 +221,26 @@ public class IssueServiceImpl implements IssueService {
 
         middleBucket.addIssue(middleBucketIssue);
     }
+
+    @Transactional
+    @Override
+    public void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
+        IssueType issueType = issueTypeRepo.findByName(middleBucketIssueUpdateRequest.getIssueType())
+                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+
+        middleBucketIssue.update(
+                middleBucketIssueUpdateRequest.getSummary(),
+                middleBucketIssueUpdateRequest.getDescription(),
+                middleBucketIssueUpdateRequest.getAssignee(),
+                middleBucketIssueUpdateRequest.getPriority(),
+                middleBucketIssueUpdateRequest.getEpicLink(),
+                middleBucketIssueUpdateRequest.getSprint(),
+                middleBucketIssueUpdateRequest.getStoryPoints(),
+                issueType
+        );
+    }
 }

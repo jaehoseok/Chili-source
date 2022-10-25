@@ -96,10 +96,12 @@ public class IssueController {
     }
 
     // 미들 버킷 내의 이슈 수정
-//    @PutMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
-//    public ResponseEntity<?> updateIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId) {
-//
-//    }
+    @PutMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
+    public ResponseEntity<?> updateIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest) {
+        issueService.updateIssueInMiddleBucket(user.getId(), middleBucketId, middleBucketIssueId, middleBucketIssueUpdateRequest);
+        return ResponseEntity.ok()
+                .build();
+    }
 
     // 미들 버킷 내의 이슈 삭제
 //    @DeleteMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
