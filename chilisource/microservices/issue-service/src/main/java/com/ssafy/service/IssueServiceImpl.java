@@ -14,6 +14,7 @@ import com.ssafy.repository.MiddleBucketRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.ssafy.exception.NotFoundException.*;
 
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 @Service
 public class IssueServiceImpl implements IssueService {
     private final IssueTemplateRepo issueTemplateRepo;
@@ -61,6 +63,7 @@ public class IssueServiceImpl implements IssueService {
                 ).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public void createIssueTemplate(Long userId, IssueTemplateCreateRequest issueTemplateCreateRequest) {
         if (!projectServiceClient.findProjectById(issueTemplateCreateRequest.getProjectId())) {
@@ -84,6 +87,7 @@ public class IssueServiceImpl implements IssueService {
         issueTemplateRepo.save(issueTemplate);
     }
 
+    @Transactional
     @Override
     public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
@@ -103,6 +107,7 @@ public class IssueServiceImpl implements IssueService {
         );
     }
 
+    @Transactional
     @Override
     public void deleteIssueTemplate(Long issueTemplateId) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
@@ -134,13 +139,14 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public List<MiddleBucketListResponse> getMiddleBucket(Long userId, Long middleBucketId) {
+    public List<IssueListResponse> getMiddleBucket(Long userId, Long middleBucketId) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         // TODO 여기까지
         return null;
     }
 
+    @Transactional
     @Override
     public void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest) {
         Long projectId = middleBucketCreateRequest.getProjectId();
@@ -157,6 +163,7 @@ public class IssueServiceImpl implements IssueService {
         middleBucketRepo.save(middleBucket);
     }
 
+    @Transactional
     @Override
     public void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
@@ -164,6 +171,7 @@ public class IssueServiceImpl implements IssueService {
         middleBucket.update(middleBucketUpdateRequest.getName());
     }
 
+    @Transactional
     @Override
     public void deleteMiddleBucket(Long userId, Long middleBucketId) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
@@ -171,6 +179,7 @@ public class IssueServiceImpl implements IssueService {
         middleBucketRepo.delete(middleBucket);
     }
 
+    @Transactional
     @Override
     public void addIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
