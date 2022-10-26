@@ -2,11 +2,13 @@ server:
   port: 8000
 
 eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-#      defaultZone: http://j7b305.p.ssafy.io:8761/eureka
+      #defaultZone: http://j7b305.p.ssafy.io:8761/eureka
       defaultZone: http://localhost:8761/eureka
 
 spring:
@@ -15,57 +17,32 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: gateway-service
-#  zipkin:
-#    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
-#    base-url: http://j7b305.p.ssafy.io:9411
-#    enabled: true
+  zipkin:
+    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
+    base-url: http://k7b2071.p.ssafy.io:9411
+    enabled: true
   sleuth:
     sampler:
       probability: 1.0
   cloud:
     gateway:
       routes:
-
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/api/auth-service/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            #- RemoveRequestHeader=Cookie
+            #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
         ##---------------------------------------------USER FILTER START---------------------------------------------------------------
-        #        - id: user-service
-        #          uri: lb://USER-SERVICE
-        #          predicates:
-        #            - Path=/api/user-service/recreatejwt
-        #            - Method=GET
-        #          filters:
-        #            - AuthorizationFilter
-        #
-        #        - id: user-service
-        #          uri: lb://USER-SERVICE
-        #          predicates:
-        #            - Path=/api/user-service/game
-        #            - Method=GET,POST
-        #          filters:
-        #            - AuthorizationFilter
-        #
-        #        - id: user-service
-        #          uri: lb://USER-SERVICE
-        #          predicates:
-        #            - Path=/api/user-service/disable
-        #            - Method=GET
-        #          filters:
-        #            - AuthorizationFilter
-        #
-        #        - id: user-service
-        #          uri: lb://USER-SERVICE
-        #          predicates:
-        #            - Path=/api/user-service/logout
-        #            - Method=GET
-        #          filters:
-        #            - AuthorizationFilter
-
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/user-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
-            - RemoveRequestHeader=Cookie
+            #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
         #---------------------------------------------USER FILTER END---------------------------------------------------------------
 
