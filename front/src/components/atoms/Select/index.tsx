@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
-import { StyledSelect, StyleTypes } from './style';
+import { StyledSelect, StyledTypes } from './style';
 
-interface propTypes extends StyleTypes {
+interface propTypes extends StyledTypes {
   children: ReactNode;
 }
 
