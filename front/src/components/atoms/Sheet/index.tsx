@@ -12,12 +12,12 @@ interface propsType extends styledType {
  * <Sheet />
  *
  * // 사용 예시
- * <Sheet width={200} height={200} backgroundColor="red">
+ * <Sheet width={200px} height={200rem} backgroundColor="red">
  *  <img src={require('assets/logo/logo.png')} alt="이미지" />
  * </Sheet>
  *
- * @param {number?} height - 높이정수
- * @param {number?} width - 넓이정수
+ * @param {string?} height - 높이문자열
+ * @param {string?} width - 넓이문자열
  * @param {string?} backgroundColor - #배경색핵사코드
  * @author inte
  */
