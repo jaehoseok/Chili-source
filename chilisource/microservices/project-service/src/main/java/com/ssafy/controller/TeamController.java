@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
+import com.ssafy.dto.request.UserProjectCreateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.service.UserProjectService;
@@ -20,8 +21,8 @@ public class TeamController {
 
     // 프로젝트에 팀원 초대
     @PostMapping
-    public ResponseEntity<?> inviteUserProject(@LoginUser User user, @PathVariable Long projectId) {
-        userProjectService.createUserProject(user.getId(), projectId);
+    public ResponseEntity<?> inviteUserProject(@LoginUser User user, UserProjectCreateRequest request) {
+        userProjectService.createUserProject(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
     }

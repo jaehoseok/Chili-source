@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.dto.request.UserProjectCreateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.entity.Project;
@@ -25,29 +26,31 @@ public class UserProjectServiceImpl implements UserProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
-    private final String DEFAULT_COLOR = "FFFFFF";
 //    private final Role DEFAULT_ROLE = roleRepo.findById(2L).get();
 
     // 프로젝트 초대
     @Override
     @Transactional
-    public void createUserProject(Long userId, Long projectId) {
+    public void createUserProject(Long userId, UserProjectCreateRequest request) {
         // 프로젝트 존재 확인
-        Project project = projectRepo.findById(projectId)
+        Project project = projectRepo.findById(request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
         // 유저 존재 확인
 
         // 초대 권한 확인
-
-        // 프로젝트 초대
-        UserProject userProject = UserProject.builder()
-                .userColor(DEFAULT_COLOR)
-                .userId(userId)
-                .project(project)
-                .role(null)
-//                .role(DEFAULT_ROLE)
-                .build();
-        userProjectRepo.save(userProject);
+        UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        if (userProjectManager.getRole().getInvite()) {
+            // 프로젝트 초대
+            UserProject userProject = UserProject.builder()
+                    .userColor(request.getUserColor())
+                    .userId(request.getUserId())
+                    .project(project)
+                    .role(null)
+    //                .role(DEFAULT_ROLE)
+                    .build();
+            userProjectRepo.save(userProject);
+        }
     }
 
     // 프로젝트 팀원 정보 수정
