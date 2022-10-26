@@ -2,5 +2,5 @@
 spring:
   cloud:
     config:
-      uri: http://j7b305.p.ssafy.io:8888
+      uri: http://localhost:8888
       name: user-service

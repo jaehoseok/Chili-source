@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,5 +56,17 @@ public class IssueTemplate extends BaseEntity {
         this.issueType = issueType;
         this.userId = userId;
         this.projectId = projectId;
+    }
+
+    public void update(String summary, String description, String assignee, String priority, String epicLink,
+                       Long sprint, Double storyPoints, IssueType issueType) {
+        if (!summary.equals(null)) this.summary = summary;
+        if (!description.equals(null)) this.description = description;
+        if (!assignee.equals(null)) this.assignee = assignee;
+        if (!priority.equals(null)) this.priority = priority;
+        if (!epicLink.equals(null)) this.epicLink = epicLink;
+        if (!sprint.equals(null)) this.sprint = sprint;
+        if (!storyPoints.equals(null)) this.storyPoints = storyPoints;
+        if (!issueType.equals(null)) this.issueType = issueType;
     }
 }

@@ -17,7 +17,7 @@ spring:
         native:
           # TODO : 설정 파일들 name 달아서 넣으면됨
           # Window 일 경우에는 마지막에 / 붙여야함
-          search-locations: classpath:/configs
+          search-locations: classpath:/configs/
 
 management:
   endpoints:
