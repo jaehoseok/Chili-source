@@ -18,7 +18,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     // 프로젝트 조회
-    @GetMapping("{projectId}")
+    @GetMapping("/{projectId}")
     public ResponseEntity<?> getProject(@PathVariable Long projectId) {
         ProjectResponse response = projectService.getProject(projectId);
         return ResponseEntity.ok()
@@ -50,7 +50,7 @@ public class ProjectController {
     }
 
     // 프로젝트 삭제
-    @DeleteMapping("{projectId}")
+    @DeleteMapping("/{projectId}")
     public ResponseEntity<?> deleteProject(@PathVariable Long projectId, @LoginUser User user) {
         projectService.deleteProject(projectId, user.getId());
         return ResponseEntity.ok()
