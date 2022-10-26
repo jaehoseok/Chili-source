@@ -45,7 +45,6 @@
   > - 'import Something from '../../../components/atom' 같은 항목을 'components/atom' 으로 선언가능
 
 - atom 제작
-  > - 한 atom 안에 두가지 타입이 있을 경우 별개로 export 하였음
-  >   - 사용 예시) import { Input, FileInput } from 'components/atoms/Input';
   > - style 관련 props 는 style.ts의 styleType에 묶고 index.tsx에서 styleType을 상속한 propsType가 다른 props 들을 정의한다.
   > - defaultStyle 적용
+  > - Sheet, Input 만들어둠
