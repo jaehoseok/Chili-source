@@ -1,7 +1,11 @@
 import React from 'react';
 
-const TextArea = () => {
-  <div>TextArea</div>;
+import * as S from './style';
+
+const TextArea = ({ children, ...props }: S.TextAreaProps) => {
+  return <S.TextArea {...props}>{children}</S.TextArea>;
 };
+
+TextArea.defaultProps = S.defaultProps;
 
 export default TextArea;

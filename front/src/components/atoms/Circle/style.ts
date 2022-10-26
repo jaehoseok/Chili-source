@@ -23,12 +23,12 @@ export const defaultProps: CircleProps = {
   clickEvent: null,
 };
 
-export const Circle = styled.div`
+export const Circle = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: ${(props: CircleProps) => props.height};
-  height: ${(props: CircleProps) => props.height};
+  ${({ height }) => height && `width: ${height}px`};
+  ${({ height }) => height && `height: ${height}px`};
   background-color: ${(props: CircleProps) =>
     typeof props.children === 'string' ? '#d9d9d9' : 'transparent'};
   font-weight: bold;
@@ -51,5 +51,3 @@ export const Circle = styled.div`
       cursor: pointer;
     `}
 `;
-
-defaultProps;
