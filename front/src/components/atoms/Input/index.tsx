@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-import { StyledInputBox, StyledInput, styledType } from './style';
+import { StyledInputSpace, StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
   type?: string;
@@ -29,16 +29,16 @@ export const Input = (props: propsType) => {
 
   return (
     <>
-      <StyledInputBox height={props.height} width={props.width}>
-        <StyledInput
+      <StyledInput height={props.height} width={props.width}>
+        <StyledInputSpace
           height={props.height}
           width={props.width}
           type={props.type}
           placeholder={props.placeHolder}
           onChange={onChange}
           value={value}
-        ></StyledInput>
-      </StyledInputBox>
+        ></StyledInputSpace>
+      </StyledInput>
     </>
   );
 };

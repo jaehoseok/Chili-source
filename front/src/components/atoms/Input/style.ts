@@ -5,7 +5,7 @@ export interface styledType {
   height?: number;
 }
 
-export const StyledInputBox = styled.div`
+export const StyledInput = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,18 +16,18 @@ export const StyledInputBox = styled.div`
   border: 1px solid #d9d9d9;
   padding: 10px;
 `;
-StyledInputBox.defaultProps = {
+StyledInput.defaultProps = {
   width: 400,
   height: 20,
 };
 
-export const StyledInput = styled.input`
+export const StyledInputSpace = styled.input`
   flex-grow: 1;
   border: 0px;
   background-color: #fbfbfb;
   outline-color: #fbfbfb;
 `;
-StyledInput.defaultProps = {
+StyledInputSpace.defaultProps = {
   width: 20,
   height: 20,
 };
