@@ -6,14 +6,22 @@ interface propTypes extends StyledTypes {
   clickHandler?: MouseEventHandler<HTMLSpanElement>;
 }
 
-const index = ({ title, activated, clickHandler }: propTypes) => {
+/**
+ *
+ * @description
+ * Tab 재사용 컴포넌트
+ *
+ * @param {string}                    title         - 컴포넌트 안에 쓰이는 내용
+ * @param {MouseEventHandler<T>?}     clickHandler  - 클릭 이벤트 반영
+ * @param {boolean}                   activated     - 현재 Tab이 켜져있는지 꺼져있는지를 확인하는 prop
+ *
+ * @author bell
+ */
+const index = ({ title, clickHandler, activated }: propTypes) => {
   return (
-    <>
-      <div>LandingPage</div>
-      <StyledTab activated={activated} onClick={clickHandler}>
-        {title}
-      </StyledTab>
-    </>
+    <StyledTab activated={activated} onClick={clickHandler}>
+      {title}
+    </StyledTab>
   );
 };
 
