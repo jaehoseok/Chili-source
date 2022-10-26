@@ -34,7 +34,6 @@ public class JwtUtil {
 
     // AceessToken 생성
     public String createAccessToken(Long userId) {
-        Date now = new Date();
         return Jwts.builder()
                 .setHeader(createHeader("ACCESS_TOKEN"))
                 .setClaims(createClaims(userId))
@@ -45,7 +44,6 @@ public class JwtUtil {
 
     // RefreshToekn 생성
     public String createRefreshToken(Long userId) {
-        Date now = new Date();
         return Jwts.builder()
                 .setHeader(createHeader("REFRESH_TOKEN"))
                 .setClaims(createClaims(userId))
@@ -60,7 +58,6 @@ public class JwtUtil {
         header.put("typ", typ);
         header.put("alg", "HS256");
         header.put("regDate", System.currentTimeMillis());
-        System.out.println("헤더:" + header.get("typ"));
         return header;
     }
 
