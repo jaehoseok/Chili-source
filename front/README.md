@@ -31,3 +31,15 @@
     + `children` 설정
     + `width`, `font-size` 동적 설정
     + 와이어 프레임과 유사하게 설정
+
+
+## 221026
+### 종현
+  + Tab 컴포넌트 구현
+    + `activated` 를 따라 `background-color` 다르게 설정
+    + `react-router`를 통한 `link` 이동을 위해 `clickHandler` 설정
+  + `theme.ts`
+    + 필요한 전역 색 설정완료
+      + `primary`, `secondary`, `epic`, `bug`, `task`, `story`
+  + `minireset.min.css`
+    + `min` 설정 완료
