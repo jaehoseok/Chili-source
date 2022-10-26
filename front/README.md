@@ -27,15 +27,17 @@
 ## 221025
 
 ### 종현
-
-- Text 컴포넌트 구현
-  - `isFill` 적용, `true` 시 `Fill` 컴포넌트가 `false` 시 `Text` 컴포넌트가 생성됨
-  - `Text` 전체 `props` 설정완료
-  - `Fill` 컴포넌트 `width`를 통해, 자동 형태 구축할 수 있도록 조정
-  - `defaultProps` 수정 완료
+  + Text 컴포넌트 구현
+    + `isFill` 적용, `true` 시 `Fill` 컴포넌트가 `false` 시 `Text` 컴포넌트가 생성됨
+    + `Text` 전체 `props` 설정완료
+    + `Fill` 컴포넌트 `width`를 통해, 자동 형태 구축할 수 있도록 조정 
+    + `defaultProps` 수정 완료
+  + Select 컴포넌트 구현
+    + `children` 설정
+    + `width`, `font-size` 동적 설정
+    + 와이어 프레임과 유사하게 설정
 
 ### 준혁
-
 - front/src/RouterWrapper 주소별로 주석 추가함
 
 - front/tsconfig.json 수정
