@@ -9,8 +9,17 @@ const color = {
   task: '#4BADE8',
 };
 
+const button = {
+  green: '#34A853',
+  lightgray: '#F8F8F8',
+  gray: '#D9D9D9',
+  white: '#FFFFFF',
+  black: '#000000',
+};
+
 export const theme = {
   color,
+  button,
 };
 
 export type Theme = typeof theme;

@@ -1,26 +1,24 @@
-import React from 'react';
-
 import styled from 'styled-components';
 
 export interface TextAreaProps {
-  children: React.ReactNode;
   width: number;
   height: number;
-  value?: string;
   placeHolder?: string;
 }
 
 export const defaultProps: TextAreaProps = {
-  children: '',
   width: 0,
   height: 0,
-  value: '',
   placeHolder: '',
 };
 
-export const TextArea = styled.input`
-  ${({ width }) => width && `width: ${width}px`};
-  ${({ height }) => height && `height: ${height}px`};
-  background-color: #d9d9d9;
-  border: 1px solid black;
+export const TextArea = styled.input.attrs({
+  type: 'text',
+})`
+  ${(props: TextAreaProps) => props.width && `width: ${props.width}px`};
+  ${(props: TextAreaProps) => props.height && `height: ${props.height}px`};
+  background-color: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  outline-style: none;
+  ${(props: TextAreaProps) => props.height && `border-radius: ${props.height * 0.2}px`};
 `;
