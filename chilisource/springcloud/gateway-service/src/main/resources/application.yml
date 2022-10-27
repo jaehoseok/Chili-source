@@ -174,3 +174,5 @@ spring:
 token:
   secret: secretKey
   refresh: refreshKey
+  
+include: refresh, health, beans, busrefresh, info, metrics, prometheus
