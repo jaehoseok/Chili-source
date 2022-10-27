@@ -22,18 +22,21 @@ public class GanttChartResponse extends BaseEntity {
 
     private String issueCode;
 
+    private Float progress;
+
     private Long projectId;
 
     private Long userId;
 
     @Builder
-    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Long projectId, Long userId) {
+    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long projectId, Long userId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.issueSummary = issueSummary;
         this.version = version;
         this.issueCode = issueCode;
+        this.progress = progress;
         this.projectId = projectId;
         this.userId = userId;
     }

@@ -44,6 +44,8 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueSummary(ganttChart.getIssueSummary())
                         .version(ganttChart.getVersion())
                         .issueCode(ganttChart.getIssueCode())
+                        .progress(ganttChart.getProgress())
+                        .projectId(projectId)
                         .userId(ganttChart.getUserId())
                         .build())
                 .collect(Collectors.toList());
@@ -69,6 +71,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueSummary(ganttChart.getIssueSummary())
                         .version(ganttChart.getVersion())
                         .issueCode(ganttChart.getIssueCode())
+                        .progress(ganttChart.getProgress())
                         .projectId(projectId)
                         .userId(ganttChart.getUserId())
                         .build())
