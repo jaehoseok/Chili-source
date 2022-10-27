@@ -9,10 +9,10 @@ public interface IssueService {
     List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me);
 
     // 이슈 템플릿 생성
-    void createIssueTemplate(Long userId, IssueTemplateCreateRequest issueTemplateCreateRequest);
+    void createIssueTemplate(Long userId, IssueTemplateCreateRequest request);
 
     // 이슈 템플릿 수정
-    void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest);
+    void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request);
 
     // 이슈 템플릿 삭제
     void deleteIssueTemplate(Long issueTemplateId);
@@ -24,19 +24,19 @@ public interface IssueService {
     IssueListResponse getMiddleBucket(Long userId, Long middleBucketId);
 
     // 미들 버킷 생성
-    void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest);
+    void createMiddleBucket(Long userId, MiddleBucketCreateRequest request);
 
     // 미들 버킷 수정
-    void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest);
+    void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest request);
 
     // 미들 버킷 삭제
     void deleteMiddleBucket(Long userId, Long middleBucketId);
 
     // 미들 버킷에 이슈 추가
-    void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest issueCreateRequest);
+    void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest request);
 
     // 미들 버킷의 이슈 수정
-    void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest);
+    void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest request);
 
     // 미들 버킷의 이슈 삭제
     void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
