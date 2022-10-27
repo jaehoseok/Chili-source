@@ -65,7 +65,7 @@ const App = () => {
                 id={idx}
                 isActivated={isActivated}
                 title={title}
-                clickHandler={activateToggleHandler.bind('', idx)}
+                toggleHandler={activateToggleHandler.bind('', idx)}
               ></Tab>
             ))}
           </NavProject>
