@@ -1,6 +1,6 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './styles/theme';
@@ -9,6 +9,21 @@ import RouterWrapper from './RouterWrapper';
 
 import NavProject from './components/molecules/NavProject';
 import Tab from './components/atoms/Tab';
+
+interface tabData {
+  isActivated: boolean;
+  title: string;
+}
+
+const CHILISOURCE = {
+  isActivated: true,
+  title: '칠리소스',
+};
+
+const APICLOUD = {
+  isActivated: false,
+  title: 'API cloud',
+};
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -19,13 +34,34 @@ const App = () => {
     },
   });
 
+  const [tabs, setTabs] = useState<tabData[]>([]);
+
+  useEffect(() => {
+    setTabs([CHILISOURCE, APICLOUD]);
+  }, []);
+
+  const activateToggleHandler = (idx: number) => {
+    setTabs(prevArr => {
+      const newTabs = [...prevArr];
+      newTabs.forEach(newTab => (newTab.isActivated = false));
+      newTabs[idx].isActivated = !newTabs[idx].isActivated;
+      return newTabs;
+    });
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <>
           <NavProject>
-            <Tab id={0} isActivated={true} title={'칠리소스'} />
-            <Tab id={1} isActivated={false} title={'API cloud'} />
+            {tabs.map(({ isActivated, title }, idx) => (
+              <Tab
+                id={idx}
+                isActivated={isActivated}
+                title={title}
+                clickHandler={activateToggleHandler.bind('', idx)}
+              ></Tab>
+            ))}
           </NavProject>
         </>
         <RouterWrapper />
