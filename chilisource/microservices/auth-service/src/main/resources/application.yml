@@ -5,11 +5,7 @@ server:
       enabled: false
   servlet:
     # TODO : CONTEXT-PATH가 해당 서비스명과 같은지 확인
-    context-path: /api/auth-service
-#    encoding:
-#      charset: UTF-8
-#      enabled: true
-#      force: true
+    context-path: /auth-service
 
 spring:
   application:
@@ -17,7 +13,7 @@ spring:
 
     zipkin:
       # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
-      base-url: http://b7b2071.p.ssafy.io:9411
+      base-url: http://k7b2071.p.ssafy.io:9411
       enabled: true
     sleuth:
       sampler:

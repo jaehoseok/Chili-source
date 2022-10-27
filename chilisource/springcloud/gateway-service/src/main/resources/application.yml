@@ -8,8 +8,8 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      #defaultZone: http://j7b305.p.ssafy.io:8761/eureka
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://k7b2071.p.ssafy.io:8761/eureka
+      #defaultZone: http://localhost:8761/eureka
 
 spring:
   # bean중복 에러 해결
@@ -30,16 +30,16 @@ spring:
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
-            - Path=/api/auth-service/**
+            - Path=/auth-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        ##---------------------------------------------USER FILTER START---------------------------------------------------------------
+        #---------------------------------------------USER FILTER START---------------------------------------------------------------
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/api/user-service/**
+            - Path=/user-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
             #- RemoveRequestHeader=Cookie
@@ -98,11 +98,11 @@ spring:
         - id: issue-service
           uri: lb://ISSUE-SERVICE
           predicates:
-            - Path=/api/issue-service/**
+            - Path=/issue-service/**
             - Method=GET,POST,PUT,DELETE
         #---------------------------------------------ISSUE FILTER END---------------------------------------------------------------
 
-        #---------------------------------------------MAIN FILTER START---------------------------------------------------------------
+        #---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
         #        - id: main-service
         #          uri: lb://MAIN-SERVICE
         #          predicates:
@@ -119,24 +119,14 @@ spring:
         #          filters:
         #            - AdminFilter
 
-        - id: main-service
-          uri: lb://MAIN-SERVICE
+        - id: project-service
+          uri: lb://PROJECT-SERVICE
           predicates:
-            - Path=/api/main-service/**
+            - Path=/project-service/**
             - Method=GET,POST,PUT,DELETE
         #          filters:
         #            - AuthorizationFilter
-        #---------------------------------------------MAIN FILTER END---------------------------------------------------------------
-
-        #---------------------------------------------RECOMM FILTER START---------------------------------------------------------------
-        - id: recomm-service
-          uri: lb://RECOMM-SERVICE
-          predicates:
-            - Path=/api/recomm-service/**
-            - Method=GET,POST
-#          filters:
-#            - AuthorizationFilter
-#---------------------------------------------RECOMM FILTER END---------------------------------------------------------------
+        #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
 
 token:
   secret: secretKey
