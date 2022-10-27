@@ -1,7 +1,7 @@
 import React, { MouseEventHandler } from 'react';
-import { StyledTab, StyledTypes } from './style';
+import { StyledTab, styledType } from './style';
 
-interface propTypes extends StyledTypes {
+interface propsType extends styledType {
   title: string;
   clickHandler?: MouseEventHandler<HTMLSpanElement>;
 }
@@ -17,7 +17,7 @@ interface propTypes extends StyledTypes {
  *
  * @author bell
  */
-const index = ({ title, clickHandler, isActivated }: propTypes) => {
+const index = ({ title, clickHandler, isActivated }: propsType) => {
   return (
     <StyledTab isActivated={isActivated} onClick={clickHandler}>
       {title}

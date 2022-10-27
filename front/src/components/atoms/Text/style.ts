@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-export interface StyledTypes {
+export interface styledType {
   fontFamily?: string;
   fontWeight?: string;
   color?: string;
@@ -10,7 +10,7 @@ export interface StyledTypes {
   width?: number;
 }
 
-export const StyledText = styled.div<StyledTypes>`
+export const StyledText = styled.div<styledType>`
   color: ${({ color }) => color};
   font-weight: ${({ fontWeight }) => fontWeight};
   font-size: ${({ fontSize }) => fontSize};
@@ -24,7 +24,7 @@ StyledText.defaultProps = {
   fontFamily: 'pretendard',
 };
 
-export const StyledFill = styled.div<StyledTypes>`
+export const StyledFill = styled.div<styledType>`
   ${tw`inline-block`}
   background-color: ${({ backgroundColor }) => backgroundColor};
   font-family: ${({ fontFamily }) => fontFamily};
