@@ -25,7 +25,7 @@ public class IssueController {
 
     // 이슈 템플릿 등록
     @PostMapping
-    public ResponseEntity<?> createIssueTemplate(@LoginUser User user, IssueTemplateCreateRequest issueTemplateCreateRequest) {
+    public ResponseEntity<?> createIssueTemplate(@LoginUser User user, @RequestBody IssueTemplateCreateRequest issueTemplateCreateRequest) {
         issueService.createIssueTemplate(user.getId(), issueTemplateCreateRequest);
         return ResponseEntity.ok()
                 .build();
@@ -33,7 +33,7 @@ public class IssueController {
 
     // 이슈 템플릿 수정
     @PutMapping("/{issueTemplateId}")
-    public ResponseEntity<?> updateIssueTemplate(@LoginUser User user, @PathVariable Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
+    public ResponseEntity<?> updateIssueTemplate(@LoginUser User user, @PathVariable Long issueTemplateId, @RequestBody IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
         issueService.updateIssueTemplate(user.getId(), issueTemplateId, issueTemplateUpdateRequest);
         return ResponseEntity.ok()
                 .build();
@@ -65,7 +65,7 @@ public class IssueController {
 
     // 미들 버킷 생성
     @PostMapping("/middle-buckets")
-    public ResponseEntity<?> createMiddleBucket(@LoginUser User user, MiddleBucketCreateRequest middleBucketCreateRequest) {
+    public ResponseEntity<?> createMiddleBucket(@LoginUser User user, @RequestBody MiddleBucketCreateRequest middleBucketCreateRequest) {
         issueService.createMiddleBucket(user.getId(), middleBucketCreateRequest);
         return ResponseEntity.ok()
                 .build();
@@ -73,7 +73,7 @@ public class IssueController {
 
     // 미들 버킷 수정
     @PutMapping("/middle-buckets/{middleBucketId}")
-    public ResponseEntity<?> updateMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest) {
+    public ResponseEntity<?> updateMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @RequestBody MiddleBucketUpdateRequest middleBucketUpdateRequest) {
         issueService.updateMiddleBucket(user.getId(), middleBucketId, middleBucketUpdateRequest);
         return ResponseEntity.ok()
                 .build();
@@ -89,7 +89,7 @@ public class IssueController {
 
     // 미들 버킷에 이슈 추가
     @PostMapping("/middle-buckets/{middleBucketId}")
-    public ResponseEntity<?> createIssueIntoMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
+    public ResponseEntity<?> createIssueIntoMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @RequestBody MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
         issueService.createIssueIntoMiddleBucket(user.getId(), middleBucketId, middleBucketIssueCreateRequest);
         return ResponseEntity.ok()
                 .build();
@@ -97,7 +97,7 @@ public class IssueController {
 
     // 미들 버킷 내의 이슈 수정
     @PutMapping("/middle-buckets/{middleBucketId}/{middleBucketIssueId}")
-    public ResponseEntity<?> updateIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest) {
+    public ResponseEntity<?> updateIssueInMiddleBucket(@LoginUser User user, @PathVariable Long middleBucketId, @PathVariable Long middleBucketIssueId, @RequestBody MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest) {
         issueService.updateIssueInMiddleBucket(user.getId(), middleBucketId, middleBucketIssueId, middleBucketIssueUpdateRequest);
         return ResponseEntity.ok()
                 .build();
