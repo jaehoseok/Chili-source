@@ -82,8 +82,8 @@ public class UserProjectServiceImpl implements UserProjectService {
                         .userId(userProject.getUserId())
                         .projectId(userProject.getProject().getId())
                         .roleId(userProject.getRole().getId())
-                        .build()
-                ).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
     }
 
 

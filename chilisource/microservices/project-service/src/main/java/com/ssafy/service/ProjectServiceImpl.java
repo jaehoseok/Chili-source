@@ -52,8 +52,8 @@ public class ProjectServiceImpl implements ProjectService {
                         .teamName(project.getTeamName())
                         .image(project.getImage())
                         .jiraProject(project.getJiraProject())
-                        .build()
-                ).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
     }
 
     // 프로젝트 생성
