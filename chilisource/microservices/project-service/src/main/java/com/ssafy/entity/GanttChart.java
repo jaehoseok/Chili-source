@@ -17,10 +17,8 @@ public class GanttChart extends BaseEntity {
     @Column(name = "gantt_chart_id")
     private Long id;
 
-    @Temporal(TemporalType.DATE)
     private LocalDateTime startDate;
 
-    @Temporal(TemporalType.DATE)
     private LocalDateTime endDate;
 
     private String content;

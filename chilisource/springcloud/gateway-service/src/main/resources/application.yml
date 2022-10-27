@@ -46,6 +46,49 @@ spring:
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
         #---------------------------------------------USER FILTER END---------------------------------------------------------------
 
+        ##---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
+        #        - id: user-service
+        #          uri: lb://USER-SERVICE
+        #          predicates:
+        #            - Path=/api/user-service/recreatejwt
+        #            - Method=GET
+        #          filters:
+        #            - AuthorizationFilter
+        #
+        #        - id: user-service
+        #          uri: lb://USER-SERVICE
+        #          predicates:
+        #            - Path=/api/user-service/game
+        #            - Method=GET,POST
+        #          filters:
+        #            - AuthorizationFilter
+        #
+        #        - id: user-service
+        #          uri: lb://USER-SERVICE
+        #          predicates:
+        #            - Path=/api/user-service/disable
+        #            - Method=GET
+        #          filters:
+        #            - AuthorizationFilter
+        #
+        #        - id: user-service
+        #          uri: lb://USER-SERVICE
+        #          predicates:
+        #            - Path=/api/user-service/logout
+        #            - Method=GET
+        #          filters:
+        #            - AuthorizationFilter
+
+        - id: project-service
+          uri: lb://PROJECT-SERVICE
+          predicates:
+            - Path=/api/project-service/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            - RemoveRequestHeader=Cookie
+            #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
+
         #---------------------------------------------ISSUE FILTER START---------------------------------------------------------------
         #        - id: festival-service
         #          uri: lb://FESTIVAL-SERVICE
