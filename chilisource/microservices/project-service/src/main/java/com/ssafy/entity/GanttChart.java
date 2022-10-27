@@ -17,11 +17,15 @@ public class GanttChart extends BaseEntity {
     @Column(name = "gantt_chart_id")
     private Long id;
 
-    private LocalDateTime startDate;
+    private LocalDateTime startTime;
 
-    private LocalDateTime endDate;
+    private LocalDateTime endTime;
 
-    private String content;
+    private String issueSummary;
+
+    private Long version;
+
+    private String issueCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -30,11 +34,13 @@ public class GanttChart extends BaseEntity {
     private Long userId;
 
     @Builder
-    public GanttChart(Long id, LocalDateTime startDate, LocalDateTime endDate, String content, Project project, Long userId) {
+    public GanttChart(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Project project, Long userId) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.content = content;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.issueSummary = issueSummary;
+        this.version = version;
+        this.issueCode = issueCode;
         this.project = project;
         this.userId = userId;
     }
