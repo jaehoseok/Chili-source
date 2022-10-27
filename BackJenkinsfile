@@ -97,9 +97,9 @@ pipeline{
                 script{
                     try{
                         // spring-cloud 빌드
-                        sh "docker build -t ${DISCOVERY_NAME} ./chilisource/spring-cloud/discovery-service/."
-                        sh "docker build -t ${CONFIG_NAME} ./chilisource/spring-cloud/config-service/."
-                        sh "docker build -t ${GATEWAY_NAME} ./chilisource/spring-cloud/gateway-service/."
+                        sh "docker build -t ${DISCOVERY_NAME} ./chilisource/springcloud/discovery-service/."
+                        sh "docker build -t ${CONFIG_NAME} ./chilisource/springcloud/config-service/."
+                        sh "docker build -t ${GATEWAY_NAME} ./chilisource/springcloud/gateway-service/."
 
                         // Spring micro-service 빌드
                         sh "docker build -t ${AUTH_NAME} ./chilisource/microservices/auth-service/."
