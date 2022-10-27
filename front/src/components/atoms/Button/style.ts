@@ -5,17 +5,19 @@ export interface ButtonProps {
   children: React.ReactNode;
   width: number;
   height: number;
+  fontSize: number;
   backgroundColor: string;
   borderColor: string;
-  isHover: boolean; // hover 기능 넣을 버튼을 위해 추가한 props
-  isDisabled: boolean; // 비활성화 상태임을 나타내기 위해 추가한 props
+  isHover: boolean;
+  isDisabled: boolean;
   clickHandler: MouseEventHandler<HTMLButtonElement>;
 }
 
 export const defaultProps = {
   children: '',
-  width: 0,
-  height: 0,
+  width: 100,
+  height: 40,
+  fontSize: 20,
   backgroundColor: '#FFFFFF',
   borderColor: '#FFFFFF',
   isHover: false,
@@ -30,7 +32,7 @@ export const Button = styled.button`
   border: 1px solid ${(props: ButtonProps) => props.borderColor};
 
   ${(props: ButtonProps) => props.height && `border-radius: ${props.height * 0.3}px`};
-  font-size: 10px;
+  ${(props: ButtonProps) => props.fontSize && `font-size: ${props.fontSize}px`};
   cursor: pointer;
   color: ${(props: ButtonProps) =>
     props.backgroundColor

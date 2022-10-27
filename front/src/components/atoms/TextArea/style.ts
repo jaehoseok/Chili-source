@@ -7,8 +7,8 @@ export interface TextAreaProps {
 }
 
 export const defaultProps: TextAreaProps = {
-  width: 0,
-  height: 0,
+  width: 400,
+  height: 30,
   placeHolder: '',
 };
 

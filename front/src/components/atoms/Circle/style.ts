@@ -14,7 +14,7 @@ export interface CircleProps {
 
 export const defaultProps: CircleProps = {
   children: '',
-  height: 0,
+  height: 50,
   backgroundColor: theme.button.gray,
   isDropShadow: false,
   isInnerShadow: false,
@@ -28,8 +28,7 @@ export const Circle = styled.span`
   align-items: center;
   ${(props: CircleProps) => props.height && `width: ${props.height}px`};
   ${(props: CircleProps) => props.height && `height: ${props.height}px`};
-  background-color: ${(props: CircleProps) =>
-    typeof props.children === 'string' ? '#d9d9d9' : 'transparent'};
+  ${(props: CircleProps) => props.backgroundColor && `background-color: ${props.backgroundColor}`};
   font-weight: bold;
   border-radius: 50%;
   box-shadow: none;
