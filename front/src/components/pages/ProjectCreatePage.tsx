@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ProjectCreatePage = () => {
   return <div>ProjectCreatePage</div>;
 };
