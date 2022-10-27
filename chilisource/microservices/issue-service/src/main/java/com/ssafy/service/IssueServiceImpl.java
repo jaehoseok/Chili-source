@@ -68,46 +68,46 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void createIssueTemplate(Long userId, IssueTemplateCreateRequest issueTemplateCreateRequest) {
-        Response response = projectServiceClient.findProjectById(issueTemplateCreateRequest.getProjectId());
+    public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request) {
+        Response response = projectServiceClient.findProjectById(request.getProjectId());
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
-        IssueType issueType = issueTypeRepo.findByName(issueTemplateCreateRequest.getIssueType())
+        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         IssueTemplate issueTemplate = IssueTemplate.builder()
-                .summary(issueTemplateCreateRequest.getSummary())
-                .description(issueTemplateCreateRequest.getDescription())
-                .assignee(issueTemplateCreateRequest.getAssignee())
-                .priority(issueTemplateCreateRequest.getPriority())
-                .epicLink(issueTemplateCreateRequest.getEpicLink())
-                .sprint(issueTemplateCreateRequest.getSprint())
-                .storyPoints(issueTemplateCreateRequest.getStoryPoints())
+                .summary(request.getSummary())
+                .description(request.getDescription())
+                .assignee(request.getAssignee())
+                .priority(request.getPriority())
+                .epicLink(request.getEpicLink())
+                .sprint(request.getSprint())
+                .storyPoints(request.getStoryPoints())
                 .issueType(issueType)
                 .userId(userId)
-                .projectId(issueTemplateCreateRequest.getProjectId())
+                .projectId(request.getProjectId())
                 .build();
         issueTemplateRepo.save(issueTemplate);
     }
 
     @Transactional
     @Override
-    public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest issueTemplateUpdateRequest) {
+    public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
                 .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
-        IssueType issueType = issueTypeRepo.findByName(issueTemplateUpdateRequest.getIssueType())
+        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         issueTemplate.update(
-                issueTemplateUpdateRequest.getSummary(),
-                issueTemplateUpdateRequest.getDescription(),
-                issueTemplateUpdateRequest.getAssignee(),
-                issueTemplateUpdateRequest.getPriority(),
-                issueTemplateUpdateRequest.getEpicLink(),
-                issueTemplateUpdateRequest.getSprint(),
-                issueTemplateUpdateRequest.getStoryPoints(),
+                request.getSummary(),
+                request.getDescription(),
+                request.getAssignee(),
+                request.getPriority(),
+                request.getEpicLink(),
+                request.getSprint(),
+                request.getStoryPoints(),
                 issueType
         );
     }
@@ -173,15 +173,15 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void createMiddleBucket(Long userId, MiddleBucketCreateRequest middleBucketCreateRequest) {
-        Long projectId = middleBucketCreateRequest.getProjectId();
+    public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request) {
+        Long projectId = request.getProjectId();
         Response response = projectServiceClient.findProjectById(projectId);
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
         MiddleBucket middleBucket = MiddleBucket.builder()
-                .name(middleBucketCreateRequest.getName())
+                .name(request.getName())
                 .userId(userId)
                 .projectId(projectId)
                 .build();
@@ -191,10 +191,10 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest middleBucketUpdateRequest) {
+    public void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest request) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
-        middleBucket.update(middleBucketUpdateRequest.getName());
+        middleBucket.update(request.getName());
     }
 
     @Transactional
@@ -207,20 +207,20 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest middleBucketIssueCreateRequest) {
+    public void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest request) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
-        IssueType issueType = issueTypeRepo.findByName(middleBucketIssueCreateRequest.getIssueType())
+        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         MiddleBucketIssue middleBucketIssue = MiddleBucketIssue.builder()
-                .summary(middleBucketIssueCreateRequest.getSummary())
-                .description(middleBucketIssueCreateRequest.getDescription())
-                .assignee(middleBucketIssueCreateRequest.getAssignee())
-                .priority(middleBucketIssueCreateRequest.getPriority())
-                .epicLink(middleBucketIssueCreateRequest.getEpicLink())
-                .sprint(middleBucketIssueCreateRequest.getSprint())
-                .storyPoints(middleBucketIssueCreateRequest.getStoryPoints())
+                .summary(request.getSummary())
+                .description(request.getDescription())
+                .assignee(request.getAssignee())
+                .priority(request.getPriority())
+                .epicLink(request.getEpicLink())
+                .sprint(request.getSprint())
+                .storyPoints(request.getStoryPoints())
                 .middleBucket(middleBucket)
                 .issueType(issueType)
                 .build();
@@ -231,22 +231,22 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest middleBucketIssueUpdateRequest) {
+    public void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest request) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
-        IssueType issueType = issueTypeRepo.findByName(middleBucketIssueUpdateRequest.getIssueType())
+        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         middleBucketIssue.update(
-                middleBucketIssueUpdateRequest.getSummary(),
-                middleBucketIssueUpdateRequest.getDescription(),
-                middleBucketIssueUpdateRequest.getAssignee(),
-                middleBucketIssueUpdateRequest.getPriority(),
-                middleBucketIssueUpdateRequest.getEpicLink(),
-                middleBucketIssueUpdateRequest.getSprint(),
-                middleBucketIssueUpdateRequest.getStoryPoints(),
+                request.getSummary(),
+                request.getDescription(),
+                request.getAssignee(),
+                request.getPriority(),
+                request.getEpicLink(),
+                request.getSprint(),
+                request.getStoryPoints(),
                 issueType
         );
     }
