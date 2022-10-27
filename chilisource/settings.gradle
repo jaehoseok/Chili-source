@@ -16,4 +16,6 @@ include 'microservices:issue-service'
 findProject(':microservices:issue-service')?.name = 'issue-service'
 include 'microservices:auth-service'
 findProject(':microservices:auth-service')?.name = 'auth-service'
+include 'microservices:wigget-service'
+findProject(':microservices:wigget-service')?.name = 'wigget-service'
 
