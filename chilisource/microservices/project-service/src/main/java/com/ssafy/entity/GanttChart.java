@@ -44,4 +44,13 @@ public class GanttChart extends BaseEntity {
         this.project = project;
         this.userId = userId;
     }
+
+    public void update(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Long userId) {
+        if(!startTime.equals(null)) this.startTime = startTime;
+        if(!endTime.equals(null)) this.endTime = endTime;
+        if(!issueSummary.equals(null)) this.issueSummary = issueSummary;
+        if(!version.equals(null)) this.version = version;
+        if(!issueCode.equals(null)) this.issueCode = issueCode;
+        if(!userId.equals(null)) this.userId = userId;
+    }
 }
