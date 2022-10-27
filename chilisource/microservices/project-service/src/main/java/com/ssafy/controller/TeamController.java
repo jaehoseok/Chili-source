@@ -48,7 +48,7 @@ public class TeamController {
     public ResponseEntity<?> quitUserProject(@LoginUser User user, @PathVariable Long projectId) {
         int result = userProjectService.quitUserProject(user.getId(), projectId);
         if (result == 0) return ResponseEntity.ok().build();
-        else return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     // 프로젝트에 팀원 강퇴
