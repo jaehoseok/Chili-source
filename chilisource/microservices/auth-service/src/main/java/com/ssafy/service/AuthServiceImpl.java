@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
                 .accessToken(jwtUtil.createAccessToken(userId))
                 .refreshToken(refreshToken)
                 .build();
-        return null;
+        return response;
     }
 
     @Override
@@ -127,6 +127,4 @@ public class AuthServiceImpl implements AuthService {
                 .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenRepo.delete(token);
     }
-
-
 }

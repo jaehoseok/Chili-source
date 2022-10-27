@@ -48,6 +48,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/users/withdraw")
+    public ResponseEntity<?> withdraw(
+            @LoginUser User user
+    ) {
+        userService.withdraw(user.getId());
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/users/list")
     public ResponseEntity<?> getUserList(
             @RequestParam List<Long> userIds

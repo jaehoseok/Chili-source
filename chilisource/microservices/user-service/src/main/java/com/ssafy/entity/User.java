@@ -57,7 +57,7 @@ public class User extends BaseEntity {
         this.active = true;
     }
 
-    public void withdrawal() {
+    public void withdraw() {
         this.active = false;
     }
 }

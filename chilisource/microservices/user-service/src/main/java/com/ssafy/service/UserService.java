@@ -18,7 +18,7 @@ public interface UserService {
     public void updateUserImage(String image, Long userId);
 
     // 회원탈퇴 (비활성화)
-    public void withdrawal(Long userId);
+    public void withdraw(Long userId);
 
     // 유저리스트 조회
     public List<UserResponse> getUserList(List<Long> userIds);

@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void withdrawal(Long userId) {
+    public void withdraw(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.withdrawal();
