@@ -47,7 +47,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                     .userId(request.getUserId())
                     .project(project)
                     .role(null)
-    //                .role(DEFAULT_ROLE)
+                    //                .role(DEFAULT_ROLE)
                     .build();
             userProjectRepo.save(userProject);
         }
@@ -66,7 +66,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         if (userProjectManager.getRole().getInvite()) {
             // 팀원 정보 수정
             userProject.update(request.getUserColor(), null);
-    //        userProject.update(request.getUserColor(), roleRepo.findById(request.getRoleId()).get());
+            //        userProject.update(request.getUserColor(), roleRepo.findById(request.getRoleId()).get());
         }
     }
 

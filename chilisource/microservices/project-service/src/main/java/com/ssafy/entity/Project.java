@@ -59,6 +59,6 @@ public class Project extends BaseEntity {
         if (!image.equals(null)) this.image = image;
         if (!jiraProject.equals(null)) this.jiraProject = jiraProject;
         if (!jiraToken.equals(null)) this.jiraToken = jiraToken;
-        if (!gitToken.equals(null))  this.gitToken = gitToken;
+        if (!gitToken.equals(null)) this.gitToken = gitToken;
     }
 }

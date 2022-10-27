@@ -23,11 +23,11 @@ public class ProjectCustomRepoImpl implements ProjectCustomRepo {
         return jpaQueryFactory
                 .selectFrom(project)
                 .where(project.id.in(
-                        JPAExpressions
-                                .select(userProject.project.id)
-                                .where(userProject.userId.eq(userId))
-                                )
+                                JPAExpressions
+                                        .select(userProject.project.id)
+                                        .where(userProject.userId.eq(userId))
                         )
+                )
                 .fetch();
     }
 }
