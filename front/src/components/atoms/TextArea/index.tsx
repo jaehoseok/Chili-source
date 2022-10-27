@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import * as S from './style';
 
 /**
@@ -13,6 +14,11 @@ import * as S from './style';
  */
 
 const TextArea = ({ ...props }: S.TextAreaProps) => {
+  const [value, setValue] = useState<string>(props.value ? props.value : '');
+
+  const changeHandler = () => {
+    setValue(value);
+  };
   return <S.TextArea {...props}></S.TextArea>;
 };
 

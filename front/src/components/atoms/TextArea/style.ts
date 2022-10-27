@@ -4,12 +4,14 @@ export interface TextAreaProps {
   width: number;
   height: number;
   placeHolder?: string;
+  value?: string;
 }
 
 export const defaultProps: TextAreaProps = {
   width: 400,
   height: 30,
   placeHolder: '',
+  value: '',
 };
 
 export const TextArea = styled.input.attrs({
