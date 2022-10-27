@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/gantt")
-public class ScheduleController {
+public class GanttController {
     private final GanttChartService ganttChartService;
 
     @GetMapping
