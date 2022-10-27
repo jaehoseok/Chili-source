@@ -24,12 +24,10 @@ public class GanttChartResponse extends BaseEntity {
 
     private Float progress;
 
-    private Long projectId;
-
     private Long userId;
 
     @Builder
-    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long projectId, Long userId) {
+    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -37,7 +35,6 @@ public class GanttChartResponse extends BaseEntity {
         this.version = version;
         this.issueCode = issueCode;
         this.progress = progress;
-        this.projectId = projectId;
         this.userId = userId;
     }
 }
