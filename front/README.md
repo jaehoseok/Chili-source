@@ -70,4 +70,5 @@
 
 - MR 수정 요구 적용
   > - `src/components/atom/Sheet/` 와 `Input` 의 index와 style 에 props 값을 구조 분해 할당함
+  > - `src/components/atom/Sheet/` 와 `Input` 의 height, width 는 기존 넘버에서 px, rem 등 다양한 상황을 위하여 문자열 타입으로 변경함
   > - `src/components/atom/input/` 은 InputBox molecule 을 상정하지 않고 개발되어 수정함
