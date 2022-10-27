@@ -43,3 +43,12 @@
       + `primary`, `secondary`, `epic`, `bug`, `task`, `story`
   + `minireset.min.css`
     + `min` 설정 완료
+
+## 221027
+### 종현
+  + `navProject` 컴포넌트
+    + 디자인 완료
+    + `tabs` 데이터 설정
+      + `프로젝트 데이터를 가지고 있는 상태값
+    + `activatedToggleHandler` : 하나의 `tab`이 활성화되면, 다른 `tab`은 비활성화 화는 이벤트
+    
