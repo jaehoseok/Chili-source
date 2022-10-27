@@ -96,18 +96,18 @@ pipeline{
             steps {
                 script{
                     try{
-                                            // spring-cloud 빌드
-                        sh "docker build -t ${DISCOVERY_NAME} ./back/jeonwoochi_spring/spring-cloud/discovery-service/."
-                        sh "docker build -t ${CONFIG_NAME} ./back/jeonwoochi_spring/spring-cloud/config-service/."
-                        sh "docker build -t ${GATEWAY_NAME} ./back/jeonwoochi_spring/spring-cloud/gateway-service/."
+                        // spring-cloud 빌드
+                        sh "docker build -t ${DISCOVERY_NAME} ./chilisource/spring-cloud/discovery-service/."
+                        sh "docker build -t ${CONFIG_NAME} ./chilisource/spring-cloud/config-service/."
+                        sh "docker build -t ${GATEWAY_NAME} ./chilisource/spring-cloud/gateway-service/."
 
-                                            // Spring micro-service 빌드
-                        sh "docker build -t ${USER_NAME} ./back/jeonwoochi_spring/microservices/user-service/."
-                        sh "docker build -t ${FESTIVAL_NAME} ./back/jeonwoochi_spring/microservices/festival-service/."
-                        sh "docker build -t ${MAIN_NAME} ./back/jeonwoochi_spring/microservices/main-service/."
+                        // Spring micro-service 빌드
+                        sh "docker build -t ${AUTH_NAME} ./chilisource/microservices/auth-service/."
+                        sh "docker build -t ${USER_NAME} ./chilisource/microservices/user-service/."
+                        sh "docker build -t ${ISSUE_NAME} ./chilisource/microservices/issue-service/."
+                        //sh "docker build -t ${PROJECT_NAME} ./chilisource/microservices/project-service/."
+                        //sh "docker build -t ${WIGGET_NAME} ./chilisource/microservices/wigget-service/."
 
-                                            // Django service 빌드
-                        sh "docker build -t ${RECOMM_NAME} ./back/jeonwoochi_django/."
                         mattermostSend (
                             color: "good", 
                             message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
