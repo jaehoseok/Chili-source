@@ -21,7 +21,9 @@ public class TeamController {
 
     // 프로젝트에 팀원 초대
     @PostMapping
-    public ResponseEntity<?> inviteUserProject(@LoginUser User user, UserProjectCreateRequest request) {
+    public ResponseEntity<?> inviteUserProject(
+            @LoginUser User user,
+            UserProjectCreateRequest request) {
         userProjectService.createUserProject(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
@@ -29,7 +31,9 @@ public class TeamController {
 
     // 프로젝트 팀원 정보 수정
     @PutMapping
-    public ResponseEntity<?> updateUserProject(@LoginUser User user, UserProjectUpdateRequest request) {
+    public ResponseEntity<?> updateUserProject(
+            @LoginUser User user,
+            UserProjectUpdateRequest request) {
         userProjectService.updateUserProject(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
@@ -37,7 +41,8 @@ public class TeamController {
 
     // 프로젝트 팀원 조회
     @GetMapping("/{projectId}")
-    public ResponseEntity<?> getUserProjectList(@PathVariable Long projectId) {
+    public ResponseEntity<?> getUserProjectList(
+            @PathVariable Long projectId) {
         List<UserProjectResponse> responses = userProjectService.getUserProject(projectId);
         return ResponseEntity.ok()
                 .body(responses);
@@ -45,7 +50,9 @@ public class TeamController {
 
     // 프로젝트에서 나가기
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> quitUserProject(@LoginUser User user, @PathVariable Long projectId) {
+    public ResponseEntity<?> quitUserProject(
+            @LoginUser User user,
+            @PathVariable Long projectId) {
         int result = userProjectService.quitUserProject(user.getId(), projectId);
         if (result == 0) return ResponseEntity.ok().build();
         else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -53,7 +60,10 @@ public class TeamController {
 
     // 프로젝트에 팀원 강퇴
     @DeleteMapping("/fire")
-    public ResponseEntity<?> fireUserProject(@LoginUser User user, @RequestParam Long projectId, @RequestParam Long fireUserId) {
+    public ResponseEntity<?> fireUserProject(
+            @LoginUser User user,
+            @RequestParam Long projectId,
+            @RequestParam Long fireUserId) {
         userProjectService.fireUserProject(user.getId(), projectId, fireUserId);
         return ResponseEntity.ok()
                 .build();

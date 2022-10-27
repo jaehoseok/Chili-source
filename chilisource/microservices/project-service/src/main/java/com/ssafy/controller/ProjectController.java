@@ -19,7 +19,8 @@ public class ProjectController {
 
     // 프로젝트 조회
     @GetMapping("/{projectId}")
-    public ResponseEntity<?> getProject(@PathVariable Long projectId) {
+    public ResponseEntity<?> getProject(
+            @PathVariable Long projectId) {
         ProjectResponse response = projectService.getProject(projectId);
         return ResponseEntity.ok()
                 .body(response);
@@ -27,7 +28,8 @@ public class ProjectController {
 
     // 프로젝트 목록 조회
     @GetMapping
-    public ResponseEntity<?> getProjectByUserId(@LoginUser User user) {
+    public ResponseEntity<?> getProjectByUserId(
+            @LoginUser User user) {
         List<ProjectResponse> responses = projectService.getProjectByUserId(user.getId());
         return ResponseEntity.ok()
                 .body(responses);
@@ -35,7 +37,9 @@ public class ProjectController {
     
     // 프로젝트 생성
     @PostMapping
-    public ResponseEntity<?> createProject(ProjectCreateRequest request,  @LoginUser User user) {
+    public ResponseEntity<?> createProject(
+            @RequestBody ProjectCreateRequest request,
+            @LoginUser User user) {
         projectService.createProject(request, user.getId());
         return ResponseEntity.ok()
                 .build();
@@ -43,7 +47,8 @@ public class ProjectController {
 
     // 프로젝트 수정
     @PutMapping
-    public ResponseEntity<?> updateProject(ProjectUpdateRequest request) {
+    public ResponseEntity<?> updateProject(
+            @RequestBody ProjectUpdateRequest request) {
         projectService.updateProject(request);
         return ResponseEntity.ok()
                 .build();
@@ -51,7 +56,9 @@ public class ProjectController {
 
     // 프로젝트 삭제
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<?> deleteProject(@PathVariable Long projectId, @LoginUser User user) {
+    public ResponseEntity<?> deleteProject(
+            @PathVariable Long projectId,
+            @LoginUser User user) {
         projectService.deleteProject(projectId, user.getId());
         return ResponseEntity.ok()
                 .build();
