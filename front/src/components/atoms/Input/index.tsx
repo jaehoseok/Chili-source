@@ -20,20 +20,20 @@ interface propsType extends styledType {
  * @param {string?} value - #초기에 들어가있을 값
  * @author inte
  */
-export const Input = (props: propsType) => {
-  const [value, setValue] = useState(props.value);
+export const Input = ({ height, width, type, placeHolder, value }: propsType) => {
+  const [text, setText] = useState(value);
 
   return (
     <>
       <StyledInput
-        height={props.height}
-        width={props.width}
-        type={props.type}
-        placeholder={props.placeHolder}
+        height={height}
+        width={width}
+        type={type}
+        placeholder={placeHolder}
         onChange={e => {
-          setValue(e.target.value);
+          setText(e.target.value);
         }}
-        value={value}
+        value={text}
       ></StyledInput>
     </>
   );
