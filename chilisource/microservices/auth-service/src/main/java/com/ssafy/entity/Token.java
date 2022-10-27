@@ -17,6 +17,8 @@ public class Token extends BaseEntity {
 
     private String value;
 
+    private String email;
+
     @ManyToOne
     @JoinColumn(name = "token_code_id")
     private TokenCode tokenCode;
@@ -24,13 +26,15 @@ public class Token extends BaseEntity {
     private Long userId;
 
     @Builder
-    public Token(String value, TokenCode tokenCode, Long userId) {
+    public Token(String value, TokenCode tokenCode,String email, Long userId) {
         this.value = value;
         this.tokenCode = tokenCode;
+        this.email = email;
         this.userId = userId;
     }
 
-    public void update(String value) {
+    public void update(String value, String email) {
         this.value = value;
+        this.email = email;
     }
 }

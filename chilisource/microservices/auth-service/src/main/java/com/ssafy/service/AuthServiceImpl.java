@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService {
                     .build();
             tokenRepo.save(newToken);
         } else {
-            token.ifPresent(findToken -> findToken.update(request.getValue()));
+            token.ifPresent(findToken -> findToken.update(request.getValue(), request.getEmail()));
         }
     }
 
