@@ -15,6 +15,7 @@ interface tabData {
   title: string;
 }
 
+// 테스트용 더미 데이터
 const CHILISOURCE = {
   isActivated: true,
   title: '칠리소스',
@@ -23,6 +24,11 @@ const CHILISOURCE = {
 const APICLOUD = {
   isActivated: false,
   title: 'API cloud',
+};
+
+const MOTOO = {
+  isActivated: false,
+  title: '모투',
 };
 
 const App = () => {
@@ -37,7 +43,7 @@ const App = () => {
   const [tabs, setTabs] = useState<tabData[]>([]);
 
   useEffect(() => {
-    setTabs([CHILISOURCE, APICLOUD]);
+    setTabs([CHILISOURCE, APICLOUD, MOTOO]);
   }, []);
 
   const activateToggleHandler = (idx: number) => {
