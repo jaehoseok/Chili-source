@@ -3,7 +3,7 @@
 const color = {
   primary: '#54C270',
   secondary: '#00875A',
-  epic: '##C0B6F2',
+  epic: '#C0B6F2',
   story: '#64BAC3C',
   bug: '#E5493A',
   task: '#4BADE8',
