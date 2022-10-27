@@ -17,9 +17,9 @@ interface propTypes extends StyledTypes {
  *
  * @author bell
  */
-const index = ({ title, clickHandler, activated }: propTypes) => {
+const index = ({ title, clickHandler, isActivated }: propTypes) => {
   return (
-    <StyledTab activated={activated} onClick={clickHandler}>
+    <StyledTab isActivated={isActivated} onClick={clickHandler}>
       {title}
     </StyledTab>
   );
