@@ -49,7 +49,7 @@ pipeline{
                         sh "docker stop ${AUTH_CONTAINER_NAME}"
                         sh "docker stop ${USER_CONTAINER_NAME}"
                         sh "docker stop ${ISSUE_CONTAINER_NAME}"
-                        //sh "docker stop ${PROJECT_CONTAINER_NAME}"
+                        sh "docker stop ${PROJECT_CONTAINER_NAME}"
                         //sh "docker stop ${WIGGET_CONTAINER_NAME}"
                         sleep 1
                         sh "docker rm ${DISCOVERY_CONTAINER_NAME}"
@@ -59,7 +59,7 @@ pipeline{
                         sh "docker rm ${AUTH_CONTAINER_NAME}"
                         sh "docker rm ${USER_CONTAINER_NAME}"
                         sh "docker rm ${ISSUE_CONTAINER_NAME}"
-                        //sh "docker rm ${PROJECT_CONTAINER_NAME}"
+                        sh "docker rm ${PROJECT_CONTAINER_NAME}"
                         //sh "docker rm ${WIGGET_CONTAINER_NAME}"
                     }catch(e){
                         sh 'exit 0'
