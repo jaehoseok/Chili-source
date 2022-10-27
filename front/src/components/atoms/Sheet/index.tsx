@@ -21,15 +21,11 @@ interface propsType extends styledType {
  * @param {string?} backgroundColor - #배경색핵사코드
  * @author inte
  */
-export const Sheet = (props: propsType) => {
+export const Sheet = ({ width, height, backgroundColor, children }: propsType) => {
   return (
     <>
-      <StyledSheet
-        width={props.width}
-        height={props.height}
-        backgroundColor={props.backgroundColor}
-      >
-        {props.children}
+      <StyledSheet width={width} height={height} backgroundColor={backgroundColor}>
+        {children}
       </StyledSheet>
     </>
   );

@@ -1,5 +1,4 @@
-import { useState, useRef } from 'react';
-// import { StyledInputSpace, StyledInput, styledType } from './style';
+import { useState } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {

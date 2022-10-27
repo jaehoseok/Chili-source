@@ -5,8 +5,6 @@ const ProjectDashBoardPage = () => {
   return (
     <>
       <div>ProjectDashBoardPage</div>
-      <Sheet height="10rem" width="10rem"></Sheet>
-      <Input height="10px" value="초기값"></Input>
     </>
   );
 };
