@@ -85,7 +85,7 @@ spring:
             - Path=/api/project-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
-            - RemoveRequestHeader=Cookie
+            # - RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
         #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
 
