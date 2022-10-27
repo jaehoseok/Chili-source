@@ -22,16 +22,19 @@ public class GanttChartUpdateRequest extends BaseEntity {
 
     private String issueCode;
 
+    private Float progress;
+
     private Long userId;
 
     @Builder
-    public GanttChartUpdateRequest(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Long userId) {
+    public GanttChartUpdateRequest(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.issueSummary = issueSummary;
         this.version = version;
         this.issueCode = issueCode;
+        this.progress = progress;
         this.userId = userId;
     }
 }

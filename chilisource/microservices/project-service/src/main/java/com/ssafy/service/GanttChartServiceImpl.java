@@ -117,6 +117,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                     request.getIssueSummary(),
                     request.getVersion(),
                     request.getIssueCode(),
+                    request.getProgress(),
                     request.getUserId()
             );
             ganttChartRepo.save(ganttChart);

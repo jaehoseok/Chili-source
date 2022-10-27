@@ -20,17 +20,19 @@ public class GanttChartCreateRequest extends BaseEntity {
 
     private String issueCode;
 
+    private Float progress;
     private Long projectId;
 
     private Long userId;
 
     @Builder
-    public GanttChartCreateRequest(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Long projectId, Long userId) {
+    public GanttChartCreateRequest(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long projectId, Long userId) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.issueSummary = issueSummary;
         this.version = version;
         this.issueCode = issueCode;
+        this.progress = progress;
         this.projectId = projectId;
         this.userId = userId;
     }
