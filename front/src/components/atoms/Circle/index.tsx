@@ -1,4 +1,8 @@
+import React, { MouseEventHandler } from 'react';
+
 import * as S from './style';
+import { styledType } from './style';
+import { theme } from '../../../styles/theme';
 
 /**
  *
@@ -15,14 +19,27 @@ import * as S from './style';
  *
  * @author dbcs
  */
+interface propsType extends styledType {
+  children: React.ReactNode;
+  clickHandler?: MouseEventHandler<HTMLSpanElement>;
+}
 
-const Circle = ({ children, ...props }: S.CircleProps) => {
+const Circle = ({ children, ...props }: propsType) => {
   return (
     <S.Circle onClick={props.clickHandler} {...props}>
       {children}
     </S.Circle>
   );
 };
-Circle.defaultProps = S.defaultProps;
+
+Circle.defaultProps = {
+  children: '',
+  height: 50,
+  backgroundColor: theme.button.gray,
+  isDropShadow: false,
+  isInnerShadow: false,
+  isClickable: false,
+  clickHandler: undefined,
+};
 
 export default Circle;

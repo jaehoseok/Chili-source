@@ -1,9 +1,6 @@
-import React, { MouseEventHandler } from 'react';
-
 import styled, { css } from 'styled-components';
 
-export interface ButtonProps {
-  children: React.ReactNode;
+export interface styledType {
   width: number;
   height: number;
   fontSize: number;
@@ -11,37 +8,24 @@ export interface ButtonProps {
   borderColor: string;
   isHover: boolean;
   isDisabled: boolean;
-  clickHandler: MouseEventHandler<HTMLButtonElement>;
 }
 
-export const defaultProps = {
-  children: '',
-  width: 100,
-  height: 40,
-  fontSize: 20,
-  backgroundColor: '#FFFFFF',
-  borderColor: '#FFFFFF',
-  isHover: false,
-  isDisabled: false,
-  clickHandler: undefined,
-};
-
 export const Button = styled.button`
-  ${(props: ButtonProps) => props.width && `width: ${props.width}px`};
-  ${(props: ButtonProps) => props.height && `height: ${props.height}px`};
-  background-color: ${(props: ButtonProps) => props.backgroundColor};
-  border: 1px solid ${(props: ButtonProps) => props.borderColor};
+  ${(props: styledType) => props.width && `width: ${props.width}px`};
+  ${(props: styledType) => props.height && `height: ${props.height}px`};
+  background-color: ${(props: styledType) => props.backgroundColor};
+  border: 1px solid ${(props: styledType) => props.borderColor};
 
-  ${(props: ButtonProps) => props.height && `border-radius: ${props.height * 0.3}px`};
-  ${(props: ButtonProps) => props.fontSize && `font-size: ${props.fontSize}px`};
+  ${(props: styledType) => props.height && `border-radius: ${props.height * 0.3}px`};
+  ${(props: styledType) => props.fontSize && `font-size: ${props.fontSize}px`};
   cursor: pointer;
-  color: ${(props: ButtonProps) =>
+  color: ${(props: styledType) =>
     props.backgroundColor
       ? props.borderColor
       : props.backgroundColor === '#F8F8F8'
       ? '#000000'
       : '#FFFFFF'};
-  ${(props: ButtonProps) =>
+  ${(props: styledType) =>
     props.isHover &&
     css`
       transition: 0.3s;
@@ -51,7 +35,7 @@ export const Button = styled.button`
         transition: 0.3s;
       }
     `};
-  ${(props: ButtonProps) =>
+  ${(props: styledType) =>
     props.isDisabled &&
     css`
       border: 1px solid ${({ theme }) => theme.button.gray};

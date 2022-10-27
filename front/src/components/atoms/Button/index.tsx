@@ -1,4 +1,7 @@
+import { MouseEventHandler } from 'react';
+
 import * as S from './style';
+import { styledType } from './style';
 
 /**
  *
@@ -23,7 +26,12 @@ import * as S from './style';
  * @author dbcs
  */
 
-const Button = ({ children, ...props }: S.ButtonProps) => {
+interface propsType extends styledType {
+  children: React.ReactNode;
+  clickHandler: MouseEventHandler<HTMLButtonElement>;
+}
+
+const Button = ({ children, ...props }: propsType) => {
   return (
     <S.Button onClick={props.clickHandler} {...props}>
       {children}
@@ -31,6 +39,16 @@ const Button = ({ children, ...props }: S.ButtonProps) => {
   );
 };
 
-Button.defaultProps = S.defaultProps;
+Button.defaultProps = {
+  children: '',
+  width: 100,
+  height: 40,
+  fontSize: 20,
+  backgroundColor: '#FFFFFF',
+  borderColor: '#FFFFFF',
+  isHover: false,
+  isDisabled: false,
+  clickHandler: undefined,
+};
 
 export default Button;

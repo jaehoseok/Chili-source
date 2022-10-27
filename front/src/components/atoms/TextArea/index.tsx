@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as S from './style';
+import { styledType } from './style';
 
 /**
  *
@@ -14,7 +15,12 @@ import * as S from './style';
  * @author dbcs
  */
 
-const TextArea = ({ ...props }: S.TextAreaProps) => {
+interface propsType extends styledType {
+  placeHolder?: string;
+  defaultValue?: string;
+}
+
+const TextArea = ({ ...props }: propsType) => {
   const [value, setValue] = useState<string>(props.defaultValue ? props.defaultValue : '');
 
   const changeHandler = (e: any) => {
@@ -23,6 +29,11 @@ const TextArea = ({ ...props }: S.TextAreaProps) => {
   return <S.TextArea {...props} onChange={changeHandler}></S.TextArea>;
 };
 
-TextArea.defaultProps = S.defaultProps;
+TextArea.defaultProps = {
+  width: 400,
+  height: 30,
+  placeHolder: '',
+  defaultValue: '',
+};
 
 export default TextArea;
