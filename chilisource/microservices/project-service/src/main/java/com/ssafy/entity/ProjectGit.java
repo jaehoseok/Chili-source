@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class ProjectToken extends BaseEntity {
+public class ProjectGit extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_token_id")
@@ -20,12 +20,12 @@ public class ProjectToken extends BaseEntity {
     @JoinColumn(name = "project_id")
     private Project project;
 
-    private Long tokenId;
+    private String gitRepo;
 
     @Builder
-    public ProjectToken(Long id, Project project, Long tokenId) {
+    public ProjectGit(Long id, Project project, String gitRepo) {
         this.id = id;
         this.project = project;
-        this.tokenId = tokenId;
+        this.gitRepo = gitRepo;
     }
 }
