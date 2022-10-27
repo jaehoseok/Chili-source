@@ -10,5 +10,5 @@ export const StyledTab = styled.span<styledType>`
   display: inline-block;
   background-color: ${({ theme, isActivated }) =>
     isActivated ? theme.color.secondary : theme.color.primary};
-  cursor: ${({ isActivated }) => (isActivated ? 'none' : 'pointer')};
+  cursor: ${({ isActivated }) => (isActivated ? 'default' : 'pointer')};
 `;
