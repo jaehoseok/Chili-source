@@ -36,4 +36,4 @@ const index = ({ width, height, placeholder, defaultValue }: propsType) => {
   );
 };
 
-export default TextArea;
+export default index;
