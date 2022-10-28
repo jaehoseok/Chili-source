@@ -1,6 +1,5 @@
 package com.ssafy.dto.response;
 
-import com.ssafy.entity.BaseEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class GanttChartResponse extends BaseEntity {
+public class GanttChartResponse {
     private Long id;
 
     private LocalDateTime startTime;
