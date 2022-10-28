@@ -85,8 +85,34 @@
 - Circle
   >- 디자인 효과 `isDropShadow`, `isInnerShadow` 추가. 각각 Figma의 Drop Shadow, Inner Shadow 효과 부여
   >- 클릭 효과 `isClickable` 추가. cursor: pointer 기능 부여
-
+  
 ## 221027
+
+### 준혁
+
+- `src\components\molecules\WidgetBlock` 제작
+
+  > - 디폴트 값은 높이 180px, 넓이 400px 이다.
+
+- 전체 프리텐다드 글꼴 적용
+
+  > - `src\index.css` 에 해당 폰트 적용
+
+  > ```css
+  > code {
+  >   font-family: Pretendard, source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  > }
+  >
+  > @font-face {
+  >   font-family: 'Pretendard';
+  >   src: url('assets/font/PretendardVariable.ttf');
+  > }
+  > ```
+
+- `.gitignore` 설정 추가
+
+  > - 깃에 올리지 않을 테스트 용 코드를 사용하기 위해 다음의 법칙을 추가함
+  > - `*.local.*`
 
 ### 성현
 
@@ -94,6 +120,10 @@
   >- defaultValue 옵션 적용. React에서는 value 옵션 적용 시 수정이 불가능했음
 
 ## 221028
+
+### 준혁
+
+- `src\components\molecules\WidgetBlock` tailwindcss 를 twin macro 기반 적용
 
 ### 성현
 
