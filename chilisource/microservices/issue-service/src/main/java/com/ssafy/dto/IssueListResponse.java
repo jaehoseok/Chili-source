@@ -10,7 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 public class IssueListResponse {
     private Long middleBucketId;
+
     private String middleBucketName;
+
     private List<IssueResponse> issueList;
 
     @Builder

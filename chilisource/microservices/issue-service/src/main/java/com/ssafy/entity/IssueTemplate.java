@@ -34,13 +34,13 @@ public class IssueTemplate extends BaseEntity {
 
     private Double storyPoints;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "issue_type_id")
-    private IssueType issueType;
-
     private Long userId;
 
     private Long projectId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "issue_type_id")
+    private IssueType issueType;
 
     @Builder
     public IssueTemplate(Long id, String summary, String description, String assignee, String priority, String epicLink,

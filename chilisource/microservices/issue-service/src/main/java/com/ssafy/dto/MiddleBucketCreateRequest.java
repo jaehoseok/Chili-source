@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MiddleBucketCreateRequest {
     private String name;
+
     private Long projectId;
 }
