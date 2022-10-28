@@ -1,37 +1,43 @@
 import styled, { css } from 'styled-components';
+import tw from 'twin.macro';
+import { theme } from '../../../styles/theme';
 
 export interface styledType {
-  height: number;
-  backgroundColor: string;
+  height?: number;
+  backgroundColor?: string;
   isDropShadow?: boolean;
   isInnerShadow?: boolean;
   isClickable?: boolean;
 }
 
-export const Circle = styled.span`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${(props: styledType) => props.height && `width: ${props.height}px`};
-  ${(props: styledType) => props.height && `height: ${props.height}px`};
-  ${(props: styledType) => props.backgroundColor && `background-color: ${props.backgroundColor}`};
-  font-weight: bold;
-  border-radius: 50%;
-  box-shadow: none;
+export const Circle = styled.span<styledType>`
+  ${tw`flex justify-center items-center rounded-full font-bold shadow-none`};
 
-  ${(props: styledType) =>
-    props.isInnerShadow &&
+  ${({ height }) => height && `width: ${height}px`};
+  ${({ height }) => height && `height: ${height}px`};
+  ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
+  ${({ isInnerShadow }) =>
+    isInnerShadow &&
     css`
       box-shadow: inset 0px 3px 3px #aaa;
     `};
-  ${(props: styledType) =>
-    props.isDropShadow &&
+  ${({ isDropShadow }) =>
+    isDropShadow &&
     css`
       box-shadow: 0px 3px 3px #aaa;
     `}
-  ${(props: styledType) =>
-    props.isClickable &&
+  ${({ isClickable }) =>
+    isClickable &&
     css`
-      cursor: pointer;
+      ${tw`cursor-pointer`};
     `}
 `;
+
+Circle.defaultProps = {
+  children: '',
+  height: 50,
+  backgroundColor: theme.button.gray,
+  isDropShadow: false,
+  isInnerShadow: false,
+  isClickable: false,
+};
