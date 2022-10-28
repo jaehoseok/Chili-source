@@ -2,6 +2,11 @@ import { useState } from 'react';
 import * as S from './style';
 import { styledType } from './style';
 
+interface propsType extends styledType {
+  placeHolder?: string;
+  defaultValue?: string;
+}
+
 /**
  *
  * @description
@@ -14,11 +19,6 @@ import { styledType } from './style';
  * - React에서는 바닐라 JS와 달리 value가 Read Only여서 수정이 불가능. 대신 defaultValue를 채택 시 수정 가능한 value를 사용할 수 있다.
  * @author dbcs
  */
-
-interface propsType extends styledType {
-  placeHolder?: string;
-  defaultValue?: string;
-}
 
 const TextArea = ({ ...props }: propsType) => {
   const [value, setValue] = useState<string>(props.defaultValue ? props.defaultValue : '');

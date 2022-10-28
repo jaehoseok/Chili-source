@@ -4,6 +4,11 @@ import * as S from './style';
 import { styledType } from './style';
 import { theme } from '../../../styles/theme';
 
+interface propsType extends styledType {
+  children: React.ReactNode;
+  clickHandler?: MouseEventHandler<HTMLSpanElement>;
+}
+
 /**
  *
  * @description
@@ -19,10 +24,6 @@ import { theme } from '../../../styles/theme';
  *
  * @author dbcs
  */
-interface propsType extends styledType {
-  children: React.ReactNode;
-  clickHandler?: MouseEventHandler<HTMLSpanElement>;
-}
 
 const Circle = ({ children, ...props }: propsType) => {
   return (

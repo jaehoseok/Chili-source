@@ -3,6 +3,11 @@ import { MouseEventHandler } from 'react';
 import * as S from './style';
 import { styledType } from './style';
 
+interface propsType extends styledType {
+  children: React.ReactNode;
+  clickHandler: MouseEventHandler<HTMLButtonElement>;
+}
+
 /**
  *
  * @description
@@ -25,11 +30,6 @@ import { styledType } from './style';
  *
  * @author dbcs
  */
-
-interface propsType extends styledType {
-  children: React.ReactNode;
-  clickHandler: MouseEventHandler<HTMLButtonElement>;
-}
 
 const Button = ({ children, ...props }: propsType) => {
   return (
