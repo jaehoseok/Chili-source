@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'twin.macro';
 
 export interface styledType {
   height?: string;
@@ -23,20 +24,9 @@ StyledWidgetBlock.defaultProps = {
 };
 
 export const StyledWidgetBlockLine = styled.div<styledType>`
-  margin: 16px;
-  height: 80%;
-  width: 4px;
-  border-radius: 2px;
-  background-color: #e3e3e3;
+  ${tw`h-4/5 w-1 m-4 rounded-full bg-gray-200`}
 `;
 
 export const StyledWidgetBlockText = styled.div<styledType>`
-  display: flex;
-  align-items: center;
-  max-width: 50%;
-  max-height: 100%;
-  font-size: 12pt;
-  font-weight: bold;
-
-  overflow: hidden;
+  ${tw`max-h-full max-w-[50%] overflow-hidden text-base font-bold`}
 `;

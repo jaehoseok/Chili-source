@@ -100,3 +100,9 @@
 
   > - 깃에 올리지 않을 테스트 용 코드를 사용하기 위해 다음의 법칙을 추가함
   > - `*.local.*`
+
+## 221028
+
+### 준혁
+
+- `src\components\molecules\WidgetBlock` tailwindcss 를 twin macro 기반 적용
