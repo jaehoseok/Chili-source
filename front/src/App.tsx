@@ -15,7 +15,7 @@ interface tabData {
   title: string;
 }
 
-// 테스트용 더미 데이터
+// 테스트용 삭제용 더미 데이터
 const CHILISOURCE = {
   isActivated: true,
   title: '칠리소스',
@@ -50,8 +50,23 @@ const App = () => {
     setTabs(prevArr => {
       const newTabs = [...prevArr];
       newTabs.forEach(newTab => (newTab.isActivated = false));
-      newTabs[idx].isActivated = !newTabs[idx].isActivated;
-      return newTabs;
+      try {
+        newTabs[idx].isActivated = !newTabs[idx].isActivated;
+      } catch (e) {
+        // 재 렌더링 idx 값이 계속 남아있는 문제 발생
+        if (tabs.length > idx) idx--;
+        if (idx < 0) idx++;
+        newTabs[idx].isActivated = !newTabs[idx].isActivated;
+      } finally {
+        return newTabs;
+      }
+    });
+  };
+
+  const closeTabHandler = (idx: number) => {
+    setTabs(prevArr => {
+      const newTabs = [...prevArr];
+      return newTabs.filter((_, index) => index !== idx);
     });
   };
 
@@ -62,10 +77,11 @@ const App = () => {
           <NavProject>
             {tabs.map(({ isActivated, title }, idx) => (
               <Tab
-                id={idx}
+                key={idx}
                 isActivated={isActivated}
                 title={title}
                 toggleHandler={activateToggleHandler.bind('', idx)}
+                closeHandler={closeTabHandler.bind('', idx)}
               ></Tab>
             ))}
           </NavProject>

@@ -2,7 +2,7 @@ import React, { MouseEventHandler } from 'react';
 import { StyledTab, styledType, StyledXBtn } from './style';
 
 interface propsType extends styledType {
-  id: number;
+  key: number;
   title: string;
   toggleHandler: MouseEventHandler<HTMLSpanElement>;
   closeHandler?: MouseEventHandler<HTMLSpanElement>;
