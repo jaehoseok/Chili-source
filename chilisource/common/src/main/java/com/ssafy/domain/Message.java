@@ -11,7 +11,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message {
-
     private String message;
 
     @Override
