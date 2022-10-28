@@ -1,0 +1,7 @@
+# 설정파일 가져오기
+spring:
+  cloud:
+    config:
+      uri: http://k7b2071.p.ssafy.io:8888
+#      uri: http://localhost:8888
+      name: project-service

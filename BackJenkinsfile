@@ -1,0 +1,200 @@
+//BackJenkinsFile
+pipeline{
+    agent any
+    environment {
+       DISCOVERY_CONTAINER_NAME="discovery-service-container"
+       DISCOVERY_NAME = "discovery-service-image"
+
+       CONFIG_CONTAINER_NAME="config-service-container"
+       CONFIG_NAME = "config-service-image"
+
+       GATEWAY_CONTAINER_NAME="gateway-service-container"
+       GATEWAY_NAME = "gateway-service-image"
+
+       AUTH_CONTAINER_NAME="auth-service-container"
+       AUTH_NAME = "auth-service-image"
+
+       USER_CONTAINER_NAME="user-service-container"
+       USER_NAME = "user-service-image"
+
+       ISSUE_CONTAINER_NAME="issue-service-container"
+       ISSUE_NAME = "issue-service-image"
+
+       PROJECT_CONTAINER_NAME="project-service-container"
+       PROJECT_NAME = "project-service-image"
+
+       WIGGET_CONTAINER_NAME="wigget-service-container"
+       WIGGET_NAME = "wigget-service-image"
+
+    }
+    stages {
+        stage('Checkout') {
+            steps{
+                // Get some code from a Git repository
+                checkout scm
+                mattermostSend (
+                    color: "good", 
+                    message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                )
+            }
+        }
+        stage('Container Clean'){
+            steps{
+                script {
+                    try{
+                        sh "docker stop ${DISCOVERY_CONTAINER_NAME}"
+                        sh "docker stop ${CONFIG_CONTAINER_NAME}"
+                        sh "docker stop ${GATEWAY_CONTAINER_NAME}"
+
+                        sh "docker stop ${AUTH_CONTAINER_NAME}"
+                        sh "docker stop ${USER_CONTAINER_NAME}"
+                        sh "docker stop ${ISSUE_CONTAINER_NAME}"
+                        sh "docker stop ${PROJECT_CONTAINER_NAME}"
+                        //sh "docker stop ${WIGGET_CONTAINER_NAME}"
+                        sleep 1
+                        sh "docker rm ${DISCOVERY_CONTAINER_NAME}"
+                        sh "docker rm ${CONFIG_CONTAINER_NAME}"
+                        sh "docker rm ${GATEWAY_CONTAINER_NAME}"
+
+                        sh "docker rm ${AUTH_CONTAINER_NAME}"
+                        sh "docker rm ${USER_CONTAINER_NAME}"
+                        sh "docker rm ${ISSUE_CONTAINER_NAME}"
+                        sh "docker rm ${PROJECT_CONTAINER_NAME}"
+                        //sh "docker rm ${WIGGET_CONTAINER_NAME}"
+                    }catch(e){
+                        sh 'exit 0'
+                    }finally{
+                        sh "docker image prune -a --force"
+                        mattermostSend (
+                            color: "good", 
+                            message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+		stage('Build Gradle') {
+            steps {
+                script{
+                    try{
+                        sh 'cd chilisource;chmod +x gradlew;./gradlew bootJar'
+                        sh 'exit 0'
+                        mattermostSend (
+                            color: "good", 
+                            message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }catch(e){
+                        mattermostSend (
+                            color: "danger", 
+                            message: "Back Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+        stage('Docker Image Build') {
+            steps {
+                script{
+                    try{
+                        // spring-cloud 빌드
+                        sh "docker build -t ${DISCOVERY_NAME} ./chilisource/springcloud/discovery-service/."
+                        sh "docker build -t ${CONFIG_NAME} ./chilisource/springcloud/config-service/."
+                        sh "docker build -t ${GATEWAY_NAME} ./chilisource/springcloud/gateway-service/."
+
+                        // Spring micro-service 빌드
+                        sh "docker build -t ${AUTH_NAME} ./chilisource/microservices/auth-service/."
+                        sh "docker build -t ${USER_NAME} ./chilisource/microservices/user-service/."
+                        sh "docker build -t ${ISSUE_NAME} ./chilisource/microservices/issue-service/."
+                        sh "docker build -t ${PROJECT_NAME} ./chilisource/microservices/project-service/."
+                        //sh "docker build -t ${WIGGET_NAME} ./chilisource/microservices/wigget-service/."
+
+                        mattermostSend (
+                            color: "good", 
+                            message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }catch(e){
+                    mattermostSend (
+                            color: "danger", 
+                            message: "Back Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+
+		stage('Eureka Depoly'){
+            steps {
+                script{
+                    try{
+                    sh "docker run -d --name=${DISCOVERY_CONTAINER_NAME} -p 8761:8761 --net msa ${DISCOVERY_NAME}"
+                    sh 'sleep 3'
+                    mattermostSend (
+                        color: "good", 
+                        message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                    )
+                    }catch(e){
+                        mattermostSend (
+                            color: "danger", 
+                            message: "Back Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+
+		stage('Config and Gateway Depoly'){
+                steps {
+                    script{
+                        try{
+                        sh "docker run -d --name=${CONFIG_CONTAINER_NAME} -p 8888:8888 --net msa ${CONFIG_NAME}"
+                        sh "docker run -d --name=${GATEWAY_CONTAINER_NAME} -p 8000:8000 --net msa ${GATEWAY_NAME}"
+                        sh 'sleep 10'
+                        mattermostSend (
+                            color: "good", 
+                            message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                        }catch(e){
+                            mattermostSend (
+                                color: "danger", 
+                                message: "Back Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                            )
+                        }
+                    }
+                }
+        }
+
+        stage('Micro Service Deploy'){
+            steps {
+                script{
+                    try{
+                        sh "docker run -d --name=${AUTH_CONTAINER_NAME} --net msa ${AUTH_NAME}"
+                        sh "docker run -d --name=${USER_CONTAINER_NAME} --net msa ${USER_NAME}"
+                        sh "docker run -d --name=${ISSUE_CONTAINER_NAME} --net msa ${ISSUE_NAME}"
+                        sh "docker run -d --name=${PROJECT_CONTAINER_NAME} --net msa ${PROJECT_NAME}"
+                        //sh "docker run -d --name=${WIGGET_CONTAINER_NAME} --net msa ${WIGGET_NAME}"
+                        mattermostSend (
+                            color: "good", 
+                            message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }catch(e){
+                        mattermostSend (
+                            color: "danger", 
+                            message: "Back Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+        stage('Image Clean'){
+            steps {
+                script{
+                    sh "docker image prune -a --force"
+                    mattermostSend (
+                        color: "good", 
+                        message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                    )
+                }
+            }
+        }
+    }
+}

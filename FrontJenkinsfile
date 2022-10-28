@@ -1,0 +1,65 @@
+// FrontJenkinsFile
+pipeline{
+    agent any
+    environment {
+        FRONT_CONTAINER_NAME="chilisource_react_container"
+        FRONT_NAME = "chilisource_react_image"
+    }
+    stages {
+        stage('Build') {
+            steps {
+                script{
+                    try{
+                        sh "docker build -t ${FRONT_NAME} ./front/."
+                        mattermostSend (
+                            color: "good", 
+                            message: "Front Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }catch(e){
+                        mattermostSend (
+                            color: "danger", 
+                            message: "Front Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+        stage('Clean'){
+            steps{
+                script {
+                    try{
+                        sh "docker stop ${FRONT_CONTAINER_NAME}"
+                        sleep 1
+                        sh "docker rm ${FRONT_CONTAINER_NAME}"
+                    }catch(e){
+                        sh 'exit 0'
+                    }
+                    mattermostSend (
+                        color: "good", 
+                        message: "Front Clean SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                    )
+                }
+            }
+        }
+        stage('Deploy'){
+            steps {
+                script{
+                    try{
+                        sh "docker run -d --name=${FRONT_CONTAINER_NAME} -p 8080:80 ${FRONT_NAME}"
+
+                        sh "docker image prune -a --force"
+                        mattermostSend (
+                            color: "good", 
+                            message: "Front Deploy SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }catch(e){
+                        mattermostSend (
+                            color: "danger", 
+                            message: "Front Deploy FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}

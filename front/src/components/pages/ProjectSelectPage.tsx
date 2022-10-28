@@ -1,5 +1,3 @@
-import React from 'react';
-
 const ProjectSelectPage = () => {
   return <div>ProjectSelectPage</div>;
 };

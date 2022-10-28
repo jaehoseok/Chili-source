@@ -6,11 +6,11 @@ spring:
     active: native
   application:
     name: config-service
-#  rabbitmq:
-#    host: j7b305.p.ssafy.io
-#    port: 5672
-#    username: guest
-#    password: guest
+  rabbitmq:
+    host: k7b2071.p.ssafy.io
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     config:
       server:
