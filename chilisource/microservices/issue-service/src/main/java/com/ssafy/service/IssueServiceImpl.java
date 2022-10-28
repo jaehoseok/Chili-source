@@ -6,7 +6,9 @@ import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
 import com.ssafy.entity.MiddleBucketIssue;
+import com.ssafy.exception.DuplicateException;
 import com.ssafy.exception.NotFoundException;
+import com.ssafy.exception.WrongFormException;
 import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
@@ -22,7 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.DuplicateException.MIDDLE_BUCKET_NAME_DUPLICATED;
 import static com.ssafy.exception.NotFoundException.*;
+import static com.ssafy.exception.WrongFormException.SUMMARY_NOT_NULL;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -73,7 +77,9 @@ public class IssueServiceImpl implements IssueService {
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
-
+        if (request.getSummary() == null) {
+            throw new WrongFormException(SUMMARY_NOT_NULL);
+        }
         IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
                 .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
@@ -97,8 +103,11 @@ public class IssueServiceImpl implements IssueService {
     public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
                 .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
-        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
-                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+        IssueType issueType = null;
+        if (request.getIssueType() != null) {
+            issueType = issueTypeRepo.findByName(request.getIssueType())
+                    .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+        }
 
         issueTemplate.update(
                 request.getSummary(),
@@ -163,7 +172,6 @@ public class IssueServiceImpl implements IssueService {
                         .build())
                 .collect(Collectors.toList());
 
-
         return IssueListResponse.builder()
                 .middleBucketId(middleBucket.getId())
                 .middleBucketName(middleBucket.getName())
@@ -178,6 +186,11 @@ public class IssueServiceImpl implements IssueService {
         Response response = projectServiceClient.findProjectById(projectId);
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+
+        List<MiddleBucket> list = middleBucketRepo.findByProjectIdAndUserId(projectId, userId);
+        if (list.stream().anyMatch(middleBucket -> middleBucket.getName().equals(request.getName()))) {
+            throw new DuplicateException(MIDDLE_BUCKET_NAME_DUPLICATED);
         }
 
         MiddleBucket middleBucket = MiddleBucket.builder()
@@ -208,6 +221,10 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     @Override
     public void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest request) {
+        if (request.getSummary() == null) {
+            throw new WrongFormException(SUMMARY_NOT_NULL);
+        }
+
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
@@ -236,8 +253,14 @@ public class IssueServiceImpl implements IssueService {
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
-        IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
-                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+        if (!middleBucket.getMiddleBucketIssues().contains(middleBucketIssue)) {
+            throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
+        }
+        IssueType issueType = null;
+        if (request.getIssueType() != null) {
+            issueType = issueTypeRepo.findByName(request.getIssueType())
+                    .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
+        }
 
         middleBucketIssue.update(
                 request.getSummary(),
@@ -259,6 +282,23 @@ public class IssueServiceImpl implements IssueService {
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
 
-        middleBucketIssueRepo.delete(middleBucketIssue);
+        // 예외처리 ver.1 : delete 실행 못함
+        if (middleBucket.getMiddleBucketIssues().contains(middleBucketIssue)) {
+            throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
+        }
+
+        // 예외처리 ver.2 : delete 실행 함
+        if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
+            throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
+        }
+
+        middleBucketIssueRepo.deleteById(middleBucketIssueId); // (1)
+        System.out.println("완료"); // (2)
+
+        // ver 1 실행시 (1)을 실행하지 않고 (2)만 실행됨
+        // ver 2 실행시 (2)를 실행하고 (1)을 나중에 실행함
+
+        // 의문점 1. 왜 ver 1은 (1)을 실행하지 않는지
+        // 의문점 2. 왜 ver 2는 (2)를 선실행후 (1)을 나중에 실행하는지
     }
 }
