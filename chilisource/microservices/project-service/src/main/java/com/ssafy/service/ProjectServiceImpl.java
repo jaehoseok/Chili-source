@@ -1,10 +1,12 @@
 package com.ssafy.service;
 
 import com.ssafy.dto.request.ProjectCreateRequest;
+import com.ssafy.dto.request.ProjectTokenUpdateRequest;
 import com.ssafy.dto.request.ProjectUpdateRequest;
 import com.ssafy.dto.response.ProjectResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.UserProject;
+import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
 import com.ssafy.repository.RoleRepo;
@@ -16,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.NotAuthorizedException.REMOVE_NOT_AUTHORIZED;
 import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
+import static com.ssafy.exception.NotFoundException.USER_PROJECT_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +37,7 @@ public class ProjectServiceImpl implements ProjectService {
         return ProjectResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
-                .teamName(project.getTeamName())
+                .teamName(project.getDescription())
                 .image(project.getImage())
                 .jiraProject(project.getJiraProject())
                 .build();
@@ -48,7 +52,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .map(project -> ProjectResponse.builder()
                         .id(project.getId())
                         .name(project.getName())
-                        .teamName(project.getTeamName())
+                        .teamName(project.getDescription())
                         .image(project.getImage())
                         .jiraProject(project.getJiraProject())
                         .build())
@@ -61,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
     public void createProject(ProjectCreateRequest request, Long userId) {
         Project project = Project.builder()
                 .name(request.getName())
-                .teamName(request.getName())
+                .description(request.getDescription())
                 .image(request.getImage())
                 .build();
         projectRepo.save(project);
@@ -82,18 +86,31 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-        project.update(request.getName(), request.getTeamName(), request.getImage(), request.getJiraProject(), null, null);
+        project.update(request.getName(), request.getDescription(), request.getImage());
     }
 
     // 프로젝트 삭제
     @Override
     @Transactional
     public void deleteProject(Long projectId, Long userId) {
-        // 프로젝트 삭제 권한 체크
+        UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        if (userProjectManager.getRole().getRemove()) {
+            Project project = projectRepo.findById(projectId)
+                    .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+            projectRepo.delete(project);
+        } else {
+            throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
+        }
+    }
 
-        // 삭제
-        Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-        projectRepo.delete(project);
+    @Override
+    public void createProjectToken(Long userId, ProjectTokenUpdateRequest request) {
+
+    }
+
+    @Override
+    public void deleteProjectToken(Long userId, ProjectTokenUpdateRequest request) {
+
     }
 }

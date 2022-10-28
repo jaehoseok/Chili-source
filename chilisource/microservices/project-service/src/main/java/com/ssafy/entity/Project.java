@@ -20,45 +20,54 @@ public class Project extends BaseEntity {
 
     private String name;
 
-    private String teamName;
+    private String description;
 
     private String image;
 
-    private String jiraProject;
-
     private String jiraToken;
 
+    private String jiraEmail;
+
+    private String jiraProject;
+
     private String gitToken;
+
+    private String gitRepo;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GanttChart> ganttCharts = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectGit> projectGits = new ArrayList<>();
-
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserProject> userProjects = new ArrayList<>();
 
     @Builder
-    public Project(Long id, String name, String teamName, String image, String jiraProject, String jiraToken, String gitToken, List<GanttChart> ganttCharts, List<ProjectGit> projectGits, List<UserProject> userProjects) {
+    public Project(Long id, String name, String description, String image, String jiraToken, String jiraEmail, String jiraProject, String gitToken, String gitRepo, List<GanttChart> ganttCharts, List<UserProject> userProjects) {
         this.id = id;
         this.name = name;
-        this.teamName = teamName;
+        this.description = description;
         this.image = image;
-        this.jiraProject = jiraProject;
         this.jiraToken = jiraToken;
+        this.jiraProject = jiraProject;
+        this.jiraEmail = jiraEmail;
         this.gitToken = gitToken;
+        this.gitRepo = gitRepo;
         this.ganttCharts = ganttCharts;
-        this.projectGits = projectGits;
         this.userProjects = userProjects;
     }
 
-    public void update(String name, String teamName, String image, String jiraProject, String jiraToken, String gitToken) {
+    public void update(String name, String description, String image) {
         if (name != null) this.name = name;
-        if (teamName != null) this.teamName = teamName;
+        if (description != null) this.description = description;
         if (image != null) this.image = image;
-        if (jiraProject != null) this.jiraProject = jiraProject;
+    }
+
+    public void JiraUpdate(String jiraToken, String jiraProject) {
         if (jiraToken != null) this.jiraToken = jiraToken;
+        if (jiraProject != null) this.jiraProject = jiraProject;
+    }
+
+    public void GitUpdate(String gitToken, String gitRepo) {
         if (gitToken != null) this.gitToken = gitToken;
+        if (gitRepo != null) this.gitRepo = gitRepo;
     }
 }
