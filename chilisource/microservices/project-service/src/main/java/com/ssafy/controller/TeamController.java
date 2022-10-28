@@ -23,7 +23,7 @@ public class TeamController {
     @PostMapping
     public ResponseEntity<?> inviteUserProject(
             @LoginUser User user,
-            UserProjectCreateRequest request) {
+            @RequestBody UserProjectCreateRequest request) {
         userProjectService.createUserProject(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
@@ -33,7 +33,7 @@ public class TeamController {
     @PutMapping
     public ResponseEntity<?> updateUserProject(
             @LoginUser User user,
-            UserProjectUpdateRequest request) {
+            @RequestBody UserProjectUpdateRequest request) {
         userProjectService.updateUserProject(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
