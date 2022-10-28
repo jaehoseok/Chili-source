@@ -8,6 +8,7 @@ export interface styledType {
   fontSize?: string;
   backgroundColor?: string;
   width?: number;
+  display?: string;
 }
 
 export const StyledText = styled.div<styledType>`
@@ -15,6 +16,7 @@ export const StyledText = styled.div<styledType>`
   font-weight: ${({ fontWeight }) => fontWeight};
   font-size: ${({ fontSize }) => fontSize};
   font-family: ${({ fontFamily }) => fontFamily};
+  display: ${({ display }) => display};
 `;
 
 StyledText.defaultProps = {
@@ -22,6 +24,7 @@ StyledText.defaultProps = {
   fontWeight: '400',
   fontSize: '1rem',
   fontFamily: 'pretendard',
+  display: 'inline-block',
 };
 
 export const StyledFill = styled.div<styledType>`

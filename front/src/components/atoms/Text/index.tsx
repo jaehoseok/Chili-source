@@ -8,7 +8,7 @@ import { StyledText, StyledFill, styledType } from './style';
 interface propsType extends styledType {
   message: string;
   isFill: boolean;
-  clickEvent?: MouseEventHandler<HTMLDivElement>;
+  clickHandler?: MouseEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -37,14 +37,20 @@ const index = ({
   fontSize,
   backgroundColor,
   width,
-  clickEvent,
+  clickHandler,
 }: propsType) => {
   return !isFill ? (
-    <StyledText color={color} fontFamily={fontFamily} fontWeight={fontWeight} fontSize={fontSize}>
+    <StyledText
+      color={color}
+      fontFamily={fontFamily}
+      fontWeight={fontWeight}
+      fontSize={fontSize}
+      onClick={clickHandler}
+    >
       {message}
     </StyledText>
   ) : (
-    <StyledFill backgroundColor={backgroundColor} width={width} onClick={clickEvent}>
+    <StyledFill backgroundColor={backgroundColor} width={width} onClick={clickHandler}>
       {message}
     </StyledFill>
   );
