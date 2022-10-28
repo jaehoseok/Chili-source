@@ -1,17 +1,24 @@
 import styled from 'styled-components';
 
+import tw from 'twin.macro';
 export interface styledType {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
-export const TextArea = styled.input.attrs({
+export const TextArea = styled.input.attrs<styledType>({
   type: 'text',
 })`
-  ${(props: styledType) => props.width && `width: ${props.width}px`};
-  ${(props: styledType) => props.height && `height: ${props.height}px`};
-  background-color: #fbfbfb;
-  border: 1px solid #d9d9d9;
+  ${tw`bg-gray-100 border border-gray-300`};
+  ${({ width }) => width && `width: ${width}px`};
+  ${({ height }) => height && `height: ${height}px`};
+  ${({ height }) => height && `border-radius: ${+height * 0.2}px`};
   outline-style: none;
-  ${(props: styledType) => props.height && `border-radius: ${props.height * 0.2}px`};
 `;
+
+TextArea.defaultProps = {
+  width: 400,
+  height: 30,
+  placeholder: '',
+  defaultValue: '',
+};

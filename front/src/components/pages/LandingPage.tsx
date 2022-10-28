@@ -1,5 +1,7 @@
+import TextArea from '../atoms/TextArea';
+
 const LandingPage = () => {
-  return <div>LandingPage</div>;
+  return <TextArea></TextArea>;
 };
 
 export default LandingPage;
