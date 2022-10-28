@@ -72,3 +72,37 @@
   > - `src/components/atom/Sheet/` 와 `Input` 의 index와 style 에 props 값을 구조 분해 할당함
   > - `src/components/atom/Sheet/` 와 `Input` 의 height, width 는 기존 넘버에서 px, rem 등 다양한 상황을 위하여 문자열 타입으로 변경함
   > - `src/components/atom/input/` 은 InputBox molecule 을 상정하지 않고 개발되어 수정함
+
+## 221027
+
+### 준혁
+
+- `src\components\molecules\WidgetBlock` 제작
+
+  > - 디폴트 값은 높이 180px, 넓이 400px 이다.
+
+- 전체 프리텐다드 글꼴 적용
+
+  > - `src\index.css` 에 해당 폰트 적용
+
+  > ```css
+  > code {
+  >   font-family: Pretendard, source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  > }
+  >
+  > @font-face {
+  >   font-family: 'Pretendard';
+  >   src: url('assets/font/PretendardVariable.ttf');
+  > }
+  > ```
+
+- `.gitignore` 설정 추가
+
+  > - 깃에 올리지 않을 테스트 용 코드를 사용하기 위해 다음의 법칙을 추가함
+  > - `*.local.*`
+
+## 221028
+
+### 준혁
+
+- `src\components\molecules\WidgetBlock` tailwindcss 를 twin macro 기반 적용
