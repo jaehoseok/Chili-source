@@ -15,7 +15,7 @@ import { theme } from '../../../styles/theme';
  * @param {boolean?}                              isDropShadow    Drop Shadow 효과 여부 [default: false]
  * @param {boolean?}                              isInnerShadow   Inner Shadow 효과 여부 [default: false]
  * @param {boolean?}                              isClickable     Circle 클릭 효과 여부 [default: false]
- * @param {MouseEventHandler<HTMLSpanElement>?}   clickHandler    Circle 클릭 이벤트 [default: false]
+ * @param {MouseEventHandler<HTMLSpanElement>?}   clickHandler    Circle 클릭 이벤트 [default: undefined]
  *
  * @author dbcs
  */
