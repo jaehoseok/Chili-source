@@ -54,8 +54,13 @@
 
 ## 221028
 ### 종현
-  + `navProject` 컴포넌
+  + `navProject` 컴포넌트
     + `closeTabHandler` : `tab`을 삭제하는 이벤트
     + `closeTabHandler` 에러
       + 컴포넌트 제 랜더링 시 이전의 idx가 그대로 반영되는 에러
       + idx가 가지고 있는 데이터 갯수보다 큰 경우와 0보다 작은 경우로 나누어 해결
+      + `recoil - projectList` 로 프로젝트 데이터 이동
+      + 삭제 이벤트, `activate` 이벤트 모두 정상작동
+  + `recoil` 설치
+    + `recoil` 세팅
+    + `recoil` `project` 관리용 `atoms` 생성
