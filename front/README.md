@@ -51,4 +51,11 @@
     + `tabs` 데이터 설정
       + `프로젝트 데이터를 가지고 있는 상태값
     + `activatedToggleHandler` : 하나의 `tab`이 활성화되면, 다른 `tab`은 비활성화 화는 이벤트
-    
+
+## 221028
+### 종현
+  + `navProject` 컴포넌
+    + `closeTabHandler` : `tab`을 삭제하는 이벤트
+    + `closeTabHandler` 에러
+      + 컴포넌트 제 랜더링 시 이전의 idx가 그대로 반영되는 에러
+      + idx가 가지고 있는 데이터 갯수보다 큰 경우와 0보다 작은 경우로 나누어 해결
