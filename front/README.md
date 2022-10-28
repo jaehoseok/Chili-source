@@ -53,6 +53,13 @@
   > - defaultStyle 적용
   > - Sheet, Input 만들어둠
 
+### 성현
+
+- Button
+  > - `backgroundColor`, `borderColor` default값 #FFFFFF로 설정. 사용 시 주의
+  > - `isHover` 적용 시 hover 기능 추가. 색상은 `borderColor` 색상을 따라감.
+  > - `isDisabled` 적용 시 버튼 비활성화. 비활성화 시 클릭 불가
+
 ## 221026
 
 ### 종현
@@ -73,6 +80,12 @@
   > - `src/components/atom/Sheet/` 와 `Input` 의 height, width 는 기존 넘버에서 px, rem 등 다양한 상황을 위하여 문자열 타입으로 변경함
   > - `src/components/atom/input/` 은 InputBox molecule 을 상정하지 않고 개발되어 수정함
 
+### 성현
+
+- Circle
+  >- 디자인 효과 `isDropShadow`, `isInnerShadow` 추가. 각각 Figma의 Drop Shadow, Inner Shadow 효과 부여
+  >- 클릭 효과 `isClickable` 추가. cursor: pointer 기능 부여
+  
 ## 221027
 
 ### 준혁
@@ -101,8 +114,19 @@
   > - 깃에 올리지 않을 테스트 용 코드를 사용하기 위해 다음의 법칙을 추가함
   > - `*.local.*`
 
+### 성현
+
+- TextArea
+  >- defaultValue 옵션 적용. React에서는 value 옵션 적용 시 수정이 불가능했음
+
 ## 221028
 
 ### 준혁
 
 - `src\components\molecules\WidgetBlock` tailwindcss 를 twin macro 기반 적용
+
+### 성현
+
+- Button, Circle, TextArea
+  >- props 컨벤션 적용
+  >- tailwind 적용
