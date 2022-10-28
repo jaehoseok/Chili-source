@@ -19,11 +19,11 @@ public class Token extends BaseEntity {
 
     private String email;
 
+    private Long userId;
+
     @ManyToOne
     @JoinColumn(name = "token_code_id")
     private TokenCode tokenCode;
-
-    private Long userId;
 
     @Builder
     public Token(String value, TokenCode tokenCode,String email, Long userId) {

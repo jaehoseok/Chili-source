@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenCreateRequest {
     private String value;
+
     private Long tokenCodeId;
 
     private String email;
+
     @Builder
     public TokenCreateRequest(String value, Long tokenCodeId, String email) {
         this.value = value;

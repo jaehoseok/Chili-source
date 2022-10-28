@@ -5,5 +5,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class WiggetUpdateRequest {
+public class OrderUpdateRequest {
+    private Long projectId;
+
+    private String order;
 }

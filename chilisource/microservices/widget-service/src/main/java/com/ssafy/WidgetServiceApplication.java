@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableJpaAuditing
-public class WiggetServiceApplication {
+public class WidgetServiceApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WiggetServiceApplication.class, args);
+        SpringApplication.run(WidgetServiceApplication.class, args);
     }
 }

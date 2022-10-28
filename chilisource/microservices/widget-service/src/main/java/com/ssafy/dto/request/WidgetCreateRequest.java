@@ -7,5 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WiggetCreateRequest {
+public class WidgetCreateRequest {
+    private String name;
+
+    private Long projectId;
+
+    private String widgetCodeId;
 }
