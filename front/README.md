@@ -92,3 +92,11 @@
 
 - TextArea
   >- defaultValue 옵션 적용. React에서는 value 옵션 적용 시 수정이 불가능했음
+
+## 221028
+
+### 성현
+
+- Button, Circle, TextArea
+  >- props 컨벤션 적용
+  >- tailwind 적용
