@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 
 import { theme } from './styles/theme';
@@ -73,19 +73,17 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
-        <>
-          <NavProject>
-            {tabs.map(({ isActivated, title }, idx) => (
-              <Tab
-                key={idx}
-                isActivated={isActivated}
-                title={title}
-                toggleHandler={activateToggleHandler.bind('', idx)}
-                closeHandler={closeTabHandler.bind('', idx)}
-              ></Tab>
-            ))}
-          </NavProject>
-        </>
+        <NavProject>
+          {tabs.map(({ isActivated, title }, idx) => (
+            <Tab
+              key={idx}
+              isActivated={isActivated}
+              title={title}
+              toggleHandler={activateToggleHandler.bind('', idx)}
+              closeHandler={closeTabHandler.bind('', idx)}
+            ></Tab>
+          ))}
+        </NavProject>
         <RouterWrapper />
       </ThemeProvider>
     </QueryClientProvider>

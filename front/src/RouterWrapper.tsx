@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import LandingPage from './components/pages/LandingPage';
@@ -26,14 +27,16 @@ const RouterWrapper = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />
         <Route path="/projects/create" element={<ProjectCreatePage />} />
-        <Route path="/projects/:projectId" element={<ProjectDashBoardPage />} />
-        <Route path="/projects/setting" element={<ProjectSettingPage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
-        <Route path="/widget/select" element={<WidgetSelectPage />} />
-        <Route path="/widget/ganttChart" element={<GanttChartPage />} />
-        <Route path="/widget/calendar" element={<CalendarPage />} />
-        <Route path="/widget/bucket" element={<BucketPage />} />
-        <Route path="/widget/gitLog" element={<GitLogPage />} />
+      </Routes>
+      <Routes>
+        <Route path="/projects/:projectId" element={<ProjectDashBoardPage />} />
+        <Route path="/projects/:projectId/setting" element={<ProjectSettingPage />} />
+        <Route path="/projects/:projectId/widget/select" element={<WidgetSelectPage />} />
+        <Route path="/projects/:projectId/widget/ganttChart" element={<GanttChartPage />} />
+        <Route path="/projects/:projectId/widget/calendar" element={<CalendarPage />} />
+        <Route path="/projects/:projectId/widget/bucket" element={<BucketPage />} />
+        <Route path="/projects/:projectId/widget/gitLog" element={<GitLogPage />} />
       </Routes>
     </BrowserRouter>
   );
