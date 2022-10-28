@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectResponse {
     private Long id;
+
     private String name;
+
     private String teamName;
+
     private String image;
+
     private String jiraProject;
 
     @Builder

@@ -8,9 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProjectUpdateRequest {
     private String userColor;
+
     private Long userId;
+
     private Long projectId;
+
     private Long roleId;
+
 
     @Builder
     public UserProjectUpdateRequest(String userColor, Long userId, Long projectId, Long roleId) {
