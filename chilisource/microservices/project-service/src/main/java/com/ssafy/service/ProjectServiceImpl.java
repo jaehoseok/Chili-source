@@ -25,7 +25,6 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
-    private final String DEFAULT_COLOR = "FFFFFF";
 
     @Override
     public ProjectResponse getProject(Long projectId) {
@@ -68,7 +67,6 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepo.save(project);
 
         UserProject userProject = UserProject.builder()
-                .userColor(DEFAULT_COLOR)
                 .userId(userId)
                 .project(project)
                 .role(roleRepo.findById(1L).get())
