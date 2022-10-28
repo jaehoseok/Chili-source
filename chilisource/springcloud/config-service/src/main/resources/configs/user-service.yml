@@ -1,24 +1,29 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://j7b305.p.ssafy.io:3306/jeonwoochi?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: b305
-    password: B305user!
+    url: jdbc:mysql://k7b2072.p.ssafy.io:3307/user?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: B207
+    password: B207user!
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: none
-  redis:
-    host: j7b305.hopto.org
-    port: 6379
+      ddl-auto: create
+cloud:
+  aws:
+    s3:
+      bucket: chilisource
+    credentials:
+      access-key: AKIAXELMJ3LZ22BCAJNG
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
 
 token:
-  access_token:
-    expiration_time: 86400000
-  refresh_token:
-    expiration_time: 604800000
   secret: secretKey
   refresh: refreshKey

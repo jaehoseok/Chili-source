@@ -2,11 +2,13 @@ server:
   port: 8000
 
 eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://j7b305.p.ssafy.io:8761/eureka
+      defaultZone: http://k7b2071.p.ssafy.io:8761/eureka
       #defaultZone: http://localhost:8761/eureka
 
 spring:
@@ -15,18 +17,36 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: gateway-service
-#  zipkin:
-#    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
-#    base-url: http://j7b305.p.ssafy.io:9411
-#    enabled: true
+  zipkin:
+    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
+    base-url: http://k7b2071.p.ssafy.io:9411
+    enabled: true
   sleuth:
     sampler:
       probability: 1.0
   cloud:
     gateway:
       routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth-service/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            #- RemoveRequestHeader=Cookie
+            #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #---------------------------------------------USER FILTER START---------------------------------------------------------------
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+            - Method=GET,POST,PUT,DELETE
+          filters:
+            #- RemoveRequestHeader=Cookie
+            #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        #---------------------------------------------USER FILTER END---------------------------------------------------------------
 
-        ##---------------------------------------------USER FILTER START---------------------------------------------------------------
+        ##---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
         #        - id: user-service
         #          uri: lb://USER-SERVICE
         #          predicates:
@@ -59,17 +79,17 @@ spring:
         #          filters:
         #            - AuthorizationFilter
 
-        - id: user-service
-          uri: lb://USER-SERVICE
+        - id: project-service
+          uri: lb://PROJECT-SERVICE
           predicates:
-            - Path=/api/user-service/**
+            - Path=/api/project-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
-            - RemoveRequestHeader=Cookie
+            # - RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
-        #---------------------------------------------USER FILTER END---------------------------------------------------------------
+        #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
 
-        #---------------------------------------------FESTIVAL FILTER START---------------------------------------------------------------
+        #---------------------------------------------ISSUE FILTER START---------------------------------------------------------------
         #        - id: festival-service
         #          uri: lb://FESTIVAL-SERVICE
         #          predicates:
@@ -118,14 +138,14 @@ spring:
         #          filters:
         #            - AuthorizationFilter
 
-        - id: festival-service
-          uri: lb://FESTIVAL-SERVICE
+        - id: issue-service
+          uri: lb://ISSUE-SERVICE
           predicates:
-            - Path=/api/festival-service/**
+            - Path=/issue-service/**
             - Method=GET,POST,PUT,DELETE
-        #---------------------------------------------FESTIVAL FILTER END---------------------------------------------------------------
+        #---------------------------------------------ISSUE FILTER END---------------------------------------------------------------
 
-        #---------------------------------------------MAIN FILTER START---------------------------------------------------------------
+        #---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
         #        - id: main-service
         #          uri: lb://MAIN-SERVICE
         #          predicates:
@@ -142,25 +162,21 @@ spring:
         #          filters:
         #            - AdminFilter
 
-        - id: main-service
-          uri: lb://MAIN-SERVICE
+        - id: project-service
+          uri: lb://PROJECT-SERVICE
           predicates:
-            - Path=/api/main-service/**
+            - Path=/project-service/**
             - Method=GET,POST,PUT,DELETE
         #          filters:
         #            - AuthorizationFilter
-        #---------------------------------------------MAIN FILTER END---------------------------------------------------------------
-
-        #---------------------------------------------RECOMM FILTER START---------------------------------------------------------------
-        - id: recomm-service
-          uri: lb://RECOMM-SERVICE
-          predicates:
-            - Path=/api/recomm-service/**
-            - Method=GET,POST
-#          filters:
-#            - AuthorizationFilter
-#---------------------------------------------RECOMM FILTER END---------------------------------------------------------------
+        #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
 
 token:
   secret: secretKey
   refresh: refreshKey
+  
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, busrefresh, info, metrics, prometheus
