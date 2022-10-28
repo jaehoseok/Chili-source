@@ -54,11 +54,11 @@ public class Project extends BaseEntity {
     }
 
     public void update(String name, String teamName, String image, String jiraProject, String jiraToken, String gitToken) {
-        if (!name.equals(null)) this.name = name;
-        if (!teamName.equals(null)) this.teamName = teamName;
-        if (!image.equals(null)) this.image = image;
-        if (!jiraProject.equals(null)) this.jiraProject = jiraProject;
-        if (!jiraToken.equals(null)) this.jiraToken = jiraToken;
-        if (!gitToken.equals(null)) this.gitToken = gitToken;
+        if (name != null) this.name = name;
+        if (teamName != null) this.teamName = teamName;
+        if (image != null) this.image = image;
+        if (jiraProject != null) this.jiraProject = jiraProject;
+        if (jiraToken != null) this.jiraToken = jiraToken;
+        if (gitToken != null) this.gitToken = gitToken;
     }
 }
