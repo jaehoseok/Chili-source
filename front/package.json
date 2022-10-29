@@ -52,5 +52,8 @@
     "msw": "^0.47.4",
     "prettier": "^2.7.1",
     "tailwindcss": "^3.2.0"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

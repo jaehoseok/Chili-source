@@ -24,39 +24,45 @@ const MOTOO = {
   title: '모투',
 };
 
+const ABC = {
+  id: 12826,
+  isActivated: false,
+  title: 'ABCDEFU',
+};
+
 const HeaderNav = () => {
-  const [tabList, setTabList] = useRecoilState(tabListState);
+  const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
 
   useEffect(() => {
-    setTabList([CHILISOURCE, APICLOUD, MOTOO]);
+    setTabList([CHILISOURCE, APICLOUD, MOTOO, ABC]);
   }, []);
 
-  const activateToggleHandler = (idx: number) => {
-    setTabList(prevArr => {
-      const newTabs = prevArr.map(({ id, isActivated, title }) => {
+  const activateToggleHandler = (id: number, isActivated: boolean) => {
+    setTabList((prevArr: tabType[]) => {
+      const newTabs = prevArr.map(({ id, isActivated, title }: tabType) => {
         return {
           id,
           isActivated,
           title,
         };
       });
-      newTabs.forEach(newTab => (newTab.isActivated = false));
+      newTabs.forEach((newTab: tabType) => (newTab.isActivated = false));
+      const idx = newTabs.findIndex(newTab => newTab.id === id);
       try {
-        newTabs[idx].isActivated = !newTabs[idx].isActivated;
+        if (idx === -1 && isActivated) {
+          newTabs[0].isActivated = !newTabs[0].isActivated;
+        } else {
+          newTabs[idx].isActivated = !newTabs[idx].isActivated;
+        }
       } catch (e) {
-        console.log('현재 tab값', newTabs, '\n', '현재 idx', idx);
-        // 재 렌더링 idx 값이 계속 남아있는 문제 발생
-        if (newTabs.length <= idx) idx--;
-        if (idx < 0) idx++;
-        newTabs[idx].isActivated = !newTabs[idx].isActivated;
-      } finally {
-        return newTabs;
+        return prevArr;
       }
+      return newTabs;
     });
   };
 
   const closeTabHandler = (id: number) => {
-    setTabList(prevArr => {
+    setTabList((prevArr: tabType[]) => {
       const newTabs = [...prevArr];
       return newTabs.filter(tab => tab.id !== id);
     });
@@ -64,12 +70,12 @@ const HeaderNav = () => {
 
   return (
     <NavProject>
-      {tabList.map(({ isActivated, title, id }, idx) => (
+      {tabList.map(({ isActivated, title, id }: tabType, idx: number) => (
         <Tab
           key={idx}
           isActivated={isActivated}
           title={title}
-          toggleHandler={activateToggleHandler.bind('', idx)}
+          toggleHandler={activateToggleHandler.bind('', id, isActivated)}
           closeHandler={closeTabHandler.bind('', id)}
         ></Tab>
       ))}
