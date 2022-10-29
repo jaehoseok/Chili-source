@@ -1,9 +1,11 @@
 import React, { MouseEventHandler } from 'react';
-import { StyledTab, StyledTypes } from './style';
+import { StyledTab, styledType, StyledXBtn } from './style';
 
-interface propTypes extends StyledTypes {
+interface propsType extends styledType {
+  key: number;
   title: string;
-  clickHandler?: MouseEventHandler<HTMLSpanElement>;
+  toggleHandler: MouseEventHandler<HTMLSpanElement>;
+  closeHandler?: MouseEventHandler<HTMLSpanElement>;
 }
 
 /**
@@ -17,10 +19,13 @@ interface propTypes extends StyledTypes {
  *
  * @author bell
  */
-const index = ({ title, clickHandler, activated }: propTypes) => {
+const index = ({ title, isActivated, toggleHandler, closeHandler }: propsType) => {
   return (
-    <StyledTab activated={activated} onClick={clickHandler}>
+    <StyledTab isActivated={isActivated} onClick={toggleHandler}>
       {title}
+      <StyledXBtn isActivated={isActivated} onClick={closeHandler}>
+        X
+      </StyledXBtn>
     </StyledTab>
   );
 };

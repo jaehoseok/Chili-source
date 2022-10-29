@@ -1,4 +1,4 @@
-import React from 'react';
+import { RecoilRoot } from 'recoil';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
@@ -18,9 +18,11 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        <RouterWrapper />
-      </ThemeProvider>
+      <RecoilRoot>
+        <ThemeProvider theme={theme}>
+          <RouterWrapper />
+        </ThemeProvider>
+      </RecoilRoot>
     </QueryClientProvider>
   );
 };

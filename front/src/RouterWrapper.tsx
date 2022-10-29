@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // landing
@@ -15,9 +16,11 @@ import ProjectCreatePage from 'components/pages/ProjectCreatePage';
 // widget
 import WidgetSelectPage from 'components/pages/WidgetSelectPage';
 import BucketPage from 'components/pages/BucketPage';
-import GitLogPage from 'components/pages/GitLogPage';
 import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
+
+// common
+import HeaderNav from './HeaderNav';
 
 /**
  *
@@ -31,19 +34,65 @@ const RouterWrapper = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-
         <Route path="/setting/:userId" element={<UserSettingPage />} />
-
         <Route path="/projects" element={<ProjectSelectPage />} />
-        <Route path="/projects/create" element={<ProjectCreatePage />} />
-        <Route path="/projects/:projectId" element={<ProjectDashBoardPage />} />
-        <Route path="/projects/setting" element={<ProjectSettingPage />} />
-
-        <Route path="/widget/select" element={<WidgetSelectPage />} />
-        <Route path="/widget/ganttChart" element={<GanttChartPage />} />
-        <Route path="/widget/calendar" element={<CalendarPage />} />
-        <Route path="/widget/bucket" element={<BucketPage />} />
-        <Route path="/widget/gitLog" element={<GitLogPage />} />
+        <Route path="/new-project" element={<ProjectCreatePage />} />
+      </Routes>
+      <Routes>
+        <Route
+          path="/projects/:projectId"
+          element={
+            <>
+              <HeaderNav />
+              <ProjectDashBoardPage />
+            </>
+          }
+        />
+        <Route
+          path="/projects/:projectId/setting"
+          element={
+            <>
+              <HeaderNav />
+              <ProjectSettingPage />
+            </>
+          }
+        />
+        <Route
+          path="/projects/:projectId/widget/select"
+          element={
+            <>
+              <HeaderNav />
+              <WidgetSelectPage />
+            </>
+          }
+        />
+        <Route
+          path="/projects/:projectId/widget/gantt-chart"
+          element={
+            <>
+              <HeaderNav />
+              <GanttChartPage />
+            </>
+          }
+        />
+        <Route
+          path="/projects/:projectId/widget/calendar"
+          element={
+            <>
+              <HeaderNav />
+              <CalendarPage />
+            </>
+          }
+        />
+        <Route
+          path="/projects/:projectId/widget/bucket"
+          element={
+            <>
+              <HeaderNav />
+              <BucketPage />
+            </>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
