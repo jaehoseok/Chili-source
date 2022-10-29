@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,12 +39,15 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectResponse getProject(Long projectId) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
         return ProjectResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
-                .teamName(project.getDescription())
+                .description(project.getDescription())
                 .image(project.getImage())
                 .jiraProject(project.getJiraProject())
+                .gitRepo(project.getGitRepo())
+                .tokenList(getTokenList(project))
                 .build();
     }
 
@@ -56,9 +60,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .map(project -> ProjectResponse.builder()
                         .id(project.getId())
                         .name(project.getName())
-                        .teamName(project.getDescription())
+                        .description(project.getDescription())
                         .image(project.getImage())
                         .jiraProject(project.getJiraProject())
+                        .gitRepo(project.getGitRepo())
+                        .tokenList(getTokenList(project))
                         .build())
                 .collect(Collectors.toList());
     }
@@ -177,5 +183,14 @@ public class ProjectServiceImpl implements ProjectService {
             default:
                 break;
         }
+    }
+
+    private List<String> getTokenList(Project project) {
+        List<String> tokenList = new ArrayList<>();
+
+        if (project.getJiraToken() != null) tokenList.add("JIRA");
+        if (project.getGitToken() != null) tokenList.add("GIT");
+
+        return tokenList;
     }
 }
