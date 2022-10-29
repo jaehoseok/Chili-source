@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { tabListState, tabType } from './recoil/atoms/projectList';
 
@@ -7,38 +8,41 @@ import Tab from './components/atoms/Tab';
 
 // 테스트용 삭제용 더미 데이터
 const CHILISOURCE = {
-  id: 12382,
+  id: 1,
   isActivated: true,
   title: '칠리소스',
 };
 
 const APICLOUD = {
-  id: 12387,
+  id: 2,
   isActivated: false,
   title: 'API cloud',
 };
 
 const MOTOO = {
-  id: 12820,
+  id: 3,
   isActivated: false,
   title: '모투',
 };
 
-const ABC = {
-  id: 12826,
+const FOODTRUCK = {
+  id: 4,
   isActivated: false,
-  title: 'ABCDEFU',
+  title: '푸드트럭 서비스',
 };
 
 const HeaderNav = () => {
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setTabList([CHILISOURCE, APICLOUD, MOTOO, ABC]);
+    setTabList([CHILISOURCE, APICLOUD, MOTOO, FOODTRUCK]);
   }, []);
 
   const activateToggleHandler = (id: number, isActivated: boolean) => {
     setTabList((prevArr: tabType[]) => {
+      if (prevArr.length <= 0) navigate('/projects');
+
       const newTabs = prevArr.map(({ id, isActivated, title }: tabType) => {
         return {
           id,
@@ -48,15 +52,19 @@ const HeaderNav = () => {
       });
       newTabs.forEach((newTab: tabType) => (newTab.isActivated = false));
       const idx = newTabs.findIndex(newTab => newTab.id === id);
+      let currId;
       try {
         if (idx === -1 && isActivated) {
           newTabs[0].isActivated = !newTabs[0].isActivated;
+          currId = newTabs[0].id;
         } else {
           newTabs[idx].isActivated = !newTabs[idx].isActivated;
+          currId = newTabs[idx].id;
         }
       } catch (e) {
         return prevArr;
       }
+      navigate(`/projects/${currId}`);
       return newTabs;
     });
   };
