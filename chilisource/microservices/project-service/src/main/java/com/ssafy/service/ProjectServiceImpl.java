@@ -122,7 +122,7 @@ public class ProjectServiceImpl implements ProjectService {
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(user.getId(), request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
-        if (!userProjectManager.getRole().getName().toUpperCase().equals("MASTER")) {
+        if (!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
@@ -169,7 +169,7 @@ public class ProjectServiceImpl implements ProjectService {
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(user.getId(), projectId)
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
-        if (!userProjectManager.getRole().getName().toUpperCase().equals("MASTER")) {
+        if (!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
 
