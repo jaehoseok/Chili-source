@@ -1,17 +1,26 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import LandingPage from './components/pages/LandingPage';
-import ProjectSelectPage from './components/pages/ProjectSelectPage';
-import ProjectDashBoardPage from './components/pages/ProjectDashBoardPage';
-import ProjectSettingPage from './components/pages/ProjectSettingPage';
-import UserSettingPage from './components/pages/UserSettingPage';
-import GanttChartPage from './components/pages/GanttChartPage';
-import CalendarPage from './components/pages/CalendarPage';
-import BucketPage from './components/pages/BucketPage';
-import GitLogPage from './components/pages/GitLogPage';
-import ProjectCreatePage from './components/pages/ProjectCreatePage';
-import WidgetSelectPage from './components/pages/WidgetSelectPage';
+// landing
+import LandingPage from 'components/pages/LandingPage';
+
+// setting
+import UserSettingPage from 'components/pages/UserSettingPage';
+
+// project
+import ProjectSelectPage from 'components/pages/ProjectSelectPage';
+import ProjectDashBoardPage from 'components/pages/ProjectDashBoardPage';
+import ProjectSettingPage from 'components/pages/ProjectSettingPage';
+import ProjectCreatePage from 'components/pages/ProjectCreatePage';
+
+// widget
+import WidgetSelectPage from 'components/pages/WidgetSelectPage';
+import BucketPage from 'components/pages/BucketPage';
+import GitLogPage from 'components/pages/GitLogPage';
+import GanttChartPage from 'components/pages/GanttChartPage';
+import CalendarPage from 'components/pages/CalendarPage';
+
+// common
 import HeaderNav from './HeaderNav';
 
 /**
@@ -26,9 +35,8 @@ const RouterWrapper = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/projects" element={<ProjectSelectPage />} />
-        <Route path="/newProject" element={<ProjectCreatePage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
+        <Route path="/projects" element={<ProjectSelectPage />} />
       </Routes>
       <Routes>
         <Route
