@@ -16,7 +16,6 @@ import ProjectCreatePage from 'components/pages/ProjectCreatePage';
 // widget
 import WidgetSelectPage from 'components/pages/WidgetSelectPage';
 import BucketPage from 'components/pages/BucketPage';
-import GitLogPage from 'components/pages/GitLogPage';
 import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
@@ -37,6 +36,7 @@ const RouterWrapper = () => {
         <Route path="/" element={<LandingPage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />
+        <Route path="/new-project" element={<ProjectCreatePage />} />
       </Routes>
       <Routes>
         <Route
@@ -67,7 +67,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/ganttChart"
+          path="/projects/:projectId/widget/gantt-chart"
           element={
             <>
               <HeaderNav />
@@ -90,15 +90,6 @@ const RouterWrapper = () => {
             <>
               <HeaderNav />
               <BucketPage />
-            </>
-          }
-        />
-        <Route
-          path="/projects/:projectId/widget/gitLog"
-          element={
-            <>
-              <HeaderNav />
-              <GitLogPage />
             </>
           }
         />
