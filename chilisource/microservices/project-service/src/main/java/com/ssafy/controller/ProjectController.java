@@ -3,6 +3,7 @@ package com.ssafy.controller;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.ProjectCreateRequest;
+import com.ssafy.dto.request.ProjectTokenUpdateRequest;
 import com.ssafy.dto.request.ProjectUpdateRequest;
 import com.ssafy.dto.response.ProjectResponse;
 import com.ssafy.service.ProjectService;
@@ -22,8 +23,7 @@ public class ProjectController {
     public ResponseEntity<?> getProject(
             @PathVariable Long projectId) {
         ProjectResponse response = projectService.getProject(projectId);
-        return ResponseEntity.ok()
-                .body(response);
+        return ResponseEntity.ok(response);
     }
 
     // 프로젝트 목록 조회
@@ -31,8 +31,7 @@ public class ProjectController {
     public ResponseEntity<?> getProjectByUserId(
             @LoginUser User user) {
         List<ProjectResponse> responses = projectService.getProjectByUserId(user.getId());
-        return ResponseEntity.ok()
-                .body(responses);
+        return ResponseEntity.ok(responses);
     }
     
     // 프로젝트 생성
@@ -41,8 +40,7 @@ public class ProjectController {
             @RequestBody ProjectCreateRequest request,
             @LoginUser User user) {
         projectService.createProject(request, user.getId());
-        return ResponseEntity.ok()
-                .build();
+        return ResponseEntity.ok().build();
     }
 
     // 프로젝트 수정
@@ -50,8 +48,7 @@ public class ProjectController {
     public ResponseEntity<?> updateProject(
             @RequestBody ProjectUpdateRequest request) {
         projectService.updateProject(request);
-        return ResponseEntity.ok()
-                .build();
+        return ResponseEntity.ok().build();
     }
 
     // 프로젝트 삭제
@@ -60,7 +57,23 @@ public class ProjectController {
             @PathVariable Long projectId,
             @LoginUser User user) {
         projectService.deleteProject(projectId, user.getId());
-        return ResponseEntity.ok()
-                .build();
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/token")
+    public ResponseEntity<?> updateProjectToken(
+            @LoginUser User user,
+            @RequestBody ProjectTokenUpdateRequest request) {
+        projectService.updateProjectToken(user, request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/token")
+    public ResponseEntity<?> deleteProjectToken(
+            @LoginUser User user,
+            @RequestParam Long projectId,
+            @RequestParam String name) {
+        projectService.deleteProjectToken(user, projectId, name);
+        return ResponseEntity.ok().build();
     }
 }
