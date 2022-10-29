@@ -6,7 +6,6 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from './styles/theme';
 
 import RouterWrapper from './RouterWrapper';
-import HeaderNav from './HeaderNav';
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -21,7 +20,6 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
         <ThemeProvider theme={theme}>
-          <HeaderNav />
           <RouterWrapper />
         </ThemeProvider>
       </RecoilRoot>
