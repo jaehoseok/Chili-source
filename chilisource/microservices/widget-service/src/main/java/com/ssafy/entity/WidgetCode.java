@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 public class WidgetCode extends BaseEntity{
     @Id
-    @Column(name = "widget-code-id")
+    @Column(name = "widget_code_id")
     private String id;
 
     private String requestUrl;

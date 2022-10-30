@@ -38,7 +38,7 @@ public class WidgetServiceImpl implements WidgetService {
     public List<WidgetResponse> getWidgetList(Long projectId) {
         // TODO : 권한 체크 feign 요청 후 해야함
         Order order = orderRepo.findByProjectId(projectId)
-                .orElseGet(()->{
+                .orElseGet(() -> {
                     Order newOrder = Order.builder()
                             .projectId(projectId)
                             .order("")
@@ -48,17 +48,17 @@ public class WidgetServiceImpl implements WidgetService {
                 });
         StringTokenizer st = new StringTokenizer(order.getOrder());
         List<WidgetResponse> responses = new ArrayList<>();
-        while(st.hasMoreTokens()){
+        while (st.hasMoreTokens()) {
             Widget widget = widgetRepo.findById(Long.valueOf(st.nextToken()))
-                            .orElseThrow(()-> new NotFoundException(WIDGET_NOT_FOUND));
+                    .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
             responses.add(
-                WidgetResponse.builder()
-                        .id(widget.getId())
-                        .name(widget.getName())
-                        .widgetCode(widget.getWidgetCode().getId())
-                        .requestUrl(widget.getWidgetCode().getRequestUrl())
-                        .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
-                        .build()
+                    WidgetResponse.builder()
+                            .id(widget.getId())
+                            .name(widget.getName())
+                            .widgetCode(widget.getWidgetCode().getId())
+                            .requestUrl(widget.getWidgetCode().getRequestUrl())
+                            .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
+                            .build()
             );
         }
         return responses;
@@ -68,8 +68,8 @@ public class WidgetServiceImpl implements WidgetService {
     @Transactional
     public WidgetResponse createWidget(WidgetCreateRequest request) {
         WidgetCode widgetCode = widgetCodeRepo.findById(request.getWidgetCodeId())
-                .orElseThrow(()-> new NotFoundException(WIDGET_CODE_NOT_FOUND));
-        if(widgetRepo.findByProjectIdAndWidgetCode(request.getProjectId(), widgetCode).isPresent()){
+                .orElseThrow(() -> new NotFoundException(WIDGET_CODE_NOT_FOUND));
+        if (widgetRepo.findByProjectIdAndWidgetCode(request.getProjectId(), widgetCode).isPresent()) {
             throw new DuplicateException(WIDGET_DUPLICATED);
         }
         Widget widget = Widget.builder()
@@ -90,7 +90,7 @@ public class WidgetServiceImpl implements WidgetService {
     @Transactional
     public WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId) {
         Widget widget = widgetRepo.findById(widgetId)
-                .orElseThrow(()-> new NotFoundException(WIDGET_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
         widget.update(request.getName());
         return WidgetResponse.builder()
                 .id(widget.getId())
@@ -105,7 +105,7 @@ public class WidgetServiceImpl implements WidgetService {
     @Transactional
     public void updateOrder(OrderUpdateRequest request) {
         Order order = orderRepo.findByProjectId(request.getProjectId())
-                .orElseGet(()->{
+                .orElseGet(() -> {
                     Order newOrder = Order.builder()
                             .projectId(request.getProjectId())
                             .order("")

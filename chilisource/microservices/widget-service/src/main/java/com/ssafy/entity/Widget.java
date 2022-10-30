@@ -18,7 +18,7 @@ public class Widget extends BaseEntity {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "widget-code-id")
+    @JoinColumn(name = "widget_code_id")
     private WidgetCode widgetCode;
 
     @Builder
