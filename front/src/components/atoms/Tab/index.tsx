@@ -3,9 +3,11 @@ import { StyledTab, styledType, StyledXBtn } from './style';
 
 interface propsType extends styledType {
   key: number;
+  type: string;
   title: string;
   toggleHandler?: MouseEventHandler<HTMLSpanElement>;
   closeHandler?: MouseEventHandler<HTMLSpanElement>;
+  createHandler?: MouseEventHandler<HTMLSpanElement>;
 }
 
 /**
@@ -19,13 +21,27 @@ interface propsType extends styledType {
  *
  * @author bell
  */
-const index = ({ title, isActivated, toggleHandler, closeHandler }: propsType) => {
+const index = ({
+  title,
+  type,
+  isActivated,
+  toggleHandler,
+  closeHandler,
+  createHandler,
+}: propsType) => {
   return (
-    <StyledTab isActivated={isActivated} onClick={toggleHandler}>
+    <StyledTab
+      type={type}
+      isActivated={isActivated}
+      onClick={title == '+' ? createHandler : toggleHandler}
+      plus={title == '+' ? true : false}
+    >
       {title}
-      <StyledXBtn isActivated={isActivated} onClick={closeHandler}>
-        X
-      </StyledXBtn>
+      {title === '대시보드' || title === '+' ? null : (
+        <StyledXBtn type={type} isActivated={isActivated} onClick={closeHandler}>
+          X
+        </StyledXBtn>
+      )}
     </StyledTab>
   );
 };

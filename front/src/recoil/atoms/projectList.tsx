@@ -18,7 +18,19 @@ const CHILISOURCE = {
   widgetList: [
     {
       isActivated: true,
-      title: 'dashboard',
+      title: '대시보드',
+    },
+    {
+      isActivated: false,
+      title: '캘린더',
+    },
+    {
+      isActivated: false,
+      title: '간트차트',
+    },
+    {
+      isActivated: false,
+      title: '이슈',
     },
   ],
 };
@@ -30,7 +42,7 @@ const APICLOUD = {
   widgetList: [
     {
       isActivated: true,
-      title: 'dashboard',
+      title: '대시보드',
     },
   ],
 };
@@ -42,7 +54,7 @@ const MOTOO = {
   widgetList: [
     {
       isActivated: true,
-      title: 'dashboard',
+      title: '대시보드',
     },
   ],
 };
@@ -54,7 +66,7 @@ const FOODTRUCK = {
   widgetList: [
     {
       isActivated: true,
-      title: 'dashboard',
+      title: '대시보드',
     },
   ],
 };

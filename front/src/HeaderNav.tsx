@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { tabListState, tabType, widgetType } from './recoil/atoms/projectList';
 
-import NavProject from './components/molecules/NavProject';
-import NavWidget from './components/molecules/NavWidget';
-import Tab from './components/atoms/Tab';
+import NavProject from 'components/molecules/NavProject';
+import NavWidget from 'components/molecules/NavWidget';
+import Tab from 'components/atoms/Tab';
 
 /**
  *
@@ -48,7 +48,7 @@ const HeaderNav = () => {
       // 활성화 시킬 idx 찾기
       const idx = newTabs.findIndex(newTab => newTab.id === id);
       // 경로 이동을 위한, id룰 확인
-      let currId;
+      let currId: number;
       try {
         if (idx === -1 && isActivated) {
           newTabs[0].isActivated = !newTabs[0].isActivated;
@@ -79,27 +79,99 @@ const HeaderNav = () => {
     });
   };
 
+  const activatedToggleWidgetHandler = (
+    projectIdx: number,
+    title: string,
+    isActivated: boolean,
+  ) => {
+    setTabList((prevArr: tabType[]) => {
+      const currWidgetList = prevArr[projectIdx].widgetList;
+      const idx: number = currWidgetList.findIndex(widget => widget.title === title);
+
+      const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
+        return {
+          id,
+          isActivated,
+          title,
+          widgetList,
+        };
+      });
+
+      const newWidgets: widgetType[] = currWidgetList.map(({ title, isActivated }: widgetType) => {
+        return {
+          title,
+          isActivated,
+        };
+      });
+
+      newWidgets.forEach(widget => (widget.isActivated = false));
+
+      try {
+        if (idx === -1 && isActivated) {
+          newWidgets[0].isActivated = !newWidgets[0].isActivated;
+        } else {
+          newWidgets[idx].isActivated = !newWidgets[idx].isActivated;
+        }
+      } catch (e) {
+        return prevArr;
+      }
+
+      newTabs[projectIdx].widgetList = [...newWidgets];
+      return newTabs;
+    });
+  };
+
+  const closeWidgetHandler = (title: string) => {
+    setTabList((prevArr: tabType[]) => {
+      // close 할 idx
+      const idx = prevArr.findIndex(widget => widget.title === title);
+      const newWidgets: widgetType[] = prevArr[idx].widgetList.map(
+        ({ title, isActivated }: widgetType) => {
+          return {
+            title,
+            isActivated,
+          };
+        },
+      );
+
+      return prevArr;
+    });
+  };
+
   return (
     <>
       <NavProject>
         {tabList.map(({ isActivated, title, id }: tabType, idx: number) => (
           <Tab
             key={idx}
+            type={'project'}
             isActivated={isActivated}
             title={title}
-            toggleHandler={activateToggleHandler.bind('', id, isActivated)}
-            closeHandler={closeTabHandler.bind('', id)}
+            toggleHandler={activateToggleHandler.bind(null, id, isActivated)}
+            closeHandler={closeTabHandler.bind(null, id)}
           ></Tab>
         ))}
       </NavProject>
       <NavWidget>
         {tabList.map(
-          ({ isActivated, widgetList }: tabType) =>
+          ({ isActivated, widgetList }: tabType, projectIdx: number) =>
             isActivated &&
             widgetList.map(({ isActivated, title }: widgetType, idx: number) => (
-              <Tab key={idx} isActivated={isActivated} title={title}></Tab>
+              <Tab
+                key={idx}
+                type={'widget'}
+                isActivated={isActivated}
+                title={title}
+                toggleHandler={activatedToggleWidgetHandler.bind(
+                  null,
+                  projectIdx,
+                  title,
+                  isActivated,
+                )}
+              ></Tab>
             )),
         )}
+        <Tab key={99999} type={'widget'} isActivated={false} title={'+'}></Tab>
       </NavWidget>
     </>
   );

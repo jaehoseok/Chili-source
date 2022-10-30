@@ -19,7 +19,7 @@ import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
 // common
-import HeaderNav from './HeaderNav';
+import HeaderNav from 'HeaderNav';
 
 /**
  *

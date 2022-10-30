@@ -1,12 +1,19 @@
 import { ReactNode } from 'react';
-import { StyledNav, styledType } from './style';
+import { StyledImg, StyledNav, styledType } from './style';
 
 interface propsType extends styledType {
   children?: ReactNode;
 }
 
 const index = ({ children }: propsType) => {
-  return <StyledNav>{children}</StyledNav>;
+  return (
+    <>
+      <StyledNav>
+        <StyledImg></StyledImg>
+        {children}
+      </StyledNav>
+    </>
+  );
 };
 
 export default index;
