@@ -22,7 +22,7 @@ const HeaderNav = () => {
 
   const navigate = useNavigate();
 
-  // 탭을 활성화시키는 함수
+  // 프로젝트 탭을 활성화시키는 함수
   // 해당 Tab이 활성화 되는 경우, 다른 Tab은 활성화가 종료 되며,
   // 활성화 된 컴포넌트에 맞게 경로가 이동되어야 한다.
   // 프로젝트 데이터가 없는 경우는 ProjectSelectPage로 이동한다.
@@ -69,7 +69,7 @@ const HeaderNav = () => {
     });
   };
 
-  // 해당 탭을 삭제하는 함수
+  // 해당 프로젝트 탭을 삭제하는 함수
   const closeTabHandler = (id: number) => {
     setTabList((prevArr: tabType[]) => {
       const newTabs = [...prevArr];
@@ -79,15 +79,23 @@ const HeaderNav = () => {
     });
   };
 
+  // 위젯 탭을 활성화, 비활성화시키는 함수
+  // 설계 방식은 actiavatedToggleHandler와 동일하나, 내부에 속해있는 widgetList[] 를 업데이트 해주는 함수이다.
   const activatedToggleWidgetHandler = (
-    projectIdx: number,
-    title: string,
-    isActivated: boolean,
+    projectIdx: number, // 현재 projectList 중 해당 project의 idx값
+    title: string, // 현재 위젯 탭의 title 값
+    isActivated: boolean, // 현재 위젯 탭의 활성화 여부
   ) => {
     setTabList((prevArr: tabType[]) => {
+      // 현재 수정이 이루어져야 하는 widgetList
       const currWidgetList = prevArr[projectIdx].widgetList;
-      const id = prevArr[projectIdx].id;
+      // 실제 프로젝트의 id값
+      // 이후 경로 이동에 필요하다.
+      const projectId = prevArr[projectIdx].id;
+      // widgetList 안의 현재 widget의 idx 값
       const idx: number = currWidgetList.findIndex(widget => widget.title === title);
+
+      // 배열 복제
       const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
         return {
           id,
@@ -97,6 +105,8 @@ const HeaderNav = () => {
         };
       });
 
+      // 위젯 복제
+      // 위젯도 배열이기에, 복제를 하지 않으면 수정이 불가능하다.
       const newWidgets: widgetType[] = currWidgetList.map(({ title, isActivated }: widgetType) => {
         return {
           title,
@@ -104,6 +114,7 @@ const HeaderNav = () => {
         };
       });
 
+      // 해당 프로젝트의 모든 위젯의 활성화 여부를 모두 false로
       newWidgets.forEach(widget => (widget.isActivated = false));
 
       let currTitle: string;
@@ -121,28 +132,35 @@ const HeaderNav = () => {
 
       newTabs[projectIdx].widgetList = [...newWidgets];
 
+      // 확인된 currTitle 값을 토대로, 경로 이동
+      // 고유의 id값을 지정할까 생각했지만
+      // 서비스에서 나타날 수 있는 경우의 수가 4개뿐이라
+      // 그냥 title로 확인함
       switch (currTitle) {
         case '대시보드':
-          navigate(`/projects/${id}`);
+          navigate(`/projects/${projectId}`);
           break;
         case '이슈':
-          navigate(`/projects/${id}/widget/issues`);
+          navigate(`/projects/${projectId}/widget/issues`);
           break;
         case `캘린더`:
-          navigate(`/projects/${id}/widget/calendar`);
+          navigate(`/projects/${projectId}/widget/calendar`);
           break;
         case '간트차트':
-          navigate(`/projects/${id}/widget/gantt-chart`);
+          navigate(`/projects/${projectId}/widget/gantt-chart`);
           break;
       }
       return newTabs;
     });
   };
 
+  // 위젯 탭을 삭제하는 함수
   const closeWidgetHandler = (projectIdx: number, title: string) => {
     setTabList((prevArr: tabType[]) => {
       const currWidgetList = prevArr[projectIdx].widgetList;
 
+      // 결과적으로 이중 배열의 형태이기 때문에
+      // 한번의 복제를 해야한다.
       const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
         return {
           id,
@@ -156,8 +174,11 @@ const HeaderNav = () => {
         (widget: widgetType) => widget.title !== title,
       );
 
+      // 해당 프로젝트의 widgetList에
+      // 수정 값을 반영
       newTabs[projectIdx].widgetList = [...newWidgets];
 
+      // 수정환 newTabs를 반환
       return newTabs;
     });
   };
