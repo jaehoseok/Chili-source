@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoilState } from 'recoil';
-import { tabListState, tabType } from './recoil/atoms/projectList';
-import { widgetListState, widgetType } from 'recoil/atoms/widgetList';
+import { tabListState, tabType, widgetType } from './recoil/atoms/projectList';
 
 import NavProject from './components/molecules/NavProject';
 import NavWidget from './components/molecules/NavWidget';
@@ -18,9 +17,8 @@ import Tab from './components/atoms/Tab';
  */
 const HeaderNav = () => {
   // project용 recoil 데이터 가져오기, set 적용하기
+
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
-  // widget용 recoil 데이터 가져오기, set 적용하기
-  const [widgetList, setWidgetList] = useRecoilState<widgetType[]>(widgetListState);
 
   const navigate = useNavigate();
 
@@ -35,11 +33,12 @@ const HeaderNav = () => {
       // 데이터 복사
       // recoil은 primitive 데이터 외에는 모두 읽기전용으로만 가져오기 떄문에,
       // 복사시 설정 주의할것!
-      const newTabs = prevArr.map(({ id, isActivated, title }: tabType) => {
+      const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
         return {
           id,
           isActivated,
           title,
+          widgetList,
         };
       });
 
@@ -94,9 +93,13 @@ const HeaderNav = () => {
         ))}
       </NavProject>
       <NavWidget>
-        {widgetList.map(({ isActivated, title }: widgetType, idx: number) => (
-          <Tab key={idx} isActivated={isActivated} title={title}></Tab>
-        ))}
+        {tabList.map(
+          ({ isActivated, widgetList }: tabType) =>
+            isActivated &&
+            widgetList.map(({ isActivated, title }: widgetType, idx: number) => (
+              <Tab key={idx} isActivated={isActivated} title={title}></Tab>
+            )),
+        )}
       </NavWidget>
     </>
   );
