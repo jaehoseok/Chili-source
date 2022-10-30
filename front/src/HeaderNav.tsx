@@ -86,8 +86,8 @@ const HeaderNav = () => {
   ) => {
     setTabList((prevArr: tabType[]) => {
       const currWidgetList = prevArr[projectIdx].widgetList;
+      const id = prevArr[projectIdx].id;
       const idx: number = currWidgetList.findIndex(widget => widget.title === title);
-
       const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
         return {
           id,
@@ -106,35 +106,59 @@ const HeaderNav = () => {
 
       newWidgets.forEach(widget => (widget.isActivated = false));
 
+      let currTitle: string;
       try {
         if (idx === -1 && isActivated) {
           newWidgets[0].isActivated = !newWidgets[0].isActivated;
+          currTitle = newWidgets[0].title;
         } else {
           newWidgets[idx].isActivated = !newWidgets[idx].isActivated;
+          currTitle = newWidgets[idx].title;
         }
       } catch (e) {
         return prevArr;
       }
 
       newTabs[projectIdx].widgetList = [...newWidgets];
+
+      switch (currTitle) {
+        case '대시보드':
+          navigate(`/projects/${id}`);
+          break;
+        case '이슈':
+          navigate(`/projects/${id}/widget/issues`);
+          break;
+        case `캘린더`:
+          navigate(`/projects/${id}/widget/calendar`);
+          break;
+        case '간트차트':
+          navigate(`/projects/${id}/widget/gantt-chart`);
+          break;
+      }
       return newTabs;
     });
   };
 
-  const closeWidgetHandler = (title: string) => {
+  const closeWidgetHandler = (projectIdx: number, title: string) => {
     setTabList((prevArr: tabType[]) => {
-      // close 할 idx
-      const idx = prevArr.findIndex(widget => widget.title === title);
-      const newWidgets: widgetType[] = prevArr[idx].widgetList.map(
-        ({ title, isActivated }: widgetType) => {
-          return {
-            title,
-            isActivated,
-          };
-        },
+      const currWidgetList = prevArr[projectIdx].widgetList;
+
+      const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
+        return {
+          id,
+          isActivated,
+          title,
+          widgetList,
+        };
+      });
+
+      const newWidgets: widgetType[] = currWidgetList.filter(
+        (widget: widgetType) => widget.title !== title,
       );
 
-      return prevArr;
+      newTabs[projectIdx].widgetList = [...newWidgets];
+
+      return newTabs;
     });
   };
 
@@ -151,6 +175,7 @@ const HeaderNav = () => {
             closeHandler={closeTabHandler.bind(null, id)}
           ></Tab>
         ))}
+        <Tab key={99999} type={'project'} isActivated={false} title={'+'}></Tab>
       </NavProject>
       <NavWidget>
         {tabList.map(
@@ -168,6 +193,7 @@ const HeaderNav = () => {
                   title,
                   isActivated,
                 )}
+                closeHandler={closeWidgetHandler.bind(null, projectIdx, title)}
               ></Tab>
             )),
         )}
