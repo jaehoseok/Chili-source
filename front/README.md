@@ -156,3 +156,12 @@
   >- 특정 경로에서 `HeaderNav` 적용되지 않도록 적용 
   >- 탭 클릭 시 `projects/:projectId`로 이동
   >- 모든 프로젝트 탭 종료 시 `projectSelectPage`로 이동하게 설정
+
+
+## 221030
+### 종현
+- `navWidget` 컴포넌트, 이벤트 구성 완료
+  >- `recoil` projectList 데이터에 widgetList 추가
+  >- `navProject`의 삭제, 토글 이벤트와 동일하게 적용
+  >- 해당 `widget` 탭마다 경로 이동하도록 설정
+  >- 대시보드 페이지 및 위젯 생성 페이지는 삭제가 이루어지지 않도록 설정

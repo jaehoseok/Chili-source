@@ -2,8 +2,8 @@ import ReactDOM from 'react-dom/client';
 
 import axios from 'axios';
 
-import './index.css';
-import './styles/minireset.min.css';
+import 'index.css';
+import 'styles/minireset.min.css';
 
 import App from './App';
 

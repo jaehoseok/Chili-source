@@ -3,9 +3,9 @@ import { RecoilRoot } from 'recoil';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 
-import { theme } from './styles/theme';
+import { theme } from 'styles/theme';
 
-import RouterWrapper from './RouterWrapper';
+import RouterWrapper from 'RouterWrapper';
 
 const App = () => {
   const queryClient = new QueryClient({

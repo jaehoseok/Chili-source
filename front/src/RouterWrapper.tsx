@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 // landing
@@ -15,12 +14,12 @@ import ProjectCreatePage from 'components/pages/ProjectCreatePage';
 
 // widget
 import WidgetSelectPage from 'components/pages/WidgetSelectPage';
-import BucketPage from 'components/pages/BucketPage';
+import IssuesPage from 'components/pages/IssuesPage';
 import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
 // common
-import HeaderNav from './HeaderNav';
+import HeaderNav from 'HeaderNav';
 
 /**
  *
@@ -85,11 +84,11 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/bucket"
+          path="/projects/:projectId/widget/issues"
           element={
             <>
               <HeaderNav />
-              <BucketPage />
+              <IssuesPage />
             </>
           }
         />
