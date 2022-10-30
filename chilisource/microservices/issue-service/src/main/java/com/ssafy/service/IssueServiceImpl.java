@@ -283,9 +283,9 @@ public class IssueServiceImpl implements IssueService {
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
 
         // 예외처리 ver.1 : delete 실행 못함
-        if (middleBucket.getMiddleBucketIssues().contains(middleBucketIssue)) {
-            throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
-        }
+//        if (middleBucket.getMiddleBucketIssues().contains(middleBucketIssue)) {
+//            throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
+//        }
 
         // 예외처리 ver.2 : delete 실행 함
         if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
@@ -293,7 +293,7 @@ public class IssueServiceImpl implements IssueService {
         }
 
         middleBucketIssueRepo.deleteById(middleBucketIssueId); // (1)
-        System.out.println("완료"); // (2)
+//        System.out.println("완료"); // (2)
 
         // ver 1 실행시 (1)을 실행하지 않고 (2)만 실행됨
         // ver 2 실행시 (2)를 실행하고 (1)을 나중에 실행함
