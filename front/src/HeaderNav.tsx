@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+
 import { useRecoilState } from 'recoil';
 import { tabListState, tabType } from './recoil/atoms/projectList';
+import { widgetListState, widgetType } from 'recoil/atoms/widgetList';
 
 import NavProject from './components/molecules/NavProject';
+import NavWidget from './components/molecules/NavWidget';
 import Tab from './components/atoms/Tab';
 
 /**
@@ -14,8 +17,11 @@ import Tab from './components/atoms/Tab';
  * @author bell
  */
 const HeaderNav = () => {
-  // recoil 데이터 가져오기, set 적용하기
+  // project용 recoil 데이터 가져오기, set 적용하기
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
+  // widget용 recoil 데이터 가져오기, set 적용하기
+  const [widgetList, setWidgetList] = useRecoilState<widgetType[]>(widgetListState);
+
   const navigate = useNavigate();
 
   // 탭을 활성화시키는 함수
@@ -75,17 +81,24 @@ const HeaderNav = () => {
   };
 
   return (
-    <NavProject>
-      {tabList.map(({ isActivated, title, id }: tabType, idx: number) => (
-        <Tab
-          key={idx}
-          isActivated={isActivated}
-          title={title}
-          toggleHandler={activateToggleHandler.bind('', id, isActivated)}
-          closeHandler={closeTabHandler.bind('', id)}
-        ></Tab>
-      ))}
-    </NavProject>
+    <>
+      <NavProject>
+        {tabList.map(({ isActivated, title, id }: tabType, idx: number) => (
+          <Tab
+            key={idx}
+            isActivated={isActivated}
+            title={title}
+            toggleHandler={activateToggleHandler.bind('', id, isActivated)}
+            closeHandler={closeTabHandler.bind('', id)}
+          ></Tab>
+        ))}
+      </NavProject>
+      <NavWidget>
+        {widgetList.map(({ isActivated, title }: widgetType, idx: number) => (
+          <Tab key={idx} isActivated={isActivated} title={title}></Tab>
+        ))}
+      </NavWidget>
+    </>
   );
 };
 

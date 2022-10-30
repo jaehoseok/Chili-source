@@ -4,7 +4,7 @@ import { StyledTab, styledType, StyledXBtn } from './style';
 interface propsType extends styledType {
   key: number;
   title: string;
-  toggleHandler: MouseEventHandler<HTMLSpanElement>;
+  toggleHandler?: MouseEventHandler<HTMLSpanElement>;
   closeHandler?: MouseEventHandler<HTMLSpanElement>;
 }
 
