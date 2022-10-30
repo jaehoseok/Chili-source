@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
 export interface styledType {
@@ -25,6 +25,17 @@ export const StyledXBtn = styled.span<styledType>`
 export const StyledTab = styled.span<styledType>`
   ${tw`mr-2 border rounded-t-2xl text-lg font-bold inline-block text-center relative`}
   padding : 7.5px ${({ plus }) => (plus ? '15px' : '30px')};
+  ${({ plus }) =>
+    plus
+      ? css`
+          min-width: 10px;
+        `
+      : css`
+          width: 10rem;
+          overflow: clip;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        `}
   background-color: ${({ theme, type, isActivated }) =>
     type === 'project'
       ? isActivated

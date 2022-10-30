@@ -62,7 +62,7 @@ const MOTOO = {
 const FOODTRUCK = {
   id: 4,
   isActivated: false,
-  title: '푸드트럭 서비스',
+  title: '푸드트럭 서비스!',
   widgetList: [
     {
       isActivated: true,
