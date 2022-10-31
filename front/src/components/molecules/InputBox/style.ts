@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
-export interface styledFlexType {
+export interface styledContainerType {
   isRow: boolean;
   containerWidth?: string;
   containerPadding?: string;
@@ -14,7 +14,7 @@ export interface styledLabelType {
   labelMarginBottom?: string;
 }
 
-export const StyledFlex = styled.div<styledFlexType>`
+export const StyledContainer = styled.div<styledContainerType>`
   ${({ isRow }) =>
     isRow &&
     css`
@@ -26,7 +26,7 @@ export const StyledFlex = styled.div<styledFlexType>`
   padding: ${({ containerPadding }) => containerPadding};
 `;
 
-StyledFlex.defaultProps = {
+StyledContainer.defaultProps = {
   containerWidth: '450px',
   containerPadding: '5px',
 };

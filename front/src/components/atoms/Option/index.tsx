@@ -12,7 +12,7 @@ interface propsType {
  * @param {string[]} messages   - option의 값이 되는 string 배열
  * @author bell
  */
-const index = ({ messages }: propsType): JSX.Element => {
+const index = ({ messages }: propsType) => {
   return (
     <>
       {messages.map((message, idx) => (

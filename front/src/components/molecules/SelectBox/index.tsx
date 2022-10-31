@@ -1,8 +1,10 @@
-import { StyledLabel, styledLabelType } from './style';
-import Select from 'components/atoms/Select';
 import { ReactNode } from 'react';
 
-interface propsType extends styledLabelType {
+import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
+
+import Select from 'components/atoms/Select';
+
+interface propsType extends styledLabelType, styledContainerType {
   labelName: string;
   selectWidth?: string;
   selectSize?: string;
@@ -11,10 +13,9 @@ interface propsType extends styledLabelType {
 
 /**
  * @description
- * InputBox를 생성하는 컴포넌트
- * Row 형태의 InputBox 혹은
- * Column 형태의 InputBox를 생성할 수 있다.
- *
+ * SelectBox를 생성하는 컴포넌트
+
+
  * @example
  * <SelectBox labelName="이슈유형" selectWidth="30rem">
  *  <Option messages={['스토리', '태스크', '버그']}></Option>
@@ -38,10 +39,11 @@ const index = ({
   labelMarginBottom,
   selectWidth,
   selectSize,
+  containerPadding,
   children,
 }: propsType) => {
   return (
-    <>
+    <StyledContainer containerPadding={containerPadding}>
       <StyledLabel
         labelSize={labelSize}
         labelWeight={labelWeight}
@@ -50,7 +52,7 @@ const index = ({
         {labelName}
       </StyledLabel>
       <Select width={selectWidth} fontSize={selectSize} children={children}></Select>
-    </>
+    </StyledContainer>
   );
 };
 

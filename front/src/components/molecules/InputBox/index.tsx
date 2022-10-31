@@ -1,7 +1,7 @@
-import { StyledLabel, StyledFlex, styledLabelType, styledFlexType } from './style';
+import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
 
-interface propsType extends styledFlexType, styledLabelType {
+interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
   inputPlaceHolder?: string;
   inputValue?: string;
@@ -54,7 +54,11 @@ const index = ({
   containerPadding,
 }: propsType) => {
   return (
-    <StyledFlex isRow={isRow} containerPadding={containerPadding} containerWidth={containerWidth}>
+    <StyledContainer
+      isRow={isRow}
+      containerPadding={containerPadding}
+      containerWidth={containerWidth}
+    >
       <StyledLabel
         isRow={isRow}
         labelSize={labelSize}
@@ -70,7 +74,7 @@ const index = ({
         placeHolder={inputPlaceHolder}
         value={inputValue}
       ></Input>
-    </StyledFlex>
+    </StyledContainer>
   );
 };
 
