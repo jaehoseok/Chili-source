@@ -7,6 +7,7 @@ import com.ssafy.dto.request.TokenCodeCreateRequest;
 import com.ssafy.dto.request.TokenCodeUpdateRequest;
 import com.ssafy.dto.request.TokenCreateRequest;
 import com.ssafy.dto.response.ServiceTokenResponse;
+import com.ssafy.repository.TokenRepo;
 import com.ssafy.service.OAuthService;
 import com.ssafy.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,6 @@ public class AuthController {
     @GetMapping("/login/{socialLoginType}")
     public void socialLoginRedirect(@PathVariable(name = "socialLoginType") String SocialLoginPath) throws IOException {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
-        System.out.println(socialLoginType);
         oAuthService.request(socialLoginType);
     }
 
@@ -89,26 +89,34 @@ public class AuthController {
 
     @PutMapping("/token-codes/{tokenCodeId}")
     public ResponseEntity<?> updateTokenCode(
-            @PathVariable(name = "tokenCodeId") Long tokenCodeId,
+            @PathVariable(name = "tokenCodeId") String tokenCodeId,
             @RequestBody TokenCodeUpdateRequest request
     ) {
-        authService.updateTokenCode(tokenCodeId, request);
+        authService.updateTokenCode(tokenCodeId.toUpperCase(), request);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/token-codes/{tokenCodeId}")
     public ResponseEntity<?> deleteTokenCode(
-            @PathVariable(name = "tokenCodeId") Long tokenCodeId
+            @PathVariable(name = "tokenCodeId") String tokenCodeId
     ) {
-        authService.deleteTokenCode(tokenCodeId);
+        authService.deleteTokenCode(tokenCodeId.toUpperCase());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/tokens")
-    public ResponseEntity<?> getToken(
+    public ResponseEntity<?> getTokenList(
             @LoginUser User user
     ) {
-        return ResponseEntity.ok(authService.getToken(user.getId()));
+        return ResponseEntity.ok(authService.getTokenList(user.getId()));
+    }
+
+    @GetMapping("/tokens/{tokenCodeId}")
+    public ResponseEntity<?> getToken(
+            @LoginUser User user,
+            @PathVariable(name = "tokenCodeId") String tokenCodeId
+    ) {
+        return ResponseEntity.ok(authService.getToken(tokenCodeId.toUpperCase(), user.getId()));
     }
 
     @PostMapping("/tokens")
@@ -123,9 +131,9 @@ public class AuthController {
     @DeleteMapping("/tokens/{tokenCodeId}")
     public ResponseEntity<?> deleteToken(
             @LoginUser User user,
-            @PathVariable(name = "tokenCodeId") Long tokenCodeId
+            @PathVariable(name = "tokenCodeId") String tokenCodeId
     ) {
-        authService.deleteToken(tokenCodeId, user.getId());
+        authService.deleteToken(tokenCodeId.toUpperCase(), user.getId());
         return ResponseEntity.ok().build();
     }
 

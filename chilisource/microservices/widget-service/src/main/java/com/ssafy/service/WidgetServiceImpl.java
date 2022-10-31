@@ -74,6 +74,7 @@ public class WidgetServiceImpl implements WidgetService {
         }
         Widget widget = Widget.builder()
                 .name(request.getName())
+                .projectId(request.getProjectId())
                 .widgetCode(widgetCode)
                 .build();
         widgetRepo.save(widget);
