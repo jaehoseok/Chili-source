@@ -16,16 +16,18 @@ interface propsType extends styledLabelType {
  * Column 형태의 InputBox를 생성할 수 있다.
  *
  * @example
- * // flex-column 시
- * <InputBox containerWidth="38rem" containerPadding="20px" inputWidth="30rem" isRow={false} labelName={'이름'}></InputBox>
- * // flex-row 시
- * <InputBox containerWidth="38rem" containerPadding="20px" inputWidth="30rem" isRow={true} labelName={'이름'}></InputBox>
- *
+ * <SelectBox labelName="이슈유형" selectWidth="30rem">
+ *  <Option messages={['스토리', '태스크', '버그']}></Option>
+ * </SelectBox>
  *
  * @param {string}  labelName         - label 태그에 쓰일 label에 이름
  * @param {string?} labelWeight       - label 태그의 font-weight
  * @param {string?} labelSize         - label 태그의 font-size
  * @param {string?} labelMarginBottom - label 태그의 margin-bottom
+ *
+ * @param {string?} selectWidth       - select 태그의 width
+ * @param {string?} selectSize        - select 태그 및 option 태그의 font 크기
+ * @param {string?} children          - Select 컴포넌트가 이어받을 children 컴포넌트 (<option>)
  *
  * @author bell
  */
