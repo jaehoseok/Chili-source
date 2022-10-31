@@ -14,6 +14,8 @@ public class NotFoundException extends RuntimeException {
     public static final String TOKEN_CODE_NOT_FOUND = "존재하지 않는 TOKEN CODE 입니다.";
     public static final String TOKEN_NOT_FOUND = "존재하지 않는 TOKEN 입니다.";
     public static final String TOKEN_NOT_CONNECTED = "등록된 토큰이 없습니다.";
+    public static final String WIDGET_CODE_NOT_FOUND = "존재하지 않는 WIDGET CODE 입니다.";
+    public static final String WIDGET_NOT_FOUND = "존재하지 않는 WIDGET 입니다.";
     public NotFoundException(String message) {
         super(message);
     }
