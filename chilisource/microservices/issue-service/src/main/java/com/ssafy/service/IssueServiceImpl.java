@@ -253,7 +253,7 @@ public class IssueServiceImpl implements IssueService {
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
-        if (!middleBucket.getMiddleBucketIssues().contains(middleBucketIssue)) {
+        if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
         IssueType issueType = null;
