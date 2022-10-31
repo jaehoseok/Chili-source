@@ -1,5 +1,6 @@
 package com.ssafy.client;
 
+import com.ssafy.dto.gitlab.Branch;
 import com.ssafy.dto.response.GitlabCommitResponse;
 import com.ssafy.dto.response.GitlabMergeRequestResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,4 +23,10 @@ public interface SsafyGitlabClient {
             @RequestHeader("PRIVATE-TOKEN") String ssafyGitlabToken,
             @PathVariable String project_id,
             @RequestParam("ref_name") String ref_name);
+
+    @GetMapping("/projects/{project_id}/repository/branches")
+    List<Branch> findBranch(
+            @RequestHeader("PRIVATE-TOKEN") String ssafyGitlabToken,
+            @PathVariable String project_id
+    );
 }

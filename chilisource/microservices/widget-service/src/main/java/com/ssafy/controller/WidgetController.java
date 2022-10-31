@@ -1,5 +1,7 @@
 package com.ssafy.controller;
 
+import brave.Response;
+import com.ssafy.client.SsafyGitlabClient;
 import com.ssafy.config.WidgetType;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
@@ -110,7 +112,7 @@ public class WidgetController {
 //            case GITHUB: {
 //
 //            }
-            default:{
+            default: {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }
         }

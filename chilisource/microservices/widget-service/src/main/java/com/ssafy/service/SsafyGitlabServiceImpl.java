@@ -3,10 +3,8 @@ package com.ssafy.service;
 import com.ssafy.client.AuthServiceClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.client.SsafyGitlabClient;
-import com.ssafy.dto.response.GitlabCommitResponse;
-import com.ssafy.dto.response.GitlabMergeRequestResponse;
-import com.ssafy.dto.response.ProjectResponse;
-import com.ssafy.dto.response.TokenResponse;
+import com.ssafy.dto.gitlab.Branch;
+import com.ssafy.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,10 +18,18 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
     private final SsafyGitlabClient ssafyGitlabClient;
 
     @Override
-    public List<GitlabMergeRequestResponse> findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
+    public GitlabDefaultResponse findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
         TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
-        return ssafyGitlabClient.findMergeRequest(tokenResponse.getValue(), projectResponse.getGitRepo());
+
+        List<Branch> branches = ssafyGitlabClient.findBranch(tokenResponse.getValue(), projectResponse.getGitRepo());
+        List<GitlabMergeRequestResponse> gitlabMergeRequestResponses = ssafyGitlabClient.findMergeRequest(tokenResponse.getValue(), projectResponse.getGitRepo());
+
+        GitlabDefaultResponse gitlabDefaultResponse = GitlabDefaultResponse.builder()
+                .branchs(branches)
+                .mergeRequestResponses(gitlabMergeRequestResponses)
+                .build();
+        return gitlabDefaultResponse;
     }
 
     @Override

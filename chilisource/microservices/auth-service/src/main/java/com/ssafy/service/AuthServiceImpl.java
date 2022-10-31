@@ -94,6 +94,7 @@ public class AuthServiceImpl implements AuthService {
                     return TokenResponse.builder()
                             .id(token.getId())
                             .value(token.getValue())
+                            .email(token.getEmail())
                             .tokenCodeId(token.getTokenCode().getId())
                             .build();
                 })
@@ -110,6 +111,7 @@ public class AuthServiceImpl implements AuthService {
         return TokenResponse.builder()
                 .id(token.getId())
                 .value(token.getValue())
+                .email(token.getEmail())
                 .tokenCodeId(token.getTokenCode().getId())
                 .build();
     }
@@ -123,6 +125,7 @@ public class AuthServiceImpl implements AuthService {
         if (!token.isPresent()) {
             Token newToken = Token.builder()
                     .value(request.getValue())
+                    .email(request.getEmail())
                     .tokenCode(tokenCode)
                     .build();
             tokenRepo.save(newToken);
