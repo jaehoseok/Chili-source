@@ -16,10 +16,21 @@ const button = {
   white: '#FFFFFF',
   black: '#000000',
 };
-
+type issueType = {
+  [key: string]: string;
+  story: string;
+  task: string;
+  bug: string;
+};
+const issue: issueType = {
+  story: '#63BA3C',
+  task: '#4BADE8',
+  bug: '#E5493A',
+};
 export const theme = {
   color,
   button,
+  issue,
 };
 
 export type Theme = typeof theme;
