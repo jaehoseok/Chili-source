@@ -15,7 +15,6 @@ public class UserProjectUpdateRequest {
 
     private Long roleId;
 
-
     @Builder
     public UserProjectUpdateRequest(String userColor, Long userId, Long projectId, Long roleId) {
         this.userColor = userColor;

@@ -13,7 +13,6 @@ public class UserProjectCreateRequest {
 
     private Long projectId;
 
-
     @Builder
     public UserProjectCreateRequest(String userColor, Long userId, Long projectId) {
         if (userColor != null) this.userColor = userColor;
