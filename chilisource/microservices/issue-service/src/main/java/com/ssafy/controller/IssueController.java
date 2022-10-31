@@ -186,7 +186,20 @@ public class IssueController {
                 .build();
     }
 
-    // 이슈 템플릿을 지라의 이슈로 생성
+    // 미들버킷내의 이슈들을 지라의 이슈로 생성
+    @PutMapping("/jira/middle-bucket")
+    public ResponseEntity<?> addIssuesToJira(
+            @LoginUser User user,
+            @RequestParam Long projectId,
+            @RequestParam Long middleBucketId
+    ) {
+        issueService.addIssuesToJira(
+                user.getId(),
+//                1L,
+                projectId,
+                middleBucketId);
+        return ResponseEntity.ok().build();
+    }
     // 미들 버킷을 지라의 이슈로 생성
     // 변수를 사용하여 여러 이슈 등록
 }

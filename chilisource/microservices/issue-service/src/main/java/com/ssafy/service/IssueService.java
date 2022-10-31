@@ -40,4 +40,7 @@ public interface IssueService {
 
     // 미들 버킷의 이슈 삭제
     void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
+
+    // 미들 버킷 내의 이슈를 지라로 생성
+    void addIssuesToJira(Long userId, Long projectId, Long middleBucketId);
 }

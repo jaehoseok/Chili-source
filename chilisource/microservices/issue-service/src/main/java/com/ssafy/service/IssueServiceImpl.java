@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.dto.*;
 import com.ssafy.entity.IssueTemplate;
@@ -38,6 +39,7 @@ public class IssueServiceImpl implements IssueService {
     private final MiddleBucketRepo middleBucketRepo;
     private final MiddleBucketIssueRepo middleBucketIssueRepo;
     private final ProjectServiceClient projectServiceClient;
+    private final JiraFeignClient jiraFeignClient;
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
@@ -300,5 +302,12 @@ public class IssueServiceImpl implements IssueService {
 
         // 의문점 1. 왜 ver 1은 (1)을 실행하지 않는지
         // 의문점 2. 왜 ver 2는 (2)를 선실행후 (1)을 나중에 실행하는지
+    }
+
+    @Override
+    public void addIssuesToJira(Long userId, Long projectId, Long middleBucketId) {
+
+
+        jiraFeignClient.addIssuesToJira();
     }
 }
