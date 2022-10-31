@@ -24,7 +24,8 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Sheet = ({ width, height, backgroundColor, children }: propsType) => {
+
+const index = ({ width, height, backgroundColor, children }: propsType) => {
   return (
     <>
       <StyledSheet width={width} height={height} backgroundColor={backgroundColor}>
@@ -33,3 +34,5 @@ export const Sheet = ({ width, height, backgroundColor, children }: propsType) =
     </>
   );
 };
+
+export default index;
