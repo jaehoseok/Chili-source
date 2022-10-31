@@ -4,7 +4,7 @@ const ProjectDashBoardPage = () => {
   return (
     <>
       <InputBox
-        containerWidth="33rem"
+        containerWidth="38rem"
         containerPadding="20px"
         inputWidth="30rem"
         isRow={true}

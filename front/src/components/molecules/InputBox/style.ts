@@ -1,14 +1,17 @@
 import styled, { css } from 'styled-components';
-
-export interface styledLabelType {
-  labelWeight?: number;
-  labelSize?: string;
-}
+import tw from 'twin.macro';
 
 export interface styledFlexType {
   isRow: boolean;
   containerWidth?: string;
   containerPadding?: string;
+}
+
+export interface styledLabelType {
+  isRow: boolean;
+  labelWeight?: number;
+  labelSize?: string;
+  labelMarginBottom?: string;
 }
 
 export const StyledFlex = styled.div<styledFlexType>`
@@ -21,8 +24,8 @@ export const StyledFlex = styled.div<styledFlexType>`
       `;
     }
   }}
-  padding : ${({ containerPadding }) => containerPadding};
-  width: ${({ containerWidth }) => containerWidth};
+  width: ${({ containerWidth, isRow }) => isRow && containerWidth};
+  padding: ${({ containerPadding }) => containerPadding};
 `;
 
 StyledFlex.defaultProps = {
@@ -31,8 +34,10 @@ StyledFlex.defaultProps = {
 };
 
 export const StyledLabel = styled.label<styledLabelType>`
+  ${tw`inline-block`}
   font-weight: ${({ labelWeight }) => labelWeight};
   font-size: ${({ labelSize }) => labelSize};
+  margin-bottom: ${({ isRow, labelMarginBottom }) => !isRow && labelMarginBottom};
 `;
 
 StyledLabel.defaultProps = {

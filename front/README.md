@@ -126,7 +126,7 @@
 
 ## 221028
 ### 종현
-- `navProject` 컴포넌트
+- `NavProject` 컴포넌트
   >- `closeTabHandler` : `tab`을 삭제하는 이벤트
   >- `closeTabHandler` 에러
     >- 컴포넌트 제 랜더링 시 이전의 idx가 그대로 반영되는 에러
@@ -149,26 +149,25 @@
 
 ## 221029
 ### 종현 
-- `navProject` 컴포넌트, 이벤트 구성 완료
+- `NavProject` 컴포넌트, 이벤트 구성 완료
   >- 실제 브라우저 탭과 동일한 기능을 반영
   >- 실제 서비스 플로우와 연결 시 에러날 가능성 있음
   >- 문제가 나면 일단 그때 찾아보자
   >- 특정 경로에서 `HeaderNav` 적용되지 않도록 적용 
   >- 탭 클릭 시 `projects/:projectId`로 이동
-  >- 모든 프로젝트 탭 종료 시 `projectSelectPage`로 이동하게 설정
+  >- 모든 프로젝트 탭 종료 시 `ProjectSelectPage`로 이동하게 설정
 
 
 ## 221030
 ### 종현
-- `navWidget` 컴포넌트, 이벤트 구성 완료
+- `NavWidget` 컴포넌트, 이벤트 구성 완료
   >- `recoil` projectList 데이터에 widgetList 추가
-  >- `navProject`의 삭제, 토글 이벤트와 동일하게 적용
+  >- `NavProject`의 삭제, 토글 이벤트와 동일하게 적용
   >- 해당 `widget` 탭마다 경로 이동하도록 설정
   >- 대시보드 페이지 및 위젯 생성 페이지는 삭제가 이루어지지 않도록 설정
 
 ## 221031
 ### 종현
 - `InputBox` 컴포넌트 구현
-  >- `isRow` 값 마다 row 혹은 column 방향의 컴포넌트
-  >- 반드시 `label`을 가지고 있어야 함
+  >- `isRow` 값 마다 `row` 혹은 `column` 방향의 컴포넌트 생성
   
