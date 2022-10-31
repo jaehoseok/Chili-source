@@ -11,7 +11,8 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ########## 항상 NONE으로 되돌려 놓기 #########
+      ddl-auto: none
 token:
   secret: secretKey
   refresh: refreshKey

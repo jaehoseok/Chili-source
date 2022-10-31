@@ -60,13 +60,13 @@ public class IssueTemplate extends BaseEntity {
 
     public void update(String summary, String description, String assignee, String priority, String epicLink,
                        Long sprint, Double storyPoints, IssueType issueType) {
-        if (!summary.equals(null)) this.summary = summary;
-        if (!description.equals(null)) this.description = description;
-        if (!assignee.equals(null)) this.assignee = assignee;
-        if (!priority.equals(null)) this.priority = priority;
-        if (!epicLink.equals(null)) this.epicLink = epicLink;
-        if (!sprint.equals(null)) this.sprint = sprint;
-        if (!storyPoints.equals(null)) this.storyPoints = storyPoints;
-        if (!issueType.equals(null)) this.issueType = issueType;
+        if (summary != null) this.summary = summary;
+        if (description != null) this.description = description;
+        if (assignee != null) this.assignee = assignee;
+        if (priority != null) this.priority = priority;
+        if (epicLink != null) this.epicLink = epicLink;
+        if (sprint != null) this.sprint = sprint;
+        if (storyPoints != null) this.storyPoints = storyPoints;
+        if (issueType != null) this.issueType = issueType;
     }
 }
