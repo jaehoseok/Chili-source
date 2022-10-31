@@ -20,18 +20,21 @@ public interface AuthService {
     public void createTokenCode(TokenCodeCreateRequest request);
 
     // 토큰 코드 수정
-    public void updateTokenCode(Long tokenCodeId, TokenCodeUpdateRequest request);
+    public void updateTokenCode(String tokenCodeId, TokenCodeUpdateRequest request);
 
     // 토큰 코드 삭제
-    public void deleteTokenCode(Long tokenCodeId);
+    public void deleteTokenCode(String tokenCodeId);
 
     // 유저에 연결된 토큰 정보 반환
-    public List<TokenResponse> getToken(Long userId);
+    public List<TokenResponse> getTokenList(Long userId);
+
+    // 유저와 연결된 해당 토큰코드 값 반환
+    public TokenResponse getToken(String tokenCodeId, Long userId);
 
     // 유저에 토큰 연동
     public void createToken(TokenCreateRequest request, Long userId);
 
     // 유저가 가진 토큰 삭제
-    public void deleteToken(Long tokenCodeId, Long userId);
+    public void deleteToken(String tokenCodeId, Long userId);
 
 }

@@ -1,22 +1,29 @@
 package com.ssafy.controller;
 
+import com.ssafy.config.WidgetType;
+import com.ssafy.config.loginuser.LoginUser;
+import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.WidgetCodeCreateRequest;
 import com.ssafy.dto.request.WidgetCodeUpdateRequest;
 import com.ssafy.dto.request.WidgetCreateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
+import com.ssafy.service.SsafyGitlabService;
 import com.ssafy.service.WidgetCodeService;
 import com.ssafy.service.WidgetService;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.Path;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
 public class WidgetController {
     private final WidgetService widgetService;
     private final WidgetCodeService widgetCodeService;
+    private final SsafyGitlabService ssafyGitlabService;
 
     @GetMapping("/widget-codes")
     public ResponseEntity<?> getWidgetCodeList() {
@@ -74,8 +81,38 @@ public class WidgetController {
     @DeleteMapping("/widgets/{widgetId}")
     public ResponseEntity<?> deleteWidget(
             @PathVariable(name = "widgetId") Long widgetId
-    ){
+    ) {
         widgetService.deleteWidget(widgetId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/widgets/small/{projectId}/{widgetType}")
+    public ResponseEntity<?> getSmallWidget(
+            HttpServletRequest request,
+            @LoginUser User user,
+            @PathVariable("projectId") Long projectId,
+            @PathVariable("widgetType") String widgetType,
+            @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId,
+            @RequestParam(required = false, name = "branch") String branch
+    ) {
+        WidgetType type = WidgetType.valueOf(widgetType.toUpperCase());
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        switch (type) {
+            case SSAFYGITLAB: {
+                if (branch == null)
+                    return ResponseEntity.ok(ssafyGitlabService.findMergeRequest(accessToken, tokenCodeId, projectId, user.getId()));
+                else
+                    return ResponseEntity.ok(ssafyGitlabService.findCommits(accessToken, tokenCodeId, projectId, user.getId(), branch));
+            }
+//            case GITLAB: {
+//
+//            }
+//            case GITHUB: {
+//
+//            }
+            default:{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+        }
     }
 }
