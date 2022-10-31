@@ -15,15 +15,13 @@ export interface styledLabelType {
 }
 
 export const StyledFlex = styled.div<styledFlexType>`
-  ${({ isRow }) => {
-    if (isRow) {
-      return css`
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      `;
-    }
-  }}
+  ${({ isRow }) =>
+    isRow &&
+    css`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    `}
   width: ${({ containerWidth, isRow }) => isRow && containerWidth};
   padding: ${({ containerPadding }) => containerPadding};
 `;
