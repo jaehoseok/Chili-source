@@ -8,12 +8,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProjectCreateRequest {
     private String userColor = "FFFFFF";
+
     private Long userId;
+
     private Long projectId;
 
     @Builder
-    public UserProjectCreateRequest( String userColor, Long userId, Long projectId) {
-        this.userColor = userColor;
+    public UserProjectCreateRequest(String userColor, Long userId, Long projectId) {
+        if (userColor != null) this.userColor = userColor;
         this.userId = userId;
         this.projectId = projectId;
     }

@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectUpdateRequest {
     private Long id;
+
     private String name;
-    private String teamName;
+
+    private String description;
+
     private String image;
-    private String jiraProject;
 
     @Builder
-    public ProjectUpdateRequest(Long id, String name, String teamName, String image, String jiraProject) {
+    public ProjectUpdateRequest(Long id, String name, String description, String image) {
         this.id = id;
         this.name = name;
-        this.teamName = teamName;
+        this.description = description;
         this.image = image;
-        this.jiraProject = jiraProject;
     }
 }

@@ -28,7 +28,7 @@ public class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(WrongAccessException.class)
+    @ExceptionHandler({WrongAccessException.class, NotAuthorizedException.class})
     public Message WrongAccessException(RuntimeException runtimeException) {
         return new Message(runtimeException.getMessage());
     }

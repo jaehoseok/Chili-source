@@ -8,15 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProjectCreateRequest {
     private String name;
-    private String teamName;
+
+    private String description;
+
     private String image;
-    private String jiraProject;
 
     @Builder
-    public ProjectCreateRequest(String name, String teamName, String image, String jiraProject) {
+    public ProjectCreateRequest(String name, String description, String image) {
         this.name = name;
-        this.teamName = teamName;
+        this.description = description;
         this.image = image;
-        this.jiraProject = jiraProject;
     }
 }
