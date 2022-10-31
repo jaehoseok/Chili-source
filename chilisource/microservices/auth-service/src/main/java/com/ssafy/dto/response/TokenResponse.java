@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TokenResponse {
     private Long id;
+
     private String value;
+
     private Long tokenCodeId;
 
     @Builder

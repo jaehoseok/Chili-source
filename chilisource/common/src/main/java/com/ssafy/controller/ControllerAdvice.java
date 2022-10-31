@@ -22,7 +22,7 @@ public class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler({BadRequestException.class, WrongFormException.class})
     public Message BadRequestException(RuntimeException runtimeException) {
         return new Message(runtimeException.getMessage());
     }
