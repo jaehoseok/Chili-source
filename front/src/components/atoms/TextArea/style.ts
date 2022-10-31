@@ -6,9 +6,7 @@ export interface styledType {
   height?: number;
 }
 
-export const TextArea = styled.input.attrs<styledType>({
-  type: 'text',
-})`
+export const TextArea = styled.textarea<styledType>`
   ${tw`bg-gray-100 border border-gray-300`};
   ${({ width }) => width && `width: ${width}px`};
   ${({ height }) => height && `height: ${height}px`};

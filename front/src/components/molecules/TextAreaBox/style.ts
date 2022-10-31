@@ -32,7 +32,7 @@ StyledContainer.defaultProps = {
 };
 
 export const StyledLabel = styled.label<styledLabelType>`
-  ${tw`inline-block`}
+  ${tw`block`}
   font-weight: ${({ labelWeight }) => labelWeight};
   font-size: ${({ labelSize }) => labelSize};
   margin-bottom: ${({ isRow, labelMarginBottom }) => !isRow && labelMarginBottom};

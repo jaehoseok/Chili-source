@@ -1,18 +1,17 @@
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
-import Input from 'components/atoms/Input';
+import TextArea from 'components/atoms/TextArea';
 
 interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
-  inputPlaceHolder?: string;
-  inputValue?: string;
-  inputHeight?: string;
-  inputWidth?: string;
-  inputType?: string;
+  textAreaPlaceHolder?: string;
+  textAreaValue?: string;
+  textAreaWidth?: number;
+  textAreaHeight?: number;
 }
 
 /**
  * @description
- * InputBox를 생성하는 컴포넌트
+ * TextAreaBox를 생성하는 컴포넌트
  * Row 형태의 InputBox 혹은
  * Column 형태의 InputBox를 생성할 수 있다.
  *
@@ -22,11 +21,6 @@ interface propsType extends styledContainerType, styledLabelType {
  * // flex-row 시
  * <InputBox containerWidth="38rem" containerPadding="20px" inputWidth="30rem" isRow={true} labelName={'이름'}></InputBox>
  *
- * @param {string?} inputHeight       - Input에 쓰일 height props
- * @param {string?} inputWidth        - Input에 쓰일 width props
- * @param {string?} inputValue        - Input에 쓰일 value props
- * @param {string?} inputType         - Input에 쓰일 type props
- * @param {string?} inputPlaceHolder  - Input에 쓰일 placeHolder props
  *
  * @param {string}  labelName         - label 태그에 쓰일 label에 이름
  * @param {string?} labelWeight       - label 태그의 font-weight
@@ -40,11 +34,10 @@ interface propsType extends styledContainerType, styledLabelType {
  * @author bell
  */
 const index = ({
-  inputHeight,
-  inputWidth,
-  inputValue,
-  inputType,
-  inputPlaceHolder,
+  textAreaValue,
+  textAreaPlaceHolder,
+  textAreaWidth,
+  textAreaHeight,
   labelName,
   labelSize,
   labelWeight,
@@ -67,13 +60,12 @@ const index = ({
       >
         {labelName}
       </StyledLabel>
-      <Input
-        height={inputHeight}
-        width={inputWidth}
-        type={inputType}
-        placeHolder={inputPlaceHolder}
-        value={inputValue}
-      ></Input>
+      <TextArea
+        width={textAreaWidth}
+        height={textAreaHeight}
+        placeholder={textAreaPlaceHolder}
+        defaultValue={textAreaValue}
+      ></TextArea>
     </StyledContainer>
   );
 };
