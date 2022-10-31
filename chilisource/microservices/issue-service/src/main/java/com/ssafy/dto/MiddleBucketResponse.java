@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MiddleBucketResponse {
     private Long middleBucketId;
+
     private String name;
 
     @Builder

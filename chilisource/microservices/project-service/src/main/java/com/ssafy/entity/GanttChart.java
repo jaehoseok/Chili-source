@@ -17,11 +17,17 @@ public class GanttChart extends BaseEntity {
     @Column(name = "gantt_chart_id")
     private Long id;
 
-    private LocalDateTime startDate;
+    private LocalDateTime startTime;
 
-    private LocalDateTime endDate;
+    private LocalDateTime endTime;
 
-    private String content;
+    private String issueSummary;
+
+    private Long version;
+
+    private String issueCode;
+
+    private Float progress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
@@ -30,12 +36,25 @@ public class GanttChart extends BaseEntity {
     private Long userId;
 
     @Builder
-    public GanttChart(Long id, LocalDateTime startDate, LocalDateTime endDate, String content, Project project, Long userId) {
+    public GanttChart(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Project project, Long userId) {
         this.id = id;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.content = content;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.issueSummary = issueSummary;
+        this.version = version;
+        this.issueCode = issueCode;
+        this.progress = progress;
         this.project = project;
         this.userId = userId;
+    }
+
+    public void update(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId) {
+        if(!startTime.equals(null)) this.startTime = startTime;
+        if(!endTime.equals(null)) this.endTime = endTime;
+        if(!issueSummary.equals(null)) this.issueSummary = issueSummary;
+        if(!version.equals(null)) this.version = version;
+        if(!issueCode.equals(null)) this.issueCode = issueCode;
+        if(!progress.equals(null)) this.progress = progress;
+        if(!userId.equals(null)) this.userId = userId;
     }
 }
