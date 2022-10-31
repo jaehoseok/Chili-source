@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCreateRequest {
+public class WidgetCreateRequest {
     private String name;
 
-    private String email;
+    private Long projectId;
 
-    private String image;
+    private String widgetCodeId;
 }

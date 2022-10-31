@@ -17,11 +17,17 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
     private String name;
+
     private String google;
+
     private String naver;
+
     private String kakao;
+
     private String image;
+
     private boolean active;
 
     @Builder

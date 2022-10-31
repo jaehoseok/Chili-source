@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCreateRequest {
     private String name;
+
     private String email;
+
     private String image;
 
     @Builder
