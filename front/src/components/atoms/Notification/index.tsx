@@ -13,10 +13,10 @@ interface propsType extends styledType {
  *
  * @example
  *
- * @param {string} message        - 알림 메시지 내용
- * @param {string?} check         - 현재 알림의 상태 (false : 에러, true: 확인)
- * @param {number?} milliseconds  - 알림 애니메이션 시간 설정
- * @param {string?} width         - 알림의 길이
+ * @param {string} message         - 알림 메시지 내용
+ * @param {boolean} check         - 현재 알림의 상태 (false : 에러, true: 확인)
+ * @param {number?} milliseconds   - 알림 애니메이션 시간 설정
+ * @param {string?} width          - 알림의 길이
  *
  * @author bell
  */
