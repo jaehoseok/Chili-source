@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "jira", url = "https://ehoi-chili.atlassian.net/rest/api/3")
+@FeignClient(name = "jira", url = "https://ssafy.atlassian.net/rest/api/3")
 public interface JiraFeignClient {
     // TODO bulk 로 생성하는 api로 수정
     // TODO 개인 테스트 지라 프로젝트에서 수정하기
