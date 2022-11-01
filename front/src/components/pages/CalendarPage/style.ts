@@ -1,7 +1,6 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import tw from 'twin.macro';
 
-export const StyledCalendar = styled.div`
-  .fc-header-toolbar {
-    color: green;
-  }
+export const StyledContainer = styled.div`
+  ${tw`flex w-full justify-center content-center`}
 `;

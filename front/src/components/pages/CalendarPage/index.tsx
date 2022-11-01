@@ -1,13 +1,13 @@
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import { StyledCalendar } from './style';
+import { StyledContainer } from './style';
+import MainCalendar from 'components/organisms/projects/projectId/widget/calendar/Main';
+
 const index = () => {
   return (
     <>
       <div>CalendarPage</div>
-      <StyledCalendar>
-        <FullCalendar plugins={[dayGridPlugin]} initialView={'dayGridMonth'} />
-      </StyledCalendar>
+      <StyledContainer>
+        <MainCalendar></MainCalendar>
+      </StyledContainer>
     </>
   );
 };

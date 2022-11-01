@@ -199,4 +199,7 @@
   >- `width`, `height`의 타입을 `string` 으로 수정
   >- `styled.input` -> `styled.textarea`
 - `Calendar API` 학습 
+  >- `Calendar API` react 렌더링 완료
+  >- `styled component` 디자인 리팩토링
+  
 
