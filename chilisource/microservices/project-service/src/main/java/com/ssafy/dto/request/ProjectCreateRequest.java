@@ -11,12 +11,9 @@ public class ProjectCreateRequest {
 
     private String description;
 
-    private String image;
-
     @Builder
-    public ProjectCreateRequest(String name, String description, String image) {
+    public ProjectCreateRequest(String name, String description) {
         this.name = name;
         this.description = description;
-        this.image = image;
     }
 }

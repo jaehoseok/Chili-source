@@ -1,5 +1,6 @@
 package com.ssafy.controller;
 
+import com.ssafy.config.AwsS3Service;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.ProjectCreateRequest;
@@ -10,12 +11,15 @@ import com.ssafy.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class ProjectController {
+    private static final String baseURL = "https://chilisource.s3.ap-northeast-2.amazonaws.com/";
+    private final AwsS3Service awsS3Service;
     private final ProjectService projectService;
 
     // 프로젝트 조회
@@ -48,6 +52,16 @@ public class ProjectController {
     public ResponseEntity<?> updateProject(
             @RequestBody ProjectUpdateRequest request) {
         projectService.updateProject(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/image/{projectId}")
+    public ResponseEntity<?> updateProjectImage(
+            @LoginUser User user,
+            @PathVariable Long projectId,
+            @RequestPart(value = "image") final MultipartFile file) {
+        String projectImage = awsS3Service.uploadFile(file, "project/");
+        projectService.updateProjectImage("project/" + projectImage, projectId, user.getId());
         return ResponseEntity.ok().build();
     }
 
