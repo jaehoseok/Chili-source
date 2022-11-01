@@ -166,6 +166,34 @@
   >- 해당 `widget` 탭마다 경로 이동하도록 설정
   >- 대시보드 페이지 및 위젯 생성 페이지는 삭제가 이루어지지 않도록 설정
 
+### 준혁
+
+- 드래그 앤 드롭을 위한 사전 세팅
+
+  > - 클래스를 조건에 맞춰서 조작하는 라이브러리 설치
+  >
+  > ```
+  > npm install --save @types/classnames
+  > ```
+  >
+  > - 테스트 시, 드래그하는 객체의 PK 값을 위한 PK 생성 라이브러리 설치
+  >
+  > ```
+  >
+  > npm i --save-dev @types/shortid
+  >
+  > ```
+  >
+  > - 드래그 앤 드랍을 구현해주는 라이브러리 설치
+  >
+  > ```
+  >
+  > react-dnd install
+  >
+  > ```
+  >
+  > - onDrag 에 타입을 설정하지 않는다면 Uncaught Invariant Violation: spec.type must be defined 에러를 뱉으니 주의
+
 ## 221031
 ### 종현
 - `InputBox` 컴포넌트 구현
@@ -182,6 +210,13 @@
   >- 이를 위한 대안으로 `react-select` 라이브러리 있음
   >- `selectBox` 를 많이 사용하지 않아서, 설치 없이 `icon`을 반영하지 않는 것으로 결정 
 
+### 준혁
+
+- `DashBoard` 페이지 구현
+  > - 드래그앤 드롭에 맞게 페이지 조작
+  > - 행과 열로 통제
+
+
 ## 221101
 ### 종현
 - `Notification` 컴포넌트 구현
@@ -197,3 +232,9 @@
 - `TextArea` 컴포넌트 수정
   >- `width`, `height`의 타입을 `string` 으로 수정
   >- `styled.input` -> `styled.textarea`
+
+### 준혁
+
+- `components/atoms/Sheet` props 수정
+- `api/rest` 제작
+  > - 
