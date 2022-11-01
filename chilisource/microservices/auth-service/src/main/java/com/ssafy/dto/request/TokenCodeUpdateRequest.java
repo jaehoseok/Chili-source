@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TokenCodeUpdateRequest {
-    private String name;
+    private String id;
 
     @Builder
-    public TokenCodeUpdateRequest(String name) {
-        this.name = name;
+    public TokenCodeUpdateRequest(String id) {
+        this.id = id;
     }
 }

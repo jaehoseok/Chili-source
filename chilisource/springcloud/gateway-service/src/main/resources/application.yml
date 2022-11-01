@@ -82,7 +82,7 @@ spring:
         - id: project-service
           uri: lb://PROJECT-SERVICE
           predicates:
-            - Path=/api/project-service/**
+            - Path=/project-service/**
             - Method=GET,POST,PUT,DELETE
           filters:
             # - RemoveRequestHeader=Cookie
@@ -162,10 +162,10 @@ spring:
         #          filters:
         #            - AdminFilter
 
-        - id: project-service
-          uri: lb://PROJECT-SERVICE
+        - id: widget-service
+          uri: lb://WIDGET-SERVICE
           predicates:
-            - Path=/project-service/**
+            - Path=/widget-service/**
             - Method=GET,POST,PUT,DELETE
         #          filters:
         #            - AuthorizationFilter

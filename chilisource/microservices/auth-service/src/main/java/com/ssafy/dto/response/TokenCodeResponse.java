@@ -7,13 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TokenCodeResponse {
-    private Long id;
-
-    private String name;
+    private String id;
 
     @Builder
-    public TokenCodeResponse(Long id, String name) {
+    public TokenCodeResponse(String id) {
         this.id = id;
-        this.name = name;
     }
 }
