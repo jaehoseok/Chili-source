@@ -1,11 +1,22 @@
-// API
+// API & Library
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import { auth } from 'api/rest';
 
 // Components
 import Button from 'components/atoms/Button';
 
 const UserLoginLoadingPage = () => {
-  // Active 되면 url 에서 code 챙겨
+  // Data
+  const location = useLocation();
+
+  // Mounted
+  useEffect(() => {
+    const params = new URLSearchParams(location.search.substring(1));
+    console.log('[code]:', params.get('code'));
+    // 코드를 받고 다시 백에 넘겨주는 코드
+  }, []);
 
   const clickHandler = async () => {
     console.log('눌렸당');
