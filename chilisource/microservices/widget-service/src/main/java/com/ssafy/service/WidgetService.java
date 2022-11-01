@@ -23,5 +23,6 @@ public interface WidgetService {
     // 위젯 삭제
     void deleteWidget(Long widgetId);
 
+    // 위젯 전체 삭제
     void deleteAllWidget(Long projectId);
 }

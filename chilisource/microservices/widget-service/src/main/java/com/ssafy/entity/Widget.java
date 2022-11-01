@@ -17,13 +17,16 @@ public class Widget extends BaseEntity {
 
     private String name;
 
+    private Long projectId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "widget_code_id")
     private WidgetCode widgetCode;
 
     @Builder
-    public Widget(String name, WidgetCode widgetCode) {
+    public Widget(String name, Long projectId, WidgetCode widgetCode) {
         this.name = name;
+        this.projectId = projectId;
         this.widgetCode = widgetCode;
     }
 

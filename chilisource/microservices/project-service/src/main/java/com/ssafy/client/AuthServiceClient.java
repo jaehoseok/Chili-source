@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
-@FeignClient(name = "auth-service", url = "http://k7b2071.p.ssafy.io:8000/auth-service")
+@FeignClient(name = "auth-service", url = "http://k7b2071.p.ssafy.io/auth-service")
 public interface AuthServiceClient {
     @GetMapping("/tokens")
     List<TokenResponse> getToken(User user);

@@ -11,12 +11,15 @@ public class TokenResponse {
 
     private String value;
 
-    private Long tokenCodeId;
+    private String email;
+
+    private String tokenCodeId;
 
     @Builder
-    public TokenResponse(Long id, String value, Long tokenCodeId) {
+    public TokenResponse(Long id, String value, String email, String tokenCodeId) {
         this.id = id;
         this.value = value;
+        this.email = email;
         this.tokenCodeId = tokenCodeId;
     }
 }
