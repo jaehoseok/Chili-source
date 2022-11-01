@@ -2,29 +2,18 @@ import IssueBar from '../molecules/IssueBar';
 import Issue from '../molecules/Issue';
 import ProjectItem from '../molecules/ProjectItem';
 import GitLog from '../../assets/images/GitLog.png';
+import TokenBox from '../molecules/TokenBox';
+
 const LandingPage = () => {
   return (
     <>
-      <ProjectItem
+      <TokenBox labelText={'Jira 토큰'}></TokenBox>
+      {/* <ProjectItem
         logoImg={GitLog}
         title={'Project 1'}
         leader={'dbcs'}
         members={['dbcs', 'inte', 'bell']}
-        isPinned={true}
-      />
-      <ProjectItem
-        logoImg={GitLog}
-        title={'Project 1'}
-        leader={'dbcs'}
-        members={['dbcs', 'inte', 'bell']}
-        isPinned={false}
-      />
-      <ProjectItem
-        logoImg={GitLog}
-        title={'Project 1'}
-        leader={'dbcs'}
-        members={['dbcs', 'inte', 'bell']}
-      />
+      /> */}
     </>
     // <IssueBar
     //   summary={'이슈 제목'}

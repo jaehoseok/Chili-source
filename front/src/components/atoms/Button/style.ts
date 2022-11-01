@@ -21,7 +21,7 @@ export const Button = styled.button<styledType>`
   ${({ borderColor }) => borderColor && `border-color: ${borderColor}`};
 
   color: ${({ backgroundColor, borderColor }) =>
-    backgroundColor ? borderColor : backgroundColor === '#F8F8F8' ? '#000000' : '#FFFFFF'};
+    !backgroundColor ? borderColor : backgroundColor === '#F8F8F8' ? '#000000' : '#FFFFFF'};
   ${({ isHover, borderColor }) =>
     isHover &&
     css`
