@@ -198,4 +198,5 @@
 - `TextArea` 컴포넌트 수정
   >- `width`, `height`의 타입을 `string` 으로 수정
   >- `styled.input` -> `styled.textarea`
+- `Calendar API` 학습 
 
