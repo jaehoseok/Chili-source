@@ -1,5 +1,6 @@
 package com.ssafy.client;
 
+import com.ssafy.dto.response.JiraEpicListResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +18,7 @@ public interface JiraFeignClient {
 
     // 해당 프로젝트에서 만든 에픽 리스트 조회
     @GetMapping("/search?jql=type = \"Epic\"  ORDER BY created DESC")
-    List<JiraEpicResponse> getJiraEpics(
+    JiraEpicListResponse getJiraEpics(
             @RequestHeader("Authorization") String jiraToken
     );
 }
