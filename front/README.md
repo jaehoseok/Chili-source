@@ -174,8 +174,6 @@
   >- `Container~` box 전체의 style을 담당
   >- `Input~` Input 컴포넌트에 필요한 props를 담당
 
-## 221101
-### 종현
 - `TextAreaBox` 컴포넌트 구현
   >- `isRow` 값 마다 `row` 혹은 `column` 방향의 컴포넌트 생성
   >- `label~` label에 대한 style 및 값을 담당
