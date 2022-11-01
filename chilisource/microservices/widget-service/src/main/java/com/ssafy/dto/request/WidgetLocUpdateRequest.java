@@ -5,16 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class WidgetCreateRequest {
-    private String name;
+@AllArgsConstructor
+public class WidgetLocUpdateRequest {
+    private Long id;
 
     private Integer row;
 
     private Integer col;
-
-    private Long projectId;
-
-    private String widgetCodeId;
 }

@@ -17,6 +17,10 @@ public class Widget extends BaseEntity {
 
     private String name;
 
+    private Integer row;
+
+    private Integer col;
+
     private Long projectId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,13 +28,20 @@ public class Widget extends BaseEntity {
     private WidgetCode widgetCode;
 
     @Builder
-    public Widget(String name, Long projectId, WidgetCode widgetCode) {
+    public Widget(String name, Integer row, Integer col, Long projectId, WidgetCode widgetCode) {
         this.name = name;
+        this.row = row;
+        this.col = col;
         this.projectId = projectId;
         this.widgetCode = widgetCode;
     }
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public void locUpdate(Integer row, Integer col){
+        this.row = row;
+        this.col = col;
     }
 }

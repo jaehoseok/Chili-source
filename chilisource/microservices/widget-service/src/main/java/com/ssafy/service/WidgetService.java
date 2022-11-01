@@ -1,7 +1,7 @@
 package com.ssafy.service;
 
-import com.ssafy.dto.request.OrderUpdateRequest;
 import com.ssafy.dto.request.WidgetCreateRequest;
+import com.ssafy.dto.request.WidgetLocUpdateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
 import com.ssafy.dto.response.WidgetResponse;
 
@@ -18,7 +18,7 @@ public interface WidgetService {
     WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId);
 
     // 위젯 순서 변경
-    void updateOrder(OrderUpdateRequest request);
+    void updateLoc(List<WidgetLocUpdateRequest> requests);
 
     // 위젯 삭제
     void deleteWidget(Long widgetId);
