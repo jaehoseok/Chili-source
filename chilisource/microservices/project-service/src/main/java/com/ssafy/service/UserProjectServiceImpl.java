@@ -70,9 +70,9 @@ public class UserProjectServiceImpl implements UserProjectService {
         }
     }
 
-    // 프로젝트 팀원 조회
+    // 프로젝트 팀원 목록 조회
     @Override
-    public List<UserProjectResponse> getUserProject(Long projectId) {
+    public List<UserProjectResponse> getUserProjectList(Long projectId) {
         // 팀원 리스트 조회
         List<UserProject> responses = userProjectRepo.findByProjectId(projectId);
 
@@ -86,6 +86,18 @@ public class UserProjectServiceImpl implements UserProjectService {
                 .collect(Collectors.toList());
     }
 
+    // 프로젝트 팀원 조회
+    @Override
+    public UserProjectResponse getUserProject(Long projectId, Long userId) {
+        UserProject userProject = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        return UserProjectResponse.builder()
+                .userColor(userProject.getUserColor())
+                .userId(userProject.getUserId())
+                .projectId(projectId)
+                .roleId(userProject.getRole().getId())
+                .build();
+    }
 
     // 프로젝트 나가기
     @Override

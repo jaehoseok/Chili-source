@@ -20,6 +20,7 @@ public class GanttChartCreateRequest {
     private String issueCode;
 
     private Float progress;
+
     private Long projectId;
 
     private Long userId;
