@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(name = "auth-service", url = "http://k7b2071.p.ssafy/auth-service")
+@FeignClient(name = "auth-service", url = "https://k7b2071.p.ssafy/auth-service")
 public interface AuthServiceClient {
     @GetMapping("/tokens/{tokenCodeId}")
     TokenResponse findToken(

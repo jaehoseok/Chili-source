@@ -12,6 +12,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addMapping("/**")
                 //.allowedOrigins("*")
                 .allowedOriginPatterns("*")
+                //.allowCredentials(true)
                 .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type", "accept", "access-control-allow-origin")
                 .exposedHeaders("Authorization")

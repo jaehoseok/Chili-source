@@ -84,8 +84,12 @@ dependencies {
     // 프로메테우스
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    // Swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+//    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+//    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 test {
