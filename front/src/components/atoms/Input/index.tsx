@@ -23,7 +23,7 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Input = ({ height, width, type, placeHolder, value }: propsType) => {
+const index = ({ height, width, type, placeHolder, value }: propsType) => {
   const [text, setText] = useState(value);
 
   return (
@@ -41,3 +41,5 @@ export const Input = ({ height, width, type, placeHolder, value }: propsType) =>
     </>
   );
 };
+
+export default index;

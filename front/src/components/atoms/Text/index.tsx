@@ -1,14 +1,14 @@
 import { MouseEventHandler } from 'react';
-import { StyledText, StyledFill, StyledTypes } from './style';
+import { StyledText, StyledFill, styledType } from './style';
 
 // StyleTypes는 style.ts에 있음
 // PropTypes의 부모 클래스가 된다.
 // 타입 선정을 interface로 할지, Types로 정할지는
 // 추후 논의해봅시다.
-interface PropTypes extends StyledTypes {
+interface propsType extends styledType {
   message: string;
   isFill: boolean;
-  clickEvent?: MouseEventHandler<HTMLDivElement>;
+  clickHandler?: MouseEventHandler<HTMLDivElement>;
 }
 
 /**
@@ -37,14 +37,20 @@ const index = ({
   fontSize,
   backgroundColor,
   width,
-  clickEvent,
-}: PropTypes) => {
+  clickHandler,
+}: propsType) => {
   return !isFill ? (
-    <StyledText color={color} fontFamily={fontFamily} fontWeight={fontWeight} fontSize={fontSize}>
+    <StyledText
+      color={color}
+      fontFamily={fontFamily}
+      fontWeight={fontWeight}
+      fontSize={fontSize}
+      onClick={clickHandler}
+    >
       {message}
     </StyledText>
   ) : (
-    <StyledFill backgroundColor={backgroundColor} width={width} onClick={clickEvent}>
+    <StyledFill backgroundColor={backgroundColor} width={width} onClick={clickHandler}>
       {message}
     </StyledFill>
   );
