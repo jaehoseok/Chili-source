@@ -72,4 +72,23 @@ export default {
         });
     });
   },
+
+  /**
+   *
+   * @param nothing
+   * @returns
+   * @author inte
+   */
+  tokenCodes: () => {
+    return new Promise((resolve, reject) => {
+      axiosApi
+        .get(REST_PATH + `/token-codes`)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };

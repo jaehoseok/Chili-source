@@ -16,7 +16,7 @@ const ProjectDashBoardPage = () => {
         <Option messages={['스토리', '태스크', '버그']}></Option>
       </SelectBox>
       {/* <div>ProjectDashBoardPage</div> */}
-      <Button onClick={clickHandler} height={100} width={100} borderColor={'red'}>
+      <Button clickHandler={clickHandler} height={100} width={100} borderColor={'red'}>
         10
       </Button>
       <Sheet height="100px"></Sheet>
