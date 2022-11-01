@@ -9,14 +9,20 @@ import lombok.NoArgsConstructor;
 public class TokenResponse {
     private Long id;
 
-    private String value;
-
     private Long tokenCodeId;
 
+    private String value;
+
+    private String email;
+
+    private String jiraUserId;
+
     @Builder
-    public TokenResponse(Long id, String value, Long tokenCodeId) {
+    public TokenResponse(Long id, Long tokenCodeId, String value, String email, String jiraUserId) {
         this.id = id;
-        this.value = value;
         this.tokenCodeId = tokenCodeId;
+        this.value = value;
+        this.email = email;
+        this.jiraUserId = jiraUserId;
     }
 }

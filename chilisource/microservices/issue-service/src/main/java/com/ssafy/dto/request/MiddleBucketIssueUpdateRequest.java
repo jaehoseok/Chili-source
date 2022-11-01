@@ -1,11 +1,11 @@
-package com.ssafy.dto;
+package com.ssafy.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class IssueTemplateUpdateRequest {
+public class MiddleBucketIssueUpdateRequest {
     private String issueType;
 
     private String summary;

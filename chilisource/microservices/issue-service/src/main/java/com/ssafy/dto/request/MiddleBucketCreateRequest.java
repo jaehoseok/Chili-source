@@ -1,4 +1,4 @@
-package com.ssafy.dto;
+package com.ssafy.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
