@@ -12,7 +12,7 @@ export interface styledType {
 }
 
 export const Button = styled.button<styledType>`
-  ${tw`flex border border-solid cursor-pointer`};
+  ${tw`flex justify-center items-center border border-solid cursor-pointer`};
   ${({ width }) => width && `width: ${width}`};
   ${({ height }) => height && `height: ${height}`};
   border-radius: 3rem;

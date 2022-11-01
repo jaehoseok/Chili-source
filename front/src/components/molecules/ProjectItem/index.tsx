@@ -21,6 +21,7 @@ import { SlOptionsVertical } from 'react-icons/sl';
 import { BiUser } from 'react-icons/bi';
 
 type propsType = styledType;
+
 const index = ({
   children,
   width,

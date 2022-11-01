@@ -9,12 +9,12 @@ const LandingPage = () => {
   return (
     <>
       {/* <TokenBox labelText={'Jira 토큰'}></TokenBox> */}
-      <ProjectItem
+      {/* <ProjectItem
         logoImg={GitLog}
         title={'Project 1'}
         leader={'dbcs'}
         members={['dbcs', 'inte', 'bell']}
-      />
+      /> */}
 
       {/* <IssueBar
         summary={'이슈 제목'}

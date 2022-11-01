@@ -13,6 +13,9 @@ export interface styledType {
   members: string[];
 }
 
+export interface styledInfoType {
+  children?: React.ReactNode;
+}
 export const StyledProjectItem = styled.div<styledType>`
   ${tw`flex justify-center font-bold border border-solid border-2 rounded-2xl `};
   ${({ width }) => `width: ${width}`};
@@ -33,7 +36,7 @@ export const InfoCategory = styled.div`
   ${tw`flex flex-col justify-around items-start w-1/4 h-full`};
 `;
 
-export const InfoContent = styled.div`
+export const InfoContent = styled.div<styledInfoType>`
   ${tw`flex flex-col justify-around items-start h-full`}
 `;
 export const ProjectOption = styled.div`
