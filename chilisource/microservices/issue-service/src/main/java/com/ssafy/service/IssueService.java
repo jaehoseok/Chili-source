@@ -4,6 +4,7 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
+import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 
 import java.util.List;
@@ -49,5 +50,5 @@ public interface IssueService {
     void addIssuesToJira(Long userId, Long projectId, Long middleBucketId);
 
     // 프로젝트의 에픽 리스트 조회
-    void getEpicList(User user);
+    JiraEpicListResponse getEpicList(User user);
 }

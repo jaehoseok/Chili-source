@@ -17,7 +17,6 @@ import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
 import com.ssafy.repository.MiddleBucketRepo;
-import feign.FeignException;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,8 @@ public class IssueServiceImpl implements IssueService {
     private final ProjectServiceClient projectServiceClient;
     private final JiraFeignClient jiraFeignClient;
     private final AuthServiceClient authServiceClient;
+
+    private static Encoder encoder = Base64.getEncoder();
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
@@ -350,9 +353,18 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void getEpicList(User user) {
-        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        List<TokenResponse> token = authServiceClient.getToken(user);
+    public JiraEpicListResponse getEpicList(User user) {
+//        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
+        TokenResponse response = authServiceClient.getToken(user, "jira");
 
+//        // 이메일과 토큰으로 Base64 인코딩을 한다
+        String token = response.getEmail() + ":" + response.getValue();
+        String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
+
+        // feign을 요청해서 -> dto 로 받는다
+        JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics("Basic " + jiraToken);
+
+        // 리턴한다
+        return jiraEpics;
     }
 }

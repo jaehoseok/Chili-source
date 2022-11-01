@@ -5,6 +5,7 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
+import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
@@ -209,8 +210,9 @@ public class IssueController {
     public ResponseEntity<?> getEpicList(
             @LoginUser User user
     ) {
-        issueService.getEpicList(user);
-        return null;
+        JiraEpicListResponse response = issueService.getEpicList(user);
+        return ResponseEntity.ok()
+                .body(response);
     }
 
     // 프로젝트 목록을 불러오는 api
