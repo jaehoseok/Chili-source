@@ -170,6 +170,9 @@
 ### 종현
 - `InputBox` 컴포넌트 구현
   >- `isRow` 값 마다 `row` 혹은 `column` 방향의 컴포넌트 생성
+  >- `label~` label에 대한 style 및 값을 담당
+  >- `Container~` box 전체의 style을 담당
+  >- `Input~` Input 컴포넌트에 필요한 props를 담당
 - `Option` 컴포넌트 구현
   >- `string[]` 데이터를 보내는 경우, 자동으로 배열 갯수만큼 `<option>` 태그를 반환하는 컴포넌트
 - `SelectBox` 컴포넌트 구현
@@ -179,6 +182,7 @@
   >- 이를 위한 대안으로 `react-select` 라이브러리 있음
   >- `selectBox` 를 많이 사용하지 않아서, 설치 없이 `icon`을 반영하지 않는 것으로 결정 
 
+
 ## 221101
 ### 종현
 - `Notification` 컴포넌트 구현
@@ -186,6 +190,12 @@
   >- `message` prop에 메시지를 담을 수 있음
   >- `width` 값 설정 가능
   >- `millisecond`를 통해, 애니메이션 지속 시간 설정 가능
+- `TextAreaBox` 컴포넌트 구현
+  >- `isRow` 값 마다 `row` 혹은 `column` 방향의 컴포넌트 생성
+  >- `label~` label에 대한 style 및 값을 담당
+  >- `Container~` box 전체의 style을 담당
+  >- `TextArea~` Input 컴포넌트에 필요한 props를 담당
+- `TextArea` 컴포넌트 수정
+  >- `width`, `height`의 타입을 `string` 으로 수정
+  >- `styled.input` -> `styled.textarea`
 
-
->>>>>>> front/README.md
