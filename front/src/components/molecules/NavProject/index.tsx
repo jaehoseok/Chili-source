@@ -6,7 +6,6 @@ interface propsType extends styledType {
 }
 
 /**
- *
  * @description
  * 프로젝트 탭을 관리하는 컴포넌트
  *

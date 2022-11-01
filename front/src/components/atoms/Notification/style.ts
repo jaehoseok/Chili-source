@@ -22,7 +22,7 @@ const slideRight = keyframes`
   }
 `;
 
-export const StyledAlert = styled.div<styledType>`
+export const StyledNotfication = styled.div<styledType>`
   ${({ check }) =>
     check
       ? tw`p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800 inline-block absolute`
@@ -34,6 +34,6 @@ export const StyledAlert = styled.div<styledType>`
   animation-duration: ${({ milliseconds }) => milliseconds && milliseconds / 1000}s;
 `;
 
-StyledAlert.defaultProps = {
+StyledNotfication.defaultProps = {
   milliseconds: 5000,
 };
