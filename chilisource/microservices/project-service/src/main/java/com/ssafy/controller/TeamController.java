@@ -43,7 +43,17 @@ public class TeamController {
     @GetMapping("/{projectId}")
     public ResponseEntity<?> getUserProjectList(
             @PathVariable Long projectId) {
-        List<UserProjectResponse> responses = userProjectService.getUserProject(projectId);
+        List<UserProjectResponse> responses = userProjectService.getUserProjectList(projectId);
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
+    // 프로젝트 팀원 한 명 조회
+    @GetMapping("/{projectId}/{userId}")
+    public ResponseEntity<?> getUserProject(
+            @PathVariable Long projectId,
+            @PathVariable Long userId) {
+        UserProjectResponse responses = userProjectService.getUserProject(projectId, userId);
         return ResponseEntity.ok()
                 .body(responses);
     }
