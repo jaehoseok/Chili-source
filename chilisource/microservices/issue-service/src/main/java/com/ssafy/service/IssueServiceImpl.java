@@ -1,8 +1,11 @@
 package com.ssafy.service;
 
+import com.ssafy.client.AuthServiceClient;
 import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
-import com.ssafy.dto.*;
+import com.ssafy.config.loginuser.User;
+import com.ssafy.dto.request.*;
+import com.ssafy.dto.response.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -14,6 +17,7 @@ import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
 import com.ssafy.repository.MiddleBucketRepo;
+import feign.FeignException;
 import feign.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +44,7 @@ public class IssueServiceImpl implements IssueService {
     private final MiddleBucketIssueRepo middleBucketIssueRepo;
     private final ProjectServiceClient projectServiceClient;
     private final JiraFeignClient jiraFeignClient;
+    private final AuthServiceClient authServiceClient;
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
@@ -306,8 +311,48 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void addIssuesToJira(Long userId, Long projectId, Long middleBucketId) {
+        // 미들 버킷을 가져온다
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+        // 미들 버킷 안에 있는 이슈들을 펼친다
+        for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
+            // 1. summary
+            String summary = issue.getSummary();
 
+            // 2. 이슈 타입
+//            String customfield_10011 = null;
+            // 2-1. 에픽이라면 - 일단 솔직히 에픽은 지라에서 만들어서 오는 걸로 하자 ㅡㅡ
+//           if (issue.getIssueType().getName().equalsIgnoreCase("epic")) {
+//
+//            }
+            issue.getEpicLink();
+            // TODO 일단 에픽링크 보여주는 API를 만들어야겠네
+        }
+        // 각 이슈들을 지라 이슈로 create 할 수 있게 dto 형식을 만든다
+        // 지라에 보낼 dto에 맞는 형식은..
+        // 1. summary : 이건 우리 이슈에 담아놓은 summary 그대로 가져다 쓴다
+        /*
+        2. parent 얘가 문제임 -> null 로 해결해보자
+        사용자가 만들려고 하는 이슈 타입이 에픽이면 parent는 필요없고 "customfield_100" 이라는 이름이 들어가야함
+        사용자가 만들려고 하는 이슈 타입이 스토리, 버그, 태스크면 parent에 해당 에픽의 ID를 가져와야함
+            -> 해당 어떻게 가져오지?
+         */
+        // 3. project는 id 이든 key 든 상관 없는데 이거는 project-service에서 feign으로 jira project code 가져오면 됨
+        // 4. description은 사용자가 입력한 정보로 처리하면 됨
+        // 5. reporter와 assignee는 내가 재호쪽으로 feign으로 요청해서 id 가져오면 됨
+        // + 이때 이메일이랑 토큰을 같이 가져오게
+        // 6. priority는 medium 이면 3으로 highest면 1로 이런 식으로 switch로 매핑...
+        // 7. storyPoints 는 db에 있는 값
+        // 8. 스프린트는 일단 바이이
 
-        jiraFeignClient.addIssuesToJira();
+        // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
+//        jiraFeignClient.addIssuesToJira();
+    }
+
+    @Override
+    public void getEpicList(User user) {
+        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
+        List<TokenResponse> token = authServiceClient.getToken(user);
+
     }
 }

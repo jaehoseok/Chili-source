@@ -1,6 +1,10 @@
 package com.ssafy.service;
 
-import com.ssafy.dto.*;
+import com.ssafy.config.loginuser.User;
+import com.ssafy.dto.request.*;
+import com.ssafy.dto.response.IssueListResponse;
+import com.ssafy.dto.response.IssueTemplateResponse;
+import com.ssafy.dto.response.MiddleBucketResponse;
 
 import java.util.List;
 
@@ -43,4 +47,7 @@ public interface IssueService {
 
     // 미들 버킷 내의 이슈를 지라로 생성
     void addIssuesToJira(Long userId, Long projectId, Long middleBucketId);
+
+    // 프로젝트의 에픽 리스트 조회
+    void getEpicList(User user);
 }

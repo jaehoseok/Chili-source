@@ -2,7 +2,10 @@ package com.ssafy.controller;
 
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
-import com.ssafy.dto.*;
+import com.ssafy.dto.request.*;
+import com.ssafy.dto.response.IssueListResponse;
+import com.ssafy.dto.response.IssueTemplateResponse;
+import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -186,7 +189,7 @@ public class IssueController {
                 .build();
     }
 
-    // 미들버킷내의 이슈들을 지라의 이슈로 생성
+    // 미들버킷 내의 이슈들을 지라의 이슈로 생성
     @PutMapping("/jira/middle-bucket")
     public ResponseEntity<?> addIssuesToJira(
             @LoginUser User user,
@@ -200,6 +203,15 @@ public class IssueController {
                 middleBucketId);
         return ResponseEntity.ok().build();
     }
-    // 미들 버킷을 지라의 이슈로 생성
-    // 변수를 사용하여 여러 이슈 등록
+
+    // 에픽 리스트 조회
+    @GetMapping("/epic-list")
+    public ResponseEntity<?> getEpicList(
+            @LoginUser User user
+    ) {
+        issueService.getEpicList(user);
+        return null;
+    }
+
+    // 프로젝트 목록을 불러오는 api
 }
