@@ -148,7 +148,7 @@ pipeline{
                         try{
                         sh "docker run -d --name=${CONFIG_CONTAINER_NAME} -p 8888:8888 --net msa ${CONFIG_NAME}"
                         sh "docker run -d --name=${GATEWAY_CONTAINER_NAME} -p 8000:8000 --net msa ${GATEWAY_NAME}"
-                        sh 'sleep 10'
+                        sh 'sleep 5'
                         mattermostSend (
                             color: "good", 
                             message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
