@@ -5,8 +5,8 @@ interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
   textAreaPlaceHolder?: string;
   textAreaValue?: string;
-  textAreaWidth?: number;
-  textAreaHeight?: number;
+  textAreaWidth?: string;
+  textAreaHeight?: string;
 }
 
 /**
