@@ -198,7 +198,7 @@ public class IssueController {
             @RequestParam Long middleBucketId
     ) {
         issueService.addIssuesToJira(
-                user.getId(),
+                user,
 //                1L,
                 projectId,
                 middleBucketId);
