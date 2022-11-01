@@ -56,8 +56,7 @@ public class AuthController {
         cookie.setPath("/api");
         response.addCookie(cookie);
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken())
-                .body(tokenResponse.getAccessToken());
+                .header(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken()).build();
     }
 
     @GetMapping("/refresh")
