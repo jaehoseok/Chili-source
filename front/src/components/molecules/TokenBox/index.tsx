@@ -1,6 +1,6 @@
 import { StyledTokenBox, StyledInputBtnBox, styledType } from './style';
-import { Sheet } from '../../atoms/Sheet';
-import { Input } from '../../atoms/Input';
+import Sheet from '../../atoms/Sheet';
+import Input from '../../atoms/Input';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
 import { theme } from '../../../styles/theme';
@@ -17,8 +17,8 @@ const index = ({ labelText, width, height }: propsType) => {
         <Button
           backgroundColor={theme.button.lightgray}
           borderColor={theme.button.gray}
-          width={54}
-          height={24}
+          width={'54px'}
+          height={'24px'}
         >
           입력
         </Button>

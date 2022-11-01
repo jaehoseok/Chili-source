@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import tw from 'twin.macro';
-
+import { theme } from '../../../styles/theme';
 export interface styledType {
   children?: React.ReactNode;
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   isPinned?: boolean;
   logoImg?: string; // 추후 교체예정
   title: string;
@@ -14,36 +14,34 @@ export interface styledType {
 }
 
 export const StyledProjectItem = styled.div<styledType>`
-  ${tw`flex justify-center mb-3 px-2 py-2.5 border border-solid border-gray-200 rounded-2xl font-bold`};
-  ${({ width }) => `width: ${width}px`};
-  ${({ height }) => `height: ${height}px`};
+  ${tw`flex justify-center font-bold border border-solid border-2 rounded-2xl `};
+  ${({ width }) => `width: ${width}`};
+  ${({ height }) => `height: ${height}`};
+  border-color: ${theme.button.gray};
 `;
 
 export const ProjectLogo = styled.div`
-  ${tw`flex justify-center items-center`};
-  width: 20%;
+  ${tw`flex w-1/5 h-full justify-center items-center`};
 `;
 
 export const ProjectInfo = styled.div`
-  ${tw`flex flex-col justify-between py-1`}
-  width: 70%;
+  ${tw`flex h-full py-1`}
+  width: 65%;
 `;
-export const InfoElement = styled.div`
-  ${tw`flex`}
-  width: 100%;
+
+export const InfoCategory = styled.div`
+  ${tw`flex flex-col justify-around items-start w-1/4 h-full`};
 `;
-export const ElementCategory = styled.div`
-  width: 25%;
-`;
-export const ElementContent = styled.div`
-  ${tw`px-1`}
+
+export const InfoContent = styled.div`
+  ${tw`flex flex-col justify-around items-start h-full`}
 `;
 export const ProjectOption = styled.div`
-  ${tw`flex justify-around px-1`};
+  ${tw`flex h-full justify-around ml-4 py-4`};
   width: 10%;
 `;
 StyledProjectItem.defaultProps = {
-  width: 800,
-  height: 140,
+  width: '900px',
+  height: '160px',
   isPinned: false,
 };

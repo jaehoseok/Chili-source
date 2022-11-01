@@ -17,11 +17,20 @@ import {
   StyledIssueTop,
   StyledIssueBottom,
   StyledIssueBottomElement,
-  StyledIssueTopLeft,
   styledType,
 } from './style';
+import Text from '../../atoms/Text';
+import Circle from '../../atoms/Circle';
 
 interface propsType extends styledType {
+  project?: string;
+  summary?: string;
+  reporter?: string;
+  assignee?: string;
+  rank?: string;
+  epicLink?: string;
+  sprint?: string;
+  storyPoints?: number;
   clickHandler?: MouseEventHandler<HTMLDivElement>;
 }
 
@@ -39,24 +48,29 @@ const index = ({
   storyPoints,
   clickHandler,
 }: propsType) => {
+  let issueType: string;
+  switch (type) {
+    case 'story':
+      issueType = '스토리';
+      break;
+    case 'task':
+      issueType = '태스크';
+      break;
+    case 'bug':
+      issueType = '버그';
+      break;
+    default:
+      issueType = '에러';
+      break;
+  }
+  const issueSummary = summary ? summary : '';
+  const issueEpicLink = epicLink ? epicLink : '';
+  const issueStoryPoints = storyPoints ? storyPoints : '';
   return (
     <>
-      <StyledIssue
-        width={width}
-        height={height}
-        project={project}
-        type={type}
-        summary={summary}
-        reporter={reporter}
-        assignee={assignee}
-        rank={rank}
-        epicLink={epicLink}
-        sprint={sprint}
-        storyPoints={storyPoints}
-        onClick={clickHandler}
-      >
-        <StyledIssueTop width={width} height={height} type={type}>
-          <StyledIssueTopLeft></StyledIssueTopLeft>
+      <StyledIssue width={width} height={height} type={type}>
+        <StyledIssueTop type={type}>
+          <Text isFill={false} message={issueType} color={'white'}></Text>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="18"
@@ -68,15 +82,15 @@ const index = ({
             <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
           </svg>
         </StyledIssueTop>
-        <StyledIssueBottom height={height} type={'none'}>
-          <div>이슈제목</div>
+        <StyledIssueBottom>
+          <Text isFill={false} message={issueSummary}></Text>
 
-          <div>
-            <StyledIssueBottomElement type={'epicLink'}>{epicLink}</StyledIssueBottomElement>
-            <StyledIssueBottomElement type={'assignee'}>{assignee}</StyledIssueBottomElement>
-            <StyledIssueBottomElement type={'rank'}>{rank}</StyledIssueBottomElement>
-            <StyledIssueBottomElement type={'storyPoints'}>{storyPoints}</StyledIssueBottomElement>
-          </div>
+          <StyledIssueBottomElement>
+            <Text isFill={true} message={issueEpicLink} width={24}></Text>
+            <Circle height={24}>{assignee}</Circle>
+            <Circle height={24}>{rank}</Circle>
+            <Text isFill={true} message={issueStoryPoints + ''} width={24}></Text>
+          </StyledIssueBottomElement>
         </StyledIssueBottom>
       </StyledIssue>
     </>

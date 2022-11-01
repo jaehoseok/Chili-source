@@ -2,13 +2,23 @@ import {
   StyledIssueBar,
   StyledIssueBarType,
   StyledIssueBarContent,
-  StyledIssueBarLeft,
-  StyledIssueBarRight,
-  StyledIssueElement,
+  StyledIssueBarElement,
   styledType,
 } from './style';
 
-type propsType = styledType;
+import Text from '../../atoms/Text';
+import Circle from '../../atoms/Circle';
+
+interface propsType extends styledType {
+  project?: string;
+  summary?: string;
+  reporter?: string;
+  assignee?: string;
+  rank?: string;
+  epicLink?: string;
+  sprint?: string;
+  storyPoints?: number;
+}
 
 const index = ({
   width,
@@ -23,37 +33,21 @@ const index = ({
   sprint,
   storyPoints,
 }: propsType) => {
+  const issueSummary = summary ? summary : '';
+  const issueEpicLink = epicLink ? epicLink : '';
+  const issueStoryPoints = storyPoints ? storyPoints : '';
   return (
     <>
-      <StyledIssueBar
-        width={width}
-        height={height}
-        project={project}
-        type={type}
-        summary={summary}
-        reporter={reporter}
-        assignee={assignee}
-        rank={rank}
-        epicLink={epicLink}
-        sprint={sprint}
-        storyPoints={storyPoints}
-      >
+      <StyledIssueBar width={width} height={height} type={type}>
         <StyledIssueBarType width={width} type={type}></StyledIssueBarType>
-        <StyledIssueBarContent
-          summary={summary}
-          epicLink={epicLink}
-          assignee={assignee}
-          rank={rank}
-          storyPoints={4}
-          type={'none'}
-        >
-          <StyledIssueBarLeft type={'none'}>{summary}</StyledIssueBarLeft>
-          <StyledIssueBarRight type={'none'}>
-            <StyledIssueElement type={'epicLink'}>{epicLink}</StyledIssueElement>
-            <StyledIssueElement type={'assignee'}>{assignee}</StyledIssueElement>
-            <StyledIssueElement type={'rank'}>{rank}</StyledIssueElement>
-            <StyledIssueElement type={'storyPoints'}>{storyPoints}</StyledIssueElement>
-          </StyledIssueBarRight>
+        <StyledIssueBarContent>
+          <Text isFill={false} message={issueSummary}></Text>
+          <StyledIssueBarElement>
+            <Text width={24} isFill={issueEpicLink !== ''} message={issueEpicLink}></Text>
+            <Circle height={24}>{assignee}</Circle>
+            <Circle height={24}>{rank}</Circle>
+            <Text width={24} isFill={true} message={issueStoryPoints + ''}></Text>
+          </StyledIssueBarElement>
         </StyledIssueBarContent>
       </StyledIssueBar>
     </>

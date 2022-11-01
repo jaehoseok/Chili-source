@@ -2,8 +2,8 @@ import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
 export interface styledType {
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   fontSize?: string;
   backgroundColor?: string;
   borderColor?: string;
@@ -12,10 +12,10 @@ export interface styledType {
 }
 
 export const Button = styled.button<styledType>`
-  ${tw`border border-solid cursor-pointer`};
-  ${({ width }) => width && `width: ${width}px`};
-  ${({ height }) => height && `height: ${height}px`};
-  ${({ height }) => height && `border-radius: ${height * 0.3}px`};
+  ${tw`flex border border-solid cursor-pointer`};
+  ${({ width }) => width && `width: ${width}`};
+  ${({ height }) => height && `height: ${height}`};
+  border-radius: 3rem;
   ${({ fontSize }) => fontSize && `font-size: ${fontSize}  `};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ borderColor }) => borderColor && `border-color: ${borderColor}`};
@@ -43,8 +43,8 @@ export const Button = styled.button<styledType>`
 
 Button.defaultProps = {
   children: '',
-  width: 100,
-  height: 40,
+  width: '100px',
+  height: '40px',
   fontSize: '0.85rem',
   backgroundColor: '#FFFFFF',
   borderColor: '#FFFFFF',

@@ -1,14 +1,21 @@
+import { useState } from 'react';
+
 import {
   StyledProjectItem,
   ProjectLogo,
   ProjectInfo,
+  InfoCategory,
+  InfoContent,
   ProjectOption,
-  InfoElement,
-  ElementCategory,
-  ElementContent,
   styledType,
 } from './style';
+
 import Circle from '../../atoms/Circle';
+import Sheet from '../../atoms/Sheet';
+import Text from '../../atoms/Text';
+import Button from '../../atoms/Button';
+import { theme } from '../../../styles/theme';
+
 import { AiOutlinePushpin } from 'react-icons/ai';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { BiUser } from 'react-icons/bi';
@@ -24,38 +31,40 @@ const index = ({
   logoImg,
   isPinned,
 }: propsType) => {
+  const [pin, setPin] = useState(isPinned);
   return (
     <StyledProjectItem title={title} leader={leader} members={members}>
-      <ProjectLogo>
-        <Circle height={100}>
-          <img src={logoImg} />
-        </Circle>
-      </ProjectLogo>
-      <ProjectInfo>
-        <InfoElement>
-          <ElementCategory>프로젝트명</ElementCategory>
-          <ElementContent>{title}</ElementContent>
-        </InfoElement>
-        <InfoElement>
-          <ElementCategory>팀장</ElementCategory>
-          <ElementContent>{leader}</ElementContent>
-        </InfoElement>
-        <InfoElement>
-          <ElementCategory>팀원</ElementCategory>
-          <ElementContent>{members}</ElementContent>
-          <ElementContent>
-            <BiUser style={{ marginTop: '0.125rem' }} />
-          </ElementContent>
-          <ElementContent>{members.length}</ElementContent>
-        </InfoElement>
-      </ProjectInfo>
-      <ProjectOption>
-        <AiOutlinePushpin
-          size={20}
-          style={{ marginTop: `0.125rem`, color: isPinned ? '#2684FF' : 'black' }}
-        />
-        <SlOptionsVertical style={{ marginTop: `0.25rem` }} />
-      </ProjectOption>
+      <Button
+        width={'100%'}
+        height={'100%'}
+        clickHandler={() => console.log(`${title}프로젝트 대쉬보드 이동`)}
+      >
+        <ProjectLogo>
+          <Circle height={100}>
+            <img src={logoImg} />
+          </Circle>
+        </ProjectLogo>
+        <ProjectInfo>
+          <InfoCategory>
+            <Text isFill={false} message={'프로젝트명'} />
+            <Text isFill={false} message={'팀장'} />
+            <Text isFill={false} message={'팀원'} />
+          </InfoCategory>
+          <InfoContent>
+            <Text isFill={false} message={title} />
+            <Text isFill={false} message={leader} />
+            <Text isFill={false} message={members[0]} />
+          </InfoContent>
+        </ProjectInfo>
+        <ProjectOption>
+          <Button width={'36px'} height={'36px'} clickHandler={() => setPin(!pin)}>
+            <AiOutlinePushpin size={24} style={{ color: pin ? '#2684FF' : 'black' }} />
+          </Button>
+          <Button width={'36px'} height={'36px'} clickHandler={() => console.log('setting modal')}>
+            <SlOptionsVertical size={18} style={{ color: 'black', marginTop: '4px' }} />
+          </Button>
+        </ProjectOption>
+      </Button>
     </StyledProjectItem>
   );
 };
