@@ -20,7 +20,6 @@ export const StyledContainer = styled.div<styledContainerType>`
     css`
       display: flex;
       justify-content: space-between;
-      align-items: center;
     `}
   width: ${({ containerWidth, isRow }) => isRow && containerWidth};
   padding: ${({ containerPadding }) => containerPadding};
