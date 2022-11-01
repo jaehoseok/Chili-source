@@ -216,4 +216,12 @@ public class IssueController {
     }
 
     // 프로젝트 목록을 불러오는 api
+//    @GetMapping("/project-list")
+//    public ResponseEntity<?> getProjectList(
+//            @LoginUser User user
+//    ) {
+//        issueService.getProjectList(
+//                user
+//        );
+//    }
 }
