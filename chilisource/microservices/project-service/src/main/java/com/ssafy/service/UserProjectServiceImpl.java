@@ -4,7 +4,6 @@ import com.ssafy.dto.request.UserProjectCreateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.entity.Project;
-import com.ssafy.entity.Role;
 import com.ssafy.entity.UserProject;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
@@ -27,7 +26,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
-    private final Role DEFAULT_ROLE = roleRepo.findById(3L).get();
+//    private final Role DEFAULT_ROLE = roleRepo.findById(3L).get();
 
     // 프로젝트 초대
     @Override
@@ -47,7 +46,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                     .userColor(request.getUserColor())
                     .userId(request.getUserId())
                     .project(project)
-                    .role(DEFAULT_ROLE)
+                    .role(roleRepo.findById(3L).get())
                     .build();
             userProjectRepo.save(userProject);
         }
