@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class JiraIssueDetailCreateRequest {
     private String summary;
     private JiraIssueParentCreateRequest parent;
-    private JiraIssueTypeCreateRequest issueType;
+    private JiraIssueTypeCreateRequest issuetype;
     private JiraIssueProjectCreateRequest project;
     private JiraIssueDescriptionCreateRequest description;
     private JiraIssueReporterCreateRequest reporter;
@@ -17,10 +17,10 @@ public class JiraIssueDetailCreateRequest {
     private JiraIssuePriorityCreateRequest priority;
 
     @Builder
-    public JiraIssueDetailCreateRequest(String summary, JiraIssueParentCreateRequest parent, JiraIssueTypeCreateRequest issueType, JiraIssueProjectCreateRequest project, JiraIssueDescriptionCreateRequest description, JiraIssueReporterCreateRequest reporter, JiraIssueAssigneeCreateRequest assignee, JiraIssuePriorityCreateRequest priority) {
+    public JiraIssueDetailCreateRequest(String summary, JiraIssueParentCreateRequest parent, JiraIssueTypeCreateRequest issuetype, JiraIssueProjectCreateRequest project, JiraIssueDescriptionCreateRequest description, JiraIssueReporterCreateRequest reporter, JiraIssueAssigneeCreateRequest assignee, JiraIssuePriorityCreateRequest priority) {
         this.summary = summary;
         this.parent = parent;
-        this.issueType = issueType;
+        this.issuetype = issuetype;
         this.project = project;
         this.description = description;
         this.reporter = reporter;
