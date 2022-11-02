@@ -5,6 +5,10 @@ import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
+import com.ssafy.dto.request.jira.JiraIssueBulkCreateRequest;
+import com.ssafy.dto.request.jira.JiraIssueCreateRequest;
+import com.ssafy.dto.request.jira.JiraIssueDetailCreateRequest;
+import com.ssafy.dto.request.jira.JiraIssueProjectCreateRequest;
 import com.ssafy.dto.response.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
@@ -313,16 +317,36 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void addIssuesToJira(Long userId, Long projectId, Long middleBucketId) {
+    public void addIssuesToJira(User user, Long projectId, Long middleBucketId) {
+        // token feign 으로 사용자 이메일, 사용자 지라 토큰, 사용자 고유 아이디 받아온다
+        TokenResponse token = authServiceClient.getToken(user, "jira");
+        String userEmail = token.getEmail();
+        String userToken = token.getValue();
+        String userJiraId = "62beec7c268cac6e31c5e160"; // 임시
+
+        // project-feign 으로 지라 프로젝트 코드를 가져온다.
+        String jiraProjectCode = projectServiceClient.getProject(projectId)
+                .getJiraProject();
+
         // 미들 버킷을 가져온다
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+
+        List<JiraIssueCreateRequest> issueUpdates = new ArrayList<>();
         // 미들 버킷 안에 있는 이슈들을 펼친다
         for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
-            // 1. summary
+            // summary
             String summary = issue.getSummary();
 
+            // project : jira project code
+            JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
+                    .key(jiraProjectCode)
+                    .build();
+
+
             // 2. 이슈 타입
+            // 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
+            String
 //            String customfield_10011 = null;
             // 2-1. 에픽이라면 - 일단 솔직히 에픽은 지라에서 만들어서 오는 걸로 하자 ㅡㅡ
 //           if (issue.getIssueType().getName().equalsIgnoreCase("epic")) {
@@ -330,6 +354,24 @@ public class IssueServiceImpl implements IssueService {
 //            }
             issue.getEpicLink();
             // TODO 일단 에픽링크 보여주는 API를 만들어야겠네
+
+
+            JiraIssueDetailCreateRequest fields = JiraIssueDetailCreateRequest.builder()
+                    .summary(summary)
+                    .project(project)
+                    .issueType()
+                    .parent()
+                    .description()
+                    .reporter()
+                    .assignee()
+                    .priority()
+                    .build();
+
+            JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()
+                    .fields(fields)
+                    .build();
+
+            issueUpdates.add(build);
         }
         // 각 이슈들을 지라 이슈로 create 할 수 있게 dto 형식을 만든다
         // 지라에 보낼 dto에 맞는 형식은..
@@ -348,6 +390,9 @@ public class IssueServiceImpl implements IssueService {
         // 7. storyPoints 는 db에 있는 값
         // 8. 스프린트는 일단 바이이
 
+        JiraIssueBulkCreateRequest request = JiraIssueBulkCreateRequest.builder()
+                .issueUpdates(issueUpdates)
+                .build();
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
 //        jiraFeignClient.addIssuesToJira();
     }
