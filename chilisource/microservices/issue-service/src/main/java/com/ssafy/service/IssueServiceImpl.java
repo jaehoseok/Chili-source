@@ -341,6 +341,7 @@ public class IssueServiceImpl implements IssueService {
 //                .getJiraProject();
         // 테스트용
         String jiraProjectCode = "CHIL";
+        String jiraProjectId = "10000";
 
         // 미들 버킷을 가져온다
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
@@ -355,7 +356,8 @@ public class IssueServiceImpl implements IssueService {
 
             // project : jira project code
             JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
-                    .key(jiraProjectCode)
+//                    .key(jiraProjectCode)
+                    .id(jiraProjectId)
                     .build();
 
             System.out.println("프로젝트 키:" + project.getKey());
