@@ -8,16 +8,32 @@ import { StyledLandingPage } from './style';
 import Button from 'components/atoms/Button';
 
 const LandingPage = () => {
-  const clickHandler = async () => {
-    console.log('눌렸당');
-    await auth.login('google');
+  // Methods
+  const clickLoginHandler = () => {
+    auth.login('google');
+  };
+
+  const clickTestHandler = async () => {
+    await auth.getTokens();
+  };
+
+  const clickLogoutHandler = async () => {
+    await auth.logout();
   };
 
   return (
     <>
       <StyledLandingPage>LandingPage</StyledLandingPage>
-      <Button clickHandler={clickHandler} borderColor="red">
+      <Button clickHandler={clickLoginHandler} borderColor="red">
         로그인버튼
+      </Button>
+
+      <Button clickHandler={clickTestHandler} borderColor="red">
+        테스트버튼
+      </Button>
+
+      <Button clickHandler={clickLogoutHandler} borderColor="red">
+        로그아웃버튼
       </Button>
     </>
   );

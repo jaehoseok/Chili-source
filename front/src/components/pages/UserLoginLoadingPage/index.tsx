@@ -1,6 +1,6 @@
 // API & Library
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { auth } from 'api/rest';
 
@@ -8,29 +8,28 @@ import { auth } from 'api/rest';
 import Button from 'components/atoms/Button';
 
 const UserLoginLoadingPage = () => {
-  // Data
+  // Init
   const location = useLocation();
+  const navigate = useNavigate();
 
   // Mounted
   useEffect(() => {
-    const params = new URLSearchParams(location.search.substring(1));
-    console.log('[code]:', params.get('code'));
-    // 코드를 받고 다시 백에 넘겨주는 코드
+    // IFFE
+    (async () => {
+      const params = new URLSearchParams(location.search.substring(1));
+      console.log('[code]:', params.get('code'));
+      console.log('[엑세드 토큰 발급 시도]');
+      try {
+        await auth.loginCallback('google', params.get('code') || '');
+      } finally {
+        navigate(localStorage.getItem('URL') || '/');
+      }
+    })();
   }, []);
-
-  const clickHandler = async () => {
-    console.log('눌렸당');
-    // const testData = await auth.login('google');
-    const testData = await auth.tokenCodes();
-    console.log(testData);
-  };
 
   return (
     <>
       <div>로그인 중 입니다...</div>
-      <Button clickHandler={clickHandler} borderColor="red">
-        그냥있는 버튼 입니다.
-      </Button>
     </>
   );
 };

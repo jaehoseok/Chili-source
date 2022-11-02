@@ -1,72 +1,59 @@
-import { createAxiosApi } from 'api/axios';
+// API & Library
+// import { useLocation } from 'react-router-dom';
+import { createAxiosApi, setAccessToken } from 'api/axios';
 
-const REST_PATH = '/auth-service';
-const axiosApi = createAxiosApi();
-
-interface payloadType {
-  data: number;
-}
+export const authAxios = createAxiosApi('auth-service');
 
 /**
  * @description
- * http://k7b2071.p.ssafy.io/auth-service/ 이하의 url의 요청을 보내는 프라미스 객체들의 모음
+ * http://k7b2071.p.ssafy.io/auth-service/ 이하의 url의 요청을 보낼 프라미스 객체를 리턴하는 함수들
  *
- * @example
- * ```typescript
- * // 임포트
- * import { auth } from 'api/rest'
- *
- * // url 요청 예시 - http://k7b2071.p.ssafy.io/auth-service/test-connection
- * async () => { const testData = await auth.testConnection }
- * ```
  * @author inte
  */
 export default {
   /**
-   * @description 해당 타입에 요청 후 DB에 있으면 로그인 페이지로 전송
+   * @description 로그인 페이지로 즉시 이동
    * @example
    * ```typescript
-   * async () => { await auth.login(google) }
+   * () => { auth.login(google) }
    * ```
    * @params {string?} socialLoginType - 로그인 타입
    * @returns
    * @author inte
    */
   login: (socialLoginType: string) => {
-    console.log('로그인 시도', socialLoginType);
-    const link = 'https://www.google.co.kr/webhp?hl=ko';
-    location.href = link;
-    // 로그인 주소 받아오는 코드
-    // return new Promise((resolve, reject) => {
-    //   axiosApi
-    //     .post(REST_PATH + `/login/${socialLoginType}`)
-    //     .then(response => {
-    //       resolve(response);
-    //     })
-    //     .catch(error => {
-    //       reject(error);
-    //     });
-    // });
+    console.log('[로그인 시도] : ', socialLoginType);
+    console.log('[이전 주소 저장]', location.pathname);
+    localStorage.setItem('URL', location.pathname);
+    console.log(authAxios.defaults.baseURL);
+    location.href = `${authAxios.defaults.baseURL}/login/${socialLoginType}`;
+    return;
+  },
+
+  logout: () => {
+    console.log('[로그아웃 시도]');
+    localStorage.removeItem('URL');
+    localStorage.removeItem('Authorization');
+    location.href = `/`;
+    return;
   },
 
   /**
-   * @description 해당 타입에 요청 후 DB에 있으면 로그인
-   * @example
-   * ```typescript
-   * async () => { await auth.login(google) }
-   * ```
-   * @params {string?} socialLoginType - 로그인 타입
-   * @returns
+   * @description 서버에 로그인의 콜백함수를 호출 Access token 요청
+   * @params {string?} code - 구글 소셜 로그인 코드
+   * @returns {number} ACCESS_TOKEN - 헤더에 담긴 엑세스 토큰
    * @author inte
    */
-  getAccessToken: () => {
+  loginCallback: (socialLoginType: string, code: string) => {
     return new Promise((resolve, reject) => {
-      axiosApi
-        .get(REST_PATH + '/refresh')
+      authAxios
+        .get(`/login/${socialLoginType}/callback?code=${code}`)
         .then(response => {
-          const accessToken = 'gura';
-          axiosApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-          resolve(response);
+          const ACCESS_TOKEN = response.headers['authorization'];
+          console.log('[받아온 토큰] : ', response.headers['authorization']);
+          setAccessToken(ACCESS_TOKEN);
+          localStorage.setItem('Authorization', ACCESS_TOKEN || '');
+          resolve(ACCESS_TOKEN);
         })
         .catch(error => {
           reject(error);
@@ -74,10 +61,10 @@ export default {
     });
   },
 
-  refresh: () => {
+  tokenRefresh: () => {
     return new Promise((resolve, reject) => {
-      axiosApi
-        .get(REST_PATH + '/refresh')
+      authAxios
+        .get('/refresh')
         .then(response => {
           resolve(response);
         })
@@ -88,18 +75,32 @@ export default {
   },
 
   /**
-   * @param nothing
-   * @returns
+   * @description 서버의 token code 들을 받아옴
    * @author inte
    */
-  tokenCodes: () => {
+  getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      axiosApi
-        .get(REST_PATH + `/token-codes`)
+      authAxios
+        .get(`/token-codes`)
         .then(response => {
           resolve(response);
         })
         .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  getTokens: () => {
+    return new Promise((resolve, reject) => {
+      authAxios
+        .get(`/tokens`)
+        .then(response => {
+          console.log('일단은 토큰스', response);
+          resolve(response);
+        })
+        .catch(error => {
+          console.log('error');
           reject(error);
         });
     });
