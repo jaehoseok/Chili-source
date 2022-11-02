@@ -32,9 +32,9 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private static final String API_NAME = "Project Service API 문서";
+    private static final String API_NAME = "칠리소스 프로젝트 API 문서";
     private static final String API_VERSION = "0.0.1";
-    private static final String API_DESCRIPTION = "인증 API 명세서";
+    private static final String API_DESCRIPTION = "프로젝트 API 명세서";
     // documentationpluginsbootstrapper 에러 설정
     @Bean
     public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(WebEndpointsSupplier webEndpointsSupplier, ServletEndpointsSupplier servletEndpointsSupplier, ControllerEndpointsSupplier controllerEndpointsSupplier, EndpointMediaTypes endpointMediaTypes, CorsEndpointProperties corsProperties, WebEndpointProperties webEndpointProperties, Environment environment) {
