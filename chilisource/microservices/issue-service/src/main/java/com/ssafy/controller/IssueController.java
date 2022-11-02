@@ -147,13 +147,13 @@ public class IssueController {
     // 미들 버킷에 이슈 추가
     @PostMapping("/middle-buckets/{middleBucketId}")
     public ResponseEntity<?> createIssueIntoMiddleBucket(
-            @LoginUser User user,
+//            @LoginUser User user,
             @PathVariable Long middleBucketId,
             @RequestBody MiddleBucketIssueCreateRequest request
     ) {
         issueService.createIssueIntoMiddleBucket(
-                user.getId(),
-//                1L,
+//                user.getId(),
+                1L,
                 middleBucketId, request);
         return ResponseEntity.ok()
                 .build();
@@ -191,14 +191,15 @@ public class IssueController {
     }
 
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성
-    @PutMapping("/jira/middle-bucket")
+    @PostMapping("/jira/middle-bucket")
     public ResponseEntity<?> addIssuesToJira(
-            @LoginUser User user,
+//            @LoginUser User user,
             @RequestParam Long projectId,
             @RequestParam Long middleBucketId
     ) {
+        System.out.println("컨트롤러 들어옴");
         issueService.addIssuesToJira(
-                user,
+//                user,
                 projectId,
                 middleBucketId);
         return ResponseEntity.ok().build();
@@ -207,9 +208,11 @@ public class IssueController {
     // 에픽 리스트 조회
     @GetMapping("/epic-list")
     public ResponseEntity<?> getEpicList(
-            @LoginUser User user
+//            @LoginUser User user
     ) {
-        JiraEpicListResponse response = issueService.getEpicList(user);
+        JiraEpicListResponse response = issueService.getEpicList(
+//                user
+        );
         return ResponseEntity.ok()
                 .body(response);
     }

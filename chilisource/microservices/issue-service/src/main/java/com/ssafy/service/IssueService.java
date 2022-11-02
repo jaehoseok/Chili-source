@@ -47,8 +47,12 @@ public interface IssueService {
     void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
 
     // 미들 버킷 내의 이슈를 지라로 생성
-    void addIssuesToJira(User user, Long projectId, Long middleBucketId);
+    void addIssuesToJira(
+//            User user,
+            Long projectId, Long middleBucketId);
 
     // 프로젝트의 에픽 리스트 조회
-    JiraEpicListResponse getEpicList(User user);
+    JiraEpicListResponse getEpicList(
+//            User user
+    );
 }
