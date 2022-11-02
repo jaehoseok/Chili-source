@@ -186,7 +186,19 @@ public class IssueController {
                 .build();
     }
 
-    // 이슈 템플릿을 지라의 이슈로 생성
-    // 미들 버킷을 지라의 이슈로 생성
-    // 변수를 사용하여 여러 이슈 등록
+    // TODO 미들 버킷을 지라의 이슈로 생성
+
+    // TODO 에픽 리스트 반환
+
+    // TODO 프로젝트 리스트 반환
+
+    // 프로젝트 id로 그 이하 모든 이슈템플릿과 미들버킷 삭제
+    @DeleteMapping("/all/{projectId}")
+    public ResponseEntity<?> deleteAll(
+            @LoginUser User user,
+            @PathVariable("projectId") Long projectId
+    ) {
+        issueService.deleteAll(user, projectId);
+        return ResponseEntity.ok().build();
+    }
 }

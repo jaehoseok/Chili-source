@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.*;
 
 import java.util.List;
@@ -40,4 +41,6 @@ public interface IssueService {
 
     // 미들 버킷의 이슈 삭제
     void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
+
+    void deleteAll(User user, Long projectId);
 }
