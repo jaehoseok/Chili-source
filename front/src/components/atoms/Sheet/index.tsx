@@ -29,10 +29,19 @@ interface propsType extends styledType {
  * @param {boolean?} isShadow       - 그림자 유무
  * @param {string?} borderColor     - #테두리색 핵사코드
  * @param {string?} backgroundColor - #배경색 핵사코드
+ * @param {string?} flex            - flex-direction (row, column)
  *
  * @author inte
  */
-const index = ({ width, height, isShadow, backgroundColor, children, borderColor }: propsType) => {
+const index = ({
+  width,
+  height,
+  isShadow,
+  backgroundColor,
+  children,
+  borderColor,
+  flex,
+}: propsType) => {
   return (
     <>
       <StyledSheet
@@ -41,6 +50,7 @@ const index = ({ width, height, isShadow, backgroundColor, children, borderColor
         isShadow={isShadow}
         backgroundColor={backgroundColor}
         borderColor={borderColor}
+        flex={flex}
       >
         {children}
       </StyledSheet>

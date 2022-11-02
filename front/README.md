@@ -182,6 +182,16 @@
   >- 이를 위한 대안으로 `react-select` 라이브러리 있음
   >- `selectBox` 를 많이 사용하지 않아서, 설치 없이 `icon`을 반영하지 않는 것으로 결정 
 
+### 성현
+- `Issue` 컴포넌트 UI 구현
+  >- 이슈 템플릿의 정보를 받아서 간략하게 표기해줌
+  >- `type` props에 `story` `task` `bug` 중 하나의 값을 부여 시 유형에 따라 스타일링해줌.
+- `IssueBar` 컴포넌트 UI 구현
+  >- 미들 버킷에 들어간 이슈 템플릿을 막대 형태로 표기해줌
+  >- `type` props에 `story` `task` `bug` 중 하나의 값을 부여 시 유형에 따라 스타일링해줌.
+- `ProjectItem` 컴포넌트 UI 구현
+  >- 사용자의 Jira 프로젝트의 정보를 표기
+  >- 클릭 시 해당 프로젝트로 이동(예정)
 
 ## 221101
 ### 종현
@@ -199,3 +209,7 @@
   >- `width`, `height`의 타입을 `string` 으로 수정
   >- `styled.input` -> `styled.textarea`
 
+### 성현
+- `TokenBox` 컴포넌트 UI 구현
+  >- `Input`에 Jira 토큰 입력 시 프로젝트 리스트 도출 후 컴포넌트 생성 가능(예정)
+- `Issue` `IssueBar` `ProjectItem` 컴포넌트 코드 수정
