@@ -440,11 +440,13 @@ public class IssueServiceImpl implements IssueService {
                 .issueUpdates(issueUpdates)
                 .build();
 
-        JiraIssueFinalCreateRequest request = JiraIssueFinalCreateRequest.builder()
-                .request(bulk)
-                .build();
-        // TODO 리퀘스트도 출력할 수 있나욤
-//        String s = request.
+        // 리퀘스트dto -> string 형식으로 출력
+        ObjectMapper om = new ObjectMapper();
+        String requestJson = om.writeValueAsString(bulk);
+
+        System.out.println("===============");
+        System.out.println(requestJson);
+        System.out.println("===============");
 
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
         Response response1 = jiraFeignClient.addIssuesToJira("Basic " + jiraToken, bulk);
