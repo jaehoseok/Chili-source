@@ -1,14 +1,13 @@
 import { StyledContainer } from './style';
 import MainCalendar from 'components/organisms/project/calendar/Main';
+import SideBarJiraIssues from 'components/organisms/project/calendar/Sidebar';
 
 const index = () => {
   return (
-    <>
-      <div>CalendarPage</div>
-      <StyledContainer>
-        <MainCalendar></MainCalendar>
-      </StyledContainer>
-    </>
+    <StyledContainer>
+      <MainCalendar></MainCalendar>
+      <SideBarJiraIssues></SideBarJiraIssues>
+    </StyledContainer>
   );
 };
 
