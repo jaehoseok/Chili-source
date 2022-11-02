@@ -466,15 +466,16 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public JiraEpicListResponse getEpicList(
-//            User user
+            User user
     ) {
         // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-//        TokenResponse response = authServiceClient.getToken(user, "jira");
+        TokenResponse response = authServiceClient.getToken(user, "jira");
 
         // 이메일과 토큰으로 Base64 인코딩을 한다
-//        String token = response.getEmail() + ":" + response.getValue();
-        // 테스트용
-        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1";
+        String token = response.getEmail() + ":" + response.getValue();
+
+//        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1"; // TODO 테스트용
+
         String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
 
         // feign을 요청해서 -> dto 로 받는다
