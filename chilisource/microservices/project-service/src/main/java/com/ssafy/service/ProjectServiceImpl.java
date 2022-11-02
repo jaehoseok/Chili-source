@@ -1,6 +1,8 @@
 package com.ssafy.service;
 
 import com.ssafy.client.AuthServiceClient;
+import com.ssafy.client.IssueServiceClient;
+import com.ssafy.client.WidgetServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.ProjectCreateRequest;
 import com.ssafy.dto.request.ProjectTokenUpdateRequest;
@@ -33,6 +35,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
     private final AuthServiceClient authServiceClient;
+    private final IssueServiceClient issueServiceClient;
+    private final WidgetServiceClient widgetServiceClient;
 
     @Override
     public ProjectResponse getProject(Long projectId) {
@@ -115,13 +119,15 @@ public class ProjectServiceImpl implements ProjectService {
     // 프로젝트 삭제
     @Override
     @Transactional
-    public void deleteProject(Long projectId, Long userId) {
+    public void deleteProject(Long projectId, Long userId, List<String> auths) {
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (userProjectManager.getRole().getRemove()) {
             Project project = projectRepo.findById(projectId)
                     .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
             projectRepo.delete(project);
+            issueServiceClient.deleteAll(auths, projectId);
+            widgetServiceClient.deleteAllWidget(projectId);
         } else {
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
