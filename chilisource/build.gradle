@@ -38,7 +38,7 @@ subprojects {
 
 
     configurations {
-        asciidoctorExtensions
+        //asciidoctorExtensions
         compileOnly {
             extendsFrom annotationProcessor
         }

@@ -11,7 +11,7 @@
 
 ==== HTTP request
 
-include::{snippets}/user-get/http-request.adoc[]
+include::{snippets}/GET/http-request.adoc[]
 
 ==== HTTP response
 

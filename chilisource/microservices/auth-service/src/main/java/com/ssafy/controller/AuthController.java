@@ -53,7 +53,7 @@ public class AuthController {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setDomain("");
-        cookie.setPath("/api");
+        cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken()).build();

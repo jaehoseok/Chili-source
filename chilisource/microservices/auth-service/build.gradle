@@ -57,8 +57,8 @@ dependencies {
     implementation(project(":common"))
 
     // Swagger
-    //implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    //implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     // kafka
     implementation 'org.springframework.kafka:spring-kafka'
@@ -84,19 +84,19 @@ dependencies {
     // 프로메테우스
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 
-    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+//    asciidoctorExtensions 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+//    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 }
 
 test {
-    outputs.dir snippetsDir
+    //outputs.dir snippetsDir
     useJUnitPlatform()
 }
-asciidoctor {
-    inputs.dir snippetsDir
-    configurations 'asciidoctorExtensions'
-    dependsOn test
-}
+//asciidoctor {
+//    inputs.dir snippetsDir
+//    configurations 'asciidoctorExtensions'
+//    dependsOn test
+//}
 // QueryDSL
 // TODO : QueryDSL 사용시 주석 해제
 //querydsl 추가 시작
@@ -117,7 +117,7 @@ tasks.withType(JavaCompile) {
 //compile에러 때문에 추가
 
 bootJar {
-    dependsOn asciidoctor
+    //dependsOn asciidoctor
     copy {
         from "/build/docs/asciidoc"
         into "src/main/resources/static/docs/"

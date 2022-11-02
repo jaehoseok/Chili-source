@@ -60,14 +60,12 @@ public class OAuthServiceImpl implements OAuthService {
                 ResponseEntity<String> userInfoResponse = googleOauth.requestUserInfo(oAuthToken);
                 //다시 JSON 형식의 응답 객체를 자바 객체로 역직렬화한다.
                 GoogleUser googleUser = googleOauth.getUserInfo(userInfoResponse);
-                System.out.println(googleUser);
                 UserCreateRequest request = UserCreateRequest.builder()
                         .name(googleUser.getName())
                         .email(googleUser.getEmail())
                         .image(googleUser.getPicture())
                         .build();
                 UserResponse user = userServiceClient.findUser(socialLoginType.name(), request);
-                System.out.println("AUTH : " + user.getName());
                 // TODO : HTTP ONLY로 accessToken 및 refreshToken 발급 및 REDIS에 저장
                 String accessToken = jwtUtil.createAccessToken(user.getId());
                 String refreshToken = jwtUtil.createRefreshToken(user.getId());

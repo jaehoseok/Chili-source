@@ -11,6 +11,10 @@ public class WidgetResponse {
 
     private String name;
 
+    private Integer row;
+
+    private Integer col;
+
     private String widgetCode;
 
     private String requestUrl;
@@ -18,9 +22,11 @@ public class WidgetResponse {
     private String detailRequestUrl;
 
     @Builder
-    public WidgetResponse(Long id, String name, String widgetCode, String requestUrl, String detailRequestUrl) {
+    public WidgetResponse(Long id, String name, Integer row, Integer col, String widgetCode, String requestUrl, String detailRequestUrl) {
         this.id = id;
         this.name = name;
+        this.row = row;
+        this.col = col;
         this.widgetCode = widgetCode;
         this.requestUrl = requestUrl;
         this.detailRequestUrl = detailRequestUrl;

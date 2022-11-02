@@ -12,5 +12,5 @@ public interface AuthServiceClient {
     @GetMapping("/tokens/{tokenCodeId}")
     TokenResponse findToken(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
-            @PathVariable String tokenCodeId);
+            @PathVariable(value = "tokenCodeId") String tokenCodeId);
 }

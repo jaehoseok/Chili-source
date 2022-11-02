@@ -1,14 +1,9 @@
 package com.ssafy.controller;
 
-import brave.Response;
-import com.ssafy.client.SsafyGitlabClient;
 import com.ssafy.config.WidgetType;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
-import com.ssafy.dto.request.WidgetCodeCreateRequest;
-import com.ssafy.dto.request.WidgetCodeUpdateRequest;
-import com.ssafy.dto.request.WidgetCreateRequest;
-import com.ssafy.dto.request.WidgetUpdateRequest;
+import com.ssafy.dto.request.*;
 import com.ssafy.service.SsafyGitlabService;
 import com.ssafy.service.WidgetCodeService;
 import com.ssafy.service.WidgetService;
@@ -19,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,6 +67,14 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
+    @PutMapping("/widgets/loc")
+    public ResponseEntity<?> updateLocWidget(
+            @RequestBody List<WidgetLocUpdateRequest> requests
+    ) {
+        widgetService.updateLoc(requests);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("/widgets/{widgetId}")
     public ResponseEntity<?> updateWidget(
             @PathVariable(name = "widgetId") Long widgetId,
@@ -85,6 +89,14 @@ public class WidgetController {
             @PathVariable(name = "widgetId") Long widgetId
     ) {
         widgetService.deleteWidget(widgetId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/widgets/{projectId}")
+    public ResponseEntity<?> deleteAllWidget(
+            @PathVariable(name = "projectId") Long projectId
+    ) {
+        widgetService.deleteAllWidget(projectId);
         return ResponseEntity.ok().build();
     }
 
