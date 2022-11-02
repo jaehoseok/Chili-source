@@ -67,7 +67,7 @@ const HeaderNav = memo(() => {
         return prevArr;
       }
       // 해당 id값을 토대로 경로 이동
-      navigate(`/projects/${currId}/dashboard`);
+      navigate(`/project/${currId}/dashboard`);
       return newTabs;
     });
     activatedToggleWidgetHandler(idx, '대시보드', false);
@@ -145,16 +145,16 @@ const HeaderNav = memo(() => {
       // 그냥 title로 확인함
       switch (currTitle) {
         case '대시보드':
-          navigate(`/projects/${projectId}/dashboard`);
+          navigate(`/project/${projectId}/dashboard`);
           break;
         case '이슈':
-          navigate(`/projects/${projectId}/issues`);
+          navigate(`/project/${projectId}/issues`);
           break;
         case `캘린더`:
-          navigate(`/projects/${projectId}/calendar`);
+          navigate(`/project/${projectId}/calendar`);
           break;
         case '간트차트':
-          navigate(`/projects/${projectId}/gantt-chart`);
+          navigate(`/project/${projectId}/gantt-chart`);
           break;
       }
       return newTabs;

@@ -1,5 +1,5 @@
 import { StyledContainer } from './style';
-import MainCalendar from 'components/organisms/projects/projectId/widget/calendar/Main';
+import MainCalendar from 'components/organisms/project/calendar/Main';
 
 const index = () => {
   return (
