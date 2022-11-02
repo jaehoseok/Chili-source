@@ -56,7 +56,7 @@ const index = ({ width, height, title, leader, members, logoImg, isPinned }: pro
         clickHandler={() => console.log(`${title}프로젝트 대쉬보드 이동`)}
       >
         <ProjectLogo>
-          <Circle height={100}>
+          <Circle height={'100px'}>
             <img src={logoImg} />
           </Circle>
         </ProjectLogo>

@@ -15,13 +15,17 @@ export const Button = styled.button<styledType>`
   ${tw`flex justify-center items-center border border-solid cursor-pointer`};
   ${({ width }) => width && `width: ${width}`};
   ${({ height }) => height && `height: ${height}`};
-  border-radius: 3rem;
+  ${({ height }) => height && `border-radius: ${+height.substring(0, height.length - 2) * 0.2}px`};
   ${({ fontSize }) => fontSize && `font-size: ${fontSize}  `};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ borderColor }) => borderColor && `border-color: ${borderColor}`};
 
   color: ${({ backgroundColor, borderColor }) =>
-    !backgroundColor ? borderColor : backgroundColor === '#F8F8F8' ? '#000000' : '#FFFFFF'};
+    backgroundColor === '#FFFFFF'
+      ? borderColor
+      : backgroundColor === '#F8F8F8'
+      ? '#000000'
+      : '#FFFFFF'};
   ${({ isHover, borderColor }) =>
     isHover &&
     css`
