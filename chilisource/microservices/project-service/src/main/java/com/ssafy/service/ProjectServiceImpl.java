@@ -22,8 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.exception.NotAuthorizedException.CREATE_NOT_AUTHORIZED;
-import static com.ssafy.exception.NotAuthorizedException.REMOVE_NOT_AUTHORIZED;
+import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
 
 @RequiredArgsConstructor
@@ -76,7 +75,6 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = Project.builder()
                 .name(request.getName())
                 .description(request.getDescription())
-                .image(request.getImage())
                 .build();
         projectRepo.save(project);
 
@@ -96,7 +94,22 @@ public class ProjectServiceImpl implements ProjectService {
     public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-        project.update(request.getName(), request.getDescription(), request.getImage());
+        project.update(request.getName(), request.getDescription());
+    }
+
+    @Override
+    public void updateProjectImage(String image, Long projectId, Long userId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+
+        if (!userProjectManager.getRole().getModify()) {
+            throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
+        }
+
+        project.updateImage(image);
     }
 
     // 프로젝트 삭제

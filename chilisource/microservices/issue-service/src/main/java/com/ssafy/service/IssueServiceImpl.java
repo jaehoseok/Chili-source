@@ -6,9 +6,7 @@ import com.ssafy.client.AuthServiceClient;
 import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.config.loginuser.User;
-import com.ssafy.dto.request.*;
-import com.ssafy.dto.request.jira.*;
-import com.ssafy.dto.response.*;
+import com.ssafy.dto.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -483,5 +481,17 @@ public class IssueServiceImpl implements IssueService {
 
         // 리턴한다
         return jiraEpics;
+    }
+
+    @Transactional
+    @Override
+    public void deleteAll(User user, Long projectId) {
+        issueTemplateRepo.deleteAllInBatch(issueTemplateRepo.findByProjectId(projectId));
+        List<MiddleBucket> middleBuckets = middleBucketRepo.findByProjectId(projectId);
+        for (MiddleBucket middleBucket : middleBuckets) {
+            List<MiddleBucketIssue> middleBucketIssues = middleBucket.getMiddleBucketIssues();
+            middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
+        }
+        middleBucketRepo.deleteAllInBatch(middleBuckets);
     }
 }

@@ -52,4 +52,6 @@ public interface IssueService {
 
     // 프로젝트의 에픽 리스트 조회
     JiraEpicListResponse getEpicList(User user);
+
+    void deleteAll(User user, Long projectId);
 }

@@ -1,24 +1,20 @@
 package com.ssafy.service;
 
-import com.ssafy.dto.request.OrderUpdateRequest;
 import com.ssafy.dto.request.WidgetCreateRequest;
+import com.ssafy.dto.request.WidgetLocUpdateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
 import com.ssafy.dto.response.WidgetResponse;
-import com.ssafy.entity.Order;
 import com.ssafy.entity.Widget;
 import com.ssafy.entity.WidgetCode;
 import com.ssafy.exception.DuplicateException;
 import com.ssafy.exception.NotFoundException;
-import com.ssafy.repository.OrderRepo;
 import com.ssafy.repository.WidgetCodeRepo;
 import com.ssafy.repository.WidgetRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.WIDGET_DUPLICATED;
@@ -31,36 +27,23 @@ import static com.ssafy.exception.NotFoundException.WIDGET_NOT_FOUND;
 public class WidgetServiceImpl implements WidgetService {
     private final WidgetRepo widgetRepo;
     private final WidgetCodeRepo widgetCodeRepo;
-    private final OrderRepo orderRepo;
 
     @Override
     @Transactional
     public List<WidgetResponse> getWidgetList(Long projectId) {
         // TODO : 권한 체크 feign 요청 후 해야함
-        Order order = orderRepo.findByProjectId(projectId)
-                .orElseGet(() -> {
-                    Order newOrder = Order.builder()
-                            .projectId(projectId)
-                            .order("")
-                            .build();
-                    orderRepo.save(newOrder);
-                    return newOrder;
-                });
-        StringTokenizer st = new StringTokenizer(order.getOrder());
-        List<WidgetResponse> responses = new ArrayList<>();
-        while (st.hasMoreTokens()) {
-            Widget widget = widgetRepo.findById(Long.valueOf(st.nextToken()))
-                    .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
-            responses.add(
-                    WidgetResponse.builder()
+        List<WidgetResponse> responses = widgetRepo.findByProjectId(projectId).stream()
+                .map(widget -> {
+                    return WidgetResponse.builder()
                             .id(widget.getId())
-                            .name(widget.getName())
+                            .row(widget.getRow())
+                            .col(widget.getCol())
                             .widgetCode(widget.getWidgetCode().getId())
                             .requestUrl(widget.getWidgetCode().getRequestUrl())
                             .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
-                            .build()
-            );
-        }
+                            .build();
+                })
+                .collect(Collectors.toList());
         return responses;
     }
 
@@ -74,6 +57,8 @@ public class WidgetServiceImpl implements WidgetService {
         }
         Widget widget = Widget.builder()
                 .name(request.getName())
+                .row(request.getRow())
+                .col(request.getCol())
                 .projectId(request.getProjectId())
                 .widgetCode(widgetCode)
                 .build();
@@ -81,6 +66,8 @@ public class WidgetServiceImpl implements WidgetService {
         return WidgetResponse.builder()
                 .id(widget.getId())
                 .name(widget.getName())
+                .row(widget.getRow())
+                .col(widget.getCol())
                 .widgetCode(widgetCode.getId())
                 .requestUrl(widgetCode.getRequestUrl())
                 .detailRequestUrl(widgetCode.getDetailRequestUrl())
@@ -96,6 +83,8 @@ public class WidgetServiceImpl implements WidgetService {
         return WidgetResponse.builder()
                 .id(widget.getId())
                 .name(widget.getName())
+                .row(widget.getRow())
+                .col(widget.getCol())
                 .widgetCode(widget.getWidgetCode().getId())
                 .requestUrl(widget.getWidgetCode().getRequestUrl())
                 .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
@@ -104,17 +93,12 @@ public class WidgetServiceImpl implements WidgetService {
 
     @Override
     @Transactional
-    public void updateOrder(OrderUpdateRequest request) {
-        Order order = orderRepo.findByProjectId(request.getProjectId())
-                .orElseGet(() -> {
-                    Order newOrder = Order.builder()
-                            .projectId(request.getProjectId())
-                            .order("")
-                            .build();
-                    orderRepo.save(newOrder);
-                    return newOrder;
-                });
-        order.update(request.getOrder());
+    public void updateLoc(List<WidgetLocUpdateRequest> requests) {
+        requests.forEach(request -> {
+            Widget widget = widgetRepo.findById(request.getId())
+                    .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
+            widget.locUpdate(request.getRow(), request.getCol());
+        });
     }
 
     @Override
@@ -129,6 +113,5 @@ public class WidgetServiceImpl implements WidgetService {
     @Transactional
     public void deleteAllWidget(Long projectId) {
         widgetRepo.deleteAll(widgetRepo.findByProjectId(projectId));
-        orderRepo.deleteByProjectId(projectId);
     }
 }

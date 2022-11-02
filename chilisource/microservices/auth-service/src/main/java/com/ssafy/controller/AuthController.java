@@ -10,6 +10,8 @@ import com.ssafy.dto.response.ServiceTokenResponse;
 import com.ssafy.repository.TokenRepo;
 import com.ssafy.service.OAuthService;
 import com.ssafy.service.AuthService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -34,32 +36,36 @@ public class AuthController {
     // KAKAO - 미구현
     // NAVER - 미구현
     @GetMapping("/login/{socialLoginType}")
-    public void socialLoginRedirect(@PathVariable(name = "socialLoginType") String SocialLoginPath) throws IOException {
+    @ApiOperation(value = "소셜 로그인 - google(구현), naver(미구현), kakao(미구현)")
+    public void socialLoginRedirect(
+            @ApiParam(value = "소셜 로그인 타입 pk") @PathVariable(name = "socialLoginType") String SocialLoginPath
+    ) throws IOException {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(SocialLoginPath.toUpperCase());
         oAuthService.request(socialLoginType);
     }
 
     @GetMapping("/login/{socialLoginType}/callback")
+    @ApiOperation(value = "로그인 토큰 발급")
     public ResponseEntity<?> callback(
-            @PathVariable(name = "socialLoginType") String socialLoginPath,
-            @RequestParam(name = "code") String code,
+            @ApiParam(value = "소셜 로그인 타입") @PathVariable(name = "socialLoginType") String socialLoginPath,
+            @ApiParam(value = "해당 소셜 로그인시 받은 코드") @RequestParam(name = "code") String code,
             HttpServletResponse response
     ) throws IOException {
         Constant.SocialLoginType socialLoginType = Constant.SocialLoginType.valueOf(socialLoginPath.toUpperCase());
         ServiceTokenResponse tokenResponse = oAuthService.oAuthLogin(socialLoginType, code);
-        // TODO : TOKEN 처리 어떻게 할 것인가 -> 쿠키? 세션? 로컬? 액세스는? 리프레쉬는?
         Cookie cookie = new Cookie("refresh-token", tokenResponse.getRefreshToken());
         cookie.setMaxAge(REFRESH_EXPIRATION.intValue());
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setDomain("");
-        cookie.setPath("/api");
+        cookie.setPath("/");
         response.addCookie(cookie);
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken()).build();
     }
 
     @GetMapping("/refresh")
+    @ApiOperation(value = "액세스 토큰 재발급")
     public ResponseEntity<?> refresh(
             @CookieValue(value = "refresh-token", required = false) Cookie cookie,
             @LoginUser User user,
@@ -74,11 +80,13 @@ public class AuthController {
     }
 
     @GetMapping("/token-codes")
+    @ApiOperation(value = "토큰 코드 리스트 조회")
     public ResponseEntity<?> getTokenCodeList() {
         return ResponseEntity.ok(authService.getTokenCodeList());
     }
 
     @PostMapping("/token-codes")
+    @ApiOperation(value = "토큰 코드 생성")
     public ResponseEntity<?> createTokenCode(
             @RequestBody TokenCodeCreateRequest request
     ) {
@@ -87,8 +95,9 @@ public class AuthController {
     }
 
     @PutMapping("/token-codes/{tokenCodeId}")
+    @ApiOperation(value = "토큰 코드 수정")
     public ResponseEntity<?> updateTokenCode(
-            @PathVariable(name = "tokenCodeId") String tokenCodeId,
+            @ApiParam(value = "토큰 코드 pk") @PathVariable(name = "tokenCodeId") String tokenCodeId,
             @RequestBody TokenCodeUpdateRequest request
     ) {
         authService.updateTokenCode(tokenCodeId.toUpperCase(), request);
@@ -96,14 +105,16 @@ public class AuthController {
     }
 
     @DeleteMapping("/token-codes/{tokenCodeId}")
+    @ApiOperation(value = "토큰 코드 삭제")
     public ResponseEntity<?> deleteTokenCode(
-            @PathVariable(name = "tokenCodeId") String tokenCodeId
+            @ApiParam(value = "토큰 코드 pk") @PathVariable(name = "tokenCodeId") String tokenCodeId
     ) {
         authService.deleteTokenCode(tokenCodeId.toUpperCase());
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/tokens")
+    @ApiOperation(value = "연동한 토큰 리스트 조회")
     public ResponseEntity<?> getTokenList(
             @LoginUser User user
     ) {
@@ -111,14 +122,16 @@ public class AuthController {
     }
 
     @GetMapping("/tokens/{tokenCodeId}")
+    @ApiOperation(value = "연동한 특정 토큰 조회")
     public ResponseEntity<?> getToken(
             @LoginUser User user,
-            @PathVariable(name = "tokenCodeId") String tokenCodeId
+            @ApiParam(value = "토큰 코드 pk") @PathVariable(name = "tokenCodeId") String tokenCodeId
     ) {
         return ResponseEntity.ok(authService.getToken(tokenCodeId.toUpperCase(), user.getId()));
     }
 
     @PostMapping("/tokens")
+    @ApiOperation(value = "토큰 연동")
     public ResponseEntity<?> createToken(
             @LoginUser User user,
             @RequestBody TokenCreateRequest request
@@ -128,9 +141,10 @@ public class AuthController {
     }
 
     @DeleteMapping("/tokens/{tokenCodeId}")
+    @ApiOperation(value = "토큰 연동 해제")
     public ResponseEntity<?> deleteToken(
             @LoginUser User user,
-            @PathVariable(name = "tokenCodeId") String tokenCodeId
+            @ApiParam(value = "토큰 코드 pk") @PathVariable(name = "tokenCodeId") String tokenCodeId
     ) {
         authService.deleteToken(tokenCodeId.toUpperCase(), user.getId());
         return ResponseEntity.ok().build();

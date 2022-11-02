@@ -21,6 +21,8 @@ public interface ProjectService {
     // 프로젝트 내용 수정
     public void updateProject(ProjectUpdateRequest request);
 
+    public void updateProjectImage(String image, Long projectId, Long userId);
+
     // 프로젝트 삭제
     public void deleteProject(Long projectId, Long userId);
 
