@@ -225,6 +225,18 @@
   > - 드래그앤 드롭에 맞게 페이지 조작
   > - 행과 열로 통제
 
+### 성현
+
+- `Issue` 컴포넌트 UI 구현
+  > - 이슈 템플릿의 정보를 받아서 간략하게 표기해줌
+  > - `type` props에 `story` `task` `bug` 중 하나의 값을 부여 시 유형에 따라 스타일링해줌.
+- `IssueBar` 컴포넌트 UI 구현
+  > - 미들 버킷에 들어간 이슈 템플릿을 막대 형태로 표기해줌
+  > - `type` props에 `story` `task` `bug` 중 하나의 값을 부여 시 유형에 따라 스타일링해줌.
+- `ProjectItem` 컴포넌트 UI 구현
+  > - 사용자의 Jira 프로젝트의 정보를 표기
+  > - 클릭 시 해당 프로젝트로 이동(예정)
+
 ## 221101
 
 ### 종현
@@ -242,53 +254,41 @@
 - `TextArea` 컴포넌트 수정
   > - `width`, `height`의 타입을 `string` 으로 수정
   > - `styled.input` -> `styled.textarea`
+- `Calendar API` 학습
+  > - `Calendar API` react 렌더링 완료
+  > - `styled component` 디자인 리팩토링
 
 ### 준혁
 
 - `components/atoms/Sheet` props 수정
 - `api/rest` 제작
-  > -
-- `Token` 저장 위치에 대한 장단점에 대한 학습
-- CSRF 공격 : Cross Site Request Forgery, 정상적인 request를 중간에 가로채 변조된 request 를 보내 피해자의 요청인 척 보안을 뚫는 공격
-- XSS 공격 : Cross Site Scripting, 또는 code injection attack, 인젝션 에러, 악의적인 js 코드를 서버가 읽게 하는 공격
-- 일반적으로 토큰은 localStorage나 cookie에 저장함. 장단이 존재
-- localStorage에 저장 시,
-  - js 코드에 의하여 헤더에 토큰이 담겨 CSRF 공격에 안전함
-  - 공격자가 로컬스토리지 토큰 값을 쉽게 조작하므로 XSS 공격에 매우 취약
-- cookie에 저장 시,
-  - httpOnly 옵션 시, Js에서 쿠키 접근 자체가 불가하여 XSS 공격에 안전함
-  - 토큰이 자동으로 request에 실리므로 CSRF 공격에 취약
+  > - `Token` 저장 위치에 대한 장단점에 대한 학습
+  > - CSRF 공격 : Cross Site Request Forgery, 정상적인 request를 중간에 가로채 변조된 request 를 보내 피해자의 요청인 척 보안을 뚫는 공격
+  > - XSS 공격 : Cross Site Scripting, 또는 code injection attack, 인젝션 에러, 악의적인 js 코드를 서버가 읽게 하는 공격
+  > - 일반적으로 토큰은 localStorage나 cookie에 저장함. 장단이 존재
+  > - localStorage에 저장 시, js 코드에 의하여 헤더에 토큰이 담겨 CSRF 공격에 안전함, 공격자가 로컬스토리지 토큰 값을 쉽게 조작하므로 XSS 공격에 매우 취약
+  > - cookie에 저장 시, httpOnly 옵션 시, Js에서 쿠키 접근 자체가 불가하여 XSS 공격에 안전함, 토큰이 자동으로 request에 실리므로 CSRF 공격에 취약
 
-1. localStorage에 저장
-   👍 장점
-   CSRF 공격에는 안전하다.
-   그 이유는 자동으로 request에 담기는 쿠키와는 다르게
-   js 코드에 의해 헤더에 담기므로 XSS를 뚫지 않는 이상
-   공격자가 정상적인 사용자인 척 request를 보내기가 어렵다.
+## 221102
 
-👎 단점
-XSS에 취약하다.
-공격자가 localStorage에 접근하는 Js 코드 한 줄만 주입하면
-localStorage를 공격자가 내 집처럼 드나들 수 있다.
+### 종현
 
-세션 저장시
-👍 장점
-XSS 공격으로부터 localStorage에 비해 안전하다.
+- `HeaderNav` 경로 이동 에러 해결
+  > - 프로젝트 탭에서 위젯 탭을 활성화시킨 후, 다른 프로젝트 탭을 보다가 다시 이전의 프로젝트 탭으로 돌아오는 경우, 해당 위젯은 활성화 되어있으나 경로는 dashboard 경로로 되어있는 문제 발생
+  > - 다른 탭에 이동하는 경우 무조건 dashboard 위젯이 활성화 되게 끔 설계 변경
+- 경로 및 파일 디렉토리 재설정
+  > - 노션에 내용 정리
 
-쿠키의 httpOnly 옵션을 사용하면 Js에서 쿠키에 접근 자체가 불가능하다.
-그래서 XSS 공격으로 쿠키 정보를 탈취할 수 없다.
-(httpOnly 옵션은 서버에서 설정할 수 있음)
+### 준혁
 
-하지만 XSS 공격으로부터 완전히 안전한 것은 아니다.
-httpOnly 옵션으로 쿠키의 내용을 볼 수 없다 해도
-js로 request를 보낼 수 있으므로 자동으로 request에 실리는 쿠키의 특성 상
-사용자의 컴퓨터에서 요청을 위조할 수 있기 때문.
-공격자가 귀찮을 뿐이지 XSS가 뚫린다면 httpOnly cookie도 안전하진 않다.
+- `api/axios` 코드 수정
 
-참고 : 'About XSS Attack' 부분 참고
+  > - 전체 커스텀 axios 객체들의 설정을 조작하는 메서드 제작
 
-👎 단점
-CSRF 공격에 취약하다.
-자동으로 http request에 담아서 보내기 때문에
-공격자가 request url만 안다면
-사용자가 관련 link를 클릭하도록 유도하여 request를 위조하기 쉽다.
+- 로그인 로직 완성
+
+### 성현
+
+- `TokenBox` 컴포넌트 UI 구현
+  > - `Input`에 Jira 토큰 입력 시 프로젝트 리스트 도출 후 컴포넌트 생성 가능(예정)
+- `Issue` `IssueBar` `ProjectItem` 컴포넌트 코드 수정

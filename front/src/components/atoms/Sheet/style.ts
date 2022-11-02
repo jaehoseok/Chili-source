@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import tw from 'twin.macro';
 
 export interface styledType {
   isShadow?: boolean;
@@ -7,12 +8,12 @@ export interface styledType {
   borderRadius?: string;
   borderColor?: string;
   backgroundColor?: string;
+  flex?: string;
 }
 
 export const StyledSheet = styled.div<styledType>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${tw`flex p-4`}
+  flex-direction: ${({ flex }) => flex};
   border-radius: ${({ borderRadius }) => borderRadius};
   ${({ isShadow, borderColor }) =>
     isShadow
@@ -26,4 +27,5 @@ StyledSheet.defaultProps = {
   backgroundColor: 'white',
   borderRadius: '20px',
   borderColor: '#d9d9d9',
+  flex: 'row',
 };

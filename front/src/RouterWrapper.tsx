@@ -43,7 +43,7 @@ const RouterWrapper = () => {
       </Routes>
       <Routes>
         <Route
-          path="/projects/:projectId"
+          path="/project/:projectId/dashboard"
           element={
             <>
               <HeaderNav />
@@ -52,7 +52,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/setting"
+          path="/project/:projectId/setting"
           element={
             <>
               <HeaderNav />
@@ -61,7 +61,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/select"
+          path="/project/:projectId/widgets"
           element={
             <>
               <HeaderNav />
@@ -70,7 +70,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/gantt-chart"
+          path="/project/:projectId/gantt-chart"
           element={
             <>
               <HeaderNav />
@@ -79,7 +79,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/calendar"
+          path="/project/:projectId/calendar"
           element={
             <>
               <HeaderNav />
@@ -88,7 +88,7 @@ const RouterWrapper = () => {
           }
         />
         <Route
-          path="/projects/:projectId/widget/issues"
+          path="/project/:projectId/issues"
           element={
             <>
               <HeaderNav />
