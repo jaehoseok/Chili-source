@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -193,12 +194,12 @@ public class IssueController {
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성
     @PostMapping("/jira/middle-bucket")
     public ResponseEntity<?> addIssuesToJira(
-//            @LoginUser User user,
+            @LoginUser User user,
             @RequestParam Long projectId,
             @RequestParam Long middleBucketId
-    ) {
+    ) throws IOException {
         issueService.addIssuesToJira(
-//                user,
+                user,
                 projectId,
                 middleBucketId);
         return ResponseEntity.ok().build();
@@ -223,4 +224,6 @@ public class IssueController {
 //                user
 //        );
 //    }
+
+    // TODO 생성된 지라 이슈 불러오는 api
 }
