@@ -1,5 +1,6 @@
 package com.ssafy.dto.response;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +8,16 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TokenResponse {
+    @ApiModelProperty(value = "토큰 pk")
     private Long id;
 
+    @ApiModelProperty(value = "토큰 값")
     private String value;
 
+    @ApiModelProperty(value = "Jira에서 필요한 email")
     private String email;
 
+    @ApiModelProperty(value = "토큰 코드 pk")
     private String tokenCodeId;
 
     @Builder
