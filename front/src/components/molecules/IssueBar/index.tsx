@@ -70,8 +70,8 @@ const index = ({
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBarElement>
             <Text width={24} isFill={issueEpicLink !== ''} message={issueEpicLink}></Text>
-            <Circle height={24}>{assignee}</Circle>
-            <Circle height={24}>{rank}</Circle>
+            <Circle height={'24px'}>{assignee}</Circle>
+            <Circle height={'24px'}>{rank}</Circle>
             <Text width={24} isFill={true} message={issueStoryPoints + ''}></Text>
           </StyledIssueBarElement>
         </StyledIssueBarContent>
