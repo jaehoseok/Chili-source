@@ -32,7 +32,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-    private static final String API_NAME = "칠리소스 인증 API 문서";
+    private static final String API_NAME = "Project Service API 문서";
     private static final String API_VERSION = "0.0.1";
     private static final String API_DESCRIPTION = "인증 API 명세서";
     // documentationpluginsbootstrapper 에러 설정
