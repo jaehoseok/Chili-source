@@ -134,7 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void updateProjectToken(User user, ProjectTokenUpdateRequest request) {
+    public void updateProjectToken(User user, ProjectTokenUpdateRequest request, List<String> auths) {
         Project project = projectRepo.findById(request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
@@ -145,38 +145,17 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
-        List<TokenResponse> tokenResponses = authServiceClient.getToken(user);
+        TokenResponse tokenResponse = authServiceClient.getToken(auths, request.getName());
 
-        TokenResponse tokenResponse = null;
         switch (request.getName().toUpperCase()) {
             case "JIRA":
-                for (TokenResponse tr : tokenResponses) {
-                    if (tr.getTokenCodeId() == 0L) {
-                        tokenResponse = tr;
-                    }
-                }
-
-                if (tokenResponse != null) {
-                    project.updateJira(tokenResponse.getValue(), request.getDetail());
-                } else {
-                    throw new NotFoundException(TOKEN_NOT_CONNECTED);
-                }
+                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getEmail());
                 break;
             case "GIT":
-                for (TokenResponse tr : tokenResponses) {
-                    if (tr.getTokenCodeId() == 1L) {
-                        tokenResponse = tr;
-                    }
-                }
-
-                if (tokenResponse != null) {
-                    project.updateGit(tokenResponse.getValue(), request.getDetail());
-                } else {
-                    throw new NotFoundException(TOKEN_NOT_CONNECTED);
-                }
+                project.updateGit(tokenResponse.getValue(), request.getDetail());
                 break;
             default:
-                break;
+                throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }
 
@@ -200,7 +179,7 @@ public class ProjectServiceImpl implements ProjectService {
                 project.deleteGit();
                 break;
             default:
-                break;
+                throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }
 

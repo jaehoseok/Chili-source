@@ -24,10 +24,10 @@ public interface ProjectService {
     public void updateProjectImage(String image, Long projectId, Long userId);
 
     // 프로젝트 삭제
-    public void deleteProject(Long projectId, Long userId);
+    public void deleteProject(Long projectId, Long userId, List<String> auths);
 
     // 프로젝트 마스터 토큰 연동
-    public void updateProjectToken(User user, ProjectTokenUpdateRequest request);
+    public void updateProjectToken(User user, ProjectTokenUpdateRequest request, List<String> auths);
 
     // 프로젝트 마스터 토큰 연동 해제
     public void deleteProjectToken(User user, Long projectId, String name);

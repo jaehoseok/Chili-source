@@ -64,19 +64,21 @@ public class Project extends BaseEntity {
         this.image = image;
     }
 
-    public void updateJira(String jiraToken, String jiraProject) {
-        if (jiraToken != null) this.jiraToken = jiraToken;
-        if (jiraProject != null) this.jiraProject = jiraProject;
+    public void updateJira(String jiraToken, String jiraProject, String jiraEmail) {
+        this.jiraToken = jiraToken;
+        this.jiraProject = jiraProject;
+        this.jiraEmail = jiraEmail;
     }
 
     public void updateGit(String gitToken, String gitRepo) {
-        if (gitToken != null) this.gitToken = gitToken;
-        if (gitRepo != null) this.gitRepo = gitRepo;
+        this.gitToken = gitToken;
+        this.gitRepo = gitRepo;
     }
 
     public void deleteJira() {
         this.jiraToken = null;
         this.jiraProject = null;
+        this.jiraEmail = null;
     }
 
     public void deleteGit() {

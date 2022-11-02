@@ -91,8 +91,9 @@ public class ProjectController {
     @ApiOperation(value = "프로젝트 토큰 등록")
     public ResponseEntity<?> updateProjectToken(
             @LoginUser User user,
-            @RequestBody ProjectTokenUpdateRequest request) {
-        projectService.updateProjectToken(user, request);
+            @RequestBody ProjectTokenUpdateRequest request,
+            @RequestHeader HttpHeaders headers) {
+        projectService.updateProjectToken(user, request, headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
     }
 
