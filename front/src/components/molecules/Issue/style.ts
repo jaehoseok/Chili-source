@@ -1,9 +1,9 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import tw from 'twin.macro';
 import { theme } from '../../../styles/theme';
 export interface styledType extends styledIssueType {
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
 }
 
 export interface styledIssueType {
@@ -13,8 +13,8 @@ export interface styledIssueType {
 export const StyledIssue = styled.div<styledType>`
   ${tw`flex flex-col rounded-2xl shadow font-bold`};
 
-  ${({ width }) => `width: ${width}px`};
-  ${({ height }) => `height: ${height}px`};
+  ${({ width }) => `width: ${width}`};
+  ${({ height }) => `height: ${height}`};
 `;
 
 export const StyledIssueTop = styled.div<styledIssueType>`
@@ -34,6 +34,6 @@ export const StyledIssueBottomElement = styled.div`
 `;
 
 StyledIssue.defaultProps = {
-  width: 400,
-  height: 90,
+  width: '400px',
+  height: '90px',
 };

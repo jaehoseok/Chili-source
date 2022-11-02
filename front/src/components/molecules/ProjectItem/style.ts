@@ -3,14 +3,9 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 import { theme } from '../../../styles/theme';
 export interface styledType {
-  children?: React.ReactNode;
   width?: string;
   height?: string;
   isPinned?: boolean;
-  logoImg?: string; // 추후 교체예정
-  title: string;
-  leader: string;
-  members: string[];
 }
 
 export interface styledInfoType {

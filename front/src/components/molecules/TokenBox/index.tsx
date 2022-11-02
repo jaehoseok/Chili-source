@@ -8,6 +8,21 @@ import { theme } from '../../../styles/theme';
 interface propsType extends styledType {
   labelText: string;
 }
+
+/**
+ * @description
+ * 데이터를 얻기 위해 토큰을 입력할 수 있는 컴포넌트
+ *
+ * @example
+ * <TokenBox labelText={'Jira 토큰'}/>
+ *
+ * @param {string?} width       - 이슈 템플릿 넓이 [default: 460px]
+ * @param {string?} height      - 이슈 템플릿 높이 [default: 380px]
+ * @param {string} labelText    - TokenBox 이름
+ *
+ * @author dbcs
+ */
+
 const index = ({ labelText, width, height }: propsType) => {
   return (
     <StyledTokenBox>

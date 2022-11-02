@@ -11,7 +11,6 @@ import {
 } from './style';
 
 import Circle from '../../atoms/Circle';
-import Sheet from '../../atoms/Sheet';
 import Text from '../../atoms/Text';
 import Button from '../../atoms/Button';
 import { theme } from '../../../styles/theme';
@@ -20,21 +19,37 @@ import { AiOutlinePushpin } from 'react-icons/ai';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { BiUser } from 'react-icons/bi';
 
-type propsType = styledType;
+interface propsType extends styledType {
+  logoImg?: string;
+  title: string;
+  leader: string;
+  members: string[];
+}
 
-const index = ({
-  children,
-  width,
-  height,
-  title,
-  leader,
-  members,
-  logoImg,
-  isPinned,
-}: propsType) => {
+/**
+ * @description
+ * 미들 버킷에 추가된 IssueBar를 생성하는 컴포넌트
+ * 이슈 유형(story, task, bug)에 따라 IssueBar를 생성할 수 있다.
+ * +) 팀원 리스트 코드는 추후 수정 예정. (<Text isFill={false} message={members[0]} />)
+ *
+ * @example
+ * <ProjectItem logoImg={이미지 경로} title={'Project 1'} leader={'dbcs'} members={['dbcs', 'inte', 'bell']}/>
+ *
+ * @param {string?} width       - 이슈 템플릿 넓이 [default: 900px]
+ * @param {string?} height      - 이슈 템플릿 높이 [default: 160px]
+ * @param {string?} logoImg     - 프로젝트 로고 이미지 경로
+ * @param {string} title        - 프로젝트명
+ * @param {string} leader       - 팀장
+ * @param {string[]} members    - 팀원(팀장 포함)
+ * @param {boolean?} isPinned   - 상단 고정 여부 [default : false]
+ *
+ * @author dbcs
+ */
+
+const index = ({ width, height, title, leader, members, logoImg, isPinned }: propsType) => {
   const [pin, setPin] = useState(isPinned);
   return (
-    <StyledProjectItem title={title} leader={leader} members={members}>
+    <StyledProjectItem>
       <Button
         width={'100%'}
         height={'100%'}

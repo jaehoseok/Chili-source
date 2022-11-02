@@ -1,16 +1,3 @@
-/**
- * props
- * project  프로젝트명
- * type (story, task, bug)  이슈 유형
- * summary  요약
- * description  설명
- * reporter 보고자
- * assignee 담당자
- * 우선순위
- * epic link
- * sprint
- * story points
- */
 import { MouseEventHandler } from 'react';
 import {
   StyledIssue,
@@ -33,6 +20,32 @@ interface propsType extends styledType {
   storyPoints?: number;
   clickHandler?: MouseEventHandler<HTMLDivElement>;
 }
+
+/**
+ * @description
+ * 이슈 템플릿의 Issue를 생성하는 컴포넌트
+ * 이슈 유형(story, task, bug)에 따라 이슈 템플릿을 생성할 수 있다.
+ *
+ * @example
+ * <Issue summary={'이슈 제목'} epicLink={'에픽'} assignee={'담당자'} rank={'우선순위'} type={'story'} storyPoints={4}/>
+ * <Issue summary={'이슈 제목'} epicLink={'에픽'} assignee={'담당자'} rank={'우선순위'} type={'task'} storyPoints={4}/>
+ * <Issue summary={'이슈 제목'} epicLink={'에픽'} assignee={'담당자'} rank={'우선순위'} type={'bug'} storyPoints={4}/>
+ *
+ * @param {string?} width                                       - 이슈 템플릿 넓이 [default: 400px]
+ * @param {string?} height                                      - 이슈 템플릿 높이 [default: 90px]
+ * @param {string} type                                         - 이슈 유형 ['story', 'task', 'bug']
+ * @param {string?} project                                     - 프로젝트 이름
+ * @param {string?} summary                                     - 이슈 제목
+ * @param {string?} reporter                                    - 보고자
+ * @param {string?} assignee                                    - 담당자
+ * @param {string?} rank                                        - 우선순위
+ * @param {string?} epicLink                                    - 에픽 링크
+ * @param {string?} sprint                                      - 스프린트
+ * @param {number?} storyPoints                                 - 스토리 포인트
+ * @param {MouseEventHandler<HTMLDivElement>?} clickHandler     - 클릭 이벤트
+ *
+ * @author dbcs
+ */
 
 const index = ({
   width,
@@ -68,7 +81,7 @@ const index = ({
   const issueStoryPoints = storyPoints ? storyPoints : '';
   return (
     <>
-      <StyledIssue width={width} height={height} type={type}>
+      <StyledIssue width={width} height={height} type={type} onClick={clickHandler}>
         <StyledIssueTop type={type}>
           <Text isFill={false} message={issueType} color={'white'}></Text>
           <svg
