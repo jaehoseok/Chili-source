@@ -51,7 +51,7 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/widget-codes/{widgetCodeId")
+    @DeleteMapping("/widget-codes/{widgetCodeId}")
     @ApiOperation(value = "위젯 코드 삭제")
     public ResponseEntity<?> deleteWidgetCode(
             @ApiParam(value = "위젯 코드 pk")  @PathVariable(name = "widgetCodeId") String widgetCodeId
@@ -114,15 +114,15 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/widgets/small/{projectId}/{widgetType}")
-    @ApiOperation(value = "프로젝트에 생성된 특정 위젯 조회")
+    @GetMapping("/widgets/small/{widgetType}")
+    @ApiOperation(value = "프로젝트에 생성된 GIT 위젯 정보 조회")
     public ResponseEntity<?> getSmallWidget(
             HttpServletRequest request,
             @LoginUser User user,
             @ApiParam(value = "프로젝트 pk") @PathVariable("projectId") Long projectId,
-            @ApiParam(value = "위젯 코드 pk") @PathVariable("widgetType") String widgetType,
-            @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId,
-            @RequestParam(required = false, name = "branch") String branch
+            @ApiParam(value = "위젯 타입 (SSAFYGITLAB, GITLAB, GITHUB)") @RequestParam("widgetType") String widgetType,
+            @ApiParam(value = "토큰 코드 pk") @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId,
+            @ApiParam(value = "브랜치 (null일때는 MR 리스트)") @RequestParam(required = false, name = "branch") String branch
     ) {
         WidgetType type = WidgetType.valueOf(widgetType.toUpperCase());
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
