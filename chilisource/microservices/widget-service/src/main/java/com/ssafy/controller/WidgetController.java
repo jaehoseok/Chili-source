@@ -51,7 +51,7 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/widget-codes/{widgetCodeId")
+    @DeleteMapping("/widget-codes/{widgetCodeId}")
     @ApiOperation(value = "위젯 코드 삭제")
     public ResponseEntity<?> deleteWidgetCode(
             @ApiParam(value = "위젯 코드 pk")  @PathVariable(name = "widgetCodeId") String widgetCodeId
