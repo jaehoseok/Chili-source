@@ -71,7 +71,7 @@ public class ProjectController {
             @PathVariable Long projectId,
             @RequestPart(value = "image") final MultipartFile file) {
         String projectImage = awsS3Service.uploadFile(file, "project/");
-        projectService.updateProjectImage("project/" + projectImage, projectId, user.getId());
+        projectService.updateProjectImage(baseURL + "project/" + projectImage, projectId, user.getId());
         return ResponseEntity.ok().build();
     }
 
