@@ -1,5 +1,13 @@
 // styled-component 테마 설정
 // 특정 css를 변수로 넣어 어느 컴포넌트에서든 부르는 것이 가능
+
+interface issueType {
+  [key: string]: string;
+  story: string;
+  task: string;
+  bug: string;
+}
+
 const color = {
   primary: '#54C270',
   secondary: '#00875A',
@@ -17,9 +25,16 @@ const button = {
   black: '#000000',
 };
 
+const issue: issueType = {
+  story: '#63BA3C',
+  task: '#4BADE8',
+  bug: '#E5493A',
+};
+
 export const theme = {
   color,
   button,
+  issue,
 };
 
 export type Theme = typeof theme;

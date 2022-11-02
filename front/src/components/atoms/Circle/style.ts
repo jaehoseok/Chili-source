@@ -3,7 +3,7 @@ import tw from 'twin.macro';
 import { theme } from '../../../styles/theme';
 
 export interface styledType {
-  height?: number;
+  height?: string;
   backgroundColor?: string;
   isDropShadow?: boolean;
   isInnerShadow?: boolean;
@@ -13,8 +13,8 @@ export interface styledType {
 export const Circle = styled.span<styledType>`
   ${tw`flex justify-center items-center rounded-full font-bold shadow-none`};
 
-  ${({ height }) => height && `width: ${height}px`};
-  ${({ height }) => height && `height: ${height}px`};
+  ${({ height }) => height && `width: ${height}`};
+  ${({ height }) => height && `height: ${height}`};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ isInnerShadow }) =>
     isInnerShadow &&
@@ -35,7 +35,7 @@ export const Circle = styled.span<styledType>`
 
 Circle.defaultProps = {
   children: '',
-  height: 50,
+  height: '50px',
   backgroundColor: theme.button.gray,
   isDropShadow: false,
   isInnerShadow: false,
