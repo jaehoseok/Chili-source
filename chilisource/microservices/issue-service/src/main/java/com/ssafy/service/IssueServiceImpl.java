@@ -1,16 +1,19 @@
 package com.ssafy.service;
 
+import com.google.common.base.Charsets;
 import com.ssafy.client.AuthServiceClient;
 import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
+import com.ssafy.dto.request.jira.*;
 import com.ssafy.dto.response.*;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
 import com.ssafy.entity.MiddleBucketIssue;
 import com.ssafy.exception.DuplicateException;
+import com.ssafy.exception.InternalServerErrorException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.exception.WrongFormException;
 import com.ssafy.repository.IssueTemplateRepo;
@@ -18,12 +21,17 @@ import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
 import com.ssafy.repository.MiddleBucketRepo;
 import feign.Response;
+import io.micrometer.core.instrument.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.sleuth.http.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Base64.Encoder;
@@ -313,23 +321,128 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void addIssuesToJira(Long userId, Long projectId, Long middleBucketId) {
+    public void addIssuesToJira(
+//            User user,
+            Long projectId, Long middleBucketId) {
+        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
+//        TokenResponse response = authServiceClient.getToken(user, "jira");
+
+        // 이메일과 토큰으로 Base64 인코딩을 한다
+//        String token = response.getEmail() + ":" + response.getValue();
+        // 테스트용
+        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1";
+        String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
+
+        String userJiraTestId = "62beec7c268cac6e31c5e160"; // 임시
+//        String userJiraId = response.getSomething();
+
+        // project-feign 으로 지라 프로젝트 코드를 가져온다.
+//        String jiraProjectCode = projectServiceClient.getProject(projectId)
+//                .getJiraProject();
+        // 테스트용
+        String jiraProjectCode = "CHIL";
+        String jiraProjectId = "10000";
+
         // 미들 버킷을 가져온다
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
+
+        List<JiraIssueCreateRequest> issueUpdates = new ArrayList<>();
         // 미들 버킷 안에 있는 이슈들을 펼친다
         for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
-            // 1. summary
+            System.out.println("이슈의 이름:" + issue.getSummary());
+            // summary
             String summary = issue.getSummary();
 
-            // 2. 이슈 타입
-//            String customfield_10011 = null;
-            // 2-1. 에픽이라면 - 일단 솔직히 에픽은 지라에서 만들어서 오는 걸로 하자 ㅡㅡ
-//           if (issue.getIssueType().getName().equalsIgnoreCase("epic")) {
-//
-//            }
-            issue.getEpicLink();
-            // TODO 일단 에픽링크 보여주는 API를 만들어야겠네
+            // project : jira project code
+            JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
+//                    .key(jiraProjectCode)
+                    .id(jiraProjectId)
+                    .build();
+
+            System.out.println("프로젝트 키:" + project.getKey());
+
+
+            // 이슈 타입
+            // 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
+            String issueType = "";
+            switch (issue.getIssueType().getName()) {
+                case "Story": {
+                    issueType = "10001";
+                    break;
+                }
+                case "Task": {
+                    issueType = "10002";
+                    break;
+                }
+                case "Bug": {
+                    issueType = "10004";
+                    break;
+                }
+                case "Subtask": {
+                    issueType = "10003";
+                    break;
+                }
+                default: {
+                    throw new IllegalArgumentException("알 수 없는 이슈 타입입니다.");
+                }
+            }
+            System.out.println("이슈타입: " + issueType);
+            JiraIssueTypeCreateRequest type = JiraIssueTypeCreateRequest.builder()
+                    .id(issueType)
+                    .build();
+
+            // parent : 에픽링크
+            JiraIssueParentCreateRequest parent = JiraIssueParentCreateRequest.builder()
+                    .key(issue.getEpicLink())
+                    .build();
+
+            // description
+            List<JiraIssueDescriptionContentContentCreateRequest> list = new ArrayList<>();
+            JiraIssueDescriptionContentContentCreateRequest contentContentCreateRequest = JiraIssueDescriptionContentContentCreateRequest.builder()
+                    .text(issue.getDescription())
+                    .build();
+            list.add(contentContentCreateRequest);
+
+            List<JiraIssueDescriptionContentCreateRequest> list2 = new ArrayList<>();
+            JiraIssueDescriptionContentCreateRequest contentCreateRequest = JiraIssueDescriptionContentCreateRequest.builder()
+                    .content(list)
+                    .build();
+            list2.add(contentCreateRequest);
+
+            JiraIssueDescriptionCreateRequest description = JiraIssueDescriptionCreateRequest.builder()
+                    .content(list2)
+                    .build();
+
+            // report 와 assignee
+            JiraIssueReporterCreateRequest reporter = JiraIssueReporterCreateRequest.builder()
+                    .id(userJiraTestId)
+                    .build();
+
+            JiraIssueAssigneeCreateRequest assignee = JiraIssueAssigneeCreateRequest.builder()
+                    .id(userJiraTestId)
+                    .build();
+
+            JiraIssuePriorityCreateRequest priority = JiraIssuePriorityCreateRequest.builder()
+                    .name(issue.getPriority())
+                    .build();
+
+            JiraIssueDetailCreateRequest fields = JiraIssueDetailCreateRequest.builder()
+                    .summary(summary)
+                    .issueType(type)
+                    .parent(parent)
+                    .description(description)
+                    .reporter(reporter)
+                    .assignee(assignee)
+                    .priority(priority)
+                    .project(project)
+                    .build();
+
+            JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()
+                    .fields(fields)
+                    .build();
+
+            issueUpdates.add(build);
         }
         // 각 이슈들을 지라 이슈로 create 할 수 있게 dto 형식을 만든다
         // 지라에 보낼 dto에 맞는 형식은..
@@ -348,17 +461,51 @@ public class IssueServiceImpl implements IssueService {
         // 7. storyPoints 는 db에 있는 값
         // 8. 스프린트는 일단 바이이
 
+        JiraIssueBulkCreateRequest bulk = JiraIssueBulkCreateRequest.builder()
+                .issueUpdates(issueUpdates)
+                .build();
+
+        JiraIssueFinalCreateRequest request = JiraIssueFinalCreateRequest.builder()
+                .request(bulk)
+                .build();
+        // TODO 리퀘스트도 출력할 수 있나욤
+//        String s = request.
+
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
-//        jiraFeignClient.addIssuesToJira();
+        Response response1 = jiraFeignClient.addIssuesToJira("Basic " + jiraToken, request);
+        if (HttpStatus.Series.valueOf(response1.status()) != HttpStatus.Series.SUCCESSFUL) {
+            System.out.println("실패했어요!");
+            System.out.println(response1.status());
+            System.out.println(response1.reason());
+//            System.out.println(response1.body().);
+//            throw new InternalServerErrorException(response1.body().toString());
+            String conflictionDetails;
+            try {
+                conflictionDetails = IOUtils.toString(response1.body().asInputStream(), Charsets.UTF_8);
+            } catch (IOException e) {
+                System.out.println("read conflict response body exception. {}" + e.toString());
+                conflictionDetails = "{}";
+            }
+            System.out.println(conflictionDetails);
+
+            throw new InternalServerErrorException(conflictionDetails);
+
+        } else {
+            System.out.println("성공");
+        }
     }
 
     @Override
-    public JiraEpicListResponse getEpicList(User user) {
-//        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        TokenResponse response = authServiceClient.getToken(user, "jira");
+    public JiraEpicListResponse getEpicList(
+//            User user
+    ) {
+        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
+//        TokenResponse response = authServiceClient.getToken(user, "jira");
 
-//        // 이메일과 토큰으로 Base64 인코딩을 한다
-        String token = response.getEmail() + ":" + response.getValue();
+        // 이메일과 토큰으로 Base64 인코딩을 한다
+//        String token = response.getEmail() + ":" + response.getValue();
+        // 테스트용
+        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1";
         String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
 
         // feign을 요청해서 -> dto 로 받는다
