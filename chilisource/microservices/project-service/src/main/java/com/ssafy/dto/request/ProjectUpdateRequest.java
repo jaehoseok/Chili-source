@@ -13,13 +13,10 @@ public class ProjectUpdateRequest {
 
     private String description;
 
-    private String image;
-
     @Builder
-    public ProjectUpdateRequest(Long id, String name, String description, String image) {
+    public ProjectUpdateRequest(Long id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.image = image;
     }
 }

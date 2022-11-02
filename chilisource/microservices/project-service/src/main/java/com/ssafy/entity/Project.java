@@ -55,10 +55,13 @@ public class Project extends BaseEntity {
         this.userProjects = userProjects;
     }
 
-    public void update(String name, String description, String image) {
+    public void update(String name, String description) {
         if (name != null) this.name = name;
         if (description != null) this.description = description;
-        if (image != null) this.image = image;
+    }
+
+    public void updateImage(String image) {
+        this.image = image;
     }
 
     public void updateJira(String jiraToken, String jiraProject) {

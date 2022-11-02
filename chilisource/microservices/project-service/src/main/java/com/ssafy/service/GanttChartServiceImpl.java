@@ -93,9 +93,11 @@ public class GanttChartServiceImpl implements GanttChartService {
                     .issueSummary(request.getIssueSummary())
                     .version(request.getVersion())
                     .issueCode(request.getIssueCode())
+                    .progress(request.getProgress())
                     .project(project)
                     .userId(request.getUserId())
                     .build();
+            ganttChartRepo.save(ganttChart);
         } else {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
@@ -121,7 +123,6 @@ public class GanttChartServiceImpl implements GanttChartService {
                     request.getProgress(),
                     request.getUserId()
             );
-            ganttChartRepo.save(ganttChart);
         } else {
             new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
         }

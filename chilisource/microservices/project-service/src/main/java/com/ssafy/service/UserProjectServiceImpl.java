@@ -26,7 +26,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
-//    private final Role DEFAULT_ROLE = roleRepo.findById(2L).get();
+//    private final Role DEFAULT_ROLE = roleRepo.findById(3L).get();
 
     // 프로젝트 초대
     @Override
@@ -46,8 +46,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                     .userColor(request.getUserColor())
                     .userId(request.getUserId())
                     .project(project)
-                    .role(null)
-                    //                .role(DEFAULT_ROLE)
+                    .role(roleRepo.findById(3L).get())
                     .build();
             userProjectRepo.save(userProject);
         }
@@ -65,14 +64,13 @@ public class UserProjectServiceImpl implements UserProjectService {
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (userProjectManager.getRole().getInvite()) {
             // 팀원 정보 수정
-            userProject.update(request.getUserColor(), null);
-            //        userProject.update(request.getUserColor(), roleRepo.findById(request.getRoleId()).get());
+            userProject.update(request.getUserColor(), roleRepo.findById(request.getRoleId()).get());
         }
     }
 
-    // 프로젝트 팀원 조회
+    // 프로젝트 팀원 목록 조회
     @Override
-    public List<UserProjectResponse> getUserProject(Long projectId) {
+    public List<UserProjectResponse> getUserProjectList(Long projectId) {
         // 팀원 리스트 조회
         List<UserProject> responses = userProjectRepo.findByProjectId(projectId);
 
@@ -86,6 +84,18 @@ public class UserProjectServiceImpl implements UserProjectService {
                 .collect(Collectors.toList());
     }
 
+    // 프로젝트 팀원 조회
+    @Override
+    public UserProjectResponse getUserProject(Long projectId, Long userId) {
+        UserProject userProject = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        return UserProjectResponse.builder()
+                .userColor(userProject.getUserColor())
+                .userId(userProject.getUserId())
+                .projectId(projectId)
+                .roleId(userProject.getRole().getId())
+                .build();
+    }
 
     // 프로젝트 나가기
     @Override
