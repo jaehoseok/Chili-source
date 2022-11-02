@@ -460,10 +460,7 @@ public class IssueServiceImpl implements IssueService {
             }
             System.out.println(conflictionDetails);
 
-            throw new InternalServerErrorException(conflictionDetails);
-
-        } else {
-            System.out.println("성공");
+            throw new BadRequestException(conflictionDetails);
         }
     }
 
