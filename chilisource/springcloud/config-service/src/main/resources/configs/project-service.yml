@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://k7b2072.p.ssafy.io:3308/project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    #url: jdbc:mysql://localhost:3306/chili_source_project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    url: jdbc:mysql://k7b2072.p.ssafy.io:3308/project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/chili_source_project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: B207
     password: B207user!
   jpa:
@@ -12,6 +12,20 @@ spring:
     hibernate:
       format_sql: true
       ddl-auto: none
+
+cloud:
+  aws:
+    s3:
+      bucket: chilisource
+    credentials:
+      access-key: AKIAXELMJ3LZ22BCAJNG
+      secret-key: 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
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
 token:
   secret: secretKey
   refresh: refreshKey
