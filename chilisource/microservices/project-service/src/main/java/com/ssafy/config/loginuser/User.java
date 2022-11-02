@@ -11,10 +11,4 @@ import lombok.NoArgsConstructor;
 public class User {
     @ApiModelProperty(hidden = true)
     private Long id;
-
-    @ApiModelProperty(hidden = true)
-    private String gender;
-
-    @ApiModelProperty(hidden = true)
-    private int age;
 }
