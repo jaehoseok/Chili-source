@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoilState } from 'recoil';
@@ -15,7 +17,7 @@ import Tab from 'components/atoms/Tab';
  *
  * @author bell
  */
-const HeaderNav = () => {
+const HeaderNav = memo(() => {
   // project용 recoil 데이터 가져오기, set 적용하기
 
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
@@ -27,6 +29,7 @@ const HeaderNav = () => {
   // 활성화 된 컴포넌트에 맞게 경로가 이동되어야 한다.
   // 프로젝트 데이터가 없는 경우는 ProjectSelectPage로 이동한다.
   const activateToggleHandler = (id: number, isActivated: boolean) => {
+    let idx = -1;
     setTabList((prevArr: tabType[]) => {
       if (prevArr.length <= 0) navigate('/projects');
 
@@ -46,7 +49,7 @@ const HeaderNav = () => {
       newTabs.forEach((newTab: tabType) => (newTab.isActivated = false));
 
       // 활성화 시킬 idx 찾기
-      const idx = newTabs.findIndex(newTab => newTab.id === id);
+      idx = newTabs.findIndex(newTab => newTab.id === id);
       // 경로 이동을 위한, id룰 확인
       let currId: number;
       try {
@@ -64,9 +67,10 @@ const HeaderNav = () => {
         return prevArr;
       }
       // 해당 id값을 토대로 경로 이동
-      navigate(`/projects/${currId}`);
+      navigate(`/projects/${currId}/dashboard`);
       return newTabs;
     });
+    activatedToggleWidgetHandler(idx, '대시보드', false);
   };
 
   // 해당 프로젝트 탭을 삭제하는 함수
@@ -86,6 +90,9 @@ const HeaderNav = () => {
     title: string, // 현재 위젯 탭의 title 값
     isActivated: boolean, // 현재 위젯 탭의 활성화 여부
   ) => {
+    // projectIdx가 -1이 들어올 수 있다. (이미 데이터가 삭제되고 프로젝트 데이터가 없는 경우)
+    // 그러한 경우에는 업데이트 할게 없으니 그냥 리턴 하면 된다.
+    if (projectIdx < 0) return;
     setTabList((prevArr: tabType[]) => {
       // 현재 수정이 이루어져야 하는 widgetList
       const currWidgetList = prevArr[projectIdx].widgetList;
@@ -138,16 +145,16 @@ const HeaderNav = () => {
       // 그냥 title로 확인함
       switch (currTitle) {
         case '대시보드':
-          navigate(`/projects/${projectId}`);
+          navigate(`/projects/${projectId}/dashboard`);
           break;
         case '이슈':
-          navigate(`/projects/${projectId}/widget/issues`);
+          navigate(`/projects/${projectId}/issues`);
           break;
         case `캘린더`:
-          navigate(`/projects/${projectId}/widget/calendar`);
+          navigate(`/projects/${projectId}/calendar`);
           break;
         case '간트차트':
-          navigate(`/projects/${projectId}/widget/gantt-chart`);
+          navigate(`/projects/${projectId}/gantt-chart`);
           break;
       }
       return newTabs;
@@ -222,6 +229,6 @@ const HeaderNav = () => {
       </NavWidget>
     </>
   );
-};
+});
 
 export default HeaderNav;
