@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://k7b2072.p.ssafy.io:3308/project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    url: jdbc:mysql://localhost:3306/chili_source_project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://k7b2072.p.ssafy.io:3308/project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+#    url: jdbc:mysql://localhost:3306/chili_source_project?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: B207
     password: B207user!
   jpa:
