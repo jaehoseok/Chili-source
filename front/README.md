@@ -208,8 +208,22 @@
 - `TextArea` 컴포넌트 수정
   >- `width`, `height`의 타입을 `string` 으로 수정
   >- `styled.input` -> `styled.textarea`
+- `Calendar API` 학습 
+  >- `Calendar API` react 렌더링 완료
+  >- `styled component` 디자인 리팩토링
+  
+
+
+## 221102
+### 종현
+- `HeaderNav` 경로 이동 에러 해결
+  >- 프로젝트 탭에서 위젯 탭을 활성화시킨 후, 다른 프로젝트 탭을 보다가 다시 이전의 프로젝트 탭으로 돌아오는 경우, 해당 위젯은 활성화 되어있으나 경로는 dashboard 경로로 되어있는 문제 발생
+  >- 다른 탭에 이동하는 경우 무조건 dashboard 위젯이 활성화 되게 끔 설계 변경
+- 경로 및 파일 디렉토리 재설정
+  >- 노션에 내용 정리
 
 ### 성현
 - `TokenBox` 컴포넌트 UI 구현
   >- `Input`에 Jira 토큰 입력 시 프로젝트 리스트 도출 후 컴포넌트 생성 가능(예정)
 - `Issue` `IssueBar` `ProjectItem` 컴포넌트 코드 수정
+
