@@ -104,6 +104,6 @@ configurations {
     compileOnly {      extendsFrom annotationProcessor   }
     querydsl.extendsFrom compileClasspath
 }//querydsl 추가 끝
-//tasks.withType(JavaCompile) {
-//    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-//}//compile에러 때문에 추가
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}//compile에러 때문에 추가
