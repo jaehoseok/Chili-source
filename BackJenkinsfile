@@ -42,15 +42,15 @@ pipeline{
             steps{
                 script {
                     try{
-                        //sh "docker stop ${DISCOVERY_CONTAINER_NAME}"
-                        //sh "docker stop ${CONFIG_CONTAINER_NAME}"
-                        //sh "docker stop ${GATEWAY_CONTAINER_NAME}"
+                        sh "docker stop ${DISCOVERY_CONTAINER_NAME}"
+                        sh "docker stop ${CONFIG_CONTAINER_NAME}"
+                        sh "docker stop ${GATEWAY_CONTAINER_NAME}"
 
-                        //sh "docker stop ${AUTH_CONTAINER_NAME}"
-                        //sh "docker stop ${USER_CONTAINER_NAME}"
-                        //sh "docker stop ${ISSUE_CONTAINER_NAME}"
-                        //sh "docker stop ${PROJECT_CONTAINER_NAME}"
-                        //sh "docker stop ${WIDGET_CONTAINER_NAME}"
+                        sh "docker stop ${AUTH_CONTAINER_NAME}"
+                        sh "docker stop ${USER_CONTAINER_NAME}"
+                        sh "docker stop ${ISSUE_CONTAINER_NAME}"
+                        sh "docker stop ${PROJECT_CONTAINER_NAME}"
+                        sh "docker stop ${WIDGET_CONTAINER_NAME}"
                         sleep 1
                         sh "docker rm ${DISCOVERY_CONTAINER_NAME}"
                         sh "docker rm ${CONFIG_CONTAINER_NAME}"
