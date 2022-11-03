@@ -4,7 +4,7 @@ import { StyledInput, styledType } from './style';
 interface propsType extends styledType {
   type?: string;
   placeHolder?: string;
-  value?: string;
+  defaultValue?: string;
 }
 
 /**
@@ -23,8 +23,8 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-const index = ({ height, width, type, placeHolder, value }: propsType) => {
-  const [text, setText] = useState(value);
+const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
+  const [text, setText] = useState(defaultValue);
 
   return (
     <>
@@ -36,7 +36,7 @@ const index = ({ height, width, type, placeHolder, value }: propsType) => {
         onChange={e => {
           setText(e.target.value);
         }}
-        value={text}
+        defaultValue={defaultValue}
       ></StyledInput>
     </>
   );

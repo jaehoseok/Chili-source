@@ -1,50 +1,41 @@
 import { StyledIssueInfo } from './style';
 import Sheet from '../../atoms/Sheet';
 import Text from '../../atoms/Text';
+import InputBox from '../../molecules/InputBox';
 import SelectBox from '../../molecules/SelectBox';
 import TextAreaBox from '../../molecules/TextAreaBox';
+import Option from '../../atoms/Option';
 
 const index = (props: any) => {
-  console.log(props);
+  console.log(props.info);
   return (
     <StyledIssueInfo>
       <Sheet isShadow={false} flex={'column'}>
-        <TextAreaBox isRow={false} labelName={'프로젝트'} textAreaValue={props.info.project} />
+        <InputBox isRow={false} labelName={'프로젝트'} inputValue={props.info.project} />
         <SelectBox labelName={'이슈 유형'}>
-          <option value="">유형을 선택하세요</option>
-          <option value="story">스토리</option>
-          <option value="task">태스크</option>
-          <option value="bug">버그</option>
+          <Option messages={['태스크', '스토리', '버그']}></Option>
         </SelectBox>
-        <TextAreaBox isRow={false} labelName={'요약'} textAreaValue={props.info.summary} />
-        <TextAreaBox isRow={false} labelName={'설명'} />
+        <InputBox isRow={false} labelName={'요약'} inputValue={props.info.summary} />
+        <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
         <SelectBox labelName={'보고자'}>
-          <option>팀원</option>
-          <option>팀원2</option>
+          <Option messages={['팀원', '팀원2']}></Option>
         </SelectBox>
         <SelectBox labelName={'담당자'}>
-          <option>팀원</option>
-          <option>팀원2</option>
+          <Option messages={['팀원', '팀원2']}></Option>
         </SelectBox>
         <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
         <SelectBox labelName={'우선순위'}>
-          <option>Highest</option>
-          <option>High</option>
-          <option>Medium</option>
-          <option>Low</option>
-          <option>Lowest</option>
+          <Option messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}></Option>
         </SelectBox>
         <SelectBox labelName={'Epic Link'}>
-          <option>에픽 링크 목록</option>
+          <Option messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}></Option>
         </SelectBox>
         <SelectBox labelName={'Sprint'}>
-          <option>현재 스프린트(클릭 불가능하게 할거임)</option>
+          <Option
+            messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
+          ></Option>
         </SelectBox>
-        <TextAreaBox
-          isRow={false}
-          labelName={'Story Points'}
-          textAreaValue={props.info.storyPoints}
-        />
+        <InputBox isRow={false} labelName={'Story Points'} inputValue={props.info.storyPoints} />
       </Sheet>
     </StyledIssueInfo>
   );
