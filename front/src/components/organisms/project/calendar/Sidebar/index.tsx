@@ -5,6 +5,13 @@ import { Draggable } from '@fullcalendar/interaction';
 
 import Issue from 'components/molecules/Issue';
 
+/**
+ * @description
+ * 현재 자신에게 할당된 지라 이슈들을 가져온다.
+ * 이후 Main에 있는 Calendar API에 매핑된다.
+ * 
+ * @author bell
+ */
 const index = memo(() => {
   const [externalEvents, setExternalEvents] = useState([
     {
