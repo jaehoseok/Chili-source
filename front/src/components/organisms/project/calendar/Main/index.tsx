@@ -9,8 +9,8 @@ import { StyledCalendar } from './style';
  * @description
  * Calendar API를 렌더링하는 컴포넌트
  * SideBar 지라 이슈들을 가져와 매핑하는 역할을 한다.
- * 
- * @author bell 
+ *
+ * @author bell
  */
 const index = () => {
   return (
