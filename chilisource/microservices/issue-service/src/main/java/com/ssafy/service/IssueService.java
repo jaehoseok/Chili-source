@@ -54,4 +54,8 @@ public interface IssueService {
     JiraEpicListResponse getEpicList(User user, List<String> auths);
 
     void deleteAll(User user, Long projectId);
+
+    JiraTodoIssueListResponse getTodoIssues(
+//            User user,
+            List<String> auths, Long projectId);
 }

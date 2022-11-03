@@ -7,6 +7,7 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
+import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -254,13 +255,18 @@ public class IssueController {
 //    }
 
 
-    // 프로젝트 id로 그 이하 모든 이슈템플릿과 미들버킷 삭제
-    @DeleteMapping("/all/{projectId}")
-    public ResponseEntity<?> deleteAll(
-            @LoginUser User user,
+    // 나의 할 일 + 진행 중 이슈만 조회 : project = "S07P31B207" AND assignee = currentUser() AND status IN ("To Do","In Progress") ORDER BY created DESC
+    @GetMapping("/jira/issues/todo/{projectId}")
+    public ResponseEntity<?> getTodoIssues(
+//            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
             @PathVariable("projectId") Long projectId
     ) {
-        issueService.deleteAll(user, projectId);
-        return ResponseEntity.ok().build();
+        JiraTodoIssueListResponse response = issueService.getTodoIssues(
+//                user,
+                headers.get(HttpHeaders.AUTHORIZATION),
+                projectId);
+        return ResponseEntity.ok()
+                .body(response);
     }
 }
