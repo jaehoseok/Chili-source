@@ -37,6 +37,7 @@ const index = ({
   fontSize,
   backgroundColor,
   width,
+  display,
   clickHandler,
 }: propsType) => {
   return !isFill ? (
@@ -45,6 +46,7 @@ const index = ({
       fontFamily={fontFamily}
       fontWeight={fontWeight}
       fontSize={fontSize}
+      display={display}
       onClick={clickHandler}
     >
       {message}

@@ -41,6 +41,8 @@ const index = ({
   children,
   borderColor,
   flex,
+  maxWidth,
+  minHeight,
 }: propsType) => {
   return (
     <>
@@ -51,6 +53,8 @@ const index = ({
         backgroundColor={backgroundColor}
         borderColor={borderColor}
         flex={flex}
+        maxWidth={maxWidth}
+        minHeight={minHeight}
       >
         {children}
       </StyledSheet>
