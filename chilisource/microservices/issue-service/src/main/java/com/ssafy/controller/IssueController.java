@@ -202,6 +202,18 @@ public class IssueController {
                 .build();
     }
 
+    // =========================================== 내부 API ==================================================
+    // 프로젝트 id로 그 이하 모든 이슈템플릿과 미들버킷 삭제
+    @DeleteMapping("/all/{projectId}")
+    public ResponseEntity<?> deleteAll(
+            @LoginUser User user,
+            @PathVariable("projectId") Long projectId
+    ) {
+        issueService.deleteAll(user, projectId);
+        return ResponseEntity.ok().build();
+    }
+
+    // =========================================== JIRA API ==================================================
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성
     @PostMapping("/jira/middle-bucket")
     public ResponseEntity<?> addIssuesToJira(
