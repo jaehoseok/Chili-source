@@ -45,12 +45,4 @@ public class MiddleBucket extends BaseEntity {
     public void update(String name) {
         this.name = name;
     }
-
-    public void addIssue(MiddleBucketIssue middleBucketIssue) {
-        this.middleBucketIssues.add(middleBucketIssue);
-    }
-
-    public void deleteIssue(MiddleBucketIssue middleBucketIssue) {
-        this.middleBucketIssues.remove(middleBucketIssue);
-    }
 }
