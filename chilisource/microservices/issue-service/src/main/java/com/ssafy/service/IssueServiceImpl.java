@@ -353,7 +353,7 @@ public class IssueServiceImpl implements IssueService {
                     .build();
 
             // 이슈 타입 : 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
-            String issueType = "";
+            String issueType;
             switch (issue.getIssueType().getName()) {
                 case "Story": {
                     issueType = "10001";
@@ -435,13 +435,15 @@ public class IssueServiceImpl implements IssueService {
                 .issueUpdates(issueUpdates)
                 .build();
 
-        // 리퀘스트dto -> string 형식으로 출력
+        /*
+        리퀘스트dto -> string 형식으로 출력
         ObjectMapper om = new ObjectMapper();
         String requestJson = om.writeValueAsString(bulk);
 
-//        System.out.println("===============");
-//        System.out.println(requestJson);
-//        System.out.println("===============");
+        System.out.println("===============");
+        System.out.println(requestJson);
+        System.out.println("===============");
+        */
 
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
         Response response1 = jiraFeignClient.addIssuesToJira("Basic " + jiraToken, bulk);
