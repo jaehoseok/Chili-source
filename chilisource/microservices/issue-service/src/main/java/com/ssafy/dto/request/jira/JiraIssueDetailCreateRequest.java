@@ -8,12 +8,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JiraIssueDetailCreateRequest {
     private String summary;
+
     private JiraIssueParentCreateRequest parent;
+
     private JiraIssueTypeCreateRequest issuetype;
+
     private JiraIssueProjectCreateRequest project;
+
     private JiraIssueDescriptionCreateRequest description;
+
     private JiraIssueReporterCreateRequest reporter;
+
     private JiraIssueAssigneeCreateRequest assignee;
+
     private JiraIssuePriorityCreateRequest priority;
 
     @Builder

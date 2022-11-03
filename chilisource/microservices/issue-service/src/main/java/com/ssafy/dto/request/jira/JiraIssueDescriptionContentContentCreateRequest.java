@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JiraIssueDescriptionContentContentCreateRequest {
     private String text;
+
     private String type;
 
     @Builder

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class JiraIssueProjectCreateRequest {
     private String key;
+
     private String id;
 
     @Builder

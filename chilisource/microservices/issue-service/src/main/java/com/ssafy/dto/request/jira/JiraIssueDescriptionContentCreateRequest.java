@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JiraIssueDescriptionContentCreateRequest {
     private String type;
+
     private List<JiraIssueDescriptionContentContentCreateRequest> content;
 
     @Builder
