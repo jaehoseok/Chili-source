@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
@@ -19,7 +19,7 @@ interface propsType extends styledType {
  * @param {string?} width       - 넓이문자열
  * @param {string?} type        - 인풋 타입
  * @param {string?} placeHolder - 플레이스홀더
- * @param {string?} value       - 초기에 들어가있을 값
+ * @param {string?} defaultValue       - 초기에 들어가있을 값
  *
  * @author inte
  */
@@ -36,7 +36,7 @@ const index = ({ height, width, type, placeHolder, defaultValue }: propsType) =>
         onChange={e => {
           setText(e.target.value);
         }}
-        defaultValue={defaultValue}
+        defaultValue={text}
       ></StyledInput>
     </>
   );

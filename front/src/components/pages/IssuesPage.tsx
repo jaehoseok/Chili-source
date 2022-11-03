@@ -15,7 +15,7 @@ const IssuesPage = () => {
     rank: '',
     epicLink: '',
     sprint: '',
-    storyPoints: 0,
+    storyPoints: 234234,
   };
   const [info, setInfo] = useState(issue);
   const setInfoHandler = (props: any) => {
@@ -26,19 +26,23 @@ const IssuesPage = () => {
       <Issue
         project={'프로젝트 명'}
         summary={'이슈 제목'}
-        epicLink={'에픽'}
-        assignee={'담'}
-        rank={'L'}
+        epicLink={'에픽1'}
+        reporter={'팀원'}
+        assignee={'팀원'}
+        rank={'Low'}
         type={'story'}
+        sprint={'스프린트1'}
         storyPoints={8}
         clickHandler={setInfoHandler}
       />
       <Issue
         summary={'이슈 제목2'}
         epicLink={'에픽2'}
-        assignee={'당'}
-        rank={'H'}
+        reporter={'팀원2'}
+        assignee={'팀원2'}
+        rank={'High'}
         type={'task'}
+        sprint={'스프린트2'}
         storyPoints={4}
         clickHandler={setInfoHandler}
       />
