@@ -53,8 +53,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -85,8 +85,8 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     @Override
     public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, request.getProjectId());
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, request.getProjectId());
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
         if (request.getSummary() == null) {
@@ -143,8 +143,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -195,8 +195,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request, List<String> auths) {
         Long projectId = request.getProjectId();
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
