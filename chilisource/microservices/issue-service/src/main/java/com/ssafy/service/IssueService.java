@@ -56,7 +56,5 @@ public interface IssueService {
 
     void deleteAll(User user, Long projectId);
 
-    JiraTodoIssueListResponse getTodoIssues(
-//            User user,
-            List<String> auths, Long projectId);
+    JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception;
 }

@@ -470,25 +470,20 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public JiraTodoIssueListResponse getTodoIssues(
-//            User user,
-            List<String> auths, Long projectId) {
-//        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
-//        if (response == null) {
-//            throw new NotFoundException(PROJECT_NOT_FOUND);
-//        }
-//        String projectKey = response.getJiraProject();
-        String projectKey = "S07P31B207";
+    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+        String projectKey = response.getJiraProject();
+//        String projectKey = "S07P31B207"; // TODO 테스트용
 
-//        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail()+":"+jira.getValue()).getBytes());
-        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
 
-        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\" To Do \",\" In Progress\") ORDER BY created DESC";
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
 
-        JiraTodoIssueListResponse todoIssues = jiraFeignClient.getTodoIssues(jiraBase64, query);
-        // TODO 제대로 오는지 확인하고 잘 오면 프론트에서 보기 좋게 수정하쟈
-
-        return todoIssues;
+        return jiraFeignClient.getTodoIssues(jiraBase64, query);
     }
 }

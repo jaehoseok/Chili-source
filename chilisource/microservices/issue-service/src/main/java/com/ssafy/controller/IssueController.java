@@ -258,12 +258,12 @@ public class IssueController {
     // 나의 할 일 + 진행 중 이슈만 조회 : project = "S07P31B207" AND assignee = currentUser() AND status IN ("To Do","In Progress") ORDER BY created DESC
     @GetMapping("/jira/issues/todo/{projectId}")
     public ResponseEntity<?> getTodoIssues(
-//            @LoginUser User user,
+            @LoginUser User user,
             @RequestHeader HttpHeaders headers,
             @PathVariable("projectId") Long projectId
-    ) {
+    ) throws Exception {
         JiraTodoIssueListResponse response = issueService.getTodoIssues(
-//                user,
+                user,
                 headers.get(HttpHeaders.AUTHORIZATION),
                 projectId);
         return ResponseEntity.ok()
