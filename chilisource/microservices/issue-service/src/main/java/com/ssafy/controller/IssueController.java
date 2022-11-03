@@ -2,12 +2,18 @@ package com.ssafy.controller;
 
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
-import com.ssafy.dto.*;
+import com.ssafy.dto.request.*;
+import com.ssafy.dto.response.IssueListResponse;
+import com.ssafy.dto.response.IssueTemplateResponse;
+import com.ssafy.dto.response.JiraEpicListResponse;
+import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,12 +26,15 @@ public class IssueController {
     public ResponseEntity<?> getIssueTemplates(
             @LoginUser User user,
             @RequestParam(required = false) Long projectId,
-            @RequestParam Boolean me
+            @RequestParam Boolean me,
+            @RequestHeader HttpHeaders headers
     ) {
         List<IssueTemplateResponse> responses = issueService.getIssueTemplates(
                 user.getId(),
 //                1L,
-                projectId, me);
+                projectId,
+                me,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(responses);
     }
@@ -34,12 +43,14 @@ public class IssueController {
     @PostMapping("/")
     public ResponseEntity<?> createIssueTemplate(
             @LoginUser User user,
-            @RequestBody IssueTemplateCreateRequest request
+            @RequestBody IssueTemplateCreateRequest request,
+            @RequestHeader HttpHeaders headers
     ) {
         issueService.createIssueTemplate(
                 user.getId(),
 //                1L,
-                request);
+                request,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .build();
     }
@@ -74,11 +85,14 @@ public class IssueController {
     public ResponseEntity<?> getMiddleBuckets(
             @LoginUser User user,
             @RequestParam(required = false) Long projectId,
-            @RequestParam Boolean me) {
+            @RequestParam Boolean me,
+            @RequestHeader HttpHeaders headers) {
         List<MiddleBucketResponse> responses = issueService.getMiddleBuckets(
                 user.getId(),
 //                1L,
-                projectId, me);
+                projectId,
+                me,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(responses);
     }
@@ -87,12 +101,14 @@ public class IssueController {
     @PostMapping("/middle-buckets")
     public ResponseEntity<?> createMiddleBucket(
             @LoginUser User user,
-            @RequestBody MiddleBucketCreateRequest request
+            @RequestBody MiddleBucketCreateRequest request,
+            @RequestHeader HttpHeaders headers
     ) {
         issueService.createMiddleBucket(
                 user.getId(),
 //                1L,
-                request);
+                request,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .build();
     }
@@ -186,10 +202,48 @@ public class IssueController {
                 .build();
     }
 
+    // 미들버킷 내의 이슈들을 지라의 이슈로 생성
+    @PostMapping("/jira/middle-bucket")
+    public ResponseEntity<?> addIssuesToJira(
+            @LoginUser User user,
+            @RequestParam Long projectId,
+            @RequestParam Long middleBucketId,
+            @RequestHeader HttpHeaders headers
+    ) throws IOException {
+        issueService.addIssuesToJira(
+                user,
+                projectId,
+                middleBucketId,
+                headers.get(HttpHeaders.AUTHORIZATION));
+        return ResponseEntity.ok().build();
+    }
+
+    // 에픽 리스트 조회
+    @GetMapping("/epic-list")
+    public ResponseEntity<?> getEpicList(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
+    ) {
+        JiraEpicListResponse response = issueService.getEpicList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION));
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    // 프로젝트 목록을 불러오는 api
+//    @GetMapping("/project-list")
+//    public ResponseEntity<?> getProjectList(
+//            @LoginUser User user
+//    ) {
+//        issueService.getProjectList(
+//                user
+//        );
+//    }
+
+    // TODO 생성된 지라 이슈 불러오는 api
     // TODO 미들 버킷을 지라의 이슈로 생성
-
     // TODO 에픽 리스트 반환
-
     // TODO 프로젝트 리스트 반환
 
     // 프로젝트 id로 그 이하 모든 이슈템플릿과 미들버킷 삭제

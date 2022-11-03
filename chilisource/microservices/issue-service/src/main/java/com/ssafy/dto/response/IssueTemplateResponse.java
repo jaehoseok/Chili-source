@@ -1,4 +1,4 @@
-package com.ssafy.dto;
+package com.ssafy.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class IssueResponse {
-    private Long issueId;
+public class IssueTemplateResponse {
+    private Long issueTemplateId;
 
     private String issueType;
 
@@ -26,8 +26,8 @@ public class IssueResponse {
     private Double storyPoints;
 
     @Builder
-    public IssueResponse(Long issueId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
-        this.issueId = issueId;
+    public IssueTemplateResponse(Long issueTemplateId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
+        this.issueTemplateId = issueTemplateId;
         this.issueType = issueType;
         this.summary = summary;
         this.description = description;
