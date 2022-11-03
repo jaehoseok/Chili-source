@@ -1,6 +1,8 @@
 package com.ssafy.service;
 
 import com.ssafy.client.AuthServiceClient;
+import com.ssafy.client.IssueServiceClient;
+import com.ssafy.client.WidgetServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.ProjectCreateRequest;
 import com.ssafy.dto.request.ProjectTokenUpdateRequest;
@@ -33,6 +35,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
     private final AuthServiceClient authServiceClient;
+    private final IssueServiceClient issueServiceClient;
+    private final WidgetServiceClient widgetServiceClient;
 
     @Override
     public ProjectResponse getProject(Long projectId) {
@@ -115,20 +119,22 @@ public class ProjectServiceImpl implements ProjectService {
     // 프로젝트 삭제
     @Override
     @Transactional
-    public void deleteProject(Long projectId, Long userId) {
+    public void deleteProject(Long projectId, Long userId, List<String> auths) {
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (userProjectManager.getRole().getRemove()) {
             Project project = projectRepo.findById(projectId)
                     .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
             projectRepo.delete(project);
+            issueServiceClient.deleteAll(auths, projectId);
+            widgetServiceClient.deleteAllWidget(projectId);
         } else {
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
     }
 
     @Override
-    public void updateProjectToken(User user, ProjectTokenUpdateRequest request) {
+    public void updateProjectToken(User user, ProjectTokenUpdateRequest request, List<String> auths) {
         Project project = projectRepo.findById(request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
@@ -139,38 +145,17 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
-        List<TokenResponse> tokenResponses = authServiceClient.getToken(user);
+        TokenResponse tokenResponse = authServiceClient.getToken(auths, request.getName());
 
-        TokenResponse tokenResponse = null;
         switch (request.getName().toUpperCase()) {
             case "JIRA":
-                for (TokenResponse tr : tokenResponses) {
-                    if (tr.getTokenCodeId() == 0L) {
-                        tokenResponse = tr;
-                    }
-                }
-
-                if (tokenResponse != null) {
-                    project.updateJira(tokenResponse.getValue(), request.getDetail());
-                } else {
-                    throw new NotFoundException(TOKEN_NOT_CONNECTED);
-                }
+                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getEmail());
                 break;
             case "GIT":
-                for (TokenResponse tr : tokenResponses) {
-                    if (tr.getTokenCodeId() == 1L) {
-                        tokenResponse = tr;
-                    }
-                }
-
-                if (tokenResponse != null) {
-                    project.updateGit(tokenResponse.getValue(), request.getDetail());
-                } else {
-                    throw new NotFoundException(TOKEN_NOT_CONNECTED);
-                }
+                project.updateGit(tokenResponse.getValue(), request.getDetail());
                 break;
             default:
-                break;
+                throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }
 
@@ -194,7 +179,7 @@ public class ProjectServiceImpl implements ProjectService {
                 project.deleteGit();
                 break;
             default:
-                break;
+                throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }
 

@@ -1,15 +1,18 @@
 package com.ssafy.dto.response;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 public class TokenResponse {
     private Long id;
+
     private String value;
+
     private String email;
+
     private String tokenCodeId;
 
     @Builder

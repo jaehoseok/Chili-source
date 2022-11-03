@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,7 +72,7 @@ public class ProjectController {
             @PathVariable Long projectId,
             @RequestPart(value = "image") final MultipartFile file) {
         String projectImage = awsS3Service.uploadFile(file, "project/");
-        projectService.updateProjectImage("project/" + projectImage, projectId, user.getId());
+        projectService.updateProjectImage(baseURL + "project/" + projectImage, projectId, user.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -80,8 +81,9 @@ public class ProjectController {
     @ApiOperation(value = "프로젝트 삭제")
     public ResponseEntity<?> deleteProject(
             @PathVariable Long projectId,
-            @LoginUser User user) {
-        projectService.deleteProject(projectId, user.getId());
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers) {
+        projectService.deleteProject(projectId, user.getId(), headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
     }
 
@@ -89,8 +91,9 @@ public class ProjectController {
     @ApiOperation(value = "프로젝트 토큰 등록")
     public ResponseEntity<?> updateProjectToken(
             @LoginUser User user,
-            @RequestBody ProjectTokenUpdateRequest request) {
-        projectService.updateProjectToken(user, request);
+            @RequestBody ProjectTokenUpdateRequest request,
+            @RequestHeader HttpHeaders headers) {
+        projectService.updateProjectToken(user, request, headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
     }
 
