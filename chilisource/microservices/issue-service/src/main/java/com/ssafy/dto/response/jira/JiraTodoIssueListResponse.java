@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class JiraTodoIssueListResponse {
-    private List<JiraTodoIssueResponse> list;
+    private List<JiraTodoIssueResponse> issues;
 
     @Builder
-    public JiraTodoIssueListResponse(List<JiraTodoIssueResponse> list) {
-        this.list = list;
+    public JiraTodoIssueListResponse(List<JiraTodoIssueResponse> issues) {
+        this.issues = issues;
     }
 }
