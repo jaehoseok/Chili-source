@@ -3,7 +3,7 @@ import { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useRecoilState } from 'recoil';
-import { tabListState, tabType, widgetType } from './recoil/atoms/projectList';
+import { tabListState, tabType, widgetType } from '../../../../recoil/atoms/projectList';
 
 import NavProject from 'components/molecules/NavProject';
 import NavWidget from 'components/molecules/NavWidget';
@@ -17,7 +17,7 @@ import Tab from 'components/atoms/Tab';
  *
  * @author bell
  */
-const HeaderNav = memo(() => {
+const index = memo(() => {
   // project용 recoil 데이터 가져오기, set 적용하기
 
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
@@ -201,9 +201,17 @@ const HeaderNav = memo(() => {
             title={title}
             toggleHandler={activateToggleHandler.bind(null, id, isActivated)}
             closeHandler={closeTabHandler.bind(null, id)}
+            xBtn={true}
           ></Tab>
         ))}
-        <Tab key={99999} type={'project'} isActivated={false} title={'+'}></Tab>
+        <Tab
+          key={99999}
+          type={'project'}
+          isActivated={false}
+          title={'+'}
+          plus={true}
+          xBtn={false}
+        ></Tab>
       </NavProject>
       <NavWidget>
         {tabList.map(
@@ -222,13 +230,21 @@ const HeaderNav = memo(() => {
                   isActivated,
                 )}
                 closeHandler={closeWidgetHandler.bind(null, projectIdx, title)}
+                xBtn={true}
               ></Tab>
             )),
         )}
-        <Tab key={99999} type={'widget'} isActivated={false} title={'+'}></Tab>
+        <Tab
+          key={99999}
+          type={'widget'}
+          isActivated={false}
+          title={'+'}
+          plus={true}
+          xBtn={false}
+        ></Tab>
       </NavWidget>
     </>
   );
 });
 
-export default HeaderNav;
+export default index;

@@ -12,6 +12,7 @@ if (process.env.NODE_ENV === 'development') {
     // axios baseURL 설정
     // 추후 서버 api 확보되면, 바꿀 예정
     axios.defaults.baseURL = 'http://localhost:3000';
+    axios.defaults.withCredentials = true;
     const { worker } = await import('./mocks/browser');
     worker.start();
   })();

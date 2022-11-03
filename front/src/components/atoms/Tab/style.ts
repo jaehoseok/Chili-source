@@ -23,7 +23,7 @@ export const StyledXBtn = styled.span<styledType>`
 `;
 
 export const StyledTab = styled.span<styledType>`
-  ${tw`mr-2 border rounded-t-2xl text-lg font-bold inline-block text-center relative`}
+  ${tw`mr-2 border rounded-t-2xl text-sm font-bold inline-block text-center relative`}
   padding : 7.5px ${({ plus }) => (plus ? '15px' : '30px')};
   ${({ plus }) =>
     plus
@@ -31,7 +31,7 @@ export const StyledTab = styled.span<styledType>`
           min-width: 10px;
         `
       : css`
-          width: 10rem;
+          width: 8rem;
           overflow: clip;
           white-space: nowrap;
           text-overflow: ellipsis;

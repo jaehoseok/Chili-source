@@ -1,9 +1,10 @@
-import React, { MouseEventHandler } from 'react';
+import React, { MouseEventHandler, ReactNode } from 'react';
 import { StyledTab, styledType, StyledXBtn } from './style';
 
 interface propsType extends styledType {
-  key: number;
-  title: string;
+  key?: number;
+  title: string | ReactNode;
+  xBtn: boolean;
   toggleHandler?: MouseEventHandler<HTMLSpanElement>;
   closeHandler?: MouseEventHandler<HTMLSpanElement>;
   createHandler?: MouseEventHandler<HTMLSpanElement>;
@@ -28,6 +29,8 @@ const index = ({
   title,
   type,
   isActivated,
+  plus,
+  xBtn,
   toggleHandler,
   closeHandler,
   createHandler,
@@ -37,10 +40,10 @@ const index = ({
       type={type}
       isActivated={isActivated}
       onClick={title == '+' ? createHandler : toggleHandler}
-      plus={title == '+' ? true : false}
+      plus={plus}
     >
       {title}
-      {title === '대시보드' || title === '+' ? null : (
+      {xBtn && (
         <StyledXBtn type={type} isActivated={isActivated} onClick={closeHandler}>
           X
         </StyledXBtn>
