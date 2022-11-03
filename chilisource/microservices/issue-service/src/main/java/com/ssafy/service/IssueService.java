@@ -6,6 +6,7 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
+import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
 
 import java.io.IOException;
 import java.util.List;
