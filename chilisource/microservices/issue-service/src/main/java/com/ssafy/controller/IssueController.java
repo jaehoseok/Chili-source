@@ -231,7 +231,7 @@ public class IssueController {
     }
 
     // 에픽 리스트 조회
-    @GetMapping("/epic-list")
+    @GetMapping("/jira/epic-list")
     public ResponseEntity<?> getEpicList(
             @LoginUser User user,
             @RequestHeader HttpHeaders headers
