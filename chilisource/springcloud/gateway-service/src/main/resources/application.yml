@@ -31,7 +31,7 @@ spring:
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/auth-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
