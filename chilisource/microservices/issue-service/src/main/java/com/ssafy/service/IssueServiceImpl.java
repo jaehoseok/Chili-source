@@ -287,6 +287,7 @@ public class IssueServiceImpl implements IssueService {
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
 
+        middleBucket.deleteIssue(middleBucketIssue);
         middleBucketIssueRepo.delete(middleBucketIssue);
     }
 
