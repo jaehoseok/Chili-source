@@ -1,7 +1,24 @@
+// Styles
+import { StyledAside } from './style';
+
+// Components
+import { WidgetBlock } from 'components/molecules/WidgetBlock';
+
 export const Aside = () => {
   return (
     <>
-      <div>뭔데어사이드임</div>
+      <StyledAside>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+        <WidgetBlock type="sd"></WidgetBlock>
+      </StyledAside>
     </>
   );
 };

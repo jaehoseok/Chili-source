@@ -8,7 +8,7 @@ export interface styledType {
 }
 
 export const StyledNav = styled.nav<styledType>`
-  ${tw`px-4`}
+  ${tw`px-4 w-screen`}
   background: ${({ theme }) =>
     `linear-gradient(90.05deg, ${theme.color.primary} 35.2%, #6ACF60 53.63%, #85DF4B 76.31%)`};
 `;
