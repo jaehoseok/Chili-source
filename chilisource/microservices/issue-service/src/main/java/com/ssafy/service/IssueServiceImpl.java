@@ -32,7 +32,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Base64.Encoder;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,8 +51,6 @@ public class IssueServiceImpl implements IssueService {
     private final ProjectServiceClient projectServiceClient;
     private final JiraFeignClient jiraFeignClient;
     private final AuthServiceClient authServiceClient;
-
-    private static Encoder encoder = Base64.getEncoder();
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
