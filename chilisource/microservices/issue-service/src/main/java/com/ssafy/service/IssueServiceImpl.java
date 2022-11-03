@@ -484,7 +484,9 @@ public class IssueServiceImpl implements IssueService {
 //        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail()+":"+jira.getValue()).getBytes());
         String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
 
-        JiraTodoIssueListResponse todoIssues = jiraFeignClient.getTodoIssues(jiraBase64, projectKey);
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\" To Do \",\" In Progress\") ORDER BY created DESC";
+
+        JiraTodoIssueListResponse todoIssues = jiraFeignClient.getTodoIssues(jiraBase64, query);
         // TODO 제대로 오는지 확인하고 잘 오면 프론트에서 보기 좋게 수정하쟈
 
         return todoIssues;

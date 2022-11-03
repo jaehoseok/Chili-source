@@ -25,9 +25,9 @@ public interface JiraFeignClient {
     );
 
     // 해당 프로젝트에서 done이 아닌 나의 이슈 조회
-    @GetMapping("/search?jql=project = \"{projectKey}\" AND assignee = currentUser() AND status IN (\"To Do\",\"In Progress\") ORDER BY created DESC)")
+    @GetMapping("/search?jql={query}")
     JiraTodoIssueListResponse getTodoIssues(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
-            @PathVariable("projectKey") String projectKey
+            @PathVariable("query") String query
     );
 }
