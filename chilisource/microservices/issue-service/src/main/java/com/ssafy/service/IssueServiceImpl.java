@@ -354,20 +354,20 @@ public class IssueServiceImpl implements IssueService {
 
             // 이슈 타입 : 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
             String issueType;
-            switch (issue.getIssueType().getName()) {
-                case "Story": {
+            switch (issue.getIssueType().getName().toUpperCase()) {
+                case "STORY": {
                     issueType = "10001";
                     break;
                 }
-                case "Task": {
+                case "TASK": {
                     issueType = "10002";
                     break;
                 }
-                case "Bug": {
+                case "BUG": {
                     issueType = "10004";
                     break;
                 }
-                case "Subtask": {
+                case "SUBTASK": {
                     issueType = "10003";
                     break;
                 }
