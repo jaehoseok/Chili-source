@@ -310,7 +310,6 @@ public class IssueServiceImpl implements IssueService {
         }
 
         middleBucketIssueRepo.deleteById(middleBucketIssueId); // (1)
-//        System.out.println("완료"); // (2)
 
         // ver 1 실행시 (1)을 실행하지 않고 (2)만 실행됨
         // ver 2 실행시 (2)를 실행하고 (1)을 나중에 실행함
@@ -347,7 +346,6 @@ public class IssueServiceImpl implements IssueService {
         List<JiraIssueCreateRequest> issueUpdates = new ArrayList<>();
         // 미들 버킷 안에 있는 이슈들을 펼친다
         for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
-            System.out.println("이슈의 이름:" + issue.getSummary());
             // summary
             String summary = issue.getSummary();
 
@@ -444,23 +442,20 @@ public class IssueServiceImpl implements IssueService {
         ObjectMapper om = new ObjectMapper();
         String requestJson = om.writeValueAsString(bulk);
 
-        System.out.println("===============");
-        System.out.println(requestJson);
-        System.out.println("===============");
+//        System.out.println("===============");
+//        System.out.println(requestJson);
+//        System.out.println("===============");
 
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
         Response response1 = jiraFeignClient.addIssuesToJira("Basic " + jiraToken, bulk);
         if (HttpStatus.Series.valueOf(response1.status()) != HttpStatus.Series.SUCCESSFUL) {
-            String conflictionDetails;
+            String errorDetail;
             try {
-                conflictionDetails = IOUtils.toString(response1.body().asInputStream(), Charsets.UTF_8);
+                errorDetail = IOUtils.toString(response1.body().asInputStream(), Charsets.UTF_8);
             } catch (IOException e) {
-                System.out.println("read conflict response body exception. {}" + e.toString());
-                conflictionDetails = "{}";
+                errorDetail = "IO Exception 발생";
             }
-            System.out.println(conflictionDetails);
-
-            throw new BadRequestException(conflictionDetails);
+            throw new BadRequestException(errorDetail);
         }
     }
 
