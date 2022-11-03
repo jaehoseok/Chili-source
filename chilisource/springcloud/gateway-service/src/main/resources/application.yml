@@ -26,26 +26,12 @@ spring:
       probability: 1.0
   cloud:
     gateway:
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials 
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins: ['http://localhost:3000','https://k7b207.p.ssafy.io']
-            allow-credentials: true
-            allowedHeaders: '*'
-            allowedMethods:
-            - PUT
-            - GET
-            - POST
-            - DELETE
-            - OPTIONS
       routes:
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/auth-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
