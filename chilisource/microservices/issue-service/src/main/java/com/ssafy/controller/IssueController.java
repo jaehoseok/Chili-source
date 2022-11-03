@@ -243,8 +243,8 @@ public class IssueController {
                 .body(response);
     }
 
-    // 프로젝트 목록을 불러오는 api
-//    @GetMapping("/project-list")
+    // 프로젝트 목록 조회 https://ehoi-chili.atlassian.net/rest/api/3/project/recent
+//    @GetMapping("/jira/project-list")
 //    public ResponseEntity<?> getProjectList(
 //            @LoginUser User user
 //    ) {
@@ -253,10 +253,6 @@ public class IssueController {
 //        );
 //    }
 
-    // TODO 생성된 지라 이슈 불러오는 api
-    // TODO 미들 버킷을 지라의 이슈로 생성
-    // TODO 에픽 리스트 반환
-    // TODO 프로젝트 리스트 반환
 
     // 프로젝트 id로 그 이하 모든 이슈템플릿과 미들버킷 삭제
     @DeleteMapping("/all/{projectId}")
