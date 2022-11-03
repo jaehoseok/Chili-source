@@ -36,6 +36,12 @@ public class MiddleBucket extends BaseEntity {
         this.middleBucketIssues = middleBucketIssues;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof MiddleBucket
+                && this.id.equals(((MiddleBucket) obj).id);
+    }
+
     public void update(String name) {
         this.name = name;
     }
