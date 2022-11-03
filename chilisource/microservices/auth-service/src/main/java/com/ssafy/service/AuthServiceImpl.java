@@ -116,6 +116,7 @@ public class AuthServiceImpl implements AuthService {
                 .id(token.getId())
                 .value(token.getValue())
                 .email(token.getEmail())
+                .jiraAccountId(token.getJiraAccountId())
                 .tokenCodeId(token.getTokenCode().getId())
                 .build();
     }
@@ -135,6 +136,7 @@ public class AuthServiceImpl implements AuthService {
                         .email(request.getEmail())
                         .jiraAccountId(jiraMySelfResponse.getAccountId())
                         .tokenCode(tokenCode)
+                        .userId(userId)
                         .build();
                 tokenRepo.save(newToken);
             } else {
@@ -152,6 +154,7 @@ public class AuthServiceImpl implements AuthService {
                         .value(request.getValue())
                         .email(request.getEmail())
                         .tokenCode(tokenCode)
+                        .userId(userId)
                         .build();
                 tokenRepo.save(newToken);
             } else {
