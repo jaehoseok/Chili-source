@@ -12,10 +12,10 @@ import java.util.List;
 
 public interface IssueService {
     // 이슈 템플릿 리스트 조회
-    List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me);
+    List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me, List<String> auths);
 
     // 이슈 템플릿 생성
-    void createIssueTemplate(Long userId, IssueTemplateCreateRequest request);
+    void createIssueTemplate(Long userId, IssueTemplateCreateRequest request, List<String> auths);
 
     // 이슈 템플릿 수정
     void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request);
@@ -24,13 +24,13 @@ public interface IssueService {
     void deleteIssueTemplate(Long issueTemplateId);
 
     // 미들 버킷 리스트 조회
-    List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me);
+    List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths);
 
     // 미들 버킷 상세 조회
     IssueListResponse getMiddleBucket(Long userId, Long middleBucketId);
 
     // 미들 버킷 생성
-    void createMiddleBucket(Long userId, MiddleBucketCreateRequest request);
+    void createMiddleBucket(Long userId, MiddleBucketCreateRequest request, List<String> auths);
 
     // 미들 버킷 수정
     void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest request);
@@ -48,10 +48,10 @@ public interface IssueService {
     void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId);
 
     // 미들 버킷 내의 이슈를 지라로 생성
-    void addIssuesToJira(User user, Long projectId, Long middleBucketId) throws IOException;
+    void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException;
 
     // 프로젝트의 에픽 리스트 조회
-    JiraEpicListResponse getEpicList(User user);
+    JiraEpicListResponse getEpicList(User user, List<String> auths);
 
     void deleteAll(User user, Long projectId);
 }

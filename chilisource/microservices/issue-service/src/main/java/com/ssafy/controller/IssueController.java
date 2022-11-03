@@ -9,6 +9,7 @@ import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,15 @@ public class IssueController {
     public ResponseEntity<?> getIssueTemplates(
             @LoginUser User user,
             @RequestParam(required = false) Long projectId,
-            @RequestParam Boolean me
+            @RequestParam Boolean me,
+            @RequestHeader HttpHeaders headers
     ) {
         List<IssueTemplateResponse> responses = issueService.getIssueTemplates(
                 user.getId(),
 //                1L,
-                projectId, me);
+                projectId,
+                me,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(responses);
     }
@@ -39,12 +43,14 @@ public class IssueController {
     @PostMapping("/")
     public ResponseEntity<?> createIssueTemplate(
             @LoginUser User user,
-            @RequestBody IssueTemplateCreateRequest request
+            @RequestBody IssueTemplateCreateRequest request,
+            @RequestHeader HttpHeaders headers
     ) {
         issueService.createIssueTemplate(
                 user.getId(),
 //                1L,
-                request);
+                request,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .build();
     }
@@ -79,11 +85,14 @@ public class IssueController {
     public ResponseEntity<?> getMiddleBuckets(
             @LoginUser User user,
             @RequestParam(required = false) Long projectId,
-            @RequestParam Boolean me) {
+            @RequestParam Boolean me,
+            @RequestHeader HttpHeaders headers) {
         List<MiddleBucketResponse> responses = issueService.getMiddleBuckets(
                 user.getId(),
 //                1L,
-                projectId, me);
+                projectId,
+                me,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(responses);
     }
@@ -92,12 +101,14 @@ public class IssueController {
     @PostMapping("/middle-buckets")
     public ResponseEntity<?> createMiddleBucket(
             @LoginUser User user,
-            @RequestBody MiddleBucketCreateRequest request
+            @RequestBody MiddleBucketCreateRequest request,
+            @RequestHeader HttpHeaders headers
     ) {
         issueService.createMiddleBucket(
                 user.getId(),
 //                1L,
-                request);
+                request,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .build();
     }
@@ -196,21 +207,26 @@ public class IssueController {
     public ResponseEntity<?> addIssuesToJira(
             @LoginUser User user,
             @RequestParam Long projectId,
-            @RequestParam Long middleBucketId
+            @RequestParam Long middleBucketId,
+            @RequestHeader HttpHeaders headers
     ) throws IOException {
         issueService.addIssuesToJira(
                 user,
                 projectId,
-                middleBucketId);
+                middleBucketId,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
     }
 
     // 에픽 리스트 조회
     @GetMapping("/epic-list")
     public ResponseEntity<?> getEpicList(
-            @LoginUser User user
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
     ) {
-        JiraEpicListResponse response = issueService.getEpicList(user);
+        JiraEpicListResponse response = issueService.getEpicList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(response);
     }

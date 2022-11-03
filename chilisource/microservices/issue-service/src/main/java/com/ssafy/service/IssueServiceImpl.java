@@ -1,6 +1,5 @@
 package com.ssafy.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.ssafy.client.AuthServiceClient;
 import com.ssafy.client.JiraFeignClient;
@@ -53,8 +52,8 @@ public class IssueServiceImpl implements IssueService {
     private final AuthServiceClient authServiceClient;
 
     @Override
-    public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me) {
-        Response response = projectServiceClient.findProjectById(projectId);
+    public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me, List<String> auths) {
+        Response response = projectServiceClient.findProjectById(auths, projectId);
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
@@ -85,8 +84,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request) {
-        Response response = projectServiceClient.findProjectById(request.getProjectId());
+    public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request, List<String> auths) {
+        Response response = projectServiceClient.findProjectById(auths, request.getProjectId());
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
@@ -143,8 +142,8 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me) {
-        Response response = projectServiceClient.findProjectById(projectId);
+    public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths) {
+        Response response = projectServiceClient.findProjectById(auths, projectId);
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
@@ -194,9 +193,9 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request) {
+    public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request, List<String> auths) {
         Long projectId = request.getProjectId();
-        Response response = projectServiceClient.findProjectById(projectId);
+        Response response = projectServiceClient.findProjectById(auths, projectId);
         if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
@@ -317,9 +316,9 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void addIssuesToJira(User user, Long projectId, Long middleBucketId) throws IOException {
+    public void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException {
         // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        TokenResponse response = authServiceClient.getToken(user, "jira");
+        TokenResponse response = authServiceClient.getToken(auths, "jira");
 
         // 이메일과 토큰으로 Base64 인코딩을 한다
         String token = response.getEmail() + ":" + response.getValue();
@@ -330,7 +329,7 @@ public class IssueServiceImpl implements IssueService {
 //        String userJiraId = response.getSomething();
 
         // project-feign 으로 지라 프로젝트 코드를 가져온다.
-        String jiraProjectCode = projectServiceClient.getProject(projectId)
+        String jiraProjectCode = projectServiceClient.getProject(auths, projectId)
                 .getJiraProject();
         // 테스트용
 //        String jiraProjectCode = "CHIL";
@@ -460,10 +459,11 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public JiraEpicListResponse getEpicList(
-            User user
+            User user,
+            List<String> auths
     ) {
         // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        TokenResponse response = authServiceClient.getToken(user, "jira");
+        TokenResponse response = authServiceClient.getToken(auths, "jira");
 
         // 이메일과 토큰으로 Base64 인코딩을 한다
         String token = response.getEmail() + ":" + response.getValue();

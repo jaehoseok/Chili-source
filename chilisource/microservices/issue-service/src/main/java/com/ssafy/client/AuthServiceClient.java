@@ -1,11 +1,13 @@
 package com.ssafy.client;
 
-import com.ssafy.config.loginuser.LoginUser;
-import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.response.TokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+
+import java.util.List;
 
 @FeignClient(name = "auth-service", url = "https://k7b2071.p.ssafy.io/auth-service")
 public interface AuthServiceClient {
@@ -13,7 +15,7 @@ public interface AuthServiceClient {
     // TODO response 수정됐는지 확인하기
     @GetMapping("/tokens/{tokenCodeId}")
     TokenResponse getToken(
-            @LoginUser User user,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) List<String> auths,
             @PathVariable(name = "tokenCodeId") String tokenCodeId
     );
 }
