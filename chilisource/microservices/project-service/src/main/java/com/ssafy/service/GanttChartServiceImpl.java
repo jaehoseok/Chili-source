@@ -12,6 +12,7 @@ import com.ssafy.repository.GanttChartRepo;
 import com.ssafy.repository.ProjectRepo;
 import com.ssafy.repository.UserProjectRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,14 +29,30 @@ public class GanttChartServiceImpl implements GanttChartService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final GanttChartRepo ganttChartRepo;
+    private final Sort ganttSort = Sort.by("version").and(Sort.by("startTime"));
 
-    // 프로젝트 내 전체 간트차트 조회
     @Override
-    public List<GanttChartResponse> getProjectGanttChart(Long projectId) {
+    public List<GanttChartResponse> getProjectGanttChartAllLatest(Long projectId) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
-        List<GanttChart> responses = ganttChartRepo.findByProject(project);
+        return getProjectGanttChartByVersion(projectId, project.getLatestGanttVersion());
+    }
+
+    @Override
+    public List<GanttChartResponse> getProjectGanttChartEachLatest(Long userId, Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        return getProjectGanttChartByVersionEach(userId, projectId, project.getLatestGanttVersion());
+    }
+
+    @Override
+    public List<GanttChartResponse> getProjectGanttChartByVersion(Long projectId, Long version) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        List<GanttChart> responses = ganttChartRepo.findByProjectAndVersion(project, version, ganttSort);
         return responses.stream()
                 .map(ganttChart -> GanttChartResponse.builder()
                         .id(ganttChart.getId())
@@ -50,17 +67,16 @@ public class GanttChartServiceImpl implements GanttChartService {
                 .collect(Collectors.toList());
     }
 
-    // 프로젝트 내 개별/공통 간트차트 조회
     @Override
-    public List<GanttChartResponse> getProjectFilteredGanttChart(Long userId, Long projectId) {
+    public List<GanttChartResponse> getProjectGanttChartByVersionEach(Long userId, Long projectId, Long version) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         List<GanttChart> responses;
         if (userId.equals(null)) {
-            responses = ganttChartRepo.findByProjectAndUserIdIsNull(project);
+            responses = ganttChartRepo.findByProjectAndUserIdIsNullAndVersion(project, version, ganttSort);
         } else {
-            responses = ganttChartRepo.findByProjectAndUserId(project, userId);
+            responses = ganttChartRepo.findByProjectAndUserIdAndVersion(project, userId, version, ganttSort);
         }
         return responses.stream()
                 .map(ganttChart -> GanttChartResponse.builder()

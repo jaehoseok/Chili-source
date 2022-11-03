@@ -24,6 +24,8 @@ public class Project extends BaseEntity {
 
     private String image;
 
+    private Long latestGanttVersion = 1L;
+
     private String jiraToken;
 
     private String jiraEmail;
@@ -58,6 +60,10 @@ public class Project extends BaseEntity {
     public void update(String name, String description) {
         if (name != null) this.name = name;
         if (description != null) this.description = description;
+    }
+
+    public void update(Long latestGanttVersion) {
+        this.latestGanttVersion = latestGanttVersion;
     }
 
     public void updateImage(String image) {
