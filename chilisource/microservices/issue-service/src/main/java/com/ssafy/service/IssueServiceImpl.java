@@ -449,7 +449,7 @@ public class IssueServiceImpl implements IssueService {
     ) {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail()+":"+jira.getValue()).getBytes());
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 //        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
 
         JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics(jiraBase64);
