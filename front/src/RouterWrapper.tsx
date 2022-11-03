@@ -73,7 +73,6 @@ const RouterWrapper = () => {
           path="/project/:projectId/gantt-chart"
           element={
             <>
-              <HeaderNav />
               <GanttChartPage />
             </>
           }
