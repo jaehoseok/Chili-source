@@ -27,4 +27,7 @@ public interface GanttChartService {
 
     // 간트차트 내용 삭제
     void deleteGanttChart(Long userId, Long ganttChartId);
+
+    // 간트차트 복제 새 버전 생성 및 조회
+    List<GanttChartResponse> duplicateGanttCharts(Long userId, Long projectId);
 }

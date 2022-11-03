@@ -160,4 +160,49 @@ public class GanttChartServiceImpl implements GanttChartService {
             new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
     }
+
+    @Override
+    @Transactional
+    public List<GanttChartResponse> duplicateGanttCharts(Long userId, Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+
+        if(!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
+            new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
+        }
+
+        List<GanttChart> oldGanttCharts = ganttChartRepo.findByProjectAndVersion(project, project.getLatestGanttVersion(), ganttSort);
+
+        Long version = project.getLatestGanttVersion() + 1;
+        project.updateLatestGanttVersion(version);
+
+        List<GanttChart> responses = oldGanttCharts.stream()
+                .map(oldGanttChart -> GanttChart.builder()
+                        .startTime(oldGanttChart.getStartTime())
+                        .endTime(oldGanttChart.getEndTime())
+                        .issueSummary(oldGanttChart.getIssueSummary())
+                        .version(version)
+                        .issueCode(oldGanttChart.getIssueCode())
+                        .progress(oldGanttChart.getProgress())
+                        .build())
+                .collect(Collectors.toList());
+
+        ganttChartRepo.saveAll(responses);
+
+        return responses.stream()
+                .map(ganttChart -> GanttChartResponse.builder()
+                        .id(ganttChart.getId())
+                        .startTime(ganttChart.getStartTime())
+                        .endTime(ganttChart.getEndTime())
+                        .issueSummary(ganttChart.getIssueSummary())
+                        .version(ganttChart.getVersion())
+                        .issueCode(ganttChart.getIssueCode())
+                        .progress(ganttChart.getProgress())
+                        .userId(ganttChart.getUserId())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }

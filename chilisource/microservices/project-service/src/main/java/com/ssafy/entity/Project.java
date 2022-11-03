@@ -62,7 +62,7 @@ public class Project extends BaseEntity {
         if (description != null) this.description = description;
     }
 
-    public void update(Long latestGanttVersion) {
+    public void updateLatestGanttVersion(Long latestGanttVersion) {
         this.latestGanttVersion = latestGanttVersion;
     }
 

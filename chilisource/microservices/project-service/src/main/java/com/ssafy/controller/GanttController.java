@@ -79,4 +79,13 @@ public class GanttController {
         ganttChartService.deleteGanttChart(user.getId(), ganttChartId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/duplicate")
+    @ApiOperation(value = "최신 버전 간트 차트 복제 및 조회")
+    public ResponseEntity<List<GanttChartResponse>> getGanttChartDuplicate(
+            @LoginUser User user,
+            @ApiParam(value = "프로젝트 pk") @RequestParam Long projectId) {
+        List<GanttChartResponse> responses = ganttChartService.duplicateGanttCharts(user.getId(), projectId);
+        return ResponseEntity.ok(responses);
+    }
 }
