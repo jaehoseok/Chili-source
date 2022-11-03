@@ -307,7 +307,7 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
         // 이메일과 토큰으로 Base64 인코딩을 한다
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail()+":"+jira.getValue()).getBytes());
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 //        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1"; // 테스트용
 
         String userJiraTestId = "62beec7c268cac6e31c5e160"; // 테스트용
