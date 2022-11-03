@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // landing
 import LandingPage from 'components/pages/LandingPage';
 
+// login
+import UserLoginLoadingPage from 'components/pages/UserLoginLoadingPage';
+
 // setting
 import UserSettingPage from 'components/pages/UserSettingPage';
 
@@ -33,6 +36,7 @@ const RouterWrapper = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/user" element={<UserLoginLoadingPage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />
         <Route path="/new-project" element={<ProjectCreatePage />} />
