@@ -1,9 +1,11 @@
 package com.ssafy.service;
 
+import com.ssafy.client.JiraClient;
 import com.ssafy.config.JwtUtil;
 import com.ssafy.dto.request.TokenCodeCreateRequest;
 import com.ssafy.dto.request.TokenCodeUpdateRequest;
 import com.ssafy.dto.request.TokenCreateRequest;
+import com.ssafy.dto.response.JiraMySelfResponse;
 import com.ssafy.dto.response.ServiceTokenResponse;
 import com.ssafy.dto.response.TokenCodeResponse;
 import com.ssafy.dto.response.TokenResponse;
@@ -18,6 +20,7 @@ import com.ssafy.repository.TokenRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final AuthRepo authRepo;
     private final TokenRepo tokenRepo;
     private final TokenCodeRepo tokenCodeRepo;
+    private final JiraClient jiraClient;
     private final JwtUtil jwtUtil;
 
     @Override
@@ -105,13 +109,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse getToken(String tokenCodeId, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId.toUpperCase())
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Token token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId)
                 .orElseThrow(() -> new NotFoundException(TOKEN_NOT_FOUND));
         return TokenResponse.builder()
                 .id(token.getId())
                 .value(token.getValue())
                 .email(token.getEmail())
+                .jiraAccountId(token.getJiraAccountId())
                 .tokenCodeId(token.getTokenCode().getId())
                 .build();
     }
@@ -122,15 +127,39 @@ public class AuthServiceImpl implements AuthService {
         TokenCode tokenCode = tokenCodeRepo.findById(request.getTokenCodeId().toUpperCase())
                 .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Optional<Token> token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId);
-        if (!token.isPresent()) {
-            Token newToken = Token.builder()
-                    .value(request.getValue())
-                    .email(request.getEmail())
-                    .tokenCode(tokenCode)
-                    .build();
-            tokenRepo.save(newToken);
+        if ("JIRA".equals(tokenCode.getId())) {
+            String jiraBase64 = "Basic " + Base64Utils.encodeToString((request.getEmail()+":"+request.getValue()).getBytes());
+            JiraMySelfResponse jiraMySelfResponse = jiraClient.findMySelf(jiraBase64);
+            if (!token.isPresent()) {
+                Token newToken = Token.builder()
+                        .value(request.getValue())
+                        .email(request.getEmail())
+                        .jiraAccountId(jiraMySelfResponse.getAccountId())
+                        .tokenCode(tokenCode)
+                        .userId(userId)
+                        .build();
+                tokenRepo.save(newToken);
+            } else {
+                token.ifPresent(
+                        findToken ->{
+                            findToken.update(request.getValue(), request.getEmail());
+                            findToken.updateJira(jiraMySelfResponse.getAccountId());
+                        }
+
+                );
+            }
         } else {
-            token.ifPresent(findToken -> findToken.update(request.getValue(), request.getEmail()));
+            if (!token.isPresent()) {
+                Token newToken = Token.builder()
+                        .value(request.getValue())
+                        .email(request.getEmail())
+                        .tokenCode(tokenCode)
+                        .userId(userId)
+                        .build();
+                tokenRepo.save(newToken);
+            } else {
+                token.ifPresent(findToken -> findToken.update(request.getValue(), request.getEmail()));
+            }
         }
     }
 
@@ -138,7 +167,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteToken(String tokenCodeId, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId.toUpperCase())
-                .orElseThrow(()-> new NotFoundException(TOKEN_CODE_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Token token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId)
                 .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenRepo.delete(token);

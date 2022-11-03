@@ -17,14 +17,18 @@ public class TokenResponse {
     @ApiModelProperty(value = "Jira에서 필요한 email")
     private String email;
 
+    @ApiModelProperty(value = "Jira이슈 등록시 필요한 Account ID")
+    private String jiraAccountId;
+
     @ApiModelProperty(value = "토큰 코드 pk")
     private String tokenCodeId;
 
     @Builder
-    public TokenResponse(Long id, String value, String email, String tokenCodeId) {
+    public TokenResponse(Long id, String value, String email, String jiraAccountId, String tokenCodeId) {
         this.id = id;
         this.value = value;
         this.email = email;
+        this.jiraAccountId = jiraAccountId;
         this.tokenCodeId = tokenCodeId;
     }
 }

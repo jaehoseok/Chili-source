@@ -19,6 +19,8 @@ public class Token extends BaseEntity {
 
     private String email;
 
+    private String jiraAccountId;
+
     private Long userId;
 
     @ManyToOne
@@ -26,15 +28,19 @@ public class Token extends BaseEntity {
     private TokenCode tokenCode;
 
     @Builder
-    public Token(String value, TokenCode tokenCode,String email, Long userId) {
+    public Token(String value, TokenCode tokenCode, String email, String jiraAccountId, Long userId) {
         this.value = value;
         this.tokenCode = tokenCode;
         this.email = email;
+        this.jiraAccountId = jiraAccountId;
         this.userId = userId;
     }
 
     public void update(String value, String email) {
         this.value = value;
         this.email = email;
+    }
+    public void updateJira(String jiraAccountId){
+        this.jiraAccountId = jiraAccountId;
     }
 }
