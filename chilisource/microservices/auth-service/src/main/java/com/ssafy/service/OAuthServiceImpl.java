@@ -12,6 +12,7 @@ import com.ssafy.social.google.GoogleOAuth;
 import com.ssafy.social.google.GoogleOAuthToken;
 import com.ssafy.social.google.GoogleUser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.io.IOException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class OAuthServiceImpl implements OAuthService {
     private final AuthRepo authRepo;
     private final GoogleOAuth googleOauth;
@@ -41,6 +43,7 @@ public class OAuthServiceImpl implements OAuthService {
             }
             break;
             default: {
+                log.error("[Auth] [request] social login type is not found");
                 throw new IllegalArgumentException("알 수 없는 소셜 로그인 형식입니다.");
             }
         }
@@ -81,6 +84,7 @@ public class OAuthServiceImpl implements OAuthService {
                         .build();
             }
             default: {
+                log.error("[Auth] [oAuthLogin] social login type is not found");
                 throw new IllegalArgumentException("알 수 없는 소셜 로그인 형식입니다.");
             }
         }
