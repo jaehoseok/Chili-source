@@ -25,6 +25,7 @@ public class ProjectCustomRepoImpl implements ProjectCustomRepo {
                 .where(project.id.in(
                                 JPAExpressions
                                         .select(userProject.project.id)
+                                        .from(userProject)
                                         .where(userProject.userId.eq(userId))
                         )
                 )

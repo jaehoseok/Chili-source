@@ -24,6 +24,9 @@ public class ProjectResponse {
     @ApiModelProperty(value = "프로젝트 이미지 경로")
     private String image;
 
+    @ApiModelProperty(value = "프로젝트 간트차트 최신 버전")
+    private Long latestGanttVersion;
+
     @ApiModelProperty(value = "프로젝트 연결된 Jira 프로젝트 코드")
     private String jiraProject;
 
@@ -34,13 +37,14 @@ public class ProjectResponse {
     private List<String> TokenList;
 
     @Builder
-    public ProjectResponse(Long id, String name, String description, String image, String jiraProject, String gitRepo, List<String> tokenList) {
+    public ProjectResponse(Long id, String name, String description, String image, Long latestGanttVersion, String jiraProject, String gitRepo, List<String> tokenList) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
+        this.latestGanttVersion = latestGanttVersion;
         this.jiraProject = jiraProject;
         this.gitRepo = gitRepo;
-        this.TokenList = tokenList;
+        TokenList = tokenList;
     }
 }
