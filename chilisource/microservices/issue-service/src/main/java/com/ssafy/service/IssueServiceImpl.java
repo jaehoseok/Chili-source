@@ -9,6 +9,7 @@ import com.ssafy.dto.request.*;
 import com.ssafy.dto.request.jira.*;
 import com.ssafy.dto.response.*;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
@@ -479,5 +480,17 @@ public class IssueServiceImpl implements IssueService {
         String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
 
         return jiraFeignClient.getTodoIssues(jiraBase64, query);
+    }
+
+    @Override
+    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        List<JiraProjectResponse> responses = jiraFeignClient.getProjectList(jiraBase64);
+        return responses;
     }
 }

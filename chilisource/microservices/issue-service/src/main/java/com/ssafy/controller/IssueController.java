@@ -7,6 +7,7 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
+import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
@@ -244,18 +245,21 @@ public class IssueController {
                 .body(response);
     }
 
-    // 프로젝트 목록 조회 https://ehoi-chili.atlassian.net/rest/api/3/project/recent
-//    @GetMapping("/jira/project-list")
-//    public ResponseEntity<?> getProjectList(
-//            @LoginUser User user
-//    ) {
-//        issueService.getProjectList(
-//                user
-//        );
-//    }
+    // 프로젝트 목록 조회
+    @GetMapping("/jira/project-list")
+    public ResponseEntity<?> getProjectList(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
+    ) {
+        List<JiraProjectResponse> responses = issueService.getProjectList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION)
+        );
+        return ResponseEntity.ok()
+                .body(responses);
+    }
 
-
-    // 나의 할 일 + 진행 중 이슈만 조회 : project = "S07P31B207" AND assignee = currentUser() AND status IN ("To Do","In Progress") ORDER BY created DESC
+    // 나의 할 일 + 진행 중 이슈만 조회
     @GetMapping("/jira/issues/todo/{projectId}")
     public ResponseEntity<?> getTodoIssues(
             @LoginUser User user,
