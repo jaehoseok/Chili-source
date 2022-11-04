@@ -24,11 +24,9 @@ interface propsType extends styledType {
  * @author inte
  */
 const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
-  console.log('input : ' + defaultValue);
   const [text, setText] = useState(defaultValue);
 
   const inputTag = useRef<HTMLInputElement>(null);
-  // console.log(text);
 
   useEffect(() => {
     setText(defaultValue);
@@ -48,7 +46,6 @@ const index = ({ height, width, type, placeHolder, defaultValue }: propsType) =>
         placeholder={placeHolder}
         onChange={e => {
           setText(e.target.value);
-          console.log(text);
         }}
         defaultValue={text}
       ></StyledInput>

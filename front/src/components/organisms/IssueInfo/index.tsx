@@ -7,7 +7,6 @@ import TextAreaBox from '../../molecules/TextAreaBox';
 import Option from '../../atoms/Option';
 
 const index = (props: any) => {
-  console.log(props.info);
   const type =
     props.info.type === 'story'
       ? '스토리'
