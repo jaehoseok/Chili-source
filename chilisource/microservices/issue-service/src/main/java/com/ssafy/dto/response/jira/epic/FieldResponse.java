@@ -1,4 +1,4 @@
-package com.ssafy.dto.response;
+package com.ssafy.dto.response.jira.epic;
 
 import lombok.Builder;
 import lombok.Getter;
