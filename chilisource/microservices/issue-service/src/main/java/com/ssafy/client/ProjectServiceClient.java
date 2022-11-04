@@ -12,13 +12,7 @@ import java.util.List;
 
 @FeignClient(name = "project-service", url = "https://k7b2071.p.ssafy.io/project-service")
 public interface ProjectServiceClient {
-    @GetMapping("/{id}")
-    Response findProjectById(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) List<String> auths,
-            @PathVariable("id") Long id
-    );
-
-    @GetMapping("/{projectId}")
+    @GetMapping("/project/{projectId}")
     ProjectResponse getProject(
             @RequestHeader(HttpHeaders.AUTHORIZATION) List<String> auths,
             @PathVariable("projectId") Long projectId

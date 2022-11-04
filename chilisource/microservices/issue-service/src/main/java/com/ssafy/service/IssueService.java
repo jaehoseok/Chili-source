@@ -6,6 +6,7 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
+import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -54,4 +55,6 @@ public interface IssueService {
     JiraEpicListResponse getEpicList(User user, List<String> auths);
 
     void deleteAll(User user, Long projectId);
+
+    JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception;
 }

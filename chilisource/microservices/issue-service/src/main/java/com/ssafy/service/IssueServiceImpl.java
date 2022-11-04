@@ -8,6 +8,7 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.request.jira.*;
 import com.ssafy.dto.response.*;
+import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -27,10 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,8 +54,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -85,8 +86,8 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     @Override
     public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, request.getProjectId());
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, request.getProjectId());
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
         if (request.getSummary() == null) {
@@ -143,8 +144,8 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths) {
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -195,8 +196,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request, List<String> auths) {
         Long projectId = request.getProjectId();
-        Response response = projectServiceClient.findProjectById(auths, projectId);
-        if (HttpStatus.Series.valueOf(response.status()) != HttpStatus.Series.SUCCESSFUL) {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -303,15 +304,14 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException {
         // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        TokenResponse response = authServiceClient.getToken(auths, "jira");
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
         // 이메일과 토큰으로 Base64 인코딩을 한다
-        String token = response.getEmail() + ":" + response.getValue();
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 //        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1"; // 테스트용
-        String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
 
         String userJiraTestId = "62beec7c268cac6e31c5e160"; // 테스트용
-//        String userJiraId = response.getSomething();
+//        String userJiraId = jira.getSomething();
 
         // project-feign 으로 지라 프로젝트 코드를 가져온다.
         String jiraProjectCode = projectServiceClient.getProject(auths, projectId)
@@ -430,7 +430,7 @@ public class IssueServiceImpl implements IssueService {
         */
 
         // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
-        Response response1 = jiraFeignClient.addIssuesToJira("Basic " + jiraToken, bulk);
+        Response response1 = jiraFeignClient.addIssuesToJira(jiraBase64, bulk);
         if (HttpStatus.Series.valueOf(response1.status()) != HttpStatus.Series.SUCCESSFUL) {
             String errorDetail;
             try {
@@ -447,20 +447,13 @@ public class IssueServiceImpl implements IssueService {
             User user,
             List<String> auths
     ) {
-        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
-        TokenResponse response = authServiceClient.getToken(auths, "jira");
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
-        // 이메일과 토큰으로 Base64 인코딩을 한다
-        String token = response.getEmail() + ":" + response.getValue();
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
 
-//        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1"; // TODO 테스트용
+        JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics(jiraBase64);
 
-        String jiraToken = Base64.getEncoder().encodeToString(token.getBytes());
-
-        // feign을 요청해서 -> dto 로 받는다
-        JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics("Basic " + jiraToken);
-
-        // 리턴한다
         return jiraEpics;
     }
 
@@ -474,5 +467,23 @@ public class IssueServiceImpl implements IssueService {
             middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
         }
         middleBucketRepo.deleteAllInBatch(middleBuckets);
+    }
+
+    @Override
+    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+        String projectKey = response.getJiraProject();
+//        String projectKey = "S07P31B207"; // TODO 테스트용
+
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
+
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
+
+        return jiraFeignClient.getTodoIssues(jiraBase64, query);
     }
 }
