@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
   type?: string;
   placeHolder?: string;
-  value?: string;
+  defaultValue?: string;
 }
 
 /**
@@ -19,16 +19,27 @@ interface propsType extends styledType {
  * @param {string?} width       - 넓이문자열
  * @param {string?} type        - 인풋 타입
  * @param {string?} placeHolder - 플레이스홀더
- * @param {string?} value       - 초기에 들어가있을 값
+ * @param {string?} defaultValue       - 초기에 들어가있을 값
  *
  * @author inte
  */
-const index = ({ height, width, type, placeHolder, value }: propsType) => {
-  const [text, setText] = useState(value);
+const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
+  const [text, setText] = useState(defaultValue);
 
+  const inputTag = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setText(defaultValue);
+  }, [defaultValue]);
+  useEffect(() => {
+    if (inputTag.current) {
+      inputTag.current.value = text ? text : '';
+    }
+  }, [text]);
   return (
     <>
       <StyledInput
+        ref={inputTag}
         height={height}
         width={width}
         type={type}
@@ -36,7 +47,7 @@ const index = ({ height, width, type, placeHolder, value }: propsType) => {
         onChange={e => {
           setText(e.target.value);
         }}
-        value={text}
+        defaultValue={text}
       ></StyledInput>
     </>
   );
