@@ -1,7 +1,7 @@
 // API & Library
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useGetUserInfoHandler } from 'hooks';
+import { useGetUserInfoHandler } from 'hooks/user';
 
 import { auth } from 'api/rest';
 
@@ -10,7 +10,7 @@ const UserLoginLoadingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 유저 정보 저장
+  // react-query
   useGetUserInfoHandler();
 
   const clickHandler = async () => {

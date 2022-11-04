@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
-import { useGetUserInfoHandler } from 'hooks';
+import { useGetUserInfoHandler } from 'hooks/user';
 
 import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './style';
 
@@ -16,13 +16,12 @@ import Circle from 'components/atoms/Circle';
  * 랜딩페이지, 유저 셋팅 페이지, 프로젝트 선택 페이지, 프로젝트 생성 페이지
  * 에서 쓰이는 네비게이션 컴포넌트
  *
- * @param {ReactNode?} children       - 탭 컴포넌트
- *
  * @author bell
  */
 const index = () => {
   const isLogin = localStorage.getItem('Authorization');
 
+  // 쿼리 데이터 가져오기
   const { data } = useGetUserInfoHandler();
   const queryClient = useQueryClient();
 
@@ -34,11 +33,11 @@ const index = () => {
 
   const clickTestHandler = async () => {
     await auth.getTokens();
-    console.log(data);
   };
 
   const clickLogoutHandler = async () => {
     await auth.logout();
+    // 로그아웃 시 저장했던 쿼리데이터 삭제
     await queryClient.invalidateQueries(['userInfo']);
   };
 
