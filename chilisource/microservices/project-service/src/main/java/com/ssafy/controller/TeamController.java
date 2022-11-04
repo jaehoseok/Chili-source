@@ -10,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,9 +71,9 @@ public class TeamController {
     public ResponseEntity<?> quitUserProject(
             @LoginUser User user,
             @ApiParam(value = "프로젝트 pk") @PathVariable Long projectId) {
-        int result = userProjectService.quitUserProject(user.getId(), projectId);
-        if (result == 0) return ResponseEntity.ok().build();
-        else return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        userProjectService.quitUserProject(user.getId(), projectId);
+        return ResponseEntity.ok()
+                .build();
     }
 
     // 프로젝트에 팀원 강퇴

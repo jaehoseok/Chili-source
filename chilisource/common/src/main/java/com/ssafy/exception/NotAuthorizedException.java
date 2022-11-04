@@ -6,6 +6,7 @@ public class NotAuthorizedException extends RuntimeException {
     public static final String INVITE_NOT_AUTHORIZED = "초대 권한이 없습니다.";
     public static final String FIRE_NOT_AUTHORIZED = "강퇴 권한이 없습니다.";
     public static final String REMOVE_NOT_AUTHORIZED = "삭제 권한이 없습니다.";
+    public static final String MASTER_NOT_AUTHORIZED = "마스터 상태에서는 불가능합니다.";
     public NotAuthorizedException(String message) {
         super(message);
     }

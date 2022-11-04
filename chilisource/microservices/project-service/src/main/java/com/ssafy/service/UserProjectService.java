@@ -20,7 +20,7 @@ public interface UserProjectService {
     public UserProjectResponse getUserProject(Long projectId, Long userId);
 
     // 프로젝트 나가기
-    public int quitUserProject(Long userId, Long projectId);
+    public void quitUserProject(Long userId, Long projectId);
 
     // 프로젝트 강퇴
     public void fireUserProject(Long userId, Long projectId, Long fireUserId);
