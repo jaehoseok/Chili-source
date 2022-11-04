@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import IssueInfo from '../organisms/IssueInfo';
 import Issue from '../molecules/Issue';
+import Button from '../atoms/Button';
+
 import NavProject from '../molecules/NavProject';
 import NavWidget from '../molecules/NavWidget';
 
@@ -47,6 +49,9 @@ const IssuesPage = () => {
         clickHandler={setInfoHandler}
       />
       <IssueInfo info={info}></IssueInfo>
+      <Button borderColor="green" clickHandler={() => console.log(info)}>
+        IssueInfo Test
+      </Button>
     </>
   );
 };

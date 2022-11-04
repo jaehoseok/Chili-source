@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
@@ -24,17 +24,31 @@ interface propsType extends styledType {
  * @author inte
  */
 const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
+  console.log('input : ' + defaultValue);
   const [text, setText] = useState(defaultValue);
 
+  const inputTag = useRef<HTMLInputElement>(null);
+  // console.log(text);
+
+  useEffect(() => {
+    setText(defaultValue);
+  }, [defaultValue]);
+  useEffect(() => {
+    if (inputTag.current) {
+      inputTag.current.value = text ? text : '';
+    }
+  }, [text]);
   return (
     <>
       <StyledInput
+        ref={inputTag}
         height={height}
         width={width}
         type={type}
         placeholder={placeHolder}
         onChange={e => {
           setText(e.target.value);
+          console.log(text);
         }}
         defaultValue={text}
       ></StyledInput>

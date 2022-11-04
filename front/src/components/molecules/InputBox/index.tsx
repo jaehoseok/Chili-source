@@ -53,6 +53,7 @@ const index = ({
   containerWidth,
   containerPadding,
 }: propsType) => {
+  console.log('inputValue: ' + inputValue);
   return (
     <StyledContainer
       isRow={isRow}
