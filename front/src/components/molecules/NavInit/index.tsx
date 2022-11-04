@@ -5,6 +5,7 @@ import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
 
 import { auth } from 'api/rest';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * @description
@@ -17,6 +18,7 @@ import { auth } from 'api/rest';
  */
 const index = () => {
   const isLogin = localStorage.getItem('Authorization');
+  const navigate = useNavigate();
 
   const clickLoginHandler = () => {
     auth.login('google');
@@ -28,6 +30,10 @@ const index = () => {
 
   const clickLogoutHandler = async () => {
     await auth.logout();
+  };
+
+  const clickToProjectSelectHandler = () => {
+    navigate('/projects');
   };
 
   return (
@@ -44,6 +50,7 @@ const index = () => {
               fontSize="25px"
               color="#a9a9a9"
               fontWeight="100"
+              clickHandler={clickToProjectSelectHandler}
             ></Text>
           </StyledText>
         </StyledFlexWrapper>
