@@ -10,8 +10,8 @@ const UserLoginLoadingPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isError, data, error, refetch, isFetching, isLoading } = useGetUserInfoHandler();
-  console.log(isError, data, error, isFetching, isLoading);
+  // 유저 정보 저장
+  useGetUserInfoHandler();
 
   const clickHandler = async () => {
     // IFFE
@@ -25,7 +25,6 @@ const UserLoginLoadingPage = () => {
         navigate(localStorage.getItem('URL') || '/');
       }
     })();
-    await refetch();
   };
 
   return (

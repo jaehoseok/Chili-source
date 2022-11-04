@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
 import { useGetUserInfoHandler } from 'hooks';
@@ -8,6 +9,7 @@ import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './sty
 import logo from 'assets/logo/logo.png';
 import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
+import Circle from 'components/atoms/Circle';
 
 /**
  * @description
@@ -21,7 +23,8 @@ import Button from 'components/atoms/Button';
 const index = () => {
   const isLogin = localStorage.getItem('Authorization');
 
-  const { data, refetch } = useGetUserInfoHandler();
+  const { data } = useGetUserInfoHandler();
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -36,6 +39,7 @@ const index = () => {
 
   const clickLogoutHandler = async () => {
     await auth.logout();
+    await queryClient.invalidateQueries(['userInfo']);
   };
 
   const clickToProjectSelectHandler = () => {
@@ -62,6 +66,7 @@ const index = () => {
         </StyledFlexWrapper>
         {isLogin ? (
           <StyledFlexWrapper>
+            <Circle url={data?.image} isImage={true} height={'40px'}></Circle>
             <Button clickHandler={clickTestHandler} borderColor="red">
               테스트버튼
             </Button>

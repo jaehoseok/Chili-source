@@ -4,8 +4,14 @@ import { user } from 'api/rest';
 
 import { AxiosError } from 'axios';
 
+interface userInfoType {
+  id: number;
+  image: string;
+  name: string;
+}
+
 export const useGetUserInfoHandler = () => {
-  return useQuery<Promise<unknown>, AxiosError>(['userInfo'], () => user.getUserInfo(), {
-    cacheTime: Infinity,
+  return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo(), {
+    staleTime: Infinity,
   });
 };

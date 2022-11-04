@@ -40,16 +40,12 @@ export default {
     });
   },
 
-  getUserInfo: () => {
-    return new Promise((resolve, reject) => {
-      authAxios
-        .get('/users/info')
-        .then(response => {
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
+  getUserInfo: async () => {
+    try {
+      const response = await authAxios.get('/users/info');
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
