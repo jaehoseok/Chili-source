@@ -1,12 +1,17 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-export const StyledGanttChartPage = styled.div`
-  ${tw`h-screen w-screen flex flex-col items-center`}
+export const StyledPage = styled.div`
+  ${tw`h-screen w-screen flex flex-col`}
 `;
-StyledGanttChartPage.defaultProps = {};
+StyledPage.defaultProps = {};
 
-export const StyledGanttChartBody = styled.div`
-  ${tw`flex-grow-[1] max-w-[80%] flex overflow-hidden`}
+export const StyledBody = styled.div`
+  ${tw`flex-grow-[1] flex overflow-hidden`}
 `;
-StyledGanttChartBody.defaultProps = {};
+StyledBody.defaultProps = {};
+
+export const StyledLetterBox = styled.div`
+  ${tw`w-1/12`}
+`;
+StyledLetterBox.defaultProps = {};

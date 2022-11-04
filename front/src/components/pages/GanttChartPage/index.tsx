@@ -1,22 +1,22 @@
-// 테스트 링크 http://localhost:3000/project/1/gantt-chart
-
 // styles
-import { StyledGanttChartPage, StyledGanttChartBody } from './style';
+import { StyledPage, StyledBody, StyledLetterBox } from './style';
 
 // Components
-import HeaderNav from 'HeaderNav';
+import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 import { Aside, Section } from 'components/organisms/project/gantt-chart';
 
 const GanttChartPage = () => {
   return (
     <>
-      <StyledGanttChartPage>
+      <StyledPage>
         <HeaderNav />
-        <StyledGanttChartBody>
+        <StyledBody>
+          <StyledLetterBox />
           <Aside />
           <Section />
-        </StyledGanttChartBody>
-      </StyledGanttChartPage>
+          <StyledLetterBox />
+        </StyledBody>
+      </StyledPage>
     </>
   );
 };

@@ -1,5 +1,20 @@
+// API & Library
 import { ReactNode } from 'react';
-import { StyledGanttIssue, styledType } from './style';
+
+// Styles
+import {
+  StyledGanttIssue,
+  StyledGanttIssueLabel,
+  StyledGanttIssueDetail,
+  StyledGanttIssueLine,
+  StyledGanttIssueData,
+  StyledGanttIssueStart,
+  StyledGanttIssueProgress,
+  StyledGanttIssueEnd,
+  styledType,
+} from './style';
+
+// Components
 
 interface propsType extends styledType {
   children?: ReactNode;
@@ -14,7 +29,24 @@ interface propsType extends styledType {
 export const GanttIssue = ({}: propsType) => {
   return (
     <>
-      <StyledGanttIssue></StyledGanttIssue>
+      <StyledGanttIssue>
+        <StyledGanttIssueLabel>이름</StyledGanttIssueLabel>
+        <StyledGanttIssueDetail>테스크명</StyledGanttIssueDetail>
+        <StyledGanttIssueLine></StyledGanttIssueLine>
+        <StyledGanttIssueData>
+          <StyledGanttIssueStart>
+            <div>시작날짜</div>
+            <div>시작날짜</div>
+          </StyledGanttIssueStart>
+          <StyledGanttIssueProgress>
+            <div>달성률</div>
+          </StyledGanttIssueProgress>
+          <StyledGanttIssueEnd>
+            <div>시작날짜</div>
+            <div>시작날짜</div>
+          </StyledGanttIssueEnd>
+        </StyledGanttIssueData>
+      </StyledGanttIssue>
     </>
   );
 };

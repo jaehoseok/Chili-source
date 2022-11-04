@@ -2,22 +2,13 @@
 import { StyledAside } from './style';
 
 // Components
-import { WidgetBlock } from 'components/molecules/WidgetBlock';
+import { GanttIssue } from 'components/molecules/GanttIssue';
 
 export const Aside = () => {
   return (
     <>
       <StyledAside>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
-        <WidgetBlock type="sd"></WidgetBlock>
+        <GanttIssue></GanttIssue>
       </StyledAside>
     </>
   );
