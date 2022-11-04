@@ -1,57 +1,14 @@
-import { useNavigate } from 'react-router-dom';
-
-import {
-  StyledContainer,
-  StyledFlex,
-  StyledFlexBetween,
-  StyledFlexItemsCenter,
-  StyledWidth80,
-} from './style';
-
-// COMPONENTS
+// COMMON
 import HeaderInitNav from 'components/organisms/common/HeaderInitNav';
-import Sheet from 'components/atoms/Sheet';
-import Button from 'components/atoms/Button';
-import Text from 'components/atoms/Text';
-import Circle from 'components/atoms/Circle';
+
+// COMPONENT
+import ProjectSelectPage from 'components/organisms/projects/Main';
 
 const index = () => {
-  const navigate = useNavigate();
-
-  const clickToProjectCreateHandler = () => {
-    navigate('/new-project');
-  };
   return (
     <>
-      <HeaderInitNav></HeaderInitNav>
-      <StyledContainer>
-        <StyledFlexBetween>
-          <Text
-            isFill={false}
-            message={'프로젝트 선택'}
-            fontSize={'2rem'}
-            fontWeight={'900'}
-            display={'block'}
-          ></Text>
-          <Button
-            backgroundColor="#a9a9a9"
-            width="150px"
-            height="50px"
-            clickHandler={clickToProjectCreateHandler}
-          >
-            <Text color="#ffffff" isFill={false} message={'프로젝트 생성'}></Text>
-          </Button>
-        </StyledFlexBetween>
-        <StyledFlex>
-          <Sheet width="100%" height="25vh" minHeight="300px" maxWidth="1500px">
-            <StyledWidth80>
-              <StyledFlexItemsCenter>
-                <Circle height={'150px'}>로고 이미지</Circle>
-              </StyledFlexItemsCenter>
-            </StyledWidth80>
-          </Sheet>
-        </StyledFlex>
-      </StyledContainer>
+      <HeaderInitNav />
+      <ProjectSelectPage />
     </>
   );
 };
