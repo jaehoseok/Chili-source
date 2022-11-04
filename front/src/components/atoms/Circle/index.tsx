@@ -1,6 +1,6 @@
 import React, { MouseEventHandler } from 'react';
 
-import { Circle, styledType } from './style';
+import { StyledCircle, styledType } from './style';
 
 interface propsType extends styledType {
   children?: React.ReactNode;
@@ -30,19 +30,23 @@ const index = ({
   isDropShadow,
   isInnerShadow,
   isClickable,
+  isImage,
+  url,
   clickHandler,
 }: propsType) => {
   return (
-    <Circle
+    <StyledCircle
       height={height}
       backgroundColor={backgroundColor}
       isDropShadow={isDropShadow}
       isInnerShadow={isInnerShadow}
       isClickable={isClickable}
+      isImage={isImage}
+      url={url}
       onClick={clickHandler}
     >
       {children}
-    </Circle>
+    </StyledCircle>
   );
 };
 

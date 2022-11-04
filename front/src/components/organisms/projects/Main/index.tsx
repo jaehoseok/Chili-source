@@ -2,18 +2,26 @@ import { useNavigate } from 'react-router-dom';
 
 import {
   StyledContainer,
+  StyledInlineBlock,
   StyledFlex,
   StyledFlexBetween,
   StyledFlexItemsCenter,
+  StyledFlexColumn,
+  StyledWidth100px,
   StyledWidth80,
+  StyledMarginY,
 } from './style';
 
-// COMPONENTS
+// IMAGE
+import example from 'assets/logo/ssafyLogo2.png';
+import user1 from 'assets/images/user1.png';
 
+// COMPONENTS
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import Text from 'components/atoms/Text';
 import Circle from 'components/atoms/Circle';
+
 const index = () => {
   const navigate = useNavigate();
 
@@ -44,7 +52,55 @@ const index = () => {
         <Sheet width="100%" height="25vh" minHeight="300px" maxWidth="1500px">
           <StyledWidth80>
             <StyledFlexItemsCenter>
-              <Circle height={'150px'}>로고 이미지</Circle>
+              <Circle height={'150px'} isImage={true} url={example} />
+              <StyledFlexColumn>
+                <StyledMarginY>
+                  <StyledWidth100px>
+                    <Text
+                      message="프로젝트 명"
+                      isFill={false}
+                      fontSize={'1.5rem'}
+                      fontWeight={'700'}
+                    ></Text>
+                  </StyledWidth100px>
+                  <Text message="Project 1 " isFill={false}></Text>
+                </StyledMarginY>
+                <StyledMarginY>
+                  <StyledWidth100px>
+                    <Text
+                      message="팀장"
+                      isFill={false}
+                      fontSize={'1.5rem'}
+                      fontWeight={'700'}
+                    ></Text>
+                  </StyledWidth100px>
+                  <StyledInlineBlock>
+                    <Circle height={'25px'} isImage={true} url={user1} />
+                  </StyledInlineBlock>
+                </StyledMarginY>
+                <StyledMarginY>
+                  <StyledWidth100px>
+                    <Text
+                      message="멤버"
+                      isFill={false}
+                      fontSize={'1.5rem'}
+                      fontWeight={'700'}
+                    ></Text>
+                  </StyledWidth100px>
+                  <StyledInlineBlock>
+                    <Circle height={'25px'} isImage={true} url={user1} />
+                  </StyledInlineBlock>
+                  <StyledInlineBlock>
+                    <Circle height={'25px'} isImage={true} url={user1} />
+                  </StyledInlineBlock>
+                  <StyledInlineBlock>
+                    <Circle height={'25px'} isImage={true} url={user1} />
+                  </StyledInlineBlock>
+                  <StyledInlineBlock>
+                    <Circle height={'25px'} isImage={true} url={user1} />
+                  </StyledInlineBlock>
+                </StyledMarginY>
+              </StyledFlexColumn>
             </StyledFlexItemsCenter>
           </StyledWidth80>
         </Sheet>
