@@ -151,7 +151,7 @@ public class AuthServiceImpl implements AuthService {
         if ("JIRA".equals(tokenCode.getId())) {
             String jiraBase64 = "Basic " + Base64Utils.encodeToString((request.getEmail() + ":" + request.getValue()).getBytes());
             JiraMySelfResponse jiraMySelfResponse = jiraClient.findMySelf(jiraBase64);
-            if(jiraMySelfResponse.getAccountId()==null) log.error("[Auth] [createToken] jira feign error");
+            if (jiraMySelfResponse.getAccountId() == null) log.error("[Auth] [createToken] jira feign error");
             if (!token.isPresent()) {
                 Token newToken = Token.builder()
                         .value(request.getValue())
