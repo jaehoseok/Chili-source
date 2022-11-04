@@ -10,6 +10,7 @@ import com.ssafy.dto.response.ServiceTokenResponse;
 import com.ssafy.repository.TokenRepo;
 import com.ssafy.service.OAuthService;
 import com.ssafy.service.AuthService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = "인증")
 public class AuthController {
     private final OAuthService oAuthService;
     private final AuthService authService;

@@ -13,8 +13,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .allowedOrigins("https://k7b207.p.ssafy.io","http://localhost:3000")
                 //.allowedOriginPatterns("*")
                 //.allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type", "accept", "access-control-allow-origin")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .exposedHeaders("Authorization")
                 .allowCredentials(true)
                 .maxAge(86400L);
