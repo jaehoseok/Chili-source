@@ -1,12 +1,15 @@
 package com.ssafy.client;
 
 import com.ssafy.dto.request.jira.JiraIssueBulkCreateRequest;
-import com.ssafy.dto.response.JiraEpicListResponse;
-import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.project.JiraProjectResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // TODO 개인 테스트 지라 프로젝트에서 수정하기
 @FeignClient(name = "jira", url = "https://ssafy.atlassian.net/rest/api/3")
@@ -30,4 +33,8 @@ public interface JiraFeignClient {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("query") String query
     );
+
+    @GetMapping("/project/recent")
+    List<JiraProjectResponse> getProjectList(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken);
 }

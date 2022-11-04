@@ -8,7 +8,9 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.request.jira.*;
 import com.ssafy.dto.response.*;
-import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.project.JiraProjectResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -303,34 +305,25 @@ public class IssueServiceImpl implements IssueService {
     @Transactional
     @Override
     public void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException {
-        // 사용자 아이디로 1. 사용자 이메일 2. 사용자 토큰 3. 사용자 지라 고유 아이디를 받아온다
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
-
-        // 이메일과 토큰으로 Base64 인코딩을 한다
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-//        String token = "ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1"; // 테스트용
-
-        String userJiraTestId = "62beec7c268cac6e31c5e160"; // 테스트용
-//        String userJiraId = jira.getSomething();
-
-        // project-feign 으로 지라 프로젝트 코드를 가져온다.
+        String userJiraId = jira.getJiraAccountId();
         String jiraProjectCode = projectServiceClient.getProject(auths, projectId)
                 .getJiraProject();
-        // 테스트용
+
+        // TODO 테스트용
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+//        String userJiraId = "62beec7c268cac6e31c5e160";
 //        String jiraProjectCode = "CHIL";
 //        String jiraProjectId = "10000";
 
-        // 미들 버킷을 가져온다
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
 
         List<JiraIssueCreateRequest> issueUpdates = new ArrayList<>();
-        // 미들 버킷 안에 있는 이슈들을 펼친다
         for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
-            // summary
             String summary = issue.getSummary();
 
-            // project : jira project code
             JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
                     .key(jiraProjectCode)
 //                    .id(jiraProjectId)
@@ -385,13 +378,12 @@ public class IssueServiceImpl implements IssueService {
                     .content(list2)
                     .build();
 
-            // report 와 assignee
             JiraIssueReporterCreateRequest reporter = JiraIssueReporterCreateRequest.builder()
-                    .id(userJiraTestId)
+                    .id(userJiraId)
                     .build();
 
             JiraIssueAssigneeCreateRequest assignee = JiraIssueAssigneeCreateRequest.builder()
-                    .id(userJiraTestId)
+                    .id(userJiraId)
                     .build();
 
             JiraIssuePriorityCreateRequest priority = JiraIssuePriorityCreateRequest.builder()
@@ -450,7 +442,8 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
+        // TODO 테스트용
+//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
         JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics(jiraBase64);
 
@@ -476,14 +469,28 @@ public class IssueServiceImpl implements IssueService {
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
         String projectKey = response.getJiraProject();
-//        String projectKey = "S07P31B207"; // TODO 테스트용
 
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes()); // TODO 테스트용
+
+        // TODO 테스트용
+//        String projectKey = "S07P31B207";
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
         String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
 
         return jiraFeignClient.getTodoIssues(jiraBase64, query);
+    }
+
+    @Override
+    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        List<JiraProjectResponse> responses = jiraFeignClient.getProjectList(jiraBase64);
+        return responses;
     }
 }
