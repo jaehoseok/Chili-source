@@ -51,6 +51,8 @@ dependencies {
     // TODO : 사용시 TODO에 있는 QueryDSL 관련 주석 풀기
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+    annotationProcessor("jakarta.persistence:jakarta.persistence-api")
+    annotationProcessor("jakarta.annotation:jakarta.annotation-api")
 
     // CORE
     implementation(project(":common"))
