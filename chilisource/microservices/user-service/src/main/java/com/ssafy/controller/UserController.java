@@ -7,6 +7,7 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.UserCreateRequest;
 import com.ssafy.dto.request.UserUpdateRequest;
 import com.ssafy.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Api(tags = "유저")
 public class UserController {
     private static final String baseURL = "https://chilisource.s3.ap-northeast-2.amazonaws.com/";
     private final UserService userService;
