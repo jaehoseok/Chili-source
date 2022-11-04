@@ -3,11 +3,13 @@ package com.ssafy.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@ApiIgnore
 public class ProjectResponse {
     private Long id;
 

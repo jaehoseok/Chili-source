@@ -52,8 +52,8 @@ dependencies {
     implementation(project(":common"))
 
     // Swagger
-    //implementation 'io.springfox:springfox-boot-starter:3.0.0'
-    //implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
     // kafka
     implementation 'org.springframework.kafka:spring-kafka'
@@ -63,6 +63,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+
     // 스크링 클라우드 버스
     implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
 
@@ -73,9 +74,11 @@ dependencies {
 
     // 서킷 브레이커 ( 회로차단, 벌크헤드, 재시도, 속도제한, 폴백 등 )
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+
     // 슬루스, 집킨을 사용한 분산 추적
     implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
     implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
+
     // 프로메테우스
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
 }
