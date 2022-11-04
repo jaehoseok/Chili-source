@@ -8,6 +8,7 @@ import com.ssafy.entity.User;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import static com.ssafy.exception.NotFoundException.USER_NOT_FOUND;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
 
@@ -46,6 +48,7 @@ public class UserServiceImpl implements UserService {
                         .build();
             }
             default: {
+                log.error("[User] [getUser] social login type is not found");
                 throw new IllegalArgumentException("알 수 없는 소셜 유저 형식입니다.");
             }
         }
@@ -54,7 +57,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserInfo(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(()->new NotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("[User] [getUserInfo] user is not found");
+                    return new NotFoundException(USER_NOT_FOUND);
+                });
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -65,21 +71,30 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(UserUpdateRequest request, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("[User] [updateUserInfo] user is not found");
+                    return new NotFoundException(USER_NOT_FOUND);
+                });
         user.updateInfo(request.getName());
     }
 
     @Override
     public void updateUserImage(String image, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("[User] [updateUserImage] user is not found");
+                    return new NotFoundException(USER_NOT_FOUND);
+                });
         user.updateImage(image);
     }
 
     @Override
     public void withdraw(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("[User] [withdraw] user is not found");
+                    return new NotFoundException(USER_NOT_FOUND);
+                });
         user.withdraw();
     }
 

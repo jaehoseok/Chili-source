@@ -8,6 +8,7 @@ import com.ssafy.exception.DuplicateException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.WidgetCodeRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import static com.ssafy.exception.NotFoundException.WIDGET_CODE_NOT_FOUND;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class WidgetCodeServiceImpl implements WidgetCodeService {
 
     private final WidgetCodeRepo widgetCodeRepo;
@@ -41,8 +43,10 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Override
     @Transactional
     public void createWidgetCode(WidgetCodeCreateRequest request) {
-        if (widgetCodeRepo.findById(request.getId().toUpperCase()).isPresent())
+        if (widgetCodeRepo.findById(request.getId().toUpperCase()).isPresent()) {
+            log.error("[Widget] [createWidgetCode] widget code is duplicated");
             throw new DuplicateException(WIDGET_CODE_DUPLICATED);
+        }
         WidgetCode widgetCode = WidgetCode.builder()
                 .id(request.getId().toUpperCase())
                 .requestUrl(request.getRequestUrl())
@@ -55,9 +59,14 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Transactional
     public void updateWidgetCode(WidgetCodeUpdateRequest request) {
         WidgetCode widgetCode = widgetCodeRepo.findById(request.getId().toUpperCase())
-                .orElseThrow(() -> new DuplicateException(WIDGET_CODE_NOT_FOUND));
-        if (widgetCodeRepo.findById(request.getId().toUpperCase()).isPresent())
+                .orElseThrow(() -> {
+                    log.error("[Widget] [updateWidgetCode] widget code is not found");
+                    return new NotFoundException(WIDGET_CODE_NOT_FOUND);
+                });
+        if (widgetCodeRepo.findById(request.getId().toUpperCase()).isPresent()) {
+            log.error("[Widget] [updateWidgetCode] widget code is duplicated");
             throw new DuplicateException(WIDGET_CODE_DUPLICATED);
+        }
         widgetCode.update(request.getId().toUpperCase(), request.getRequestUrl(), request.getDetailRequestUrl());
     }
 
@@ -65,7 +74,10 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Transactional
     public void deleteWidgetCode(String widgetCodeId) {
         WidgetCode widgetCode = widgetCodeRepo.findById(widgetCodeId.toUpperCase())
-                .orElseThrow(() -> new NotFoundException(WIDGET_CODE_NOT_FOUND));
+                .orElseThrow(() -> {
+                    log.error("[Widget] [deleteWidgetCode] widget code is not found");
+                    return new NotFoundException(WIDGET_CODE_NOT_FOUND);
+                });
         widgetCodeRepo.delete(widgetCode);
     }
 }
