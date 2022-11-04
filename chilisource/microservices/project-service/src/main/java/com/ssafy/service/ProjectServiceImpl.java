@@ -11,6 +11,7 @@ import com.ssafy.dto.response.ProjectResponse;
 import com.ssafy.dto.response.TokenResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.UserProject;
+import com.ssafy.exception.BadRequestException;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.BadRequestException.INTERNAL_SERVICE_BAD_REQUEST;
 import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
 
@@ -177,7 +179,13 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
-        TokenResponse tokenResponse = authServiceClient.getToken(auths, request.getName());
+        TokenResponse tokenResponse;
+        try{
+            tokenResponse = authServiceClient.getToken(auths, request.getName());
+        } catch (Exception e) {
+            log.error("[Project] [updateProjectToken] INTERNAL_SERVICE_BAD_REQUEST");
+            throw new BadRequestException(INTERNAL_SERVICE_BAD_REQUEST);
+        }
 
         switch (request.getName().toUpperCase()) {
             case "JIRA":
