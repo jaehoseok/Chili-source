@@ -24,12 +24,14 @@ interface propsType extends styledType {
  * // 보더 색 변경
  * <Sheet isShadow={false} height="100px" borderColor="red"></Sheet>
  *
- * @param {string?} height          - 높이문자열
- * @param {string?} width           - 넓이문자열
- * @param {boolean?} isShadow       - 그림자 유무
- * @param {string?} borderColor     - #테두리색 핵사코드
- * @param {string?} backgroundColor - #배경색 핵사코드
- * @param {string?} flex            - flex-direction (row, column)
+ * @param {string?}  height          - 높이문자열
+ * @param {string?}  width           - 넓이문자열
+ * @param {boolean?} isShadow        - 그림자 유무
+ * @param {string?}  borderColor     - #테두리색 핵사코드
+ * @param {string?}  backgroundColor - #배경색 핵사코드
+ * @param {string?}  flex            - flex-direction (row, column)
+ * @param {string?}  maxWidth        - max-width 설정
+ * @param {string?}  minHeight       - min-height 설정
  *
  * @author inte
  */
@@ -41,6 +43,8 @@ const index = ({
   children,
   borderColor,
   flex,
+  maxWidth,
+  minHeight,
 }: propsType) => {
   return (
     <>
@@ -51,6 +55,8 @@ const index = ({
         backgroundColor={backgroundColor}
         borderColor={borderColor}
         flex={flex}
+        maxWidth={maxWidth}
+        minHeight={minHeight}
       >
         {children}
       </StyledSheet>

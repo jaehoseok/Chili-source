@@ -8,10 +8,12 @@ export interface styledType {
   isDropShadow?: boolean;
   isInnerShadow?: boolean;
   isClickable?: boolean;
+  isImage?: boolean;
+  url?: string;
 }
 
-export const Circle = styled.span<styledType>`
-  ${tw`flex justify-center items-center rounded-full font-bold shadow-none`};
+export const StyledCircle = styled.span<styledType>`
+  ${tw`flex justify-center items-center rounded-full font-bold shadow-none m-0`};
 
   ${({ height }) => height && `width: ${height}`};
   ${({ height }) => height && `height: ${height}`};
@@ -31,9 +33,17 @@ export const Circle = styled.span<styledType>`
     css`
       ${tw`cursor-pointer`};
     `}
+  ${({ isImage, url }) =>
+    isImage &&
+    css`
+      background-image: url(${url});
+      background-position: center, center;
+      background-size: 100% 100%;
+      object-fit: fill;
+    `}
 `;
 
-Circle.defaultProps = {
+StyledCircle.defaultProps = {
   children: '',
   height: '50px',
   backgroundColor: theme.button.gray,
