@@ -445,9 +445,7 @@ public class IssueServiceImpl implements IssueService {
         // TODO 테스트용
 //        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
-        JiraEpicListResponse jiraEpics = jiraFeignClient.getJiraEpics(jiraBase64);
-
-        return jiraEpics;
+        return jiraFeignClient.getJiraEpics(jiraBase64);
     }
 
     @Transactional
@@ -490,7 +488,6 @@ public class IssueServiceImpl implements IssueService {
         // TODO 테스트용
 //        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
-        List<JiraProjectResponse> responses = jiraFeignClient.getProjectList(jiraBase64);
-        return responses;
+        return jiraFeignClient.getProjectList(jiraBase64);
     }
 }
