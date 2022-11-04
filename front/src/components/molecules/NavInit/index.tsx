@@ -1,11 +1,13 @@
+import { useNavigate } from 'react-router-dom';
+
+import { auth } from 'api/rest';
+import { useGetUserInfoHandler } from 'hooks';
+
 import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './style';
 
 import logo from 'assets/logo/logo.png';
 import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
-
-import { auth } from 'api/rest';
-import { useNavigate } from 'react-router-dom';
 
 /**
  * @description
@@ -18,14 +20,18 @@ import { useNavigate } from 'react-router-dom';
  */
 const index = () => {
   const isLogin = localStorage.getItem('Authorization');
+
+  const { data, refetch } = useGetUserInfoHandler();
+
   const navigate = useNavigate();
 
-  const clickLoginHandler = () => {
-    auth.login('google');
+  const clickLoginHandler = async () => {
+    await auth.login('google');
   };
 
   const clickTestHandler = async () => {
     await auth.getTokens();
+    console.log(data);
   };
 
   const clickLogoutHandler = async () => {

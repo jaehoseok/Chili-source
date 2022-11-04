@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { StyledNotfication, styledType } from './style';
 
 interface propsType extends styledType {
@@ -23,15 +24,20 @@ interface propsType extends styledType {
 const index = ({ message, check, milliseconds, width }: propsType) => {
   const [render, setRender] = useState(true);
 
+  const el = document.getElementById('noti-root');
+
   useEffect(() => {
     setTimeout(() => setRender(prevRender => !prevRender), milliseconds ? milliseconds : 5000);
   }, []);
 
-  return render ? (
-    <StyledNotfication check={check} width={width} milliseconds={milliseconds}>
-      {message}
-    </StyledNotfication>
-  ) : null;
+  return render
+    ? createPortal(
+        <StyledNotfication check={check} width={width} milliseconds={milliseconds}>
+          {message}
+        </StyledNotfication>,
+        el as HTMLElement,
+      )
+    : null;
 };
 
 export default index;

@@ -30,6 +30,21 @@ export default {
       authAxios
         .get(`/token-codes`)
         .then(response => {
+          console.log(response);
+          resolve(response);
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
+  },
+
+  getUserInfo: () => {
+    return new Promise((resolve, reject) => {
+      authAxios
+        .get('/users/info')
+        .then(response => {
           resolve(response);
         })
         .catch(error => {
