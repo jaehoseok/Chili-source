@@ -1,6 +1,6 @@
 import { StyledIssueInfo } from './style';
 import Sheet from '../../atoms/Sheet';
-import Text from '../../atoms/Text';
+import Button from '../../atoms/Button';
 import InputBox from '../../molecules/InputBox';
 import SelectBox from '../../molecules/SelectBox';
 import TextAreaBox from '../../molecules/TextAreaBox';
@@ -55,6 +55,10 @@ const index = (props: any) => {
           inputValue={props.info.storyPoints + ''}
         />
       </Sheet>
+
+      <Button borderColor="green" clickHandler={() => console.log('zz')}>
+        IssueInfo Test
+      </Button>
     </StyledIssueInfo>
   );
 };

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import MiddleBucket from '../organisms/MiddleBucket';
 import IssueInfo from '../organisms/IssueInfo';
 import Issue from '../molecules/Issue';
 import Button from '../atoms/Button';
@@ -17,7 +18,7 @@ const IssuesPage = () => {
     rank: '',
     epicLink: '',
     sprint: '',
-    storyPoints: 234234,
+    storyPoints: 0,
   };
   const [info, setInfo] = useState(issue);
   const setInfoHandler = (props: any) => {
@@ -49,9 +50,7 @@ const IssuesPage = () => {
         clickHandler={setInfoHandler}
       />
       <IssueInfo info={info}></IssueInfo>
-      <Button borderColor="green" clickHandler={() => console.log(info)}>
-        IssueInfo Test
-      </Button>
+      <MiddleBucket info={info}></MiddleBucket>
     </>
   );
 };
