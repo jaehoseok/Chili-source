@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // landing
 import LandingPage from 'components/pages/LandingPage';
 
+// error
+import ErrorPage from 'components/pages/ErrorPage';
+
 // login
 import UserLoginLoadingPage from 'components/pages/UserLoginLoadingPage';
 
@@ -101,6 +104,15 @@ const RouterWrapper = () => {
             <>
               <HeaderNav />
               <IssuesPage />
+            </>
+          }
+        />
+        <Route
+          path="*"
+          element={
+            <>
+              <HeaderNav />
+              <ErrorPage />
             </>
           }
         />
