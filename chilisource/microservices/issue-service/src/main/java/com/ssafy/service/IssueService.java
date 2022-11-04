@@ -4,7 +4,7 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
-import com.ssafy.dto.response.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 

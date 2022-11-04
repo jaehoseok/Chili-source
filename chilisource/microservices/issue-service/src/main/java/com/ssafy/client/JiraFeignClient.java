@@ -1,7 +1,7 @@
 package com.ssafy.client;
 
 import com.ssafy.dto.request.jira.JiraIssueBulkCreateRequest;
-import com.ssafy.dto.response.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
