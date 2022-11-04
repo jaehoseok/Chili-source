@@ -28,7 +28,7 @@ public class IssueController {
     private final IssueService issueService;
 
     // 이슈 템플릿 조회
-    @GetMapping("/")
+    @GetMapping
     @ApiOperation(value = "이슈 템플릿 리스트 조회")
     public ResponseEntity<?> getIssueTemplates(
             @LoginUser User user,
