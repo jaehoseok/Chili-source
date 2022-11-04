@@ -1,11 +1,14 @@
 package com.ssafy.dto.response;
 
+import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Getter
 @NoArgsConstructor
+@ApiIgnore
 public class TokenResponse {
     private Long id;
 
