@@ -52,6 +52,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserResponse getUserInfo(Long userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(()->new NotFoundException(USER_NOT_FOUND));
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .image(user.getImage())
+                .build();
+    }
+
+    @Override
     public void updateUserInfo(UserUpdateRequest request, Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
