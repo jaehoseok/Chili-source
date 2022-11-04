@@ -322,3 +322,11 @@
   > - 기본 1차 디자인 적용 완료
   > - 기본 1차 레이아웃 적용 완료
   > - 삭제, 수정은 유저 정보 및 프로젝트 생성 한 후에 해보기로
+- `Circle` 컴포넌트 확장
+  > - isImage         - image가 들어오는 지 아닌지 확인
+  > - url             - 가져오는 image의 경로의 값
+- `Text` 컴포넌트 확장
+  > - display         - display 설정 변경
+- `Sheet` 컴포넌트 확장
+  > - maxWidth        - max-width 설정
+  > - minHeight       - min-height 설정
