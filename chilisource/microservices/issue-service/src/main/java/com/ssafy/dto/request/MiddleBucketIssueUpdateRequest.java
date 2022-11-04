@@ -18,7 +18,7 @@ public class MiddleBucketIssueUpdateRequest {
 
     private String epicLink;
 
-    private Long sprint;
+//    private Long sprint;
 
     private Double storyPoints;
 }

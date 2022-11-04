@@ -79,7 +79,7 @@ public class IssueServiceImpl implements IssueService {
                         .assignee(issueTemplate.getAssignee())
                         .priority(issueTemplate.getPriority())
                         .epicLink(issueTemplate.getEpicLink())
-                        .sprint(issueTemplate.getSprint())
+//                        .sprint(issueTemplate.getSprint())
                         .storyPoints(issueTemplate.getStoryPoints())
                         .build()
                 ).collect(Collectors.toList());
@@ -104,7 +104,7 @@ public class IssueServiceImpl implements IssueService {
                 .assignee(request.getAssignee())
                 .priority(request.getPriority())
                 .epicLink(request.getEpicLink())
-                .sprint(request.getSprint())
+//                .sprint(request.getSprint())
                 .storyPoints(request.getStoryPoints())
                 .issueType(issueType)
                 .userId(userId)
@@ -130,7 +130,7 @@ public class IssueServiceImpl implements IssueService {
                 request.getAssignee(),
                 request.getPriority(),
                 request.getEpicLink(),
-                request.getSprint(),
+//                request.getSprint(),
                 request.getStoryPoints(),
                 issueType
         );
@@ -182,7 +182,7 @@ public class IssueServiceImpl implements IssueService {
                         .assignee(middleBucketIssue.getAssignee())
                         .priority(middleBucketIssue.getPriority())
                         .epicLink(middleBucketIssue.getEpicLink())
-                        .sprint(middleBucketIssue.getSprint())
+//                        .sprint(middleBucketIssue.getSprint())
                         .storyPoints(middleBucketIssue.getStoryPoints())
                         .build())
                 .collect(Collectors.toList());
@@ -251,7 +251,7 @@ public class IssueServiceImpl implements IssueService {
                 .assignee(request.getAssignee())
                 .priority(request.getPriority())
                 .epicLink(request.getEpicLink())
-                .sprint(request.getSprint())
+//                .sprint(request.getSprint())
                 .storyPoints(request.getStoryPoints())
                 .middleBucket(middleBucket)
                 .issueType(issueType)
@@ -281,7 +281,7 @@ public class IssueServiceImpl implements IssueService {
                 request.getAssignee(),
                 request.getPriority(),
                 request.getEpicLink(),
-                request.getSprint(),
+//                request.getSprint(),
                 request.getStoryPoints(),
                 issueType
         );

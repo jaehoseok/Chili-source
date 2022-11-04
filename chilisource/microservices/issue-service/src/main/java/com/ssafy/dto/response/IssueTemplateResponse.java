@@ -21,12 +21,12 @@ public class IssueTemplateResponse {
 
     private String epicLink;
 
-    private Long sprint;
+//    private Long sprint;
 
     private Double storyPoints;
 
     @Builder
-    public IssueTemplateResponse(Long issueTemplateId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
+    public IssueTemplateResponse(Long issueTemplateId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Double storyPoints) {
         this.issueTemplateId = issueTemplateId;
         this.issueType = issueType;
         this.summary = summary;
@@ -34,7 +34,7 @@ public class IssueTemplateResponse {
         this.assignee = assignee;
         this.priority = priority;
         this.epicLink = epicLink;
-        this.sprint = sprint;
+//        this.sprint = sprint;
         this.storyPoints = storyPoints;
     }
 }
