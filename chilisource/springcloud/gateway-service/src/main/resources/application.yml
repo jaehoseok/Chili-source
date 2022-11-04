@@ -34,12 +34,10 @@ spring:
             allowedOrigins: ["https://k7b207.p.ssafy.io","http://localhost:3000"]
             allow-credentials: true
             allowedHeaders: '*'
-            allowedMethods:
-              - PUT
-              - GET
-              - POST
-              - DELETE
-              - OPTIONS
+            exposed-headers:
+              - 'Authorization'
+            max-age: 86400
+            allowedMethods: '*'
 
       routes:
         - id: auth-service
