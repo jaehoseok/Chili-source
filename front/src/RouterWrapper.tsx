@@ -22,7 +22,8 @@ import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
 // common
-import HeaderNav from 'HeaderNav';
+import HeaderNav from 'components/organisms/common/HeaderServiceNav';
+import HeaderInit from 'components/organisms/common/HeaderInitNav';
 
 /**
  *
@@ -35,7 +36,15 @@ const RouterWrapper = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/"
+          element={
+            <>
+              <HeaderInit />
+              <LandingPage />
+            </>
+          }
+        />
         <Route path="/user" element={<UserLoginLoadingPage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />

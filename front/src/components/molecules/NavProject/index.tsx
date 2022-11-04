@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { StyledImg, StyledNav, styledType } from './style';
+import { StyledImg, StyledNav } from './style';
 
-interface propsType extends styledType {
+interface propsType {
   children?: ReactNode;
 }
 
