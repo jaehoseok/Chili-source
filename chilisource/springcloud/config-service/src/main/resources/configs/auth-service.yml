@@ -10,7 +10,7 @@ spring:
     show-sql: true
     hibernate:
       format_sql: true
-      ddl-auto: create
+      ddl-auto: none
   redis:
     host: k7b2072.p.ssafy.io
     port: 6379
