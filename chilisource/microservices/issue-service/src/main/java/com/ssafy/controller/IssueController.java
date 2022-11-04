@@ -7,7 +7,7 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
-import com.ssafy.dto.response.jira.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.service.IssueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
