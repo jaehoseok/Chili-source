@@ -9,6 +9,8 @@ export interface styledType {
   borderColor?: string;
   backgroundColor?: string;
   flex?: string;
+  maxWidth?: string;
+  minHeight?: string;
 }
 
 export const StyledSheet = styled.div<styledType>`
@@ -22,6 +24,8 @@ export const StyledSheet = styled.div<styledType>`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   background-color: ${({ backgroundColor }) => backgroundColor};
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-height: ${({ minHeight }) => minHeight};
 `;
 StyledSheet.defaultProps = {
   backgroundColor: 'white',
