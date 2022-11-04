@@ -41,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final AuthServiceClient authServiceClient;
     private final IssueServiceClient issueServiceClient;
     private final WidgetServiceClient widgetServiceClient;
+    private final String DEFAULT_COLOR = "FFFFFF";
 
     @Override
     public ProjectResponse getProject(Long projectId) {
@@ -94,6 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
         UserProject userProject = UserProject.builder()
                 .userId(userId)
                 .project(project)
+                .userColor(DEFAULT_COLOR)
                 .role(roleRepo.findById(1L).get())
                 .build();
         userProjectRepo.save(userProject);
