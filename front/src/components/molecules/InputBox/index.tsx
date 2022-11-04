@@ -72,7 +72,7 @@ const index = ({
         width={inputWidth}
         type={inputType}
         placeHolder={inputPlaceHolder}
-        value={inputValue}
+        defaultValue={inputValue}
       ></Input>
     </StyledContainer>
   );
