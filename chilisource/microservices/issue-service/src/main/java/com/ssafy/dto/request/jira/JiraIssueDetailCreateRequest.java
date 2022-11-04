@@ -1,5 +1,6 @@
 package com.ssafy.dto.request.jira;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,20 +8,28 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class JiraIssueDetailCreateRequest {
+    @ApiModelProperty(hidden = true)
     private String summary;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueParentCreateRequest parent;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueTypeCreateRequest issuetype;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueProjectCreateRequest project;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueDescriptionCreateRequest description;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueReporterCreateRequest reporter;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssueAssigneeCreateRequest assignee;
 
+    @ApiModelProperty(hidden = true)
     private JiraIssuePriorityCreateRequest priority;
 
     @Builder
