@@ -32,6 +32,14 @@ public class UserController {
         return ResponseEntity.ok(userService.getUser(socialLoginType, request));
     }
 
+    @GetMapping("/users/info")
+    @ApiOperation(value = "유저 정보 조회")
+    public ResponseEntity<?> getUserInfo(
+            @LoginUser User user
+    ) {
+        return ResponseEntity.ok(userService.getUserInfo(user.getId()));
+    }
+
     @PutMapping("/users/name")
     @ApiOperation(value = "유저 정보 수정")
     public ResponseEntity<?> updateUserInfo(

@@ -11,6 +11,9 @@ public interface UserService {
     //회원가입
     public UserResponse getUser(Constant.SocialLoginType socialLoginType, UserCreateRequest request);
 
+    //유저정보조회
+    public UserResponse getUserInfo(Long userId);
+
     //유저정보수정(이름)
     public void updateUserInfo(UserUpdateRequest request, Long userId);
 
