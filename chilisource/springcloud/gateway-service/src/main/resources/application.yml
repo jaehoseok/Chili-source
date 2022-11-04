@@ -53,7 +53,7 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -96,7 +96,7 @@ spring:
           uri: lb://PROJECT-SERVICE
           predicates:
             - Path=/project-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             # - RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -155,7 +155,7 @@ spring:
           uri: lb://ISSUE-SERVICE
           predicates:
             - Path=/issue-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
         #---------------------------------------------ISSUE FILTER END---------------------------------------------------------------
 
         #---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
@@ -179,7 +179,7 @@ spring:
           uri: lb://WIDGET-SERVICE
           predicates:
             - Path=/widget-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
         #          filters:
         #            - AuthorizationFilter
         #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------
