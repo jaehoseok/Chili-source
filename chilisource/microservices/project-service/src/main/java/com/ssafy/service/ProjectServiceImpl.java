@@ -11,9 +11,9 @@ import com.ssafy.dto.response.ProjectResponse;
 import com.ssafy.dto.response.TokenResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.UserProject;
-import com.ssafy.exception.BadRequestException;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
+import com.ssafy.exception.WrongAccessException;
 import com.ssafy.repository.ProjectRepo;
 import com.ssafy.repository.RoleRepo;
 import com.ssafy.repository.UserProjectRepo;
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.ssafy.exception.BadRequestException.INTERNAL_SERVICE_BAD_REQUEST;
 import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
+import static com.ssafy.exception.WrongAccessException.WRONG_TOKEN_CODE;
 
 @RequiredArgsConstructor
 @Service
@@ -185,8 +185,8 @@ public class ProjectServiceImpl implements ProjectService {
         try{
             tokenResponse = authServiceClient.getToken(auths, request.getName());
         } catch (Exception e) {
-            log.error("[Project] [updateProjectToken] INTERNAL_SERVICE_BAD_REQUEST");
-            throw new BadRequestException(INTERNAL_SERVICE_BAD_REQUEST);
+            log.error("[Project] [updateProjectToken] WRONG_TOKEN_CODE");
+            throw new WrongAccessException(WRONG_TOKEN_CODE);
         }
 
         switch (request.getName().toUpperCase()) {
