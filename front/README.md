@@ -359,4 +359,8 @@
 - `ProjectCreatePage`
   > - 프로젝트 생성 페이지 1차 디자인 완료
   > - react-slick을 통한 carousel 적용
+  > - 지라 토큰 입력 창 생성
+  > - 깃 토큰 입력 창 생성
+  > - 연동 시 불러온 Select 생성
   
+
