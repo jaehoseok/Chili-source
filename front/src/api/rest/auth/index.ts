@@ -134,4 +134,19 @@ export default {
         });
     });
   },
+
+  /**
+   * @description
+   * 사용자의 토큰을 연동한다.
+   *
+   * @author bell
+   */
+  postLinkageToken: async () => {
+    try {
+      const response = await authAxios.post('/tokens');
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };
