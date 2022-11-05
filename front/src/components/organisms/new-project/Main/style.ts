@@ -32,7 +32,7 @@ export const StyledFlexAround = styled.div`
   ${tw`flex justify-around w-full items-center`}
 `;
 
-export const StyledWidth80 = styled.div`
+export const StyledWidth70 = styled.div`
   ${tw`flex items-end`}
   width: 70%;
   input[type='file']::file-selector-button {

@@ -14,7 +14,7 @@ import {
   StyledFlexRow,
   StyledFlexRowEnd,
   StyledFlexAround,
-  StyledWidth80,
+  StyledWidth70,
 } from './style';
 
 // MOLECULES
@@ -127,12 +127,12 @@ const index = () => {
               <StyledMarginY>
                 <StyledFlexRow>
                   <StyledLabel>로고 이미지</StyledLabel>
-                  <StyledWidth80>
+                  <StyledWidth70>
                     <Circle height="100px" backgroundColor="#f6f6f6">
                       <AiOutlineCamera fontSize={'40px'} color={'#a0a0a0'}></AiOutlineCamera>
                     </Circle>
                     <input type="file" id="project_logo" />
-                  </StyledWidth80>
+                  </StyledWidth70>
                 </StyledFlexRow>
               </StyledMarginY>
               <StyledFlexRowEnd>
