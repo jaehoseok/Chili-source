@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 
 import { useRecoilState } from 'recoil';
 import { tabListState, tabType, widgetType } from '../../../../recoil/atoms/projectList';
-import { StyledContainer } from './style';
 
 import NavProject from 'components/molecules/NavProject';
 import NavWidget from 'components/molecules/NavWidget';
