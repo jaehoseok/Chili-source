@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
-  ${tw`flex justify-between items-center px-2 pt-1`}
+  ${tw`flex justify-between items-center px-2 py-3`}
   border-bottom: 2px solid ${({ theme }) => `${theme.color.primary}`};
 `;
 
 export const StyledTap = styled.span`
   ${tw`w-10 h-10 flex justify-center items-center`}
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px;
   background-color: ${({ theme }) => `${theme.color.primary}`};
 `;
 

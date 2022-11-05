@@ -12,7 +12,11 @@ export interface styledType {
   url?: string;
 }
 
-export const StyledCircle = styled.span<styledType>`
+// google img를 circle에 가져오는 경우, 외부경로 설정에 따라
+// 해당 경로의 이미지를 못가져오는 에러가 발생하는 경우가 있다.
+export const StyledCircle = styled.span.attrs({
+  referrerpolicy: 'no-referrer',
+})<styledType>`
   ${tw`flex justify-center items-center rounded-full font-bold shadow-none m-0`};
 
   ${({ height }) => height && `width: ${height}`};

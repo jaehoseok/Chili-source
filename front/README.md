@@ -269,6 +269,12 @@
   > - localStorage에 저장 시, js 코드에 의하여 헤더에 토큰이 담겨 CSRF 공격에 안전함, 공격자가 로컬스토리지 토큰 값을 쉽게 조작하므로 XSS 공격에 매우 취약
   > - cookie에 저장 시, httpOnly 옵션 시, Js에서 쿠키 접근 자체가 불가하여 XSS 공격에 안전함, 토큰이 자동으로 request에 실리므로 CSRF 공격에 취약
 
+### 성현
+
+- `TokenBox` 컴포넌트 UI 구현
+  > - `Input`에 Jira 토큰 입력 시 프로젝트 리스트 도출 후 컴포넌트 생성 가능(예정)
+- `Issue` `IssueBar` `ProjectItem` 컴포넌트 코드 수정
+
 ## 221102
 
 ### 종현
@@ -293,9 +299,8 @@
 
 ### 성현
 
-- `TokenBox` 컴포넌트 UI 구현
-  > - `Input`에 Jira 토큰 입력 시 프로젝트 리스트 도출 후 컴포넌트 생성 가능(예정)
-- `Issue` `IssueBar` `ProjectItem` 컴포넌트 코드 수정
+- `IssueInfo` 컴포넌트 생성 및 UI 작업
+  >- 이슈 템플릿 클릭 시 템플릿에 대한 정보를 띄우는 컴포넌트.
 
 ## 221103
 
@@ -309,6 +314,13 @@
   > - 기존 네비게이션이 너무 크다!
   > - 실제 브라우저와 비슷하게 리사이징 완료
 
+
+### 성현
+
+- `IssueInfo` 기능 작업
+  >- 이슈 템플릿 클릭 시 템플릿에 대한 정보를 띄운다.
+  >- selectbox에 값이 안 뜨는 문제가 있어서 해결
+  >- inputbox에 값을 입력 후 이슈 템플릿을 클릭하면 컴포넌트에 값 표시가 안 되는 문제 발생.
 
 ## 221104
 
@@ -330,3 +342,12 @@
 - `Sheet` 컴포넌트 확장
   > - maxWidth        - max-width 설정
   > - minHeight       - min-height 설정
+- `react-query`
+  > - hooks 폴더 생성
+  > - react-query 초안 설계
+  > - `getUserInfo` 통신 성공
+
+### 성현
+
+- `IssueInfo` 문제 해결
+  >- inputbox에 값을 입력 후 이슈 템플릿을 클릭하면 컴포넌트에 값 표시가 안 되는 문제 해결
