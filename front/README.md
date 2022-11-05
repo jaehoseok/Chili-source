@@ -351,3 +351,12 @@
 
 - `IssueInfo` 문제 해결
   >- inputbox에 값을 입력 후 이슈 템플릿을 클릭하면 컴포넌트에 값 표시가 안 되는 문제 해결
+
+
+## 221105
+
+### 종현
+- `ProjectCreatePage`
+  > - 프로젝트 생성 페이지 1차 디자인 완료
+  > - react-slick을 통한 carousel 적용
+  
