@@ -20,9 +20,14 @@ code {
 }
 
 #nav-root {
-  height: 91px;
+  position: fixed;
+  width: 100vw;
+  background-color: #ffffff;
 }
 
 #root {
-  height: calc(100vh - 91px);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

@@ -7,6 +7,5 @@ export const StyledContainer = styled.div`
 `;
 
 export const StyledFlex = styled.div`
-  ${tw`flex justify-center w-full h-full mt-12`}
-  max-height: 1000px;
+  ${tw`w-full mt-12`}
 `;
