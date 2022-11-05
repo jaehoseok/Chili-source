@@ -342,6 +342,10 @@
 - `Sheet` 컴포넌트 확장
   > - maxWidth        - max-width 설정
   > - minHeight       - min-height 설정
+- `react-query`
+  > - hooks 폴더 생성
+  > - react-query 초안 설계
+  > - `getUserInfo` 통신 성공
 
 ### 성현
 
