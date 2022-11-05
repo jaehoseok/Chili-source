@@ -1,10 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
+
+import { SetterOrUpdater } from 'recoil';
+
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
   type?: string;
   placeHolder?: string;
   defaultValue?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -23,10 +29,20 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
+const index = ({
+  height,
+  width,
+  type,
+  placeHolder,
+  defaultValue,
+  useSetRecoilState,
+  recoilParam,
+}: propsType) => {
   const [text, setText] = useState(defaultValue);
 
   const inputTag = useRef<HTMLInputElement>(null);
+
+  const setInputValue = useSetRecoilState;
 
   useEffect(() => {
     setText(defaultValue);
@@ -36,6 +52,7 @@ const index = ({ height, width, type, placeHolder, defaultValue }: propsType) =>
       inputTag.current.value = text ? text : '';
     }
   }, [text]);
+
   return (
     <>
       <StyledInput
@@ -46,6 +63,16 @@ const index = ({ height, width, type, placeHolder, defaultValue }: propsType) =>
         placeholder={placeHolder}
         onChange={e => {
           setText(e.target.value);
+
+          if (useSetRecoilState && recoilParam)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            setInputValue(prevObj => {
+              return {
+                ...prevObj,
+                [recoilParam]: e.target.value,
+              };
+            });
         }}
         defaultValue={text}
       ></StyledInput>

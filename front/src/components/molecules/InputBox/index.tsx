@@ -1,5 +1,6 @@
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
+import { SetterOrUpdater } from 'recoil';
 
 interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
@@ -8,6 +9,9 @@ interface propsType extends styledContainerType, styledLabelType {
   inputHeight?: string;
   inputWidth?: string;
   inputType?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -52,6 +56,8 @@ const index = ({
   isRow,
   containerWidth,
   containerPadding,
+  useSetRecoilState,
+  recoilParam,
 }: propsType) => {
   return (
     <StyledContainer
@@ -73,6 +79,8 @@ const index = ({
         type={inputType}
         placeHolder={inputPlaceHolder}
         defaultValue={inputValue}
+        useSetRecoilState={useSetRecoilState}
+        recoilParam={recoilParam}
       ></Input>
     </StyledContainer>
   );

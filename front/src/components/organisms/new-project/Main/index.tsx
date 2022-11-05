@@ -1,6 +1,9 @@
 // LIBRARY
-import { AiOutlineCamera } from 'react-icons/ai';
+import { state } from 'recoil/atoms/auth/linkageToken';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import Slider from 'react-slick';
+import { AiOutlineCamera } from 'react-icons/ai';
 
 import { theme } from 'styles/theme';
 
@@ -28,6 +31,7 @@ import Circle from 'components/atoms/Circle';
 import Button from 'components/atoms/Button';
 import Select from 'components/atoms/Select';
 import Option from 'components/atoms/Option';
+import { useEffect } from 'react';
 
 const index = () => {
   const setting = {
@@ -37,6 +41,19 @@ const index = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
   };
+
+  const { jiraToken } = useRecoilValue(state);
+  const { gitToken } = useRecoilValue(state);
+  const jiraSetRecoilState = useSetRecoilState(state);
+  const gitSetRecoilState = useSetRecoilState(state);
+
+  useEffect(() => {
+    console.log('jiraToken:', jiraToken);
+  }, [jiraToken]);
+
+  useEffect(() => {
+    console.log('gitToken:', gitToken);
+  }, [gitToken]);
 
   return (
     <StyledContainer>
@@ -58,6 +75,8 @@ const index = () => {
                   labelMarginBottom="20px"
                   isRow={false}
                   containerWidth="100%"
+                  useSetRecoilState={jiraSetRecoilState}
+                  recoilParam={'jiraToken'}
                 ></InputBox>
                 <StyledMarginY>
                   <StyledFlexRowEnd>
@@ -81,6 +100,8 @@ const index = () => {
                   labelSize="1.3rem"
                   labelMarginBottom="20px"
                   isRow={false}
+                  useSetRecoilState={gitSetRecoilState}
+                  recoilParam={'gitToken'}
                 ></InputBox>
                 <StyledMarginY>
                   <StyledFlexRowEnd>
