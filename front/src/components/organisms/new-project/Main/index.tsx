@@ -15,8 +15,6 @@ import {
   StyledFlexRowEnd,
   StyledFlexAround,
   StyledWidth80,
-  StyledUl,
-  StyledLi,
 } from './style';
 
 // MOLECULES
@@ -51,7 +49,7 @@ const index = () => {
       ></Text>
       <Slider {...setting}>
         <StyledFlex>
-          <Sheet width="100%" height="30vh" minHeight="450px" maxWidth="2000px">
+          <Sheet width="100%" height="300px" minHeight="150px" maxWidth="2000px">
             <StyledFlexAround>
               <StyledMarginY>
                 <InputBox
@@ -137,6 +135,16 @@ const index = () => {
                   </StyledWidth80>
                 </StyledFlexRow>
               </StyledMarginY>
+              <StyledFlexRowEnd>
+                <Button
+                  width="100px"
+                  borderColor={theme.button.gray}
+                  backgroundColor={theme.button.green}
+                  isHover={true}
+                >
+                  생성
+                </Button>
+              </StyledFlexRowEnd>
             </StyledInputBox>
           </Sheet>
         </StyledFlex>
