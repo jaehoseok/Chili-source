@@ -3,6 +3,7 @@ import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
   ${tw`w-8/12  m-auto mt-24`}
+  max-width: 1500px;
 `;
 
 export const StyledMarginY = styled.div`

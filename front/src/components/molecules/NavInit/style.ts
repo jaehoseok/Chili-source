@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
-  ${tw`flex justify-between items-center px-2 py-3`}
+  ${tw`flex h-full justify-between items-center px-2 py-3`}
   border-bottom: 2px solid ${({ theme }) => `${theme.color.primary}`};
 `;
 
