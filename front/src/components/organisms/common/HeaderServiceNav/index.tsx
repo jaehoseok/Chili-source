@@ -1,6 +1,7 @@
 import { memo } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { createPortal } from 'react-dom';
 
 import { useRecoilState } from 'recoil';
 import { tabListState, tabType, widgetType } from '../../../../recoil/atoms/projectList';
@@ -23,6 +24,8 @@ const index = memo(() => {
   const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
 
   const navigate = useNavigate();
+
+  const el = document.getElementById('nav-root');
 
   // 프로젝트 탭을 활성화시키는 함수
   // 해당 Tab이 활성화 되는 경우, 다른 Tab은 활성화가 종료 되며,
@@ -190,7 +193,7 @@ const index = memo(() => {
     });
   };
 
-  return (
+  return createPortal(
     <>
       <NavProject>
         {tabList.map(({ isActivated, title, id }: tabType, idx: number) => (
@@ -243,7 +246,8 @@ const index = memo(() => {
           xBtn={false}
         ></Tab>
       </NavWidget>
-    </>
+    </>,
+    el as HTMLElement,
   );
 });
 

@@ -49,7 +49,7 @@ const index = () => {
         </Button>
       </StyledFlexBetween>
       <StyledFlex>
-        <Sheet width="100%" height="25vh" minHeight="300px" maxWidth="1500px">
+        <Sheet width="100%" height="25vh" minHeight="300px">
           <StyledWidth80>
             <StyledFlexItemsCenter>
               <Circle height={'150px'} isImage={true} url={example} />

@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import NavInit from 'components/molecules/NavInit';
 /**
  * @description
@@ -8,7 +9,8 @@ import NavInit from 'components/molecules/NavInit';
  * @author bell
  */
 const index = () => {
-  return <NavInit></NavInit>;
+  const el = document.getElementById('nav-root');
+  return createPortal(<NavInit></NavInit>, el as HTMLElement);
 };
 
 export default index;
