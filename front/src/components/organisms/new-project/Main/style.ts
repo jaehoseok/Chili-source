@@ -3,7 +3,7 @@ import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
   ${tw`w-8/12 h-full flex flex-col justify-center m-auto`}
-  max-width: 2000px;
+  max-width: 1500px;
 `;
 
 export const StyledFlex = styled.div`
@@ -28,10 +28,31 @@ export const StyledFlexRow = styled.div`
   ${tw`flex justify-between w-full`}
 `;
 
+export const StyledFlexAround = styled.div`
+  ${tw`flex justify-around w-full items-center`}
+`;
+
 export const StyledWidth80 = styled.div`
   ${tw`flex items-end`}
   width: 70%;
   input[type='file']::file-selector-button {
     ${tw`h-10 rounded-xl border-0 text-sm py-1.5 px-5 ml-3 mr-5 cursor-pointer`}
+  }
+`;
+
+export const StyledFlexRowEnd = styled.div`
+  ${tw`flex justify-end`}
+`;
+
+export const StyledUl = styled.ul`
+  ${tw`bg-gray-100 h-full`}
+  min-height: 200px;
+`;
+
+export const StyledLi = styled.li`
+  ${tw`cursor-pointer`}
+  &:hover {
+    background-color: ${({ theme }) => theme.color.primary};
+    color: #ffffff;
   }
 `;
