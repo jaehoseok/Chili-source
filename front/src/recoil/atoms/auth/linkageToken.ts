@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-export const state = atom({
+export const linkageTokenState = atom({
   key: 'linkageToken',
   default: {
     jiraToken: '',

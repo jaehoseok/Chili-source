@@ -1,6 +1,9 @@
 // LIBRARY
-import { useEffect } from 'react';
-import { state } from 'recoil/atoms/auth/linkageToken';
+import { ChangeEvent, useEffect } from 'react';
+
+import { linkageTokenState } from 'recoil/atoms/auth/linkageToken';
+import { createProjectState } from 'recoil/atoms/project/createProject';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { AiOutlineCamera } from 'react-icons/ai';
@@ -39,21 +42,29 @@ import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
 
 const index = () => {
-  const { jiraToken } = useRecoilValue(state);
-  const { gitToken } = useRecoilValue(state);
-  const jiraSetRecoilState = useSetRecoilState(state);
-  const gitSetRecoilState = useSetRecoilState(state);
+  // 토큰 연동시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
+  const { jiraToken } = useRecoilValue(linkageTokenState);
+  const { gitToken } = useRecoilValue(linkageTokenState);
+  const jiraSetRecoilState = useSetRecoilState(linkageTokenState);
+  const gitSetRecoilState = useSetRecoilState(linkageTokenState);
 
+  // 프로젝트 생성 시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
+  const { projectName } = useRecoilValue(createProjectState);
+  const { projectDescription } = useRecoilValue(createProjectState);
+  const { projectImage } = useRecoilValue(createProjectState);
+  const nameSetRecoilState = useSetRecoilState(createProjectState);
+  const descriptionSetRecoilState = useSetRecoilState(createProjectState);
+  const imageSetRecoilState = useSetRecoilState(createProjectState);
+
+  useEffect(() => {
+    console.log(projectName, projectDescription, projectImage);
+  }, [projectName, projectImage, projectDescription]);
+
+  // query 처리
+  // 토큰 연동
   const { mutate } = usePostLinkageTokenHandler();
-  const { data, isLoading, isError, error, refetch } = useGetJiraProjectList();
-
-  useEffect(() => {
-    console.log('jiraToken:', jiraToken);
-  }, [jiraToken]);
-
-  useEffect(() => {
-    console.log('gitToken:', gitToken);
-  }, [gitToken]);
+  // 지라 프로젝트 모두 가져오기
+  const { isError, error, refetch } = useGetJiraProjectList();
 
   return (
     <StyledContainer>
@@ -153,6 +164,8 @@ const index = () => {
                 inputWidth={'70%'}
                 inputHeight={'40px'}
                 labelSize={'1.3rem'}
+                useSetRecoilState={nameSetRecoilState}
+                recoilParam={'projectName'}
               ></InputBox>
             </StyledMarginY>
             <StyledMarginY>
@@ -163,16 +176,40 @@ const index = () => {
                 textAreaWidth={'70%'}
                 textAreaHeight={'100px'}
                 labelSize={'1.3rem'}
+                useSetRecoilState={descriptionSetRecoilState}
+                recoilParam={'projectDescription'}
               ></TextAreaBox>
             </StyledMarginY>
             <StyledMarginY>
               <StyledFlexRow>
                 <StyledLabel>로고 이미지</StyledLabel>
                 <StyledWidth70>
-                  <Circle height="100px" backgroundColor="#f6f6f6">
-                    <AiOutlineCamera fontSize={'40px'} color={'#a0a0a0'}></AiOutlineCamera>
-                  </Circle>
-                  <input type="file" id="project_logo" />
+                  {projectImage ? (
+                    <Circle
+                      height="100px"
+                      backgroundColor="#f6f6f6"
+                      isImage={true}
+                      url={projectImage}
+                    ></Circle>
+                  ) : (
+                    <Circle height="100px" backgroundColor="#f6f6f6">
+                      <AiOutlineCamera fontSize={'40px'} color={'#a0a0a0'}></AiOutlineCamera>
+                    </Circle>
+                  )}
+                  <input
+                    type="file"
+                    id="project_logo"
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      imageSetRecoilState(prevData => {
+                        return {
+                          ...prevData,
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          projectImage: URL.createObjectURL(e.target.files[0]),
+                        };
+                      });
+                    }}
+                  />
                 </StyledWidth70>
               </StyledFlexRow>
             </StyledMarginY>
