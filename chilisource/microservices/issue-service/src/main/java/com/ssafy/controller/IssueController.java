@@ -236,6 +236,21 @@ public class IssueController {
     }
 
     // =========================================== JIRA API ==================================================
+    // 프로젝트 목록 조회
+    @GetMapping("/jira/project-list")
+    @ApiOperation(value = "우리 서비스와 연동할 JIRA 프로젝트 목록 가져오기")
+    public ResponseEntity<List<JiraProjectResponse>> getProjectList(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
+    ) {
+        List<JiraProjectResponse> responses = issueService.getProjectList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION)
+        );
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성
     @PostMapping("/jira/middle-bucket")
     @ApiOperation(value = "미들 버킷에 있는 모든 이슈를 JIRA에 생성")
@@ -265,21 +280,6 @@ public class IssueController {
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
                 .body(response);
-    }
-
-    // 프로젝트 목록 조회
-    @GetMapping("/jira/project-list")
-    @ApiOperation(value = "우리 서비스와 연동할 JIRA 프로젝트 목록 가져오기")
-    public ResponseEntity<List<JiraProjectResponse>> getProjectList(
-            @LoginUser User user,
-            @RequestHeader HttpHeaders headers
-    ) {
-        List<JiraProjectResponse> responses = issueService.getProjectList(
-                user,
-                headers.get(HttpHeaders.AUTHORIZATION)
-        );
-        return ResponseEntity.ok()
-                .body(responses);
     }
 
     // 나의 할 일 + 진행 중 이슈만 조회
