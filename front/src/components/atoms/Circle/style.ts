@@ -3,18 +3,24 @@ import tw from 'twin.macro';
 import { theme } from '../../../styles/theme';
 
 export interface styledType {
-  height?: number;
+  height?: string;
   backgroundColor?: string;
   isDropShadow?: boolean;
   isInnerShadow?: boolean;
   isClickable?: boolean;
+  isImage?: boolean;
+  url?: string;
 }
 
-export const Circle = styled.span<styledType>`
-  ${tw`flex justify-center items-center rounded-full font-bold shadow-none`};
+// google img를 circle에 가져오는 경우, 외부경로 설정에 따라
+// 해당 경로의 이미지를 못가져오는 에러가 발생하는 경우가 있다.
+export const StyledCircle = styled.span.attrs({
+  referrerpolicy: 'no-referrer',
+})<styledType>`
+  ${tw`flex justify-center items-center rounded-full font-bold shadow-none m-0`};
 
-  ${({ height }) => height && `width: ${height}px`};
-  ${({ height }) => height && `height: ${height}px`};
+  ${({ height }) => height && `width: ${height}`};
+  ${({ height }) => height && `height: ${height}`};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ isInnerShadow }) =>
     isInnerShadow &&
@@ -31,11 +37,19 @@ export const Circle = styled.span<styledType>`
     css`
       ${tw`cursor-pointer`};
     `}
+  ${({ isImage, url }) =>
+    isImage &&
+    css`
+      background-image: url(${url});
+      background-position: center, center;
+      background-size: 100% 100%;
+      object-fit: fill;
+    `}
 `;
 
-Circle.defaultProps = {
+StyledCircle.defaultProps = {
   children: '',
-  height: 50,
+  height: '50px',
   backgroundColor: theme.button.gray,
   isDropShadow: false,
   isInnerShadow: false,

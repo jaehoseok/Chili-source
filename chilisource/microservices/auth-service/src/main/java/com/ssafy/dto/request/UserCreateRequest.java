@@ -1,5 +1,6 @@
 package com.ssafy.dto.request;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCreateRequest {
     private String name;
+
     private String email;
+
     private String image;
 
     @Builder

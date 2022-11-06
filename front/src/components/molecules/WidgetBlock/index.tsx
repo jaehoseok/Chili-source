@@ -7,7 +7,7 @@ import {
 } from './style';
 
 // components
-import { Sheet } from 'components/atoms/Sheet';
+import Sheet from 'components/atoms/Sheet';
 
 interface propsType extends styledType {
   type: string;

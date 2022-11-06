@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
-import { StyledSelect, StyledTypes } from './style';
+import { StyledSelect, styledType } from './style';
 
-interface propTypes extends StyledTypes {
+interface propsType extends styledType {
   children: ReactNode;
 }
 
@@ -17,7 +17,7 @@ interface propTypes extends StyledTypes {
  *
  * @author bell
  */
-const index = ({ children, width, fontSize }: propTypes) => {
+const index = ({ children, width, fontSize }: propsType) => {
   return (
     <StyledSelect width={width} fontSize={fontSize}>
       {children}

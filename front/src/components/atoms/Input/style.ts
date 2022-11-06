@@ -9,7 +9,7 @@ export const StyledInput = styled.input<styledType>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
+  border-radius: 10px;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   background-color: #fbfbfb;
@@ -19,5 +19,5 @@ export const StyledInput = styled.input<styledType>`
 `;
 StyledInput.defaultProps = {
   width: '400px',
-  height: '20px',
+  height: '30px',
 };

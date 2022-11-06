@@ -1,5 +1,6 @@
 package com.ssafy.dto.response;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,12 +8,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class TokenCodeResponse {
-    private Long id;
-    private String name;
+    @ApiModelProperty(value = "토큰 코드 pk")
+    private String id;
 
     @Builder
-    public TokenCodeResponse(Long id, String name) {
+    public TokenCodeResponse(String id) {
         this.id = id;
-        this.name = name;
     }
 }

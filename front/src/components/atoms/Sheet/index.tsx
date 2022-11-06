@@ -11,25 +11,57 @@ interface propsType extends styledType {
  *
  * @example
  * // 디폴트 구현
- * <Sheet />
+ * <Sheet height="100px"></Sheet>
  *
- * // 사용 예시
- * <Sheet width={200px} height={200rem} backgroundColor="red">
+ * // 이미지 적용 예시
+ * <Sheet isShadow={true} width={200px} height={200rem} backgroundColor="red">
  *  <img src={require('assets/logo/logo.png')} alt="이미지" />
  * </Sheet>
  *
- * @param {string?} height          - 높이문자열
- * @param {string?} width           - 넓이문자열
- * @param {string?} backgroundColor - #배경색핵사코드
+ * // 그림자 생성
+ * <Sheet isShadow={true} height="100px"></Sheet>
+ *
+ * // 보더 색 변경
+ * <Sheet isShadow={false} height="100px" borderColor="red"></Sheet>
+ *
+ * @param {string?}  height          - 높이문자열
+ * @param {string?}  width           - 넓이문자열
+ * @param {boolean?} isShadow        - 그림자 유무
+ * @param {string?}  borderColor     - #테두리색 핵사코드
+ * @param {string?}  backgroundColor - #배경색 핵사코드
+ * @param {string?}  flex            - flex-direction (row, column)
+ * @param {string?}  maxWidth        - max-width 설정
+ * @param {string?}  minHeight       - min-height 설정
  *
  * @author inte
  */
-export const Sheet = ({ width, height, backgroundColor, children }: propsType) => {
+const index = ({
+  width,
+  height,
+  isShadow,
+  backgroundColor,
+  children,
+  borderColor,
+  flex,
+  maxWidth,
+  minHeight,
+}: propsType) => {
   return (
     <>
-      <StyledSheet width={width} height={height} backgroundColor={backgroundColor}>
+      <StyledSheet
+        width={width}
+        height={height}
+        isShadow={isShadow}
+        backgroundColor={backgroundColor}
+        borderColor={borderColor}
+        flex={flex}
+        maxWidth={maxWidth}
+        minHeight={minHeight}
+      >
         {children}
       </StyledSheet>
     </>
   );
 };
+
+export default index;
