@@ -29,7 +29,7 @@ export const StyledNotfication = styled.div<styledType>`
       : tw`p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 inline-block absolute`}
   text-align: center;
   min-width: ${({ width }) => width};
-  left: calc(100% - ${({ width }) => width});
+  right: 0;
   animation: ${slideRight} ease-in forwards;
   animation-duration: ${({ milliseconds }) => milliseconds && milliseconds / 1000}s;
 `;

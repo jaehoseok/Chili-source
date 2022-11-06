@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import {
   StyledIssue,
   StyledIssueTop,
@@ -18,7 +18,7 @@ interface propsType extends styledType {
   epicLink?: string;
   sprint?: string;
   storyPoints?: number;
-  clickHandler?: MouseEventHandler<HTMLDivElement>;
+  clickHandler?: any;
 }
 
 /**
@@ -79,9 +79,26 @@ const index = ({
   const issueSummary = summary ? summary : '';
   const issueEpicLink = epicLink ? epicLink : '';
   const issueStoryPoints = storyPoints ? storyPoints : '';
+
+  const issueData = {
+    project: project,
+    type: type,
+    summary: summary,
+    reporter: reporter,
+    assignee: assignee,
+    rank: rank,
+    epicLink: epicLink,
+    sprint: sprint,
+    storyPoints: storyPoints,
+  };
   return (
     <>
-      <StyledIssue width={width} height={height} type={type} onClick={clickHandler}>
+      <StyledIssue
+        width={width}
+        height={height}
+        type={type}
+        onClick={() => clickHandler(issueData)}
+      >
         <StyledIssueTop type={type}>
           <Text isFill={false} message={issueType} color={'white'}></Text>
           <svg
