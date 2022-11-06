@@ -7,7 +7,7 @@ import { AiOutlineCamera } from 'react-icons/ai';
 
 // hooks
 import { usePostLinkageTokenHandler } from 'hooks/auth';
-// import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetProjectWithTokenHandler, projectType } from 'hooks/project';
 
 // CSS
 import { theme } from 'styles/theme';
@@ -39,20 +39,11 @@ import Option from 'components/atoms/Option';
 import { useEffect } from 'react';
 
 const index = () => {
-  const setting = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-  };
-
   const { jiraToken } = useRecoilValue(state);
   const { gitToken } = useRecoilValue(state);
   const jiraSetRecoilState = useSetRecoilState(state);
   const gitSetRecoilState = useSetRecoilState(state);
 
-  // const { data } = useGetUserInfoHandler();
   const { mutate } = usePostLinkageTokenHandler();
 
   useEffect(() => {
@@ -63,10 +54,6 @@ const index = () => {
     console.log('gitToken:', gitToken);
   }, [gitToken]);
 
-  // const linkageJiraTokenHandler = () => {
-  //   console.log(jiraToken);
-  // };
-
   return (
     <StyledContainer>
       <Text
@@ -76,7 +63,6 @@ const index = () => {
         fontWeight={'900'}
         display={'block'}
       ></Text>
-
       <StyledFlex>
         <Sheet width="100%" height="300px" minHeight="150px" maxWidth="2000px">
           <StyledFlexAround>
@@ -97,17 +83,21 @@ const index = () => {
                     borderColor={theme.button.gray}
                     backgroundColor={theme.button.green}
                     isHover={true}
-                    clickHandler={() =>
-                      mutate({ email: 'woaol@naver.com', tokenCodeId: 'JIRA', value: jiraToken })
-                    }
+                    clickHandler={() => {
+                      mutate({
+                        email: 'woaol@naver.com',
+                        tokenCodeId: 'JIRA',
+                        value: jiraToken,
+                      });
+                    }}
                   >
                     입력
                   </Button>
                 </StyledFlexRowEnd>
               </StyledMarginY>
-              <Select width="100%">
+              {/* <Select width="100%">
                 <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-              </Select>
+              </Select> */}
             </StyledMarginY>
             <StyledMarginY>
               <InputBox
