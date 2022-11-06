@@ -1,5 +1,5 @@
 // styles
-import { StyledPage, StyledBody, StyledLetterBox } from './style';
+import { StyledPage, StyledHeader, StyledBody, StyledLetterBox } from './style';
 
 // Components
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
@@ -9,7 +9,9 @@ const GanttChartPage = () => {
   return (
     <>
       <StyledPage>
-        <HeaderNav />
+        <StyledHeader>
+          <HeaderNav />
+        </StyledHeader>
         <StyledBody>
           <StyledLetterBox />
           <Aside />

@@ -9,6 +9,7 @@ export interface styledType {
 export const StyledGanttIssue = styled.div<styledType>`
   ${tw`flex flex-col items-center rounded-2xl overflow-hidden`};
   height: 140px;
+  min-height: 140px;
   width: 280px;
   min-width: 280px;
   opacity: 1;

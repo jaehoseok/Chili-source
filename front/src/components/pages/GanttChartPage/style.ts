@@ -6,12 +6,15 @@ export const StyledPage = styled.div`
 `;
 StyledPage.defaultProps = {};
 
+export const StyledHeader = styled.div`
+  height: 6rem;
+  min-height: 6rem;
+`;
+
 export const StyledBody = styled.div`
   ${tw`flex-grow-[1] flex overflow-hidden`}
 `;
-StyledBody.defaultProps = {};
 
 export const StyledLetterBox = styled.div`
   ${tw`w-1/12`}
 `;
-StyledLetterBox.defaultProps = {};
