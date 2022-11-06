@@ -49,7 +49,7 @@ const IssuesPage = () => {
         storyPoints={4}
         clickHandler={setInfoHandler}
       />
-      <IssueInfo info={info}></IssueInfo>
+      <IssueInfo info={info} setInfo={setInfo}></IssueInfo>
       <MiddleBucket info={info}></MiddleBucket>
     </>
   );

@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { StyledIssueInfo } from './style';
 import Sheet from '../../atoms/Sheet';
 import Button from '../../atoms/Button';
@@ -15,14 +16,29 @@ const index = (props: any) => {
       : props.info.type === 'bug'
       ? '버그'
       : '';
+  const issue = props.info;
+  const pjtRef = useRef<HTMLInputElement>(null);
+  const summaryRef = useRef<HTMLInputElement>(null);
+  const pointRef = useRef<HTMLInputElement>(null);
+
   return (
     <StyledIssueInfo>
       <Sheet isShadow={false} flex={'column'}>
-        <InputBox isRow={false} labelName={'프로젝트'} inputValue={props.info.project} />
+        <InputBox
+          isRow={false}
+          labelName={'프로젝트'}
+          inputValue={props.info.project}
+          ref={pjtRef}
+        />
         <SelectBox labelName={'이슈 유형'}>
           <Option messages={['스토리', '태스크', '버그']} selected={type}></Option>
         </SelectBox>
-        <InputBox isRow={false} labelName={'요약'} inputValue={props.info.summary} />
+        <InputBox
+          isRow={false}
+          labelName={'요약'}
+          inputValue={props.info.summary}
+          ref={summaryRef}
+        />
         <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
         <SelectBox labelName={'보고자'}>
           <Option messages={['팀원', '팀원2']} selected={props.info.reporter}></Option>
@@ -53,10 +69,13 @@ const index = (props: any) => {
           isRow={false}
           labelName={'Story Points'}
           inputValue={props.info.storyPoints + ''}
+          ref={pointRef}
         />
       </Sheet>
-
-      <Button borderColor="green" clickHandler={() => console.log('zz')}>
+      <Button borderColor="blue" clickHandler={() => console.log()}>
+        IssueInfo Test
+      </Button>
+      <Button borderColor="green" clickHandler={() => props.setInfo(issue)}>
         IssueInfo Test
       </Button>
     </StyledIssueInfo>

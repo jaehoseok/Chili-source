@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, forwardRef } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
@@ -23,34 +23,42 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-const index = ({ height, width, type, placeHolder, defaultValue }: propsType) => {
-  const [text, setText] = useState(defaultValue);
+const index = forwardRef<HTMLInputElement, propsType>(
+  ({ height, width, type, placeHolder, defaultValue }, ref) => {
+    const [text, setText] = useState(defaultValue);
 
-  const inputTag = useRef<HTMLInputElement>(null);
+    // const inputTag = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    setText(defaultValue);
-  }, [defaultValue]);
-  useEffect(() => {
-    if (inputTag.current) {
-      inputTag.current.value = text ? text : '';
-    }
-  }, [text]);
-  return (
-    <>
-      <StyledInput
-        ref={inputTag}
-        height={height}
-        width={width}
-        type={type}
-        placeholder={placeHolder}
-        onChange={e => {
-          setText(e.target.value);
-        }}
-        defaultValue={text}
-      ></StyledInput>
-    </>
-  );
-};
+    useEffect(() => {
+      setText(defaultValue);
+      console.log(ref);
+    }, [defaultValue]);
+    // useEffect(() => {
+    //   if (inputTag.current) {
+    //     inputTag.current.value = text ? text : '';
+    //   }
+    // }, [text]);
+    // useEffect(() => {
+    //   if (ref.current.value === null) {
+    //     ref.current.value = text ? text : '';
+    //   }
+    // }, [text]);
+    return (
+      <>
+        <StyledInput
+          ref={ref}
+          height={height}
+          width={width}
+          type={type}
+          placeholder={placeHolder}
+          onChange={e => {
+            setText(e.target.value);
+          }}
+          defaultValue={text}
+        ></StyledInput>
+      </>
+    );
+  },
+);
 
 export default index;

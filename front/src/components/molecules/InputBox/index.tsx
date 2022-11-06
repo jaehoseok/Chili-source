@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
 
@@ -39,43 +40,49 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
-const index = ({
-  inputHeight,
-  inputWidth,
-  inputValue,
-  inputType,
-  inputPlaceHolder,
-  labelName,
-  labelSize,
-  labelWeight,
-  labelMarginBottom,
-  isRow,
-  containerWidth,
-  containerPadding,
-}: propsType) => {
-  return (
-    <StyledContainer
-      isRow={isRow}
-      containerPadding={containerPadding}
-      containerWidth={containerWidth}
-    >
-      <StyledLabel
+const index = forwardRef<HTMLInputElement, propsType>(
+  (
+    {
+      inputHeight,
+      inputWidth,
+      inputValue,
+      inputType,
+      inputPlaceHolder,
+      labelName,
+      labelSize,
+      labelWeight,
+      labelMarginBottom,
+      isRow,
+      containerWidth,
+      containerPadding,
+    },
+    ref,
+  ) => {
+    return (
+      <StyledContainer
         isRow={isRow}
-        labelSize={labelSize}
-        labelWeight={labelWeight}
-        labelMarginBottom={labelMarginBottom}
+        containerPadding={containerPadding}
+        containerWidth={containerWidth}
       >
-        {labelName}
-      </StyledLabel>
-      <Input
-        height={inputHeight}
-        width={inputWidth}
-        type={inputType}
-        placeHolder={inputPlaceHolder}
-        defaultValue={inputValue}
-      ></Input>
-    </StyledContainer>
-  );
-};
+        <StyledLabel
+          isRow={isRow}
+          labelSize={labelSize}
+          labelWeight={labelWeight}
+          labelMarginBottom={labelMarginBottom}
+        >
+          {labelName}
+        </StyledLabel>
+        <Input
+          ref={ref}
+          height={inputHeight}
+          width={inputWidth}
+          type={inputType}
+          placeHolder={inputPlaceHolder}
+          defaultValue={inputValue}
+        ></Input>
+      </StyledContainer>
+    );
+  },
+);
 
 export default index;

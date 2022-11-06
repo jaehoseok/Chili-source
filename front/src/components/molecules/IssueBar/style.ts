@@ -3,16 +3,16 @@ import tw from 'twin.macro';
 import { theme } from '../../../styles/theme';
 
 export interface styledType {
-  width?: number;
-  height?: number;
+  width?: string;
+  height?: string;
   type: string;
 }
 
 export const StyledIssueBar = styled.div<styledType>`
   ${tw`flex rounded-md border border-solid border-gray-200`};
 
-  ${({ width }) => `width: ${width}px`};
-  ${({ height }) => `height: ${height}px`};
+  ${({ width }) => `width: ${width}`};
+  ${({ height }) => `height: ${height}`};
 `;
 
 export const StyledIssueBarType = styled.div<styledType>`
@@ -31,7 +31,7 @@ export const StyledIssueBarElement = styled.div`
 `;
 
 StyledIssueBar.defaultProps = {
-  width: 600,
-  height: 40,
+  width: '600px',
+  height: '40px',
   type: '',
 };
