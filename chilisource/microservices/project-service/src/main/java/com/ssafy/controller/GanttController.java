@@ -10,9 +10,11 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,12 +29,14 @@ public class GanttController {
     public ResponseEntity<List<GanttChartResponse>> getGanttChart(
             @ApiParam(value = "검색 옵션 1(모든 팀원 조회) / 2(개별 차트 조회)") @RequestParam Integer op,
             @ApiParam(value = "프로젝트 pk") @RequestParam Long projectId,
-            @ApiParam(value = "검색할 유저 pk (null 일 경우 공통 차트)") @RequestParam Long userId) {
+            @ApiParam(value = "검색할 유저 pk (null 일 경우 공통 차트)") @RequestParam(required = false) Long userId,
+            @ApiParam(value = "범위 시작") @RequestParam(defaultValue = "1900-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @ApiParam(value = "범위 끝") @RequestParam(defaultValue = "3000-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         List<GanttChartResponse> responses;
         if (op.equals(2)) {
-            responses = ganttChartService.getProjectGanttChartEachLatest(userId, projectId);
+            responses = ganttChartService.getProjectGanttChartEachLatest(userId, projectId, start, end);
         } else {
-            responses = ganttChartService.getProjectGanttChartAllLatest(projectId);
+            responses = ganttChartService.getProjectGanttChartAllLatest(projectId, start, end);
         }
         return ResponseEntity.ok(responses);
     }
@@ -42,13 +46,15 @@ public class GanttController {
     public ResponseEntity<List<GanttChartResponse>> getGanttChartByVersion(
             @ApiParam(value = "검색 옵션 1(모든 팀원 조회) / 2(개별 차트 조회)") @RequestParam Integer op,
             @ApiParam(value = "프로젝트 pk") @RequestParam Long projectId,
-            @ApiParam(value = "검색할 유저 pk (null 일 경우 공통 차트)") @RequestParam Long userId,
-            @ApiParam(value = "검색할 간트차트 버전") @RequestParam Long version) {
+            @ApiParam(value = "검색할 유저 pk (null 일 경우 공통 차트)") @RequestParam(required = false) Long userId,
+            @ApiParam(value = "검색할 간트차트 버전") @RequestParam Long version,
+            @ApiParam(value = "범위 시작") @RequestParam(defaultValue = "1900-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+            @ApiParam(value = "범위 끝") @RequestParam(defaultValue = "3000-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         List<GanttChartResponse> responses;
         if (op.equals(2)) {
-            responses = ganttChartService.getProjectGanttChartByVersion(projectId, version);
+            responses = ganttChartService.getProjectGanttChartByVersionEach(userId, projectId, version, start, end);
         } else {
-            responses = ganttChartService.getProjectGanttChartByVersionEach(userId, projectId, version);
+            responses = ganttChartService.getProjectGanttChartByVersion(projectId, version, start, end);
         }
         return ResponseEntity.ok(responses);
     }

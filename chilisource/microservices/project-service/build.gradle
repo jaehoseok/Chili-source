@@ -38,9 +38,6 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // REDIS
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
     // MySQL
     runtimeOnly 'mysql:mysql-connector-java'
 

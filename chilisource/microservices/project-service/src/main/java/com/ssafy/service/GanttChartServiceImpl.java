@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,36 +35,36 @@ public class GanttChartServiceImpl implements GanttChartService {
     private final Sort ganttSort = Sort.by("version").and(Sort.by("startTime"));
 
     @Override
-    public List<GanttChartResponse> getProjectGanttChartAllLatest(Long projectId) {
+    public List<GanttChartResponse> getProjectGanttChartAllLatest(Long projectId, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> {
                     log.error("[Project] [getProjectGanttChartAllLatest] PROJECT_NOT_FOUND");
                     return new NotFoundException(PROJECT_NOT_FOUND);
                 });
 
-        return getProjectGanttChartByVersion(projectId, project.getLatestGanttVersion());
+        return getProjectGanttChartByVersion(projectId, project.getLatestGanttVersion(), start, end);
     }
 
     @Override
-    public List<GanttChartResponse> getProjectGanttChartEachLatest(Long userId, Long projectId) {
+    public List<GanttChartResponse> getProjectGanttChartEachLatest(Long userId, Long projectId, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> {
                     log.error("[Project] [getProjectGanttChartEachLatest] PROJECT_NOT_FOUND");
                     return new NotFoundException(PROJECT_NOT_FOUND);
                 });
 
-        return getProjectGanttChartByVersionEach(userId, projectId, project.getLatestGanttVersion());
+        return getProjectGanttChartByVersionEach(userId, projectId, project.getLatestGanttVersion(), start, end);
     }
 
     @Override
-    public List<GanttChartResponse> getProjectGanttChartByVersion(Long projectId, Long version) {
+    public List<GanttChartResponse> getProjectGanttChartByVersion(Long projectId, Long version, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> {
                     log.error("[Project] [getProjectGanttChartByVersion] PROJECT_NOT_FOUND");
                     return new NotFoundException(PROJECT_NOT_FOUND);
                 });
 
-        List<GanttChart> responses = ganttChartRepo.findByProjectAndVersion(project, version, ganttSort);
+        List<GanttChart> responses = ganttChartRepo.findByProjectAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, version, start, end, ganttSort);
         return responses.stream()
                 .map(ganttChart -> GanttChartResponse.builder()
                         .id(ganttChart.getId())
@@ -79,7 +80,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     }
 
     @Override
-    public List<GanttChartResponse> getProjectGanttChartByVersionEach(Long userId, Long projectId, Long version) {
+    public List<GanttChartResponse> getProjectGanttChartByVersionEach(Long userId, Long projectId, Long version, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> {
                     log.error("[Project] [getProjectGanttChartByVersionEach] PROJECT_NOT_FOUND");
@@ -88,9 +89,9 @@ public class GanttChartServiceImpl implements GanttChartService {
 
         List<GanttChart> responses;
         if (userId == null) {
-            responses = ganttChartRepo.findByProjectAndUserIdIsNullAndVersion(project, version, ganttSort);
+            responses = ganttChartRepo.findByProjectAndUserIdIsNullAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, version, start, end,ganttSort);
         } else {
-            responses = ganttChartRepo.findByProjectAndUserIdAndVersion(project, userId, version, ganttSort);
+            responses = ganttChartRepo.findByProjectAndUserIdAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, userId, version, start, end, ganttSort);
         }
         return responses.stream()
                 .map(ganttChart -> GanttChartResponse.builder()
