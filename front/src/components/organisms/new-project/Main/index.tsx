@@ -1,5 +1,5 @@
 // LIBRARY
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { linkageTokenState } from 'recoil/atoms/auth/linkageToken';
 import { createProjectState } from 'recoil/atoms/project/createProject';
@@ -40,8 +40,14 @@ import Button from 'components/atoms/Button';
 import Select from 'components/atoms/Select';
 import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
+import { usePostCreateProjectHandler } from 'hooks/project';
+import { useNavigate } from 'react-router-dom';
 
 const index = () => {
+  // project-logo용 state
+  const [image, setImage] = useState();
+  const navigate = useNavigate();
+
   // 토큰 연동시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
   const { jiraToken } = useRecoilValue(linkageTokenState);
   const { gitToken } = useRecoilValue(linkageTokenState);
@@ -65,6 +71,17 @@ const index = () => {
   const { mutate } = usePostLinkageTokenHandler();
   // 지라 프로젝트 모두 가져오기
   const { isError, error, refetch } = useGetJiraProjectList();
+  const createProjectData = usePostCreateProjectHandler();
+
+  const creaetProjectHandler = () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-ignore
+    createProjectData.mutate({ projectName, projectDescription, image });
+  };
+
+  if (createProjectData.isSuccess) {
+    navigate('/projects');
+  }
 
   return (
     <StyledContainer>
@@ -200,6 +217,9 @@ const index = () => {
                     type="file"
                     id="project_logo"
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      setImage(e);
                       imageSetRecoilState(prevData => {
                         return {
                           ...prevData,
@@ -222,6 +242,7 @@ const index = () => {
           borderColor={theme.button.gray}
           backgroundColor={theme.button.green}
           isHover={true}
+          clickHandler={() => creaetProjectHandler()}
         >
           생성
         </Button>

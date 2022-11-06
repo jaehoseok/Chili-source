@@ -1,5 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { ChangeEvent } from 'react';
 
 // Init
 const authAxios = createAxiosApi('project-service');
@@ -41,6 +42,34 @@ export default {
   getProjectWithToken: async () => {
     try {
       const response = await authAxios.get('/project');
+      console.log(response.data);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  postCreateProject: async (
+    name: string,
+    description: string,
+    image: ChangeEvent<HTMLInputElement>,
+  ) => {
+    try {
+      const formData = new FormData();
+      const data = {
+        description,
+        name,
+      };
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      if (image) formData.append('image', image.target.files[0]);
+      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      const response = await authAxios.post('/project', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       console.log(response.data);
       return response.data;
     } catch (e) {

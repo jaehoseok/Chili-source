@@ -1,8 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { ChangeEvent } from 'react';
+
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import { project } from 'api/rest';
 
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export interface projectType {
   description: 'string';
@@ -22,5 +25,17 @@ export const useGetProjectWithTokenHandler = () => {
     {
       staleTime: Infinity,
     },
+  );
+};
+
+export interface createProjectType {
+  projectName: string;
+  projectDescription: string;
+  image: ChangeEvent<HTMLInputElement>;
+}
+
+export const usePostCreateProjectHandler = () => {
+  return useMutation(({ projectName, projectDescription, image }: createProjectType) =>
+    project.postCreateProject(projectName, projectDescription, image),
   );
 };
