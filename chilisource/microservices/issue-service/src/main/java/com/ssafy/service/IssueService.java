@@ -23,7 +23,7 @@ public interface IssueService {
     void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request);
 
     // 이슈 템플릿 삭제
-    void deleteIssueTemplate(Long issueTemplateId);
+    void deleteIssueTemplate(Long userId, Long issueTemplateId);
 
     // 미들 버킷 리스트 조회
     List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths);

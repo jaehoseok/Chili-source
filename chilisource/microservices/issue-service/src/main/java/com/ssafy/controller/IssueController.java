@@ -87,7 +87,7 @@ public class IssueController {
     public ResponseEntity<?> deleteIssueTemplate(
             @LoginUser User user,
             @ApiParam(value = "삭제하고 싶은 이슈 템플릿의 id") @PathVariable Long issueTemplateId) {
-        issueService.deleteIssueTemplate(issueTemplateId);
+        issueService.deleteIssueTemplate(user.getId(), issueTemplateId);
         return ResponseEntity.ok()
                 .build();
     }

@@ -15,10 +15,7 @@ import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
 import com.ssafy.entity.MiddleBucketIssue;
-import com.ssafy.exception.BadRequestException;
-import com.ssafy.exception.DuplicateException;
-import com.ssafy.exception.NotFoundException;
-import com.ssafy.exception.WrongFormException;
+import com.ssafy.exception.*;
 import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
@@ -39,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.MIDDLE_BUCKET_NAME_DUPLICATED;
 import static com.ssafy.exception.NotFoundException.*;
+import static com.ssafy.exception.WrongAccessException.*;
 import static com.ssafy.exception.WrongFormException.SUMMARY_NOT_NULL;
 
 @Slf4j
@@ -127,6 +125,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [updateIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
                     return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
                 });
+        if (!issueTemplate.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueTemplate] CAN_NOT_MODIFY_ISSUE_TEMPLATE");
+            throw new WrongAccessException(CAN_NOT_UPDATE_ISSUE_TEMPLATE);
+        }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
@@ -150,12 +152,16 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void deleteIssueTemplate(Long issueTemplateId) {
+    public void deleteIssueTemplate(Long userId, Long issueTemplateId) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
                 .orElseThrow(() -> {
                     log.error("[Issue] [deleteIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
                     return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
                 });
+        if (!issueTemplate.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueTemplate] CAN_NOT_DELETE_ISSUE_TEMPLATE");
+            throw new WrongAccessException(CAN_NOT_DELETE_ISSUE_TEMPLATE);
+        }
         issueTemplateRepo.delete(issueTemplate);
     }
 
@@ -217,6 +223,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [updateMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
                 });
+        if (!middleBucket.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET");
+            throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET);
+        }
         middleBucket.update(request.getName());
     }
 
@@ -228,6 +238,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [deleteMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
                 });
+        if (!middleBucket.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [deleteMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET");
+            throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET);
+        }
         middleBucketRepo.delete(middleBucket);
     }
 
@@ -310,6 +324,10 @@ public class IssueServiceImpl implements IssueService {
             log.error("[Issue] [updateIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
+        if (!middleBucketIssue.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueInMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET_ISSUE");
+            throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET_ISSUE);
+        }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
@@ -344,7 +362,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [deleteIssueInMiddleBucket] MIDDLE_BUCKET_ISSUE_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND);
                 });
-
+        if (!middleBucketIssue.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [deleteIssueInMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE");
+            throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE);
+        }
         if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
             log.error("[Issue] [deleteIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
