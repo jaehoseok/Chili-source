@@ -1,10 +1,15 @@
 // LIBRARY
 import { state } from 'recoil/atoms/auth/linkageToken';
+
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
-import Slider from 'react-slick';
 import { AiOutlineCamera } from 'react-icons/ai';
 
+// hooks
+import { usePostLinkageTokenHandler } from 'hooks/auth';
+// import { useGetUserInfoHandler } from 'hooks/user';
+
+// CSS
 import { theme } from 'styles/theme';
 
 // STYLED COMPONENT
@@ -47,6 +52,9 @@ const index = () => {
   const jiraSetRecoilState = useSetRecoilState(state);
   const gitSetRecoilState = useSetRecoilState(state);
 
+  // const { data } = useGetUserInfoHandler();
+  const { mutate } = usePostLinkageTokenHandler();
+
   useEffect(() => {
     console.log('jiraToken:', jiraToken);
   }, [jiraToken]);
@@ -54,6 +62,10 @@ const index = () => {
   useEffect(() => {
     console.log('gitToken:', gitToken);
   }, [gitToken]);
+
+  // const linkageJiraTokenHandler = () => {
+  //   console.log(jiraToken);
+  // };
 
   return (
     <StyledContainer>
@@ -64,112 +76,121 @@ const index = () => {
         fontWeight={'900'}
         display={'block'}
       ></Text>
-      <Slider {...setting}>
-        <StyledFlex>
-          <Sheet width="100%" height="300px" minHeight="150px" maxWidth="2000px">
-            <StyledFlexAround>
+
+      <StyledFlex>
+        <Sheet width="100%" height="300px" minHeight="150px" maxWidth="2000px">
+          <StyledFlexAround>
+            <StyledMarginY>
+              <InputBox
+                labelName="Jira 토큰"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                containerWidth="100%"
+                useSetRecoilState={jiraSetRecoilState}
+                recoilParam={'jiraToken'}
+              ></InputBox>
               <StyledMarginY>
-                <InputBox
-                  labelName="Jira 토큰"
-                  labelSize="1.3rem"
-                  labelMarginBottom="20px"
-                  isRow={false}
-                  containerWidth="100%"
-                  useSetRecoilState={jiraSetRecoilState}
-                  recoilParam={'jiraToken'}
-                ></InputBox>
-                <StyledMarginY>
-                  <StyledFlexRowEnd>
-                    <Button
-                      width="100px"
-                      borderColor={theme.button.gray}
-                      backgroundColor={theme.button.green}
-                      isHover={true}
-                    >
-                      입력
-                    </Button>
-                  </StyledFlexRowEnd>
-                </StyledMarginY>
-                <Select width="100%">
-                  <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-                </Select>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="100px"
+                    borderColor={theme.button.gray}
+                    backgroundColor={theme.button.green}
+                    isHover={true}
+                    clickHandler={() =>
+                      mutate({ email: 'woaol@naver.com', tokenCodeId: 'JIRA', value: jiraToken })
+                    }
+                  >
+                    입력
+                  </Button>
+                </StyledFlexRowEnd>
               </StyledMarginY>
+              <Select width="100%">
+                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
+              </Select>
+            </StyledMarginY>
+            <StyledMarginY>
+              <InputBox
+                labelName="Git 토큰"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                useSetRecoilState={gitSetRecoilState}
+                recoilParam={'gitToken'}
+              ></InputBox>
               <StyledMarginY>
-                <InputBox
-                  labelName="Git 토큰"
-                  labelSize="1.3rem"
-                  labelMarginBottom="20px"
-                  isRow={false}
-                  useSetRecoilState={gitSetRecoilState}
-                  recoilParam={'gitToken'}
-                ></InputBox>
-                <StyledMarginY>
-                  <StyledFlexRowEnd>
-                    <Button
-                      width="100px"
-                      borderColor={theme.button.gray}
-                      backgroundColor={theme.button.green}
-                      isHover={true}
-                    >
-                      입력
-                    </Button>
-                  </StyledFlexRowEnd>
-                </StyledMarginY>
-                <Select width="100%">
-                  <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-                </Select>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="100px"
+                    borderColor={theme.button.gray}
+                    backgroundColor={theme.button.green}
+                    isHover={true}
+                    clickHandler={() =>
+                      mutate({
+                        email: 'woaol@naver.com',
+                        tokenCodeId: 'SSAFYGITLAB',
+                        value: gitToken,
+                      })
+                    }
+                  >
+                    입력
+                  </Button>
+                </StyledFlexRowEnd>
               </StyledMarginY>
-            </StyledFlexAround>
-          </Sheet>
-        </StyledFlex>
-        <StyledFlex>
-          <Sheet width="100%" height="30vh" minHeight="450px" maxWidth="2000px">
-            <StyledInputBox>
-              <StyledMarginY>
-                <InputBox
-                  labelName="프로젝트명"
-                  isRow={true}
-                  containerWidth={'100%'}
-                  inputWidth={'70%'}
-                  inputHeight={'40px'}
-                  labelSize={'1.3rem'}
-                ></InputBox>
-              </StyledMarginY>
-              <StyledMarginY>
-                <TextAreaBox
-                  labelName="프로젝트 상세"
-                  isRow={true}
-                  containerWidth={'100%'}
-                  textAreaWidth={'70%'}
-                  textAreaHeight={'100px'}
-                  labelSize={'1.3rem'}
-                ></TextAreaBox>
-              </StyledMarginY>
-              <StyledMarginY>
-                <StyledFlexRow>
-                  <StyledLabel>로고 이미지</StyledLabel>
-                  <StyledWidth70>
-                    <Circle height="100px" backgroundColor="#f6f6f6">
-                      <AiOutlineCamera fontSize={'40px'} color={'#a0a0a0'}></AiOutlineCamera>
-                    </Circle>
-                    <input type="file" id="project_logo" />
-                  </StyledWidth70>
-                </StyledFlexRow>
-              </StyledMarginY>
-              <StyledFlexRowEnd>
-                <Button
-                  width="100px"
-                  borderColor={theme.button.gray}
-                  backgroundColor={theme.button.green}
-                  isHover={true}
-                >
-                  생성
-                </Button>
-              </StyledFlexRowEnd>
-            </StyledInputBox>
-          </Sheet>
-        </StyledFlex>
-      </Slider>
+              <Select width="100%">
+                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
+              </Select>
+            </StyledMarginY>
+          </StyledFlexAround>
+        </Sheet>
+      </StyledFlex>
+      <StyledFlex>
+        <Sheet width="100%" height="30vh" minHeight="450px" maxWidth="2000px">
+          <StyledInputBox>
+            <StyledMarginY>
+              <InputBox
+                labelName="프로젝트명"
+                isRow={true}
+                containerWidth={'100%'}
+                inputWidth={'70%'}
+                inputHeight={'40px'}
+                labelSize={'1.3rem'}
+              ></InputBox>
+            </StyledMarginY>
+            <StyledMarginY>
+              <TextAreaBox
+                labelName="프로젝트 상세"
+                isRow={true}
+                containerWidth={'100%'}
+                textAreaWidth={'70%'}
+                textAreaHeight={'100px'}
+                labelSize={'1.3rem'}
+              ></TextAreaBox>
+            </StyledMarginY>
+            <StyledMarginY>
+              <StyledFlexRow>
+                <StyledLabel>로고 이미지</StyledLabel>
+                <StyledWidth70>
+                  <Circle height="100px" backgroundColor="#f6f6f6">
+                    <AiOutlineCamera fontSize={'40px'} color={'#a0a0a0'}></AiOutlineCamera>
+                  </Circle>
+                  <input type="file" id="project_logo" />
+                </StyledWidth70>
+              </StyledFlexRow>
+            </StyledMarginY>
+          </StyledInputBox>
+        </Sheet>
+      </StyledFlex>
+      <StyledFlexRowEnd>
+        <Button
+          width="100px"
+          borderColor={theme.button.gray}
+          backgroundColor={theme.button.green}
+          isHover={true}
+        >
+          생성
+        </Button>
+      </StyledFlexRowEnd>
     </StyledContainer>
   );
 };
