@@ -8,4 +8,4 @@ import { getTestHandler } from './handlers/example';
  * @author bell
  */
 
-export const handlers = [...Object.values(getTestHandler)];
+export const handlers = [getTestHandler];
