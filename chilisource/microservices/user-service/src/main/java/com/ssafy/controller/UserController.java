@@ -77,7 +77,6 @@ public class UserController {
     public ResponseEntity<?> getUserList(
             @ApiParam(value = "유저 pk 리스트") @RequestParam List<Long> userIds
     ) {
-        userService.getUserList(userIds);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(userService.getUserList(userIds));
     }
 }
