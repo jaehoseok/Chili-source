@@ -85,12 +85,14 @@ public class ProjectServiceImpl implements ProjectService {
     // 프로젝트 생성
     @Override
     @Transactional
-    public void createProject(ProjectCreateRequest request, Long userId) {
+    public void createProject(ProjectCreateRequest request, String image,Long userId) {
         Project project = Project.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();
         projectRepo.save(project);
+
+        project.updateImage(image);
 
         UserProject userProject = UserProject.builder()
                 .userId(userId)
@@ -99,8 +101,6 @@ public class ProjectServiceImpl implements ProjectService {
                 .role(roleRepo.findById(1L).get())
                 .build();
         userProjectRepo.save(userProject);
-
-        return;
     }
 
     // 프로젝트 수정
