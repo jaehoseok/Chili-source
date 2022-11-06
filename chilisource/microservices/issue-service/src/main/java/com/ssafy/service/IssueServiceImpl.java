@@ -184,35 +184,6 @@ public class IssueServiceImpl implements IssueService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public IssueListResponse getMiddleBucket(Long userId, Long middleBucketId) {
-        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [getMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
-
-        List<IssueResponse> issueList = middleBucket.getMiddleBucketIssues().stream()
-                .map(middleBucketIssue -> IssueResponse.builder()
-                        .issueId(middleBucketIssue.getId())
-                        .issueType(middleBucketIssue.getIssueType().getName())
-                        .summary(middleBucketIssue.getSummary())
-                        .description(middleBucketIssue.getDescription())
-                        .assignee(middleBucketIssue.getAssignee())
-                        .priority(middleBucketIssue.getPriority())
-                        .epicLink(middleBucketIssue.getEpicLink())
-//                        .sprint(middleBucketIssue.getSprint())
-                        .storyPoints(middleBucketIssue.getStoryPoints())
-                        .build())
-                .collect(Collectors.toList());
-
-        return IssueListResponse.builder()
-                .middleBucketId(middleBucket.getId())
-                .middleBucketName(middleBucket.getName())
-                .issueList(issueList)
-                .build();
-    }
-
     @Transactional
     @Override
     public void createMiddleBucket(Long userId, MiddleBucketCreateRequest request, List<String> auths) {
@@ -258,6 +229,35 @@ public class IssueServiceImpl implements IssueService {
                     return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
                 });
         middleBucketRepo.delete(middleBucket);
+    }
+
+    @Override
+    public IssueListResponse getMiddleBucket(Long userId, Long middleBucketId) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> {
+                    log.error("[Issue] [getMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
+                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
+                });
+
+        List<IssueResponse> issueList = middleBucket.getMiddleBucketIssues().stream()
+                .map(middleBucketIssue -> IssueResponse.builder()
+                        .issueId(middleBucketIssue.getId())
+                        .issueType(middleBucketIssue.getIssueType().getName())
+                        .summary(middleBucketIssue.getSummary())
+                        .description(middleBucketIssue.getDescription())
+                        .assignee(middleBucketIssue.getAssignee())
+                        .priority(middleBucketIssue.getPriority())
+                        .epicLink(middleBucketIssue.getEpicLink())
+//                        .sprint(middleBucketIssue.getSprint())
+                        .storyPoints(middleBucketIssue.getStoryPoints())
+                        .build())
+                .collect(Collectors.toList());
+
+        return IssueListResponse.builder()
+                .middleBucketId(middleBucket.getId())
+                .middleBucketName(middleBucket.getName())
+                .issueList(issueList)
+                .build();
     }
 
     @Transactional
