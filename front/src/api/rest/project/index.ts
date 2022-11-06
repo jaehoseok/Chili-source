@@ -39,6 +39,12 @@ export default {
     });
   },
 
+  /**
+   * @description
+   * 해당 유저가 가지고 있는 토큰과 연동되는 모든 우리 서비스의 프로젝트들을 주는 API
+   *
+   * @author bell
+   */
   getProjectWithToken: async () => {
     try {
       const response = await authAxios.get('/project');
@@ -49,6 +55,15 @@ export default {
     }
   },
 
+  /**
+   * @description
+   * 프로젝트를 생성하는 API
+   *
+   * @param {string}                              name           - 프로젝트의 이름
+   * @param {string}                              description    - 프로젝트의 상세 내용
+   * @param {ChangeEvent<HTMLInputElement>}       image          - file input의 ChangeEvent가 가지고 있는 데이터
+   * @author bell
+   */
   postCreateProject: async (
     name: string,
     description: string,

@@ -43,6 +43,13 @@ import Notification from 'components/atoms/Notification';
 import { usePostCreateProjectHandler } from 'hooks/project';
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * @description
+ * 프로젝트 생성 페이지, 지라와 깃을 연동하고
+ * 지라의 프로젝트를 가져와 서비스의 프로젝트와 연결하도록 해주는 페이지
+ *
+ * @author bell
+ */
 const index = () => {
   // project-logo용 state
   const [image, setImage] = useState();
@@ -219,12 +226,16 @@ const index = () => {
                     onChange={(e: ChangeEvent<HTMLInputElement>) => {
                       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                       // @ts-ignore
+                      // 원래는 e.target.files[0] 를 직접 주고 싶었다.
+                      // 근데 문제는 e.target.files[0]의 타입을 모른다... (안찾아지더라)
+                      // 그래서 그냥 e 다주었다.
                       setImage(e);
                       imageSetRecoilState(prevData => {
                         return {
                           ...prevData,
                           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                           // @ts-ignore
+                          // projectImage는 경로가 나오도록 했다.
                           projectImage: URL.createObjectURL(e.target.files[0]),
                         };
                       });

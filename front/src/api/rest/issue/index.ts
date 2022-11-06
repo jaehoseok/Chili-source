@@ -38,6 +38,13 @@ export default {
     });
   },
 
+  /**
+   * @description
+   * 가지고 있는 지라 토큰을 통해
+   * 지라의 모든 프로젝트를 알려주는 API
+   *
+   * @author bell
+   */
   getJiraProjectList: async () => {
     try {
       const response = await authAxios.get('/jira/project-list');

@@ -137,7 +137,7 @@ export default {
 
   /**
    * @description
-   * 사용자의 토큰을 연동한다.
+   * 사용자의 토큰을 연동하는 API.
    *
    * @author bell
    */
