@@ -37,4 +37,14 @@ export default {
         });
     });
   },
+
+  getJiraProjectList: async () => {
+    try {
+      const response = await authAxios.get('/jira/project-list');
+      console.log(response);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };

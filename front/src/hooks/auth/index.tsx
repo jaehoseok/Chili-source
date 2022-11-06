@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
-import { useGetProjectWithTokenHandler } from 'hooks/project';
 
 interface requestBodyType {
   email: string;
@@ -15,7 +14,6 @@ interface requestBodyType {
  *
  * @author bell
  */
-
 export const usePostLinkageTokenHandler = () => {
   return useMutation(({ email, tokenCodeId, value }: requestBodyType) =>
     auth.postLinkageToken(email, tokenCodeId, value),

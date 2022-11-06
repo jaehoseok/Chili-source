@@ -1,13 +1,13 @@
 // LIBRARY
+import { useEffect } from 'react';
 import { state } from 'recoil/atoms/auth/linkageToken';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { AiOutlineCamera } from 'react-icons/ai';
 
 // hooks
 import { usePostLinkageTokenHandler } from 'hooks/auth';
-import { useGetProjectWithTokenHandler, projectType } from 'hooks/project';
+import { useGetJiraProjectList } from 'hooks/issue';
 
 // CSS
 import { theme } from 'styles/theme';
@@ -36,7 +36,7 @@ import Circle from 'components/atoms/Circle';
 import Button from 'components/atoms/Button';
 import Select from 'components/atoms/Select';
 import Option from 'components/atoms/Option';
-import { useEffect } from 'react';
+import Notification from 'components/atoms/Notification';
 
 const index = () => {
   const { jiraToken } = useRecoilValue(state);
@@ -45,6 +45,7 @@ const index = () => {
   const gitSetRecoilState = useSetRecoilState(state);
 
   const { mutate } = usePostLinkageTokenHandler();
+  const { data, isLoading, isError, error, refetch } = useGetJiraProjectList();
 
   useEffect(() => {
     console.log('jiraToken:', jiraToken);
@@ -89,15 +90,22 @@ const index = () => {
                         tokenCodeId: 'JIRA',
                         value: jiraToken,
                       });
+                      refetch();
                     }}
                   >
                     입력
                   </Button>
                 </StyledFlexRowEnd>
               </StyledMarginY>
-              {/* <Select width="100%">
-                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-              </Select> */}
+              {/* {isLoading && <div>Loading...</div>} */}
+              {/* {data && (
+                <Select width="100%">
+                  <Option messages={dat}></Option>
+                </Select>
+              )} */}
+              {isError && (
+                <Notification width="200px" check={false} message={error.message}></Notification>
+              )}
             </StyledMarginY>
             <StyledMarginY>
               <InputBox
