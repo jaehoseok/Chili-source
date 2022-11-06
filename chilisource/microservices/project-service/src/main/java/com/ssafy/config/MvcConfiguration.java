@@ -9,10 +9,12 @@ public class MvcConfiguration implements WebMvcConfigurer {
     //cors error
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000", "https://j7b305.p.ssafy.io", "http://j7b305.p.ssafy.io")
-                .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS")
-                .allowedHeaders("Authorization","Content-Type","accept","access-control-allow-origin")
+        registry.addMapping("/**")
+                .allowedOrigins("https://k7b207.p.ssafy.io","http://localhost:3000")
+                //.allowedOriginPatterns("*")
+                //.allowCredentials(true)
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .exposedHeaders("Authorization")
                 .allowCredentials(true)
                 .maxAge(86400L);

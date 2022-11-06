@@ -1,0 +1,45 @@
+server:
+  port: 0
+  error:
+    whitelabel:
+      enabled: false
+  servlet:
+    # TODO : CONTEXT-PATH가 해당 서비스명과 같은지 확인
+    context-path: /widget-service
+
+spring:
+  application:
+    name: widget-service
+
+  zipkin:
+    # TODO : 서버에 Open Zipkin Jar 파일 다운로드 후 실행하면 연결됨
+    base-url: http://k7b2071.p.ssafy.io:9411
+    enabled: true
+  sleuth:
+    sampler:
+      probability: 1.0
+  rabbitmq:
+    host: k7b2071.p.ssafy.io
+    port: 5672
+    username: guest
+    password: guest
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://k7b2071.p.ssafy.io:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus, busrefresh
+logging:
+  config: classpath:logback-spring.xml

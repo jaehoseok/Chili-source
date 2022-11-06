@@ -9,7 +9,7 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://k7b2071.p.ssafy.io:8761/eureka
-      #defaultZone: http://localhost:8761/eureka
+#      defaultZone: http://localhost:8761/eureka
 
 spring:
   # bean중복 에러 해결
@@ -26,12 +26,25 @@ spring:
       probability: 1.0
   cloud:
     gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: ["https://k7b207.p.ssafy.io","http://localhost:3000"]
+            allow-credentials: true
+            allowedHeaders: '*'
+            exposed-headers:
+              - 'Authorization'
+            max-age: 86400
+            allowedMethods: '*'
+
       routes:
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/auth-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -40,7 +53,7 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/user-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             #- RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -82,8 +95,8 @@ spring:
         - id: project-service
           uri: lb://PROJECT-SERVICE
           predicates:
-            - Path=/api/project-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Path=/project-service/**
+            - Method=GET,POST,PUT,DELETE,OPTIONS
           filters:
             # - RemoveRequestHeader=Cookie
             #- RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -142,7 +155,7 @@ spring:
           uri: lb://ISSUE-SERVICE
           predicates:
             - Path=/issue-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Method=GET,POST,PUT,DELETE,OPTIONS
         #---------------------------------------------ISSUE FILTER END---------------------------------------------------------------
 
         #---------------------------------------------PROJECT FILTER START---------------------------------------------------------------
@@ -162,11 +175,11 @@ spring:
         #          filters:
         #            - AdminFilter
 
-        - id: project-service
-          uri: lb://PROJECT-SERVICE
+        - id: widget-service
+          uri: lb://WIDGET-SERVICE
           predicates:
-            - Path=/project-service/**
-            - Method=GET,POST,PUT,DELETE
+            - Path=/widget-service/**
+            - Method=GET,POST,PUT,DELETE,OPTIONS
         #          filters:
         #            - AuthorizationFilter
         #---------------------------------------------PROJECT FILTER END---------------------------------------------------------------

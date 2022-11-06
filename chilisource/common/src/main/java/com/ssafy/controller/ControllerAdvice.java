@@ -22,13 +22,13 @@ public class ControllerAdvice {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler({BadRequestException.class, WrongFormException.class})
     public Message BadRequestException(RuntimeException runtimeException) {
         return new Message(runtimeException.getMessage());
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(WrongAccessException.class)
+    @ExceptionHandler({WrongAccessException.class, NotAuthorizedException.class})
     public Message WrongAccessException(RuntimeException runtimeException) {
         return new Message(runtimeException.getMessage());
     }

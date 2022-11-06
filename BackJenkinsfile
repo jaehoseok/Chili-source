@@ -23,8 +23,8 @@ pipeline{
        PROJECT_CONTAINER_NAME="project-service-container"
        PROJECT_NAME = "project-service-image"
 
-       WIGGET_CONTAINER_NAME="wigget-service-container"
-       WIGGET_NAME = "wigget-service-image"
+       WIDGET_CONTAINER_NAME="widget-service-container"
+       WIDGET_NAME = "widget-service-image"
 
     }
     stages {
@@ -50,7 +50,7 @@ pipeline{
                         sh "docker stop ${USER_CONTAINER_NAME}"
                         sh "docker stop ${ISSUE_CONTAINER_NAME}"
                         sh "docker stop ${PROJECT_CONTAINER_NAME}"
-                        //sh "docker stop ${WIGGET_CONTAINER_NAME}"
+                        sh "docker stop ${WIDGET_CONTAINER_NAME}"
                         sleep 1
                         sh "docker rm ${DISCOVERY_CONTAINER_NAME}"
                         sh "docker rm ${CONFIG_CONTAINER_NAME}"
@@ -60,7 +60,7 @@ pipeline{
                         sh "docker rm ${USER_CONTAINER_NAME}"
                         sh "docker rm ${ISSUE_CONTAINER_NAME}"
                         sh "docker rm ${PROJECT_CONTAINER_NAME}"
-                        //sh "docker rm ${WIGGET_CONTAINER_NAME}"
+                        sh "docker rm ${WIDGET_CONTAINER_NAME}"
                     }catch(e){
                         sh 'exit 0'
                     }finally{
@@ -106,7 +106,7 @@ pipeline{
                         sh "docker build -t ${USER_NAME} ./chilisource/microservices/user-service/."
                         sh "docker build -t ${ISSUE_NAME} ./chilisource/microservices/issue-service/."
                         sh "docker build -t ${PROJECT_NAME} ./chilisource/microservices/project-service/."
-                        //sh "docker build -t ${WIGGET_NAME} ./chilisource/microservices/wigget-service/."
+                        sh "docker build -t ${WIDGET_NAME} ./chilisource/microservices/widget-service/."
 
                         mattermostSend (
                             color: "good", 
@@ -148,7 +148,7 @@ pipeline{
                         try{
                         sh "docker run -d --name=${CONFIG_CONTAINER_NAME} -p 8888:8888 --net msa ${CONFIG_NAME}"
                         sh "docker run -d --name=${GATEWAY_CONTAINER_NAME} -p 8000:8000 --net msa ${GATEWAY_NAME}"
-                        sh 'sleep 10'
+                        sh 'sleep 5'
                         mattermostSend (
                             color: "good", 
                             message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
@@ -171,7 +171,7 @@ pipeline{
                         sh "docker run -d --name=${USER_CONTAINER_NAME} --net msa ${USER_NAME}"
                         sh "docker run -d --name=${ISSUE_CONTAINER_NAME} --net msa ${ISSUE_NAME}"
                         sh "docker run -d --name=${PROJECT_CONTAINER_NAME} --net msa ${PROJECT_NAME}"
-                        //sh "docker run -d --name=${WIGGET_CONTAINER_NAME} --net msa ${WIGGET_NAME}"
+                        sh "docker run -d --name=${WIDGET_CONTAINER_NAME} --net msa ${WIDGET_NAME}"
                         mattermostSend (
                             color: "good", 
                             message: "Back Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"

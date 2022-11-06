@@ -1,0 +1,108 @@
+plugins {
+    id 'java'
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'org.springframework.boot' version '2.7.4'
+}
+
+group 'com.example'
+version '0.0.1-SNAPSHOT'
+
+ext {
+    queryDslVersion = "5.0.0"
+    set('snippetsDir', file("build/generated-snippets"))
+    set('springCloudVersion', "2021.0.3")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+dependencies {
+    //javax
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+    //JSON
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    //JWT
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // @Value 관련
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // REDIS
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // MySQL
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // QueryDSL
+    // TODO : 사용시 TODO에 있는 QueryDSL 관련 주석 풀기
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    // CORE
+    implementation(project(":common"))
+
+    // Swagger
+    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+    // kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    // 스프링 클라우드
+    implementation 'org.springframework.cloud:spring-cloud-starter'
+    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
+    // 스크링 클라우드 버스
+    implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+
+    // EUREKA 서비스에 등록
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    // 서버간 API, 외부 API 사용 가능
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // 서킷 브레이커 ( 회로차단, 벌크헤드, 재시도, 속도제한, 폴백 등 )
+    implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
+    // 슬루스, 집킨을 사용한 분산 추적
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
+    // 프로메테우스
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
+    implementation 'net.logstash.logback:logstash-logback-encoder:6.6'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// QueryDSL
+// TODO : QueryDSL 사용시 주석 해제
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {   main.java.srcDir querydslDir}
+compileQuerydsl{   options.annotationProcessorPath = configurations.querydsl}
+configurations {
+    compileOnly {      extendsFrom annotationProcessor   }
+    querydsl.extendsFrom compileClasspath
+}//querydsl 추가 끝
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}//compile에러 때문에 추가

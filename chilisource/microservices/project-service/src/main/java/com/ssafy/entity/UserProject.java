@@ -38,7 +38,7 @@ public class UserProject extends BaseEntity {
     }
 
     public void update(String userColor, Role role) {
-        if (!userColor.equals(null)) this.userColor = userColor;
-        if (!role.equals(null)) this.role = role;
+        if (userColor != null) this.userColor = userColor;
+        if (role != null) this.role = role;
     }
 }
