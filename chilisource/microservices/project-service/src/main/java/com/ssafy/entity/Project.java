@@ -28,6 +28,8 @@ public class Project extends BaseEntity {
 
     private String jiraToken;
 
+    private String jiraAccountId;
+
     private String jiraEmail;
 
     private String jiraProject;
@@ -43,14 +45,15 @@ public class Project extends BaseEntity {
     private List<UserProject> userProjects = new ArrayList<>();
 
     @Builder
-    public Project(Long id, String name, String description, String image, String jiraToken, String jiraEmail, String jiraProject, String gitToken, String gitRepo, List<GanttChart> ganttCharts, List<UserProject> userProjects) {
+    public Project(Long id, String name, String description, String image, String jiraToken, String jiraAccountId, String jiraEmail, String jiraProject, String gitToken, String gitRepo, List<GanttChart> ganttCharts, List<UserProject> userProjects) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
         this.jiraToken = jiraToken;
-        this.jiraProject = jiraProject;
+        this.jiraAccountId = jiraAccountId;
         this.jiraEmail = jiraEmail;
+        this.jiraProject = jiraProject;
         this.gitToken = gitToken;
         this.gitRepo = gitRepo;
         this.ganttCharts = ganttCharts;
@@ -70,9 +73,10 @@ public class Project extends BaseEntity {
         this.image = image;
     }
 
-    public void updateJira(String jiraToken, String jiraProject, String jiraEmail) {
+    public void updateJira(String jiraToken, String jiraProject, String jiraAccountId, String jiraEmail) {
         this.jiraToken = jiraToken;
         this.jiraProject = jiraProject;
+        this.jiraAccountId = jiraAccountId;
         this.jiraEmail = jiraEmail;
     }
 
