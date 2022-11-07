@@ -1,5 +1,6 @@
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import TextArea from 'components/atoms/TextArea';
+import { SetterOrUpdater } from 'recoil';
 
 interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
@@ -7,6 +8,9 @@ interface propsType extends styledContainerType, styledLabelType {
   textAreaValue?: string;
   textAreaWidth?: string;
   textAreaHeight?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -50,6 +54,8 @@ const index = ({
   isRow,
   containerWidth,
   containerPadding,
+  useSetRecoilState,
+  recoilParam,
 }: propsType) => {
   return (
     <StyledContainer
@@ -70,6 +76,8 @@ const index = ({
         height={textAreaHeight}
         placeholder={textAreaPlaceHolder}
         defaultValue={textAreaValue}
+        useSetRecoilState={useSetRecoilState}
+        recoilParam={recoilParam}
       ></TextArea>
     </StyledContainer>
   );

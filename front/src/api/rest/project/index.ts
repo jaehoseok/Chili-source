@@ -1,8 +1,9 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { ChangeEvent } from 'react';
 
 // Init
-const authAxios = createAxiosApi('project-service');
+const projectAxios = createAxiosApi('project-service');
 
 /**
  * @description
@@ -27,7 +28,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      projectAxios
         .get(`/token-codes`)
         .then(response => {
           resolve(response);
@@ -36,5 +37,58 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * 해당 유저가 가지고 있는 토큰과 연동되는 모든 우리 서비스의 프로젝트들을 주는 API
+   *
+   * @author bell
+   */
+  getProjectWithToken: async () => {
+    try {
+      const response = await authAxios.get('/project');
+      console.log(response.data);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트를 생성하는 API
+   *
+   * @param {string}                              name           - 프로젝트의 이름
+   * @param {string}                              description    - 프로젝트의 상세 내용
+   * @param {ChangeEvent<HTMLInputElement>}       image          - file input의 ChangeEvent가 가지고 있는 데이터
+   * @author bell
+   */
+  postCreateProject: async (
+    name: string,
+    description: string,
+    image: ChangeEvent<HTMLInputElement>,
+  ) => {
+    try {
+      const formData = new FormData();
+      const data = {
+        description,
+        name,
+      };
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      if (image) formData.append('image', image.target.files[0]);
+      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      const response = await authAxios.post('/project', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

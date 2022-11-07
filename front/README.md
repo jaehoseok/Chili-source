@@ -362,5 +362,42 @@
   > - 지라 토큰 입력 창 생성
   > - 깃 토큰 입력 창 생성
   > - 연동 시 불러온 Select 생성
-  
+- `Navigation`
+  > - `Portal`을 활용한, 재배치 완료
+  > - root 컴포넌트와 전혀 다르게 배치함으로써, 컴포넌트 생성시 크기 부담 줄임
+- `recoil 설계`
+  > - react 식 form 형태 데이터 설계
+  > - api에 requestBody에 필요한 데이터를 모아둘 recoil 설계
+  > - Input 컴포넌트가 직접 setRecoil 함수를 받아 본인의 e.target.value를 지속적으로 업데이트
+  > - button 클릭으로 api에 시전되도록 
 
+## 221106
+### 종현
+- 415 error
+  > - customAxios의 content-type -> Content-Type 오타로 인한 에러
+- `/auth-service/tokens` (POST)
+  > - requestBody를 위한 recoil 설계 반영 완료
+  > - custom hook 구현 완료
+  > - jira 및 gitlab 토큰 연동 api 
+  > - 통신 완료
+- `Notifiacation 알림 컴포넌트`
+  > - navigation 재 배치에 맞게 렌더링 배치 변환
+- `/project-service/project`(GET)
+  > - 토큰을 활용한 프로젝트 리스트 가져오기
+  > - api 구현 완료
+  > - custom hook 구현 완료
+  > - 통신 완료
+  > - 알고보니 우리 서비스에서 생성한 프로젝트 리스트 가져오는 거였음
+  > - 잘못 만든건데 혹시나 싶어서 그냥 놔둠
+- `/issue-service/project-list (GET)
+  > - jira 토큰과 연관되는 jira 프로젝트를 모두 가져오는 api
+  > - 확인결과 500 error로 연기
+- `/project-service/project (POST)
+  > - 우리 서비스에 프로젝트 생성하기
+  > - requestBody를 위한 recoil 설계 반영 완료
+  > - textAreaBox,  textArea에 recoil props 반영
+  > - image file blob 화하여 저장완료
+  > - api 구현 완료
+  > - custom hook 구현 완료
+  > - 통신 완료
+  > - 정상적으로 통신 된 경우, project 목록 페이지로 이동하도록 설정

@@ -30,6 +30,7 @@ export const StyledNotfication = styled.div<styledType>`
   text-align: center;
   min-width: ${({ width }) => width};
   right: 0;
+  top: 80px;
   animation: ${slideRight} ease-in forwards;
   animation-duration: ${({ milliseconds }) => milliseconds && milliseconds / 1000}s;
 `;
