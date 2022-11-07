@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // landing
 import LandingPage from 'components/pages/LandingPage';
 
+// error
+import ErrorPage from 'components/pages/ErrorPage';
+
 // login
 import UserLoginLoadingPage from 'components/pages/UserLoginLoadingPage';
 
@@ -49,61 +52,16 @@ const RouterWrapper = () => {
         <Route path="/setting/:userId" element={<UserSettingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />
         <Route path="/new-project" element={<ProjectCreatePage />} />
-      </Routes>
-      <Routes>
-        <Route
-          path="/project/:projectId/dashboard"
-          element={
-            <>
-              <ProjectDashBoardPage />
-            </>
-          }
-        />
-        <Route
-          path="/project/:projectId/setting"
-          element={
-            <>
-              <HeaderNav />
-              <ProjectSettingPage />
-            </>
-          }
-        />
-        <Route
-          path="/project/:projectId/widgets"
-          element={
-            <>
-              <HeaderNav />
-              <WidgetSelectPage />
-            </>
-          }
-        />
-        <Route
-          path="/project/:projectId/gantt-chart"
-          element={
-            <>
-              <HeaderNav />
-              <GanttChartPage />
-            </>
-          }
-        />
-        <Route
-          path="/project/:projectId/calendar"
-          element={
-            <>
-              <HeaderNav />
-              <CalendarPage />
-            </>
-          }
-        />
-        <Route
-          path="/project/:projectId/issues"
-          element={
-            <>
-              <HeaderNav />
-              <IssuesPage />
-            </>
-          }
-        />
+
+        <Route path="/project/:projectId/*">
+          <Route path="dashboard" element={<ProjectDashBoardPage />} />
+          <Route path="setting" element={<ProjectSettingPage />} />
+          <Route path="widgets" element={<WidgetSelectPage />} />
+          <Route path="gantt-chart" element={<GanttChartPage />} />
+          <Route path="calendar" element={<CalendarPage />} />
+          <Route path="issues" element={<IssuesPage />} />
+        </Route>
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
