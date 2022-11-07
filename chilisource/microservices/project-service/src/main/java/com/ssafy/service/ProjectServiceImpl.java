@@ -13,6 +13,7 @@ import com.ssafy.entity.Project;
 import com.ssafy.entity.UserProject;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
+import com.ssafy.exception.WrongAccessException;
 import com.ssafy.repository.ProjectRepo;
 import com.ssafy.repository.RoleRepo;
 import com.ssafy.repository.UserProjectRepo;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 
 import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
+import static com.ssafy.exception.WrongAccessException.WRONG_TOKEN_CODE;
 
 @RequiredArgsConstructor
 @Service
@@ -39,6 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final AuthServiceClient authServiceClient;
     private final IssueServiceClient issueServiceClient;
     private final WidgetServiceClient widgetServiceClient;
+    private final String DEFAULT_COLOR = "FFFFFF";
 
     @Override
     public ProjectResponse getProject(Long projectId) {
@@ -82,21 +85,22 @@ public class ProjectServiceImpl implements ProjectService {
     // 프로젝트 생성
     @Override
     @Transactional
-    public void createProject(ProjectCreateRequest request, Long userId) {
+    public void createProject(ProjectCreateRequest request, String image,Long userId) {
         Project project = Project.builder()
                 .name(request.getName())
                 .description(request.getDescription())
                 .build();
         projectRepo.save(project);
 
+        project.updateImage(image);
+
         UserProject userProject = UserProject.builder()
                 .userId(userId)
                 .project(project)
+                .userColor(DEFAULT_COLOR)
                 .role(roleRepo.findById(1L).get())
                 .build();
         userProjectRepo.save(userProject);
-
-        return;
     }
 
     // 프로젝트 수정
@@ -177,7 +181,13 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
-        TokenResponse tokenResponse = authServiceClient.getToken(auths, request.getName());
+        TokenResponse tokenResponse;
+        try{
+            tokenResponse = authServiceClient.getToken(auths, request.getName());
+        } catch (Exception e) {
+            log.error("[Project] [updateProjectToken] WRONG_TOKEN_CODE");
+            throw new WrongAccessException(WRONG_TOKEN_CODE);
+        }
 
         switch (request.getName().toUpperCase()) {
             case "JIRA":

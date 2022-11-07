@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +26,7 @@ import java.util.List;
 @Api(tags = "프로젝트")
 public class ProjectController {
     private static final String baseURL = "https://chilisource.s3.ap-northeast-2.amazonaws.com/";
+    private static final String defaultImage = "ee0802f5-ef53-47af-8165-89e000595b15.png";
     private final AwsS3Service awsS3Service;
     private final ProjectService projectService;
 
@@ -47,12 +49,16 @@ public class ProjectController {
     }
 
     // 프로젝트 생성
-    @PostMapping
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "프로젝트 생성")
     public ResponseEntity<?> createProject(
-            @RequestBody ProjectCreateRequest request,
+            @RequestPart ProjectCreateRequest request,
+            @RequestPart(value = "image", required = false) final MultipartFile file,
             @LoginUser User user) {
-        projectService.createProject(request, user.getId());
+        String projectImage;
+        if (file != null) projectImage = awsS3Service.uploadFile(file, "project/");
+        else projectImage = defaultImage;
+        projectService.createProject(request, baseURL + "project/" + projectImage, user.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -69,7 +75,7 @@ public class ProjectController {
     @ApiOperation(value = "프로젝트 이미지 수정")
     public ResponseEntity<?> updateProjectImage(
             @LoginUser User user,
-            @PathVariable Long projectId,
+            @ApiParam(value = "프로젝트 pk") @PathVariable Long projectId,
             @RequestPart(value = "image") final MultipartFile file) {
         String projectImage = awsS3Service.uploadFile(file, "project/");
         projectService.updateProjectImage(baseURL + "project/" + projectImage, projectId, user.getId());

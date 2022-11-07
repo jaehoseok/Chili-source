@@ -41,3 +41,5 @@ management:
     web:
       exposure:
         include: health, info, metrics, prometheus, busrefresh
+logging:
+  config: classpath:logback-spring.xml

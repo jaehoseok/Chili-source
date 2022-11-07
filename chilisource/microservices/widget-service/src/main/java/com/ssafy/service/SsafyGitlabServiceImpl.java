@@ -21,7 +21,7 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
 
     @Override
     public GitlabDefaultResponse findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
-        TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
+        TokenResponse tokenResponse = authServiceClient.findToken(accessToken.replace("Bearer ", ""), tokenCodeId);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
 
         List<Branch> branches = ssafyGitlabClient.findBranch(tokenResponse.getValue(), projectResponse.getGitRepo());
@@ -36,7 +36,7 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
 
     @Override
     public List<GitlabCommitResponse> findCommits(String accessToken, String tokenCodeId, Long projectId, Long userId, String branch) {
-        TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
+        TokenResponse tokenResponse = authServiceClient.findToken(accessToken.replace("Bearer ", ""), tokenCodeId);
         if (tokenResponse.getValue() == null) log.error("[Widget] [findCommits] auth service feign error");
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
         if (projectResponse.getId() == null) log.error("[Widget] [findCommits] project service feign error");

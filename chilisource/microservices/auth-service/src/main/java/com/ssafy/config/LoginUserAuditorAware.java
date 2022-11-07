@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,7 +25,7 @@ public class LoginUserAuditorAware implements AuditorAware<Long> {
         try {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            String jwt = authorizationHeader.replace("Bearer ", "");
+            String jwt = authorizationHeader.replace("Bearer%20", "").replace("Bearer ", "");
             Claims body = Jwts.parser().setSigningKey(SecretKey)
                     .parseClaimsJws(jwt).getBody();
             return Optional.of(Long.valueOf(String.valueOf(body.get("id"))));
