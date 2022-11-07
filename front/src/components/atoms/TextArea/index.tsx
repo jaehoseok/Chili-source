@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { TextArea, styledType } from './style';
 
+import { SetterOrUpdater } from 'recoil';
+
 interface propsType extends styledType {
   placeholder?: string;
   defaultValue?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -19,11 +24,28 @@ interface propsType extends styledType {
  * @author dbcs
  */
 
-const index = ({ width, height, placeholder, defaultValue }: propsType) => {
+const index = ({
+  width,
+  height,
+  placeholder,
+  defaultValue,
+  useSetRecoilState,
+  recoilParam,
+}: propsType) => {
   const [value, setValue] = useState<string>(defaultValue ? defaultValue : '');
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
+
+    if (useSetRecoilState && recoilParam)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      useSetRecoilState(prevObj => {
+        return {
+          ...prevObj,
+          [recoilParam]: e.target.value,
+        };
+      });
   };
   return (
     <TextArea
