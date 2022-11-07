@@ -2,7 +2,7 @@
 import { createAxiosApi } from 'api/axios';
 
 // Init
-const authAxios = createAxiosApi('issue-service');
+const issueAxios = createAxiosApi('issue-service');
 
 /**
  * @description
@@ -27,7 +27,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      issueAxios
         .get(`/token-codes`)
         .then(response => {
           resolve(response);

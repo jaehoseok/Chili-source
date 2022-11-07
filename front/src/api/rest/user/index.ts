@@ -2,7 +2,7 @@
 import { createAxiosApi } from 'api/axios';
 
 // Init
-const authAxios = createAxiosApi('user-service');
+const userAxios = createAxiosApi('user-service');
 
 /**
  * @description
@@ -27,7 +27,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      userAxios
         .get(`/token-codes`)
         .then(response => {
           console.log(response);
@@ -55,7 +55,7 @@ export default {
     // 그렇다면 타입을 확정하기 간편하도록 성공시의 데이터 자체를 반환하면
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
-      const response = await authAxios.get('/users/info');
+      const response = await userAxios.get('/users/info');
       return response.data;
     } catch (e) {
       console.log(e);
