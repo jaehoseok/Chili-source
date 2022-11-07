@@ -15,3 +15,9 @@ StyledWidget.defaultProps = {
   height: '180px',
   width: '400px',
 };
+
+export const StyledWidgetData = styled.div<styledType>`
+  ${tw`flex justify-center items-center`}
+  height: 100%;
+  width: 100%;
+`;

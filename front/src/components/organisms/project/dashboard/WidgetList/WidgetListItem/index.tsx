@@ -33,7 +33,7 @@ export const WidgetListItem = ({ id, path }: propsType) => {
 
   return (
     <StyledWidgetListItem ref={item} style={{ opacity }}>
-      <Widget>{id}</Widget>
+      <Widget type="TEST">{id}</Widget>
     </StyledWidgetListItem>
   );
 };
