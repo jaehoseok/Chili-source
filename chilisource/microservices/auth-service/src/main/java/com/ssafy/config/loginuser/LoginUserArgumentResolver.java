@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -32,7 +31,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         try {
             String authorizationHeader = webRequest.getHeader("Authorization");
-            String jwt = authorizationHeader.replace("Bearer ", "");
+            String jwt = authorizationHeader.replace("Bearer%20", "").replace("Bearer ", "");
             Claims body = Jwts.parser().setSigningKey(SecretKey)
                     .parseClaimsJws(jwt).getBody();
             User user = new User(Long.valueOf(String.valueOf(body.get("id"))));
