@@ -47,7 +47,7 @@ export default {
    */
   getProjectWithToken: async () => {
     try {
-      const response = await authAxios.get('/project');
+      const response = await projectAxios.get('/project');
       console.log(response.data);
       return response.data;
     } catch (e) {
@@ -80,7 +80,7 @@ export default {
       //@ts-ignore
       if (image) formData.append('image', image.target.files[0]);
       formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-      const response = await authAxios.post('/project', formData, {
+      const response = await projectAxios.post('/project', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
