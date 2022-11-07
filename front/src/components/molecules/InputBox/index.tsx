@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, MutableRefObject } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
 

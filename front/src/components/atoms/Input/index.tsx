@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, forwardRef } from 'react';
+import { useEffect, useState, useRef, forwardRef, ForwardedRef } from 'react';
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
@@ -26,27 +26,39 @@ interface propsType extends styledType {
 const index = forwardRef<HTMLInputElement, propsType>(
   ({ height, width, type, placeHolder, defaultValue }, ref) => {
     const [text, setText] = useState(defaultValue);
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
 
-    // const inputTag = useRef<HTMLInputElement>(null);
+      useEffect(() => {
+        if (!ref) return;
 
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const inputRef = useForwardRef<HTMLInputElement>(ref);
     useEffect(() => {
       setText(defaultValue);
-      console.log(ref);
     }, [defaultValue]);
-    // useEffect(() => {
-    //   if (inputTag.current) {
-    //     inputTag.current.value = text ? text : '';
-    //   }
-    // }, [text]);
-    // useEffect(() => {
-    //   if (ref.current.value === null) {
-    //     ref.current.value = text ? text : '';
-    //   }
-    // }, [text]);
+    useEffect(() => {
+      console.log(ref);
+    }, [text]);
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.value = text ? text : '';
+      }
+    }, [text]);
+
     return (
       <>
         <StyledInput
-          ref={ref}
+          ref={inputRef}
           height={height}
           width={width}
           type={type}

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, MutableRefObject } from 'react';
 import { StyledIssueInfo } from './style';
 import Sheet from '../../atoms/Sheet';
 import Button from '../../atoms/Button';
@@ -21,6 +21,10 @@ const index = (props: any) => {
   const summaryRef = useRef<HTMLInputElement>(null);
   const pointRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    console.log('asd');
+  }, [pjtRef.current ? pjtRef.current.value : '']);
+
   return (
     <StyledIssueInfo>
       <Sheet isShadow={false} flex={'column'}>
@@ -41,10 +45,10 @@ const index = (props: any) => {
         />
         <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
         <SelectBox labelName={'보고자'}>
-          <Option messages={['팀원', '팀원2']} selected={props.info.reporter}></Option>
+          <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
         </SelectBox>
         <SelectBox labelName={'담당자'}>
-          <Option messages={['팀원', '팀원2']} selected={props.info.assignee}></Option>
+          <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.assignee}></Option>
         </SelectBox>
         <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
         <SelectBox labelName={'우선순위'}>
