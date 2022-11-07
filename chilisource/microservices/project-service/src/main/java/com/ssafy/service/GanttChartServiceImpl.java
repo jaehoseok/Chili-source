@@ -212,7 +212,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
 
-        if(!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
+        if(!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
             log.error("[Project] [duplicateGanttCharts] CREATE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }

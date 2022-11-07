@@ -20,10 +20,10 @@ public class UserProjectResponse {
     private Long projectId;
 
     @ApiModelProperty(value = "권한 pk")
-    private Long roleId;
+    private String roleId;
 
     @Builder
-    public UserProjectResponse(String userColor, Long userId, Long projectId, Long roleId) {
+    public UserProjectResponse(String userColor, Long userId, Long projectId, String roleId) {
         this.userColor = userColor;
         this.userId = userId;
         this.projectId = projectId;

@@ -58,7 +58,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                 .userColor(request.getUserColor())
                 .userId(request.getUserId())
                 .project(project)
-                .role(roleRepo.findById(3L).get())
+                .role(roleRepo.findById("DEVELOPER").get())
                 .build();
         userProjectRepo.save(userProject);
     }
@@ -130,7 +130,7 @@ public class UserProjectServiceImpl implements UserProjectService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
         // 마스터인지 확인
-        if (userProject.getRole().getName().equalsIgnoreCase("MASTER")) {
+        if (userProject.getRole().getId().equalsIgnoreCase("MASTER")) {
             log.error("[Project] [quitUserProject] MASTER_NOT_AUTHORIZED");
             throw new NotAuthorizedException(MASTER_NOT_AUTHORIZED);
         }
