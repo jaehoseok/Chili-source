@@ -43,6 +43,11 @@ import Notification from 'components/atoms/Notification';
 import { usePostCreateProjectHandler } from 'hooks/project';
 import { useNavigate } from 'react-router-dom';
 
+interface jiraProjectType {
+  key: string;
+  name: string;
+}
+
 /**
  * @description
  * 프로젝트 생성 페이지, 지라와 깃을 연동하고
@@ -75,17 +80,38 @@ const index = () => {
 
   // query 처리
   // 토큰 연동
-  const { mutate } = usePostLinkageTokenHandler();
+  const linkageJiraToken = usePostLinkageTokenHandler();
   // 지라 프로젝트 모두 가져오기
-  const { isError, error, refetch } = useGetJiraProjectList();
+  const jiraProjectList = useGetJiraProjectList();
   const createProjectData = usePostCreateProjectHandler();
 
+  // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
+  const filteringJiraProjectHandler = (datas: jiraProjectType[]) => {
+    const temp: string[] = [];
+    for (const data of datas) {
+      temp.push(data.name);
+    }
+    return temp;
+  };
+
+  // 생성 버튼 클릭시 프로젝트 생성 (POST) 요청 실행
   const creaetProjectHandler = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     createProjectData.mutate({ projectName, projectDescription, image });
   };
 
+  // 버튼 클릭 시 지라 토큰 연동 및 해당 지라 프로젝트 가져오기
+  const linkageJiraTokenHandler = () => {
+    linkageJiraToken.mutate({
+      email: 'woaol@naver.com',
+      tokenCodeId: 'JIRA',
+      value: jiraToken,
+    });
+    jiraProjectList.refetch();
+  };
+
+  // 생성 요청 정상적으로 수행 시 프로젝트 목록 페이지로 이동
   if (createProjectData.isSuccess) {
     navigate('/projects');
   }
@@ -119,27 +145,24 @@ const index = () => {
                     borderColor={theme.button.gray}
                     backgroundColor={theme.button.green}
                     isHover={true}
-                    clickHandler={() => {
-                      mutate({
-                        email: 'woaol@naver.com',
-                        tokenCodeId: 'JIRA',
-                        value: jiraToken,
-                      });
-                      refetch();
-                    }}
+                    clickHandler={linkageJiraTokenHandler}
                   >
                     입력
                   </Button>
                 </StyledFlexRowEnd>
               </StyledMarginY>
               {/* {isLoading && <div>Loading...</div>} */}
-              {/* {data && (
+              {jiraProjectList.data && (
                 <Select width="100%">
-                  <Option messages={dat}></Option>
+                  <Option messages={filteringJiraProjectHandler(jiraProjectList.data)}></Option>
                 </Select>
-              )} */}
-              {isError && (
-                <Notification width="200px" check={false} message={error.message}></Notification>
+              )}
+              {jiraProjectList.isError && (
+                <Notification
+                  width="200px"
+                  check={false}
+                  message={jiraProjectList.error.message}
+                ></Notification>
               )}
             </StyledMarginY>
             <StyledMarginY>
@@ -158,13 +181,6 @@ const index = () => {
                     borderColor={theme.button.gray}
                     backgroundColor={theme.button.green}
                     isHover={true}
-                    clickHandler={() =>
-                      mutate({
-                        email: 'woaol@naver.com',
-                        tokenCodeId: 'SSAFYGITLAB',
-                        value: gitToken,
-                      })
-                    }
                   >
                     입력
                   </Button>
