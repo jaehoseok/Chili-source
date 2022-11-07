@@ -251,23 +251,6 @@ public class IssueController {
                 .body(responses);
     }
 
-    // 미들버킷 내의 이슈들을 지라의 이슈로 생성
-    @PostMapping("/jira/middle-bucket")
-    @ApiOperation(value = "미들 버킷에 있는 모든 이슈를 JIRA에 생성")
-    public ResponseEntity<?> addIssuesToJira(
-            @LoginUser User user,
-            @ApiParam(value = "JIRA와 연동된 현 프로젝트 id") @RequestParam Long projectId,
-            @ApiParam(value = "JIRA에 추가하려는 이슈가 담긴 미들버킷 id") @RequestParam Long middleBucketId,
-            @RequestHeader HttpHeaders headers
-    ) throws IOException {
-        issueService.addIssuesToJira(
-                user,
-                projectId,
-                middleBucketId,
-                headers.get(HttpHeaders.AUTHORIZATION));
-        return ResponseEntity.ok().build();
-    }
-
     // 에픽 리스트 조회
     @GetMapping("/jira/epic-list")
     @ApiOperation(value = "JIRA에서 생성된 EPIC들 가져오기")
@@ -296,5 +279,22 @@ public class IssueController {
                 projectId);
         return ResponseEntity.ok()
                 .body(response);
+    }
+
+    // 미들버킷 내의 이슈들을 지라의 이슈로 생성
+    @PostMapping("/jira/middle-bucket")
+    @ApiOperation(value = "미들 버킷에 있는 모든 이슈를 JIRA에 생성")
+    public ResponseEntity<?> addIssuesToJira(
+            @LoginUser User user,
+            @ApiParam(value = "JIRA와 연동된 현 프로젝트 id") @RequestParam Long projectId,
+            @ApiParam(value = "JIRA에 추가하려는 이슈가 담긴 미들버킷 id") @RequestParam Long middleBucketId,
+            @RequestHeader HttpHeaders headers
+    ) throws IOException {
+        issueService.addIssuesToJira(
+                user,
+                projectId,
+                middleBucketId,
+                headers.get(HttpHeaders.AUTHORIZATION));
+        return ResponseEntity.ok().build();
     }
 }

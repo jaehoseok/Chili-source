@@ -374,6 +374,66 @@ public class IssueServiceImpl implements IssueService {
         middleBucketIssueRepo.delete(middleBucketIssue);
     }
 
+    // =========================================== 내부 API ==================================================
+    @Transactional
+    @Override
+    public void deleteAll(User user, Long projectId) {
+        issueTemplateRepo.deleteAllInBatch(issueTemplateRepo.findByProjectId(projectId));
+        List<MiddleBucket> middleBuckets = middleBucketRepo.findByProjectId(projectId);
+        for (MiddleBucket middleBucket : middleBuckets) {
+            List<MiddleBucketIssue> middleBucketIssues = middleBucket.getMiddleBucketIssues();
+            middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
+        }
+        middleBucketRepo.deleteAllInBatch(middleBuckets);
+    }
+
+    // =========================================== JIRA API ==================================================
+    @Override
+    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        return jiraFeignClient.getProjectList(jiraBase64);
+    }
+
+    @Override
+    public JiraEpicListResponse getEpicList(
+            User user,
+            List<String> auths
+    ) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+        // TODO 테스트용
+//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        return jiraFeignClient.getJiraEpics(jiraBase64);
+    }
+
+    @Override
+    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
+            log.error("[Issue] [getTodoIssues] PROJECT_NOT_FOUND");
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+        String projectKey = response.getJiraProject();
+
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String projectKey = "S07P31B207";
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
+
+        return jiraFeignClient.getTodoIssues(jiraBase64, query);
+    }
+
     @Transactional
     @Override
     public void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException {
@@ -509,63 +569,5 @@ public class IssueServiceImpl implements IssueService {
             log.error("[Issue] [addIssuesToJira] {}", errorDetail);
             throw new BadRequestException(errorDetail);
         }
-    }
-
-    @Override
-    public JiraEpicListResponse getEpicList(
-            User user,
-            List<String> auths
-    ) {
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-        // TODO 테스트용
-//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        return jiraFeignClient.getJiraEpics(jiraBase64);
-    }
-
-    @Transactional
-    @Override
-    public void deleteAll(User user, Long projectId) {
-        issueTemplateRepo.deleteAllInBatch(issueTemplateRepo.findByProjectId(projectId));
-        List<MiddleBucket> middleBuckets = middleBucketRepo.findByProjectId(projectId);
-        for (MiddleBucket middleBucket : middleBuckets) {
-            List<MiddleBucketIssue> middleBucketIssues = middleBucket.getMiddleBucketIssues();
-            middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
-        }
-        middleBucketRepo.deleteAllInBatch(middleBuckets);
-    }
-
-    @Override
-    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
-        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
-        if (response == null) {
-            log.error("[Issue] [getTodoIssues] PROJECT_NOT_FOUND");
-            throw new NotFoundException(PROJECT_NOT_FOUND);
-        }
-        String projectKey = response.getJiraProject();
-
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-
-        // TODO 테스트용
-//        String projectKey = "S07P31B207";
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
-
-        return jiraFeignClient.getTodoIssues(jiraBase64, query);
-    }
-
-    @Override
-    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-
-        // TODO 테스트용
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        return jiraFeignClient.getProjectList(jiraBase64);
     }
 }
