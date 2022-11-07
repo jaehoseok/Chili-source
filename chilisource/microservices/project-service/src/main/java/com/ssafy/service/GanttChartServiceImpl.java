@@ -230,6 +230,8 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .version(version)
                         .issueCode(oldGanttChart.getIssueCode())
                         .progress(oldGanttChart.getProgress())
+                        .project(oldGanttChart.getProject())
+                        .userId(oldGanttChart.getUserId())
                         .build())
                 .collect(Collectors.toList());
 

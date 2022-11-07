@@ -163,6 +163,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void updateProjectToken(User user, ProjectTokenUpdateRequest request, List<String> auths) {
         Project project = projectRepo.findById(request.getProjectId())
                 .orElseThrow(() -> {
@@ -191,9 +192,10 @@ public class ProjectServiceImpl implements ProjectService {
 
         switch (request.getName().toUpperCase()) {
             case "JIRA":
-                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getEmail());
+                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getJiraAccountId(), tokenResponse.getEmail());
                 break;
             case "GIT":
+            case "SSAFYGITLAB":
                 project.updateGit(tokenResponse.getValue(), request.getDetail());
                 break;
             default:
@@ -203,6 +205,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void deleteProjectToken(User user, Long projectId, String name) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> {
@@ -226,6 +229,7 @@ public class ProjectServiceImpl implements ProjectService {
                 project.deleteJira();
                 break;
             case "GIT":
+            case "SSAFYGITLAB":
                 project.deleteGit();
                 break;
             default:
