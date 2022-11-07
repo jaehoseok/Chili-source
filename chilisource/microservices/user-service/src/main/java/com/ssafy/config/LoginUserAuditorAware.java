@@ -25,7 +25,7 @@ public class LoginUserAuditorAware implements AuditorAware<Long> {
         try {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-            String jwt = authorizationHeader.replace("Bearer ", "");
+            String jwt = authorizationHeader.replace("Bearer%20", "").replace("Bearer ", "");
             Claims body = Jwts.parser().setSigningKey(SecretKey)
                     .parseClaimsJws(jwt).getBody();
             return Optional.of(Long.valueOf(String.valueOf(body.get("id"))));
