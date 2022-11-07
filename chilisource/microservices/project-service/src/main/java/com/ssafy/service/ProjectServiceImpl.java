@@ -98,7 +98,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .userId(userId)
                 .project(project)
                 .userColor(DEFAULT_COLOR)
-                .role(roleRepo.findById(1L).get())
+                .role(roleRepo.findById("MASTER").get())
                 .build();
         userProjectRepo.save(userProject);
     }
@@ -177,7 +177,7 @@ public class ProjectServiceImpl implements ProjectService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
 
-        if (!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
+        if (!userProjectManager.getRole().getId().equalsIgnoreCase("MASTER")) {
             log.error("[Project] [updateProjectToken] CREATE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
@@ -219,7 +219,7 @@ public class ProjectServiceImpl implements ProjectService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
 
-        if (!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
+        if (!userProjectManager.getRole().getId().equalsIgnoreCase("MASTER")) {
             log.error("[Project] [deleteProjectToken] REMOVE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
