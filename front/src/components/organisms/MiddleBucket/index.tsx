@@ -53,6 +53,7 @@ const index = (props: any) => {
   const bucket = [issue1, issue2, issue3];
   useEffect(() => {
     bucket.push(issue);
+    console.log(bucket);
   }, [issue]);
   const BarList = bucket.map(issue => (
     <IssueBar
@@ -77,6 +78,7 @@ const index = (props: any) => {
         borderColor={'red'}
         clickHandler={() => {
           console.log(props.info);
+          console.log(bucket);
         }}
       >
         Bucket Test

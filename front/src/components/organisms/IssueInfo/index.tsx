@@ -68,26 +68,26 @@ const index = (props: any) => {
           textAreaValue={props.info.summary}
           setValue={setSummary}
         />
-        <SelectBox labelName={'보고자'}>
+        <SelectBox labelName={'보고자'} setValue={setReporter}>
           <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
         </SelectBox>
-        <SelectBox labelName={'담당자'}>
+        <SelectBox labelName={'담당자'} setValue={setAssignee}>
           <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.assignee}></Option>
         </SelectBox>
         <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-        <SelectBox labelName={'우선순위'}>
+        <SelectBox labelName={'우선순위'} setValue={setRank}>
           <Option
             messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
             selected={props.info.rank}
           ></Option>
         </SelectBox>
-        <SelectBox labelName={'Epic Link'}>
+        <SelectBox labelName={'Epic Link'} setValue={setEpicLink}>
           <Option
             messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
             selected={props.info.epicLink}
           ></Option>
         </SelectBox>
-        <SelectBox labelName={'Sprint'}>
+        <SelectBox labelName={'Sprint'} setValue={setSprint}>
           <Option
             messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
             selected={props.info.sprint}
@@ -109,13 +109,13 @@ const index = (props: any) => {
         clickHandler={() =>
           props.setInfo({
             project: project,
+            type: type,
             summary: summary,
-            // epicLink:epicLink,
-            // reporter:reporter,
-            // assignee:assignee,
-            // rank:rank,
-            // type:type,
-            // sprint:sprint,
+            epicLink: epicLink,
+            reporter: reporter,
+            assignee: assignee,
+            rank: rank,
+            sprint: sprint,
             storyPoints: storyPoints,
           })
         }

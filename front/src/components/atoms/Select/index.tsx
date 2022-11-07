@@ -20,7 +20,7 @@ interface propsType extends styledType {
  * @author bell
  */
 const index = forwardRef<HTMLSelectElement, propsType>(
-  ({ children, width, fontSize, text, setText }, ref) => {
+  ({ children, width, fontSize, setText }, ref) => {
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
       const targetRef = useRef<T>(initialValue);
 

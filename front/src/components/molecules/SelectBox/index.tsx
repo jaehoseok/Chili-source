@@ -63,10 +63,11 @@ const index = forwardRef<HTMLSelectElement, propsType>(
 
       return targetRef;
     };
-    const inputRef = useForwardRef<HTMLSelectElement>(ref);
     const [text, setText] = useState('');
+    const inputRef = useForwardRef<HTMLSelectElement>(ref);
     useEffect(() => {
       console.log(text);
+      setValue(text);
     }, [text]);
     return (
       <StyledContainer containerPadding={containerPadding}>
@@ -82,7 +83,6 @@ const index = forwardRef<HTMLSelectElement, propsType>(
           fontSize={selectSize}
           children={children}
           ref={inputRef}
-          text={text}
           setText={setText}
         ></Select>
       </StyledContainer>

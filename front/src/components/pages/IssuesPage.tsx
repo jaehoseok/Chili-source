@@ -30,8 +30,8 @@ const IssuesPage = () => {
         project={'프로젝트 명'}
         summary={'이슈 제목'}
         epicLink={'에픽1'}
-        reporter={'팀원'}
-        assignee={'팀원'}
+        reporter={'팀원1'}
+        assignee={'팀원3'}
         rank={'Low'}
         type={'story'}
         sprint={'스프린트1'}
