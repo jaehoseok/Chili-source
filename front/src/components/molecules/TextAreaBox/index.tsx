@@ -1,3 +1,4 @@
+import { forwardRef, useState, useEffect, useRef, ForwardedRef } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import TextArea from 'components/atoms/TextArea';
 
@@ -7,6 +8,7 @@ interface propsType extends styledContainerType, styledLabelType {
   textAreaValue?: string;
   textAreaWidth?: string;
   textAreaHeight?: string;
+  setValue?: any;
 }
 
 /**
@@ -38,41 +40,71 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
-const index = ({
-  textAreaValue,
-  textAreaPlaceHolder,
-  textAreaWidth,
-  textAreaHeight,
-  labelName,
-  labelSize,
-  labelWeight,
-  labelMarginBottom,
-  isRow,
-  containerWidth,
-  containerPadding,
-}: propsType) => {
-  return (
-    <StyledContainer
-      isRow={isRow}
-      containerPadding={containerPadding}
-      containerWidth={containerWidth}
-    >
-      <StyledLabel
+const index = forwardRef<HTMLTextAreaElement, propsType>(
+  (
+    {
+      textAreaValue,
+      textAreaPlaceHolder,
+      textAreaWidth,
+      textAreaHeight,
+      labelName,
+      labelSize,
+      labelWeight,
+      labelMarginBottom,
+      isRow,
+      containerWidth,
+      containerPadding,
+      setValue,
+    },
+    ref,
+  ) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const [text, setText] = useState(textAreaValue);
+    const inputRef = useForwardRef<HTMLTextAreaElement>(ref);
+    useEffect(() => {
+      setValue(text);
+    }, [text]);
+    return (
+      <StyledContainer
         isRow={isRow}
-        labelSize={labelSize}
-        labelWeight={labelWeight}
-        labelMarginBottom={labelMarginBottom}
+        containerPadding={containerPadding}
+        containerWidth={containerWidth}
       >
-        {labelName}
-      </StyledLabel>
-      <TextArea
-        width={textAreaWidth}
-        height={textAreaHeight}
-        placeholder={textAreaPlaceHolder}
-        defaultValue={textAreaValue}
-      ></TextArea>
-    </StyledContainer>
-  );
-};
+        <StyledLabel
+          isRow={isRow}
+          labelSize={labelSize}
+          labelWeight={labelWeight}
+          labelMarginBottom={labelMarginBottom}
+        >
+          {labelName}
+        </StyledLabel>
+        <TextArea
+          ref={inputRef}
+          width={textAreaWidth}
+          height={textAreaHeight}
+          placeholder={textAreaPlaceHolder}
+          defaultValue={textAreaValue}
+          text={text}
+          setText={setText}
+        ></TextArea>
+      </StyledContainer>
+    );
+  },
+);
 
 export default index;

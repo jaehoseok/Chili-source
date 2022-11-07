@@ -1,4 +1,4 @@
-import { useEffect, useRef, MutableRefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyledIssueInfo } from './style';
 import Sheet from '../../atoms/Sheet';
 import Button from '../../atoms/Button';
@@ -8,7 +8,7 @@ import TextAreaBox from '../../molecules/TextAreaBox';
 import Option from '../../atoms/Option';
 
 const index = (props: any) => {
-  const type =
+  const issueType =
     props.info.type === 'story'
       ? '스토리'
       : props.info.type === 'task'
@@ -16,14 +16,31 @@ const index = (props: any) => {
       : props.info.type === 'bug'
       ? '버그'
       : '';
-  const issue = props.info;
+  // epicLink:epicLink,
+  // reporter:reporter,
+  // assignee:assignee,
+  // rank:rank,
+  // type:type,
+  // sprint:sprint,
   const pjtRef = useRef<HTMLInputElement>(null);
+  const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
+  const reporterRef = useRef<HTMLSelectElement>(null);
+  const assigneeRef = useRef<HTMLSelectElement>(null);
+  const rankRef = useRef<HTMLSelectElement>(null);
+  const epicLinkRef = useRef<HTMLSelectElement>(null);
+  const sprintRef = useRef<HTMLSelectElement>(null);
   const pointRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    console.log('asd');
-  }, [pjtRef.current ? pjtRef.current.value : '']);
+  const [project, setProject] = useState(props.info.project);
+  const [type, setType] = useState(props.info.type);
+  const [summary, setSummary] = useState(props.info.summary);
+  const [reporter, setReporter] = useState(props.info.reporter);
+  const [assignee, setAssignee] = useState(props.info.assignee);
+  const [rank, setRank] = useState(props.info.rank);
+  const [epicLink, setEpicLink] = useState(props.info.epicLink);
+  const [sprint, setSprint] = useState(props.info.sprint);
+  const [storyPoints, setStoryPoints] = useState(props.info.storyPoints);
 
   return (
     <StyledIssueInfo>
@@ -33,17 +50,24 @@ const index = (props: any) => {
           labelName={'프로젝트'}
           inputValue={props.info.project}
           ref={pjtRef}
+          setValue={setProject}
         />
-        <SelectBox labelName={'이슈 유형'}>
-          <Option messages={['스토리', '태스크', '버그']} selected={type}></Option>
+        <SelectBox labelName={'이슈 유형'} ref={typeRef} setValue={setType}>
+          <Option messages={['스토리', '태스크', '버그']} selected={issueType}></Option>
         </SelectBox>
         <InputBox
           isRow={false}
           labelName={'요약'}
           inputValue={props.info.summary}
           ref={summaryRef}
+          setValue={setSummary}
         />
-        <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
+        <TextAreaBox
+          isRow={false}
+          labelName={'설명'}
+          textAreaValue={props.info.summary}
+          setValue={setSummary}
+        />
         <SelectBox labelName={'보고자'}>
           <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
         </SelectBox>
@@ -74,12 +98,28 @@ const index = (props: any) => {
           labelName={'Story Points'}
           inputValue={props.info.storyPoints + ''}
           ref={pointRef}
+          setValue={setStoryPoints}
         />
       </Sheet>
-      <Button borderColor="blue" clickHandler={() => console.log()}>
+      <Button borderColor="blue" clickHandler={() => console.log(props.info)}>
         IssueInfo Test
       </Button>
-      <Button borderColor="green" clickHandler={() => props.setInfo(issue)}>
+      <Button
+        borderColor="green"
+        clickHandler={() =>
+          props.setInfo({
+            project: project,
+            summary: summary,
+            // epicLink:epicLink,
+            // reporter:reporter,
+            // assignee:assignee,
+            // rank:rank,
+            // type:type,
+            // sprint:sprint,
+            storyPoints: storyPoints,
+          })
+        }
+      >
         IssueInfo Test
       </Button>
     </StyledIssueInfo>

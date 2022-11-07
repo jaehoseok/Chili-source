@@ -5,6 +5,8 @@ interface propsType extends styledType {
   type?: string;
   placeHolder?: string;
   defaultValue?: string;
+  text?: any;
+  setText?: any;
 }
 
 /**
@@ -24,8 +26,8 @@ interface propsType extends styledType {
  * @author inte
  */
 const index = forwardRef<HTMLInputElement, propsType>(
-  ({ height, width, type, placeHolder, defaultValue }, ref) => {
-    const [text, setText] = useState(defaultValue);
+  ({ height, width, type, placeHolder, defaultValue, text, setText }, ref) => {
+    // const [text, setText] = useState(defaultValue);
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
       const targetRef = useRef<T>(initialValue);
 
@@ -46,9 +48,6 @@ const index = forwardRef<HTMLInputElement, propsType>(
     useEffect(() => {
       setText(defaultValue);
     }, [defaultValue]);
-    useEffect(() => {
-      console.log(ref);
-    }, [text]);
     useEffect(() => {
       if (inputRef.current) {
         inputRef.current.value = text ? text : '';

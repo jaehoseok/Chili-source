@@ -1,4 +1,4 @@
-import { forwardRef, MutableRefObject } from 'react';
+import { forwardRef, ForwardedRef, useRef, useEffect, useState } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
 
@@ -9,6 +9,7 @@ interface propsType extends styledContainerType, styledLabelType {
   inputHeight?: string;
   inputWidth?: string;
   inputType?: string;
+  setValue?: any;
 }
 
 /**
@@ -55,9 +56,32 @@ const index = forwardRef<HTMLInputElement, propsType>(
       isRow,
       containerWidth,
       containerPadding,
+      setValue,
     },
     ref,
   ) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const [text, setText] = useState(inputValue);
+    const inputRef = useForwardRef<HTMLInputElement>(ref);
+    useEffect(() => {
+      setValue(text);
+    }, [text]);
+
     return (
       <StyledContainer
         isRow={isRow}
@@ -73,12 +97,14 @@ const index = forwardRef<HTMLInputElement, propsType>(
           {labelName}
         </StyledLabel>
         <Input
-          ref={ref}
+          ref={inputRef}
           height={inputHeight}
           width={inputWidth}
           type={inputType}
           placeHolder={inputPlaceHolder}
           defaultValue={inputValue}
+          text={text}
+          setText={setText}
         ></Input>
       </StyledContainer>
     );

@@ -1,9 +1,11 @@
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
 
 import { StyledSelect, styledType } from './style';
 
 interface propsType extends styledType {
   children: ReactNode;
+  text?: any;
+  setText?: any;
 }
 
 /**
@@ -17,12 +19,36 @@ interface propsType extends styledType {
  *
  * @author bell
  */
-const index = ({ children, width, fontSize }: propsType) => {
-  return (
-    <StyledSelect width={width} fontSize={fontSize}>
-      {children}
-    </StyledSelect>
-  );
-};
+const index = forwardRef<HTMLSelectElement, propsType>(
+  ({ children, width, fontSize, text, setText }, ref) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const inputRef = useForwardRef<HTMLSelectElement>(ref);
+    return (
+      <StyledSelect
+        ref={inputRef}
+        width={width}
+        fontSize={fontSize}
+        onChange={e => setText(e.target.value)}
+      >
+        {children}
+      </StyledSelect>
+    );
+  },
+);
 
 export default index;
