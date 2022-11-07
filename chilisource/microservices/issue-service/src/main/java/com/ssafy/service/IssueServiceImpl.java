@@ -15,10 +15,7 @@ import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
 import com.ssafy.entity.MiddleBucketIssue;
-import com.ssafy.exception.BadRequestException;
-import com.ssafy.exception.DuplicateException;
-import com.ssafy.exception.NotFoundException;
-import com.ssafy.exception.WrongFormException;
+import com.ssafy.exception.*;
 import com.ssafy.repository.IssueTemplateRepo;
 import com.ssafy.repository.IssueTypeRepo;
 import com.ssafy.repository.MiddleBucketIssueRepo;
@@ -39,6 +36,7 @@ import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.MIDDLE_BUCKET_NAME_DUPLICATED;
 import static com.ssafy.exception.NotFoundException.*;
+import static com.ssafy.exception.WrongAccessException.*;
 import static com.ssafy.exception.WrongFormException.SUMMARY_NOT_NULL;
 
 @Slf4j
@@ -127,6 +125,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [updateIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
                     return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
                 });
+        if (!issueTemplate.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueTemplate] CAN_NOT_MODIFY_ISSUE_TEMPLATE");
+            throw new WrongAccessException(CAN_NOT_UPDATE_ISSUE_TEMPLATE);
+        }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
@@ -150,12 +152,16 @@ public class IssueServiceImpl implements IssueService {
 
     @Transactional
     @Override
-    public void deleteIssueTemplate(Long issueTemplateId) {
+    public void deleteIssueTemplate(Long userId, Long issueTemplateId) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
                 .orElseThrow(() -> {
                     log.error("[Issue] [deleteIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
                     return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
                 });
+        if (!issueTemplate.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueTemplate] CAN_NOT_DELETE_ISSUE_TEMPLATE");
+            throw new WrongAccessException(CAN_NOT_DELETE_ISSUE_TEMPLATE);
+        }
         issueTemplateRepo.delete(issueTemplate);
     }
 
@@ -182,35 +188,6 @@ public class IssueServiceImpl implements IssueService {
                         .name(middleBucket.getName())
                         .build())
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public IssueListResponse getMiddleBucket(Long userId, Long middleBucketId) {
-        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [getMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
-
-        List<IssueResponse> issueList = middleBucket.getMiddleBucketIssues().stream()
-                .map(middleBucketIssue -> IssueResponse.builder()
-                        .issueId(middleBucketIssue.getId())
-                        .issueType(middleBucketIssue.getIssueType().getName())
-                        .summary(middleBucketIssue.getSummary())
-                        .description(middleBucketIssue.getDescription())
-                        .assignee(middleBucketIssue.getAssignee())
-                        .priority(middleBucketIssue.getPriority())
-                        .epicLink(middleBucketIssue.getEpicLink())
-//                        .sprint(middleBucketIssue.getSprint())
-                        .storyPoints(middleBucketIssue.getStoryPoints())
-                        .build())
-                .collect(Collectors.toList());
-
-        return IssueListResponse.builder()
-                .middleBucketId(middleBucket.getId())
-                .middleBucketName(middleBucket.getName())
-                .issueList(issueList)
-                .build();
     }
 
     @Transactional
@@ -246,6 +223,10 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [updateMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
                 });
+        if (!middleBucket.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET");
+            throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET);
+        }
         middleBucket.update(request.getName());
     }
 
@@ -257,7 +238,40 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [deleteMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
                 });
+        if (!middleBucket.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [deleteMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET");
+            throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET);
+        }
         middleBucketRepo.delete(middleBucket);
+    }
+
+    @Override
+    public IssueListResponse getMiddleBucket(Long userId, Long middleBucketId) {
+        MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
+                .orElseThrow(() -> {
+                    log.error("[Issue] [getMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
+                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
+                });
+
+        List<IssueResponse> issueList = middleBucket.getMiddleBucketIssues().stream()
+                .map(middleBucketIssue -> IssueResponse.builder()
+                        .issueId(middleBucketIssue.getId())
+                        .issueType(middleBucketIssue.getIssueType().getName())
+                        .summary(middleBucketIssue.getSummary())
+                        .description(middleBucketIssue.getDescription())
+                        .assignee(middleBucketIssue.getAssignee())
+                        .priority(middleBucketIssue.getPriority())
+                        .epicLink(middleBucketIssue.getEpicLink())
+//                        .sprint(middleBucketIssue.getSprint())
+                        .storyPoints(middleBucketIssue.getStoryPoints())
+                        .build())
+                .collect(Collectors.toList());
+
+        return IssueListResponse.builder()
+                .middleBucketId(middleBucket.getId())
+                .middleBucketName(middleBucket.getName())
+                .issueList(issueList)
+                .build();
     }
 
     @Transactional
@@ -310,6 +324,10 @@ public class IssueServiceImpl implements IssueService {
             log.error("[Issue] [updateIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
+        if (!middleBucketIssue.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [updateIssueInMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET_ISSUE");
+            throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET_ISSUE);
+        }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
@@ -344,13 +362,76 @@ public class IssueServiceImpl implements IssueService {
                     log.error("[Issue] [deleteIssueInMiddleBucket] MIDDLE_BUCKET_ISSUE_NOT_FOUND");
                     return new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND);
                 });
-
+        if (!middleBucketIssue.getCreatedUser().equals(userId)) {
+            log.error("[Issue] [deleteIssueInMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE");
+            throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE);
+        }
         if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
             log.error("[Issue] [deleteIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
 
         middleBucketIssueRepo.delete(middleBucketIssue);
+    }
+
+    // =========================================== 내부 API ==================================================
+    @Transactional
+    @Override
+    public void deleteAll(User user, Long projectId) {
+        issueTemplateRepo.deleteAllInBatch(issueTemplateRepo.findByProjectId(projectId));
+        List<MiddleBucket> middleBuckets = middleBucketRepo.findByProjectId(projectId);
+        for (MiddleBucket middleBucket : middleBuckets) {
+            List<MiddleBucketIssue> middleBucketIssues = middleBucket.getMiddleBucketIssues();
+            middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
+        }
+        middleBucketRepo.deleteAllInBatch(middleBuckets);
+    }
+
+    // =========================================== JIRA API ==================================================
+    @Override
+    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        return jiraFeignClient.getProjectList(jiraBase64);
+    }
+
+    @Override
+    public JiraEpicListResponse getEpicList(
+            User user,
+            List<String> auths
+    ) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+        // TODO 테스트용
+//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        return jiraFeignClient.getJiraEpics(jiraBase64);
+    }
+
+    @Override
+    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
+            log.error("[Issue] [getTodoIssues] PROJECT_NOT_FOUND");
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+        String projectKey = response.getJiraProject();
+
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // TODO 테스트용
+//        String projectKey = "S07P31B207";
+//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
+
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
+
+        return jiraFeignClient.getTodoIssues(jiraBase64, query);
     }
 
     @Transactional
@@ -488,63 +569,5 @@ public class IssueServiceImpl implements IssueService {
             log.error("[Issue] [addIssuesToJira] {}", errorDetail);
             throw new BadRequestException(errorDetail);
         }
-    }
-
-    @Override
-    public JiraEpicListResponse getEpicList(
-            User user,
-            List<String> auths
-    ) {
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-        // TODO 테스트용
-//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        return jiraFeignClient.getJiraEpics(jiraBase64);
-    }
-
-    @Transactional
-    @Override
-    public void deleteAll(User user, Long projectId) {
-        issueTemplateRepo.deleteAllInBatch(issueTemplateRepo.findByProjectId(projectId));
-        List<MiddleBucket> middleBuckets = middleBucketRepo.findByProjectId(projectId);
-        for (MiddleBucket middleBucket : middleBuckets) {
-            List<MiddleBucketIssue> middleBucketIssues = middleBucket.getMiddleBucketIssues();
-            middleBucketIssueRepo.deleteAllInBatch(middleBucketIssues);
-        }
-        middleBucketRepo.deleteAllInBatch(middleBuckets);
-    }
-
-    @Override
-    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
-        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
-        if (response == null) {
-            log.error("[Issue] [getTodoIssues] PROJECT_NOT_FOUND");
-            throw new NotFoundException(PROJECT_NOT_FOUND);
-        }
-        String projectKey = response.getJiraProject();
-
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-
-        // TODO 테스트용
-//        String projectKey = "S07P31B207";
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
-
-        return jiraFeignClient.getTodoIssues(jiraBase64, query);
-    }
-
-    @Override
-    public List<JiraProjectResponse> getProjectList(User user, List<String> auths) {
-        TokenResponse jira = authServiceClient.getToken(auths, "jira");
-        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-
-        // TODO 테스트용
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
-        return jiraFeignClient.getProjectList(jiraBase64);
     }
 }

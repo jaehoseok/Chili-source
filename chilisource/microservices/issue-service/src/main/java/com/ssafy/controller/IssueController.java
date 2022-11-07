@@ -28,9 +28,9 @@ public class IssueController {
     private final IssueService issueService;
 
     // 이슈 템플릿 조회
-    @GetMapping("/")
+    @GetMapping
     @ApiOperation(value = "이슈 템플릿 리스트 조회")
-    public ResponseEntity<?> getIssueTemplates(
+    public ResponseEntity<List<IssueTemplateResponse>> getIssueTemplates(
             @LoginUser User user,
             @ApiParam(value = "특정 프로젝트 내의 이슈 템플릿을 조회하고 싶다면, 프로젝트 id", required = false)
             @RequestParam(required = false) Long projectId,
@@ -87,7 +87,7 @@ public class IssueController {
     public ResponseEntity<?> deleteIssueTemplate(
             @LoginUser User user,
             @ApiParam(value = "삭제하고 싶은 이슈 템플릿의 id") @PathVariable Long issueTemplateId) {
-        issueService.deleteIssueTemplate(issueTemplateId);
+        issueService.deleteIssueTemplate(user.getId(), issueTemplateId);
         return ResponseEntity.ok()
                 .build();
     }
@@ -95,7 +95,7 @@ public class IssueController {
     // 미들 버킷 리스트 조회
     @GetMapping("/middle-buckets")
     @ApiOperation(value = "미들 버킷 리스트 조회")
-    public ResponseEntity<?> getMiddleBuckets(
+    public ResponseEntity<List<MiddleBucketResponse>> getMiddleBuckets(
             @LoginUser User user,
             @ApiParam(value = "특정 프로젝트 내의 미들버킷을 조회하고 싶다면, 프로젝트 id", required = false)
             @RequestParam(required = false) Long projectId,
@@ -162,7 +162,7 @@ public class IssueController {
     // 미들 버킷 조회
     @GetMapping("/middle-buckets/{middleBucketId}")
     @ApiOperation(value = "미들 버킷 내의 이슈 리스트 조회")
-    public ResponseEntity<?> getMiddleBucket(
+    public ResponseEntity<IssueListResponse> getMiddleBucket(
             @LoginUser User user,
             @ApiParam(value = "조회하고 싶은 미들 버킷의 id") @PathVariable Long middleBucketId
     ) {
@@ -236,6 +236,51 @@ public class IssueController {
     }
 
     // =========================================== JIRA API ==================================================
+    // 프로젝트 목록 조회
+    @GetMapping("/jira/project-list")
+    @ApiOperation(value = "우리 서비스와 연동할 JIRA 프로젝트 목록 가져오기")
+    public ResponseEntity<List<JiraProjectResponse>> getProjectList(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
+    ) {
+        List<JiraProjectResponse> responses = issueService.getProjectList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION)
+        );
+        return ResponseEntity.ok()
+                .body(responses);
+    }
+
+    // 에픽 리스트 조회
+    @GetMapping("/jira/epic-list")
+    @ApiOperation(value = "JIRA에서 생성된 EPIC들 가져오기")
+    public ResponseEntity<JiraEpicListResponse> getEpicList(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers
+    ) {
+        JiraEpicListResponse response = issueService.getEpicList(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION));
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    // 나의 할 일 + 진행 중 이슈만 조회
+    @GetMapping("/jira/issues/todo/{projectId}")
+    @ApiOperation(value = "아직 DONE하지 않은 JIRA의 이슈 가져오기")
+    public ResponseEntity<JiraTodoIssueListResponse> getTodoIssues(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
+            @ApiParam(value = "JIRA와 연동된 프로젝트 id") @PathVariable Long projectId
+    ) throws Exception {
+        JiraTodoIssueListResponse response = issueService.getTodoIssues(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION),
+                projectId);
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성
     @PostMapping("/jira/middle-bucket")
     @ApiOperation(value = "미들 버킷에 있는 모든 이슈를 JIRA에 생성")
@@ -251,50 +296,5 @@ public class IssueController {
                 middleBucketId,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
-    }
-
-    // 에픽 리스트 조회
-    @GetMapping("/jira/epic-list")
-    @ApiOperation(value = "JIRA에서 생성된 EPIC들 가져오기")
-    public ResponseEntity<?> getEpicList(
-            @LoginUser User user,
-            @RequestHeader HttpHeaders headers
-    ) {
-        JiraEpicListResponse response = issueService.getEpicList(
-                user,
-                headers.get(HttpHeaders.AUTHORIZATION));
-        return ResponseEntity.ok()
-                .body(response);
-    }
-
-    // 프로젝트 목록 조회
-    @GetMapping("/jira/project-list")
-    @ApiOperation(value = "우리 서비스와 연동할 JIRA 프로젝트 목록 가져오기")
-    public ResponseEntity<?> getProjectList(
-            @LoginUser User user,
-            @RequestHeader HttpHeaders headers
-    ) {
-        List<JiraProjectResponse> responses = issueService.getProjectList(
-                user,
-                headers.get(HttpHeaders.AUTHORIZATION)
-        );
-        return ResponseEntity.ok()
-                .body(responses);
-    }
-
-    // 나의 할 일 + 진행 중 이슈만 조회
-    @GetMapping("/jira/issues/todo/{projectId}")
-    @ApiOperation(value = "아직 DONE하지 않은 JIRA의 이슈 가져오기")
-    public ResponseEntity<?> getTodoIssues(
-            @LoginUser User user,
-            @RequestHeader HttpHeaders headers,
-            @ApiParam(value = "JIRA와 연동된 프로젝트 id") @PathVariable Long projectId
-    ) throws Exception {
-        JiraTodoIssueListResponse response = issueService.getTodoIssues(
-                user,
-                headers.get(HttpHeaders.AUTHORIZATION),
-                projectId);
-        return ResponseEntity.ok()
-                .body(response);
     }
 }
