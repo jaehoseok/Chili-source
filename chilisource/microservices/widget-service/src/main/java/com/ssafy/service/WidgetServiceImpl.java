@@ -38,8 +38,8 @@ public class WidgetServiceImpl implements WidgetService {
                 .map(widget -> {
                     return WidgetResponse.builder()
                             .id(widget.getId())
-                            .row(widget.getRow())
-                            .col(widget.getCol())
+                            .widgetRow(widget.getWidgetRow())
+                            .widgetCol(widget.getWidgetCol())
                             .widgetCode(widget.getWidgetCode().getId())
                             .requestUrl(widget.getWidgetCode().getRequestUrl())
                             .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
@@ -63,8 +63,8 @@ public class WidgetServiceImpl implements WidgetService {
         }
         Widget widget = Widget.builder()
                 .name(request.getName())
-                .row(request.getRow())
-                .col(request.getCol())
+                .widgetRow(request.getWidgetRow())
+                .widgetCol(request.getWidgetCol())
                 .projectId(request.getProjectId())
                 .widgetCode(widgetCode)
                 .build();
@@ -72,8 +72,8 @@ public class WidgetServiceImpl implements WidgetService {
         return WidgetResponse.builder()
                 .id(widget.getId())
                 .name(widget.getName())
-                .row(widget.getRow())
-                .col(widget.getCol())
+                .widgetRow(widget.getWidgetRow())
+                .widgetCol(widget.getWidgetCol())
                 .widgetCode(widgetCode.getId())
                 .requestUrl(widgetCode.getRequestUrl())
                 .detailRequestUrl(widgetCode.getDetailRequestUrl())
@@ -92,8 +92,8 @@ public class WidgetServiceImpl implements WidgetService {
         return WidgetResponse.builder()
                 .id(widget.getId())
                 .name(widget.getName())
-                .row(widget.getRow())
-                .col(widget.getCol())
+                .widgetRow(widget.getWidgetRow())
+                .widgetCol(widget.getWidgetCol())
                 .widgetCode(widget.getWidgetCode().getId())
                 .requestUrl(widget.getWidgetCode().getRequestUrl())
                 .detailRequestUrl(widget.getWidgetCode().getDetailRequestUrl())
@@ -109,7 +109,7 @@ public class WidgetServiceImpl implements WidgetService {
                         log.error("[Widget] [updateLoc] widget is not found");
                         return new NotFoundException(WIDGET_NOT_FOUND);
                     });
-            widget.locUpdate(request.getRow(), request.getCol());
+            widget.locUpdate(request.getWidgetRow(), request.getWidgetCol());
         });
     }
 
