@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, ChangeEvent } from 'react';
 
 import { SetterOrUpdater } from 'recoil';
 
@@ -44,8 +44,23 @@ const index = ({
 
   const setInputValue = useSetRecoilState;
 
+  const changeHandler = (e?: ChangeEvent<HTMLInputElement>) => {
+    e && setText(e.target.value);
+
+    if (useSetRecoilState && recoilParam)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      setInputValue(prevObj => {
+        return {
+          ...prevObj,
+          [recoilParam]: e ? e.target.value : defaultValue ? defaultValue : '',
+        };
+      });
+  };
+
   useEffect(() => {
     setText(defaultValue);
+    changeHandler();
   }, [defaultValue]);
   useEffect(() => {
     if (inputTag.current) {
@@ -61,19 +76,7 @@ const index = ({
         width={width}
         type={type}
         placeholder={placeHolder}
-        onChange={e => {
-          setText(e.target.value);
-
-          if (useSetRecoilState && recoilParam)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            setInputValue(prevObj => {
-              return {
-                ...prevObj,
-                [recoilParam]: e.target.value,
-              };
-            });
-        }}
+        onChange={changeHandler}
         defaultValue={text}
       ></StyledInput>
     </>

@@ -132,10 +132,10 @@ export default {
       value: string;
       email: string;
       jiraAccoundId: null | string;
-      tokenCodeid: string;
+      tokenCodeId: string;
     }
 
-    return new Promise<responseType>((resolve, reject) => {
+    return new Promise<responseType[]>((resolve, reject) => {
       authAxios
         .get(`/tokens`)
         .then(response => {
@@ -156,11 +156,10 @@ export default {
    * @author bell
    */
   postLinkageToken: async (email: string, tokenCodeId: string, value: string) => {
-    const response = await authAxios.post('/tokens', {
+    await authAxios.post('/tokens', {
       email,
       tokenCodeId,
       value,
     });
-    console.log(response);
   },
 };

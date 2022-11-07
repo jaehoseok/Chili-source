@@ -85,8 +85,8 @@ export default {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data);
-      return response.data;
+      console.log(response);
+      return response;
     } catch (e) {
       console.log(e);
     }
