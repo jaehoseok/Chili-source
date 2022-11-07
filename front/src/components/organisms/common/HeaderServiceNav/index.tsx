@@ -238,7 +238,6 @@ const index = memo(() => {
             )),
         )}
         <Tab
-          classname="sd"
           key={99999}
           type={'widget'}
           isActivated={false}

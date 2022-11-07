@@ -23,7 +23,12 @@ const projectAxios = createAxiosApi('project-service');
 
 export default {
   /**
-   * @description project 리스트 조회 코드
+   * @description
+   * project 리스트 조회 코드에 대한 제안
+   * 각 요청 간에 반환하는 response 객체가 상이하므로
+   * 요청 코드 내에 interface responseType 을 가지도록
+   * 구현하는 것이 어떤가 생각해보았습니다.
+   *
    * @example
    *```typescript
    * // 사용예시
