@@ -2,6 +2,6 @@
 spring:
   cloud:
     config:
-      #uri: http://k7b2071.p.ssafy.io:8888
-      uri: http://localhost:8888
+      uri: http://k7b2071.p.ssafy.io:8888
+      #uri: http://localhost:8888
       name: widget-service
