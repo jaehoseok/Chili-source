@@ -38,15 +38,7 @@ const RouterWrapper = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <HeaderInit />
-              <LandingPage />
-            </>
-          }
-        />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/user" element={<UserLoginLoadingPage />} />
         <Route path="/setting/:userId" element={<UserSettingPage />} />
         <Route path="/projects" element={<ProjectSelectPage />} />

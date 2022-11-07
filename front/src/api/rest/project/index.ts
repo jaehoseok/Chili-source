@@ -20,18 +20,93 @@ const projectAxios = createAxiosApi('project-service');
  *
  * @author inte
  */
+
 export default {
   /**
-   * @description project 서버의 token code 들을 받아옴
+   * @description
+   * project 리스트 조회 코드에 대한 제안
+   * 각 요청 간에 반환하는 response 객체가 상이하므로
+   * 요청 코드 내에 interface responseType 을 가지도록
+   * 구현하는 것이 어떤가 생각해보았습니다.
    *
+   * @example
+   *```typescript
+   * // 사용예시
+   * import { project } from 'api/rest';
+   *
+   * const index = () => {
+   *   const [projectList, setProjectList] = useState<Awaited<ReturnType<typeof project.getProjectList>>>();
+   *
+   *   useEffect(() => {
+   *     (async () => {
+   *       const ans = await project.getProjectList();
+   *       setProjectList(ans);
+   *     })();
+   *   }, []);
+   *
+   * return (
+   *   <div>
+   *     {projectList ?
+   *       projectList.map((item, index) => (
+   *         <div key={index}>
+   *           <div>[id]: {item.id}</div>
+   *             <div>[name]: {item.name}</div>
+   *             <div>[description]: {item.description}</div>
+   *             <div>[image]: {item.image}</div>
+   *             <div>[latestGanttVersion]: {item.latestGanttVersion}</div>
+   *             <div>[jiraProject]: {item.jiraProject}</div>
+   *             <div>[gitRepo]: {item.gitRepo}</div>
+   *             <div>==========</div>
+   *           </div>
+   *         )) : ''
+   *     }
+   *   </div>
+   *   );
+   * };
+   * ```
    * @author inte
    */
-  getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
+  getProjectList: () => {
+    interface responseType {
+      id: string;
+      name: string;
+      description: string;
+      image: string;
+      latestGanttVersion: number;
+      jiraProject: string | null;
+      gitRepo: string | null;
+      tokenList: string[];
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
       projectAxios
-        .get(`/token-codes`)
+        .get(`/project`)
         .then(response => {
-          resolve(response);
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  getProjectData: (projectId: string) => {
+    interface responseType {
+      id: string;
+      name: string;
+      description: string;
+      image: string;
+      latestGanttVersion: number;
+      jiraProject: string | null;
+      gitRepo: string | null;
+      tokenList: string[];
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      projectAxios
+        .get(`/project/${projectId}`)
+        .then(response => {
+          resolve(response.data);
         })
         .catch(error => {
           reject(error);
