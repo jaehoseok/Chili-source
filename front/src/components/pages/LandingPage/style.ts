@@ -6,7 +6,16 @@ export interface styledType {
   width?: string;
 }
 
-export const StyledLandingPage = styled.div<styledType>`
-  ${tw`m-4`}
+export const StyledPage = styled.div<styledType>`
+  ${tw`h-screen bg-red-200`}
 `;
-StyledLandingPage.defaultProps = {};
+StyledPage.defaultProps = {};
+
+export const StyledHeader = styled.div<styledType>`
+  height: 4rem;
+  min-height: 4rem;
+`;
+
+export const StyledBody = styled.div<styledType>`
+  ${tw``}
+`;

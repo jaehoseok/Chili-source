@@ -1,6 +1,7 @@
 // API & Library
 import { useRef } from 'react';
 import { useDrag } from 'react-dnd';
+import { itemType } from '../';
 
 // Styles
 import { StyledWidgetListColumn, StyledWidgetListItemContainer } from './style';
@@ -8,7 +9,7 @@ import { StyledWidgetListColumn, StyledWidgetListItemContainer } from './style';
 // Components
 import { WidgetDropSpace } from '../WidgetDropSpace';
 import { WidgetListItem } from '../WidgetListItem';
-import { itemType } from '../';
+import { Widget } from 'components/molecules/Widget';
 
 interface propsType {
   id?: string;
@@ -60,6 +61,8 @@ export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType)
             );
           })
         : ''}
+
+      <Widget>{id}</Widget>
     </StyledWidgetListColumn>
   );
 };
