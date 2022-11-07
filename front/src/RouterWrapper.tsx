@@ -55,7 +55,6 @@ const RouterWrapper = () => {
           path="/project/:projectId/dashboard"
           element={
             <>
-              <HeaderNav />
               <ProjectDashBoardPage />
             </>
           }
