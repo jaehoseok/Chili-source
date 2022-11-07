@@ -56,6 +56,7 @@ export default {
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
       const response = await userAxios.get('/users/info');
+      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log(e);

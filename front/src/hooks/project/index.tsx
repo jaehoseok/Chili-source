@@ -4,19 +4,6 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 
 import { project } from 'api/rest';
 
-import { AxiosError } from 'axios';
-
-export interface projectType {
-  description: 'string';
-  gitRepo: 'string';
-  id: 0;
-  image: 'string';
-  jiraProject: 'string';
-  latestGanttVersion: 0;
-  name: 'string';
-  tokenList: ['string'];
-}
-
 /**
  * @description
  * 해당 유저가 가지고 있는 토큰과 연관되는 우리 서비스를 모두 가져오는
@@ -24,21 +11,11 @@ export interface projectType {
  *
  * @author bell
  */
-export const useGetProjectWithTokenHandler = () => {
-  return useQuery<projectType[], AxiosError>(
-    ['project-with-token'],
-    () => project.getProjectWithToken(),
-    {
-      staleTime: Infinity,
-    },
-  );
+export const useGetProjects = () => {
+  return useQuery(['get-projects'], () => project.getProjects(), {
+    staleTime: Infinity,
+  });
 };
-
-export interface createProjectType {
-  projectName: string;
-  projectDescription: string;
-  image: ChangeEvent<HTMLInputElement>;
-}
 
 /**
  * @description
@@ -48,7 +25,25 @@ export interface createProjectType {
  * @author bell
  */
 export const usePostCreateProjectHandler = () => {
-  return useMutation(({ projectName, projectDescription, image }: createProjectType) =>
+  interface requestBodyType {
+    projectName: string;
+    projectDescription: string;
+    image: ChangeEvent<HTMLInputElement>;
+  }
+  return useMutation(({ projectName, projectDescription, image }: requestBodyType) =>
     project.postCreateProject(projectName, projectDescription, image),
   );
+};
+
+/**
+ * @description
+ * 프로젝트를 삭제시키는 API 요청 함수를 다루는 custom-hook
+ *
+ * @author bell
+ */
+export const useDeleteProject = () => {
+  interface pathType {
+    projectId: number;
+  }
+  return useMutation(({ projectId }: pathType) => project.deleteProject(projectId));
 };
