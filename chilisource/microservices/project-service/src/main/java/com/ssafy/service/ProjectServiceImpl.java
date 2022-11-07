@@ -177,7 +177,7 @@ public class ProjectServiceImpl implements ProjectService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
 
-        if (!userProjectManager.getRole().getId().equalsIgnoreCase("MASTER")) {
+        if (!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
             log.error("[Project] [updateProjectToken] CREATE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
@@ -219,7 +219,7 @@ public class ProjectServiceImpl implements ProjectService {
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
 
-        if (!userProjectManager.getRole().getId().equalsIgnoreCase("MASTER")) {
+        if (!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
             log.error("[Project] [deleteProjectToken] REMOVE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
