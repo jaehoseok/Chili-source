@@ -520,9 +520,13 @@ public class IssueServiceImpl implements IssueService {
                     .build();
 
             // description
+            String text = issue.getDescription();
+            if (text == null) {
+                text = "";
+            }
             List<JiraIssueDescriptionContentContentCreateRequest> list = new ArrayList<>();
             JiraIssueDescriptionContentContentCreateRequest contentContentCreateRequest = JiraIssueDescriptionContentContentCreateRequest.builder()
-                    .text(issue.getDescription())
+                    .text(text)
                     .build();
             list.add(contentContentCreateRequest);
 
