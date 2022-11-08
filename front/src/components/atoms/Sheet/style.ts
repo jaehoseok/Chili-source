@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
 export interface styledType {
@@ -11,6 +11,8 @@ export interface styledType {
   flex?: string;
   maxWidth?: string;
   minHeight?: string;
+  isOverflowXScroll?: boolean;
+  isOverflowYScroll?: boolean;
 }
 
 export const StyledSheet = styled.div<styledType>`
@@ -26,6 +28,27 @@ export const StyledSheet = styled.div<styledType>`
   background-color: ${({ backgroundColor }) => backgroundColor};
   max-width: ${({ maxWidth }) => maxWidth};
   min-height: ${({ minHeight }) => minHeight};
+  ${({ isOverflowXScroll }) =>
+    isOverflowXScroll
+      ? css`
+          overflow-x: scroll;
+        `
+      : ''};
+  ${({ isOverflowYScroll }) =>
+    isOverflowYScroll
+      ? css`
+          overflow-y: scroll;
+          &::-webkit-scrollbar {
+            width: 8px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.4);
+          }
+          &::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+          }
+        `
+      : ''};
 `;
 StyledSheet.defaultProps = {
   backgroundColor: 'white',

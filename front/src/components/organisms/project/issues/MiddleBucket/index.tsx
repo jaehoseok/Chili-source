@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { MiddleBucket } from './style';
+import { MiddleBucket, StyledBucketHeader, StyledBucketBody } from './style';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import IssueBar from 'components/molecules/IssueBar';
@@ -45,17 +45,19 @@ const index = (props: any) => {
   ));
   return (
     <MiddleBucket>
-      <Button
-        borderColor={'red'}
-        clickHandler={() => {
-          console.log(props.info);
-          console.log(bucket);
-        }}
-      >
-        Bucket Test
-      </Button>
-      <Sheet isShadow={false} flex={'column'}>
-        {BarList}
+      <StyledBucketHeader>
+        <Button
+          borderColor={'red'}
+          clickHandler={() => {
+            console.log(props.info);
+            console.log(bucket);
+          }}
+        >
+          Bucket Test
+        </Button>
+      </StyledBucketHeader>
+      <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>
+        <StyledBucketBody>{BarList}</StyledBucketBody>
       </Sheet>
     </MiddleBucket>
   );

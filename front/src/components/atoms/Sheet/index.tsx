@@ -45,6 +45,8 @@ const index = ({
   flex,
   maxWidth,
   minHeight,
+  isOverflowXScroll,
+  isOverflowYScroll,
 }: propsType) => {
   return (
     <>
@@ -57,6 +59,8 @@ const index = ({
         flex={flex}
         maxWidth={maxWidth}
         minHeight={minHeight}
+        isOverflowXScroll={isOverflowXScroll}
+        isOverflowYScroll={isOverflowYScroll}
       >
         {children}
       </StyledSheet>

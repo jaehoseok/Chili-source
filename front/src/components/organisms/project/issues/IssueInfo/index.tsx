@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { StyledIssueInfo } from './style';
+import { StyledIssueInfo, StyledIssueHeader, StyledIssueBody } from './style';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import InputBox from 'components/molecules/InputBox';
@@ -29,81 +29,85 @@ const index = (props: any) => {
 
   return (
     <StyledIssueInfo>
-      <Button
-        borderColor="green"
-        clickHandler={() => {
-          props.setInfo({
-            project: projectRef.current ? projectRef.current.value : '',
-            type: typeRef.current
-              ? typeRef.current.value === '스토리'
-                ? 'story'
-                : typeRef.current.value === '태스크'
-                ? 'task'
-                : typeRef.current.value === '버그'
-                ? 'bug'
-                : 'error'
-              : '',
-            summary: summaryRef.current ? summaryRef.current.value : '',
-            epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-            reporter: reporterRef.current ? reporterRef.current.value : '',
-            assignee: assigneeRef.current ? assigneeRef.current.value : '',
-            rank: rankRef.current ? rankRef.current.value : '',
-            sprint: sprintRef.current ? sprintRef.current.value : '',
-            storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
-          });
-          props.setIsInsert(true);
-        }}
-      >
-        IssueInfo Test
-      </Button>
-      <Sheet isShadow={false} flex={'column'}>
-        <InputBox
-          isRow={false}
-          labelName={'프로젝트'}
-          inputValue={props.info.project}
-          ref={projectRef}
-        />
-        <SelectBox labelName={'이슈 유형'} ref={typeRef}>
-          <Option messages={['스토리', '태스크', '버그']} selected={issueType}></Option>
-        </SelectBox>
-        <InputBox
-          isRow={false}
-          labelName={'요약'}
-          inputValue={props.info.summary}
-          ref={summaryRef}
-        />
-        <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
-        <SelectBox labelName={'보고자'} ref={reporterRef}>
-          <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
-        </SelectBox>
-        <SelectBox labelName={'담당자'} ref={assigneeRef}>
-          <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.assignee}></Option>
-        </SelectBox>
-        <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-        <SelectBox labelName={'우선순위'} ref={rankRef}>
-          <Option
-            messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
-            selected={props.info.rank}
-          ></Option>
-        </SelectBox>
-        <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
-          <Option
-            messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
-            selected={props.info.epicLink}
-          ></Option>
-        </SelectBox>
-        <SelectBox labelName={'Sprint'} ref={sprintRef}>
-          <Option
-            messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
-            selected={props.info.sprint}
-          ></Option>
-        </SelectBox>
-        <InputBox
-          isRow={false}
-          labelName={'Story Points'}
-          inputValue={props.info.storyPoints + ''}
-          ref={storyPointsRef}
-        />
+      <StyledIssueHeader>
+        <Button
+          borderColor="green"
+          clickHandler={() => {
+            props.setInfo({
+              project: projectRef.current ? projectRef.current.value : '',
+              type: typeRef.current
+                ? typeRef.current.value === '스토리'
+                  ? 'story'
+                  : typeRef.current.value === '태스크'
+                  ? 'task'
+                  : typeRef.current.value === '버그'
+                  ? 'bug'
+                  : 'error'
+                : '',
+              summary: summaryRef.current ? summaryRef.current.value : '',
+              epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+              reporter: reporterRef.current ? reporterRef.current.value : '',
+              assignee: assigneeRef.current ? assigneeRef.current.value : '',
+              rank: rankRef.current ? rankRef.current.value : '',
+              sprint: sprintRef.current ? sprintRef.current.value : '',
+              storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+            });
+            props.setIsInsert(true);
+          }}
+        >
+          IssueInfo Test
+        </Button>
+      </StyledIssueHeader>
+      <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>
+        <StyledIssueBody>
+          <InputBox
+            isRow={false}
+            labelName={'프로젝트'}
+            inputValue={props.info.project}
+            ref={projectRef}
+          />
+          <SelectBox labelName={'이슈 유형'} ref={typeRef}>
+            <Option messages={['스토리', '태스크', '버그']} selected={issueType}></Option>
+          </SelectBox>
+          <InputBox
+            isRow={false}
+            labelName={'요약'}
+            inputValue={props.info.summary}
+            ref={summaryRef}
+          />
+          <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
+          <SelectBox labelName={'보고자'} ref={reporterRef}>
+            <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
+          </SelectBox>
+          <SelectBox labelName={'담당자'} ref={assigneeRef}>
+            <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.assignee}></Option>
+          </SelectBox>
+          <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
+          <SelectBox labelName={'우선순위'} ref={rankRef}>
+            <Option
+              messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
+              selected={props.info.rank}
+            ></Option>
+          </SelectBox>
+          <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
+            <Option
+              messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
+              selected={props.info.epicLink}
+            ></Option>
+          </SelectBox>
+          <SelectBox labelName={'Sprint'} ref={sprintRef}>
+            <Option
+              messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
+              selected={props.info.sprint}
+            ></Option>
+          </SelectBox>
+          <InputBox
+            isRow={false}
+            labelName={'Story Points'}
+            inputValue={props.info.storyPoints + ''}
+            ref={storyPointsRef}
+          />
+        </StyledIssueBody>
       </Sheet>
     </StyledIssueInfo>
   );

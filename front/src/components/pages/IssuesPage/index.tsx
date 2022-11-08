@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { StyledIssuesPage } from './style';
+import { StyledIssuesPage, StyledHeader, StyledBody } from './style';
 import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
 import IssueInfo from 'components/organisms/project/issues/IssueInfo';
 import Issue from 'components/molecules/Issue';
+import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
 export type issueType = {
   project: string;
@@ -34,33 +35,38 @@ const index = () => {
   };
   return (
     <StyledIssuesPage>
-      <div>
-        <Issue
-          project={'프로젝트 명'}
-          summary={'이슈 제목'}
-          epicLink={'에픽1'}
-          reporter={'팀원1'}
-          assignee={'팀원3'}
-          rank={'Low'}
-          type={'story'}
-          sprint={'스프린트1'}
-          storyPoints={8}
-          clickHandler={setInfoHandler}
-        />
-        <Issue
-          summary={'이슈 제목2'}
-          epicLink={'에픽2'}
-          reporter={'팀원2'}
-          assignee={'팀원2'}
-          rank={'High'}
-          type={'task'}
-          sprint={'스프린트2'}
-          storyPoints={4}
-          clickHandler={setInfoHandler}
-        />
-      </div>
-      <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
-      <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
+      <StyledHeader>
+        <HeaderNav></HeaderNav>
+      </StyledHeader>
+      <StyledBody>
+        <div>
+          <Issue
+            project={'프로젝트 명'}
+            summary={'이슈 제목'}
+            epicLink={'에픽1'}
+            reporter={'팀원1'}
+            assignee={'팀원3'}
+            rank={'Low'}
+            type={'story'}
+            sprint={'스프린트1'}
+            storyPoints={8}
+            clickHandler={setInfoHandler}
+          />
+          <Issue
+            summary={'이슈 제목2'}
+            epicLink={'에픽2'}
+            reporter={'팀원2'}
+            assignee={'팀원2'}
+            rank={'High'}
+            type={'task'}
+            sprint={'스프린트2'}
+            storyPoints={4}
+            clickHandler={setInfoHandler}
+          />
+        </div>
+        <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
+        <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
+      </StyledBody>
     </StyledIssuesPage>
   );
 };
