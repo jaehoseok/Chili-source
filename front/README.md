@@ -352,6 +352,9 @@
 
 ### 성현
 
-- `IssueInfo`-`SelectBox` 데이터 불러오기 해결
-  >- SelectBox 컴포넌트 형식을 forwardRef<HTMLSelectElement, propsType>으로 변경
-  >- 'setValue is not a function' 에러 해결
+- `IssueInfo`-`SelectBox` 에러 해결
+  >- 'setValue is not a function' 에러 - 생성된 해당 컴포넌트 전부에 props를 넣으니 해결됐다.
+
+- `IssueInfo`-`InputBox` 컴포넌트 형식 forwardRef<HTMLInputElement, propsType>로 변경
+- `IssueInfo`-`SelectBox` 컴포넌트 형식 forwardRef<HTMLSelectElement, propsType>로 변경
+  >- 내부에 targetRef를 새로 만들어 자식 컴포넌트에 ref로 접근할 수 있게 작성

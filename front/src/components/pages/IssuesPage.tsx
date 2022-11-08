@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import MiddleBucket from '../organisms/MiddleBucket';
-import IssueInfo from '../organisms/IssueInfo';
+import MiddleBucket from '../organisms/project/issues/MiddleBucket';
+import IssueInfo from '../organisms/project/issues/IssueInfo';
 import Issue from '../molecules/Issue';
 import Button from '../atoms/Button';
 

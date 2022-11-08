@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { StyledIssueInfo } from './style';
-import Sheet from '../../atoms/Sheet';
-import Button from '../../atoms/Button';
-import InputBox from '../../molecules/InputBox';
-import SelectBox from '../../molecules/SelectBox';
-import TextAreaBox from '../../molecules/TextAreaBox';
-import Option from '../../atoms/Option';
+import Sheet from 'components/atoms/Sheet';
+import Button from 'components/atoms/Button';
+import InputBox from 'components/molecules/InputBox';
+import SelectBox from 'components/molecules/SelectBox';
+import TextAreaBox from 'components/molecules/TextAreaBox';
+import Option from 'components/atoms/Option';
 
 const index = (props: any) => {
   const issueType =
@@ -29,6 +29,33 @@ const index = (props: any) => {
 
   return (
     <StyledIssueInfo>
+      <Button
+        borderColor="green"
+        clickHandler={() => {
+          props.setInfo({
+            project: projectRef.current ? projectRef.current.value : '',
+            type: typeRef.current
+              ? typeRef.current.value === '스토리'
+                ? 'story'
+                : typeRef.current.value === '태스크'
+                ? 'task'
+                : typeRef.current.value === '버그'
+                ? 'bug'
+                : 'error'
+              : '',
+            summary: summaryRef.current ? summaryRef.current.value : '',
+            epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+            reporter: reporterRef.current ? reporterRef.current.value : '',
+            assignee: assigneeRef.current ? assigneeRef.current.value : '',
+            rank: rankRef.current ? rankRef.current.value : '',
+            sprint: sprintRef.current ? sprintRef.current.value : '',
+            storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+          });
+          props.setIsInsert(true);
+        }}
+      >
+        IssueInfo Test
+      </Button>
       <Sheet isShadow={false} flex={'column'}>
         <InputBox
           isRow={false}
@@ -78,36 +105,6 @@ const index = (props: any) => {
           ref={storyPointsRef}
         />
       </Sheet>
-      <Button borderColor="blue" clickHandler={() => console.log(props.info)}>
-        IssueInfo Test
-      </Button>
-      <Button
-        borderColor="green"
-        clickHandler={() => {
-          props.setInfo({
-            project: projectRef.current ? projectRef.current.value : '',
-            type: typeRef.current
-              ? typeRef.current.value === '스토리'
-                ? 'story'
-                : typeRef.current.value === '태스크'
-                ? 'task'
-                : typeRef.current.value === '버그'
-                ? 'bug'
-                : 'error'
-              : '',
-            summary: summaryRef.current ? summaryRef.current.value : '',
-            epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-            reporter: reporterRef.current ? reporterRef.current.value : '',
-            assignee: assigneeRef.current ? assigneeRef.current.value : '',
-            rank: rankRef.current ? rankRef.current.value : '',
-            sprint: sprintRef.current ? sprintRef.current.value : '',
-            storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
-          });
-          props.setIsInsert(true);
-        }}
-      >
-        IssueInfo Test
-      </Button>
     </StyledIssueInfo>
   );
 };

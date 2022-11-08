@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import { MiddleBucket } from './style';
-import Sheet from '../../atoms/Sheet';
-import Button from '../../atoms/Button';
-import IssueBar from '../../molecules/IssueBar';
+import Sheet from 'components/atoms/Sheet';
+import Button from 'components/atoms/Button';
+import IssueBar from 'components/molecules/IssueBar';
 
-import { issueType } from '../../pages/IssuesPage';
+import { issueType } from 'components/pages/IssuesPage';
 
 const index = (props: any) => {
   const issue = {
