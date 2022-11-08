@@ -1,6 +1,7 @@
 import { forwardRef, ForwardedRef, useRef, useEffect, useState } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
+import { SetterOrUpdater } from 'recoil';
 
 interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
@@ -9,6 +10,9 @@ interface propsType extends styledContainerType, styledLabelType {
   inputHeight?: string;
   inputWidth?: string;
   inputType?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -40,6 +44,7 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
+
 const index = forwardRef<HTMLInputElement, propsType>(
   (
     {
@@ -55,6 +60,8 @@ const index = forwardRef<HTMLInputElement, propsType>(
       isRow,
       containerWidth,
       containerPadding,
+      useSetRecoilState,
+      recoilParam,
     },
     ref,
   ) => {
@@ -100,6 +107,8 @@ const index = forwardRef<HTMLInputElement, propsType>(
           defaultValue={inputValue}
           text={text}
           setText={setText}
+          useSetRecoilState={useSetRecoilState}
+          recoilParam={recoilParam}
         ></Input>
       </StyledContainer>
     );

@@ -1,6 +1,7 @@
 import { forwardRef, useState, useEffect, useRef, ForwardedRef } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import TextArea from 'components/atoms/TextArea';
+import { SetterOrUpdater } from 'recoil';
 
 interface propsType extends styledContainerType, styledLabelType {
   labelName: string;
@@ -8,6 +9,9 @@ interface propsType extends styledContainerType, styledLabelType {
   textAreaValue?: string;
   textAreaWidth?: string;
   textAreaHeight?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -39,6 +43,7 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
+
 const index = forwardRef<HTMLTextAreaElement, propsType>(
   (
     {
@@ -53,6 +58,8 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
       isRow,
       containerWidth,
       containerPadding,
+      useSetRecoilState,
+      recoilParam,
     },
     ref,
   ) => {
@@ -74,6 +81,7 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
 
     const [text, setText] = useState(textAreaValue);
     const inputRef = useForwardRef<HTMLTextAreaElement>(ref);
+
     return (
       <StyledContainer
         isRow={isRow}
@@ -96,6 +104,8 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
           defaultValue={textAreaValue}
           text={text}
           setText={setText}
+          useSetRecoilState={useSetRecoilState}
+          recoilParam={recoilParam}
         ></TextArea>
       </StyledContainer>
     );

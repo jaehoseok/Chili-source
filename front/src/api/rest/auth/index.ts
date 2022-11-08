@@ -102,11 +102,17 @@ export default {
    * @author inte
    */
   getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
+    interface responseType {
+      token_code_id: string;
+      token: string;
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
       authAxios
         .get(`/token-codes`)
         .then(response => {
-          resolve(response);
+          console.log(response.data);
+          resolve(response.data);
         })
         .catch(error => {
           reject(error);
@@ -121,17 +127,39 @@ export default {
    * @author inte
    */
   getTokens: () => {
-    return new Promise((resolve, reject) => {
+    interface responseType {
+      id: number;
+      value: string;
+      email: string;
+      jiraAccoundId: null | string;
+      tokenCodeId: string;
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
       authAxios
         .get(`/tokens`)
         .then(response => {
-          console.log('[사용자 토큰 반환]', response);
-          resolve(response);
+          console.log('[사용자 토큰 반환]', response.data);
+          resolve(response.data);
         })
         .catch(error => {
           console.log('error');
           reject(error);
         });
+    });
+  },
+
+  /**
+   * @description
+   * 사용자의 토큰을 연동하는 API.
+   *
+   * @author bell
+   */
+  postLinkageToken: async (email: string, tokenCodeId: string, value: string) => {
+    await authAxios.post('/tokens', {
+      email,
+      tokenCodeId,
+      value,
     });
   },
 };

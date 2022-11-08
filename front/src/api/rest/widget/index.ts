@@ -2,7 +2,7 @@
 import { createAxiosApi } from 'api/axios';
 
 // Init
-const authAxios = createAxiosApi('widget-service');
+const widgetAxios = createAxiosApi('widget-service');
 
 /**
  * @description
@@ -27,7 +27,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      widgetAxios
         .get(`/token-codes`)
         .then(response => {
           resolve(response);

@@ -1,11 +1,15 @@
 import React, { useState, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
 import { TextArea, styledType } from './style';
 
+import { SetterOrUpdater } from 'recoil';
+
 interface propsType extends styledType {
   placeholder?: string;
   defaultValue?: string;
   text?: any;
   setText?: any;
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -22,11 +26,23 @@ interface propsType extends styledType {
  */
 
 const index = forwardRef<HTMLTextAreaElement, propsType>(
-  ({ width, height, placeholder, defaultValue, text, setText }, ref) => {
+  (
+    { width, height, placeholder, defaultValue, text, setText, useSetRecoilState, recoilParam },
+    ref,
+  ) => {
     // const [text, setText] = useState<string>(defaultValue ? defaultValue : '');
 
     const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setText(e.target.value);
+      if (useSetRecoilState && recoilParam)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        useSetRecoilState(prevObj => {
+          return {
+            ...prevObj,
+            [recoilParam]: e.target.value,
+          };
+        });
     };
 
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {

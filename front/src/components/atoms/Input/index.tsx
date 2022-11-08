@@ -1,4 +1,7 @@
-import { useEffect, useState, useRef, forwardRef, ForwardedRef } from 'react';
+import { useEffect, useState, useRef, forwardRef, ForwardedRef, ChangeEvent } from 'react';
+
+import { SetterOrUpdater } from 'recoil';
+
 import { StyledInput, styledType } from './style';
 
 interface propsType extends styledType {
@@ -7,6 +10,9 @@ interface propsType extends styledType {
   defaultValue?: string;
   text?: any;
   setText?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -25,8 +31,22 @@ interface propsType extends styledType {
  *
  * @author inte
  */
+
 const index = forwardRef<HTMLInputElement, propsType>(
-  ({ height, width, type, placeHolder, defaultValue, text, setText }, ref) => {
+  (
+    {
+      height,
+      width,
+      type,
+      placeHolder,
+      defaultValue,
+      text,
+      setText,
+      useSetRecoilState,
+      recoilParam,
+    },
+    ref,
+  ) => {
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
       const targetRef = useRef<T>(initialValue);
 
@@ -46,13 +66,28 @@ const index = forwardRef<HTMLInputElement, propsType>(
     const inputRef = useForwardRef<HTMLInputElement>(ref);
     useEffect(() => {
       setText(defaultValue);
+      changeHandler();
     }, [defaultValue]);
     useEffect(() => {
       if (inputRef.current) {
         inputRef.current.value = text ? text : '';
       }
     }, [text]);
+    const setInputValue = useSetRecoilState;
 
+    const changeHandler = (e?: ChangeEvent<HTMLInputElement>) => {
+      e && setText(e.target.value);
+
+      if (useSetRecoilState && recoilParam)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setInputValue(prevObj => {
+          return {
+            ...prevObj,
+            [recoilParam]: e ? e.target.value : defaultValue ? defaultValue : '',
+          };
+        });
+    };
     return (
       <>
         <StyledInput
@@ -61,9 +96,7 @@ const index = forwardRef<HTMLInputElement, propsType>(
           width={width}
           type={type}
           placeholder={placeHolder}
-          onChange={e => {
-            setText(e.target.value);
-          }}
+          onChange={changeHandler}
           defaultValue={text}
         ></StyledInput>
       </>

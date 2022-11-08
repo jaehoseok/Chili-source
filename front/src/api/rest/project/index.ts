@@ -1,8 +1,9 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { ChangeEvent } from 'react';
 
 // Init
-const authAxios = createAxiosApi('project-service');
+const projectAxios = createAxiosApi('project-service');
 
 /**
  * @description
@@ -19,22 +20,180 @@ const authAxios = createAxiosApi('project-service');
  *
  * @author inte
  */
+
 export default {
   /**
-   * @description project 서버의 token code 들을 받아옴
+   * @description
+   * project 리스트 조회 코드에 대한 제안
+   * 각 요청 간에 반환하는 response 객체가 상이하므로
+   * 요청 코드 내에 interface responseType 을 가지도록
+   * 구현하는 것이 어떤가 생각해보았습니다.
    *
+   * @example
+   *```typescript
+   * // 사용예시
+   * import { project } from 'api/rest';
+   *
+   * const index = () => {
+   *   const [projectList, setProjectList] = useState<Awaited<ReturnType<typeof project.getProjectList>>>();
+   *
+   *   useEffect(() => {
+   *     (async () => {
+   *       const ans = await project.getProjectList();
+   *       setProjectList(ans);
+   *     })();
+   *   }, []);
+   *
+   * return (
+   *   <div>
+   *     {projectList ?
+   *       projectList.map((item, index) => (
+   *         <div key={index}>
+   *           <div>[id]: {item.id}</div>
+   *             <div>[name]: {item.name}</div>
+   *             <div>[description]: {item.description}</div>
+   *             <div>[image]: {item.image}</div>
+   *             <div>[latestGanttVersion]: {item.latestGanttVersion}</div>
+   *             <div>[jiraProject]: {item.jiraProject}</div>
+   *             <div>[gitRepo]: {item.gitRepo}</div>
+   *             <div>==========</div>
+   *           </div>
+   *         )) : ''
+   *     }
+   *   </div>
+   *   );
+   * };
+   * ```
    * @author inte
    */
-  getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
-      authAxios
-        .get(`/token-codes`)
+  getProjectList: () => {
+    interface responseType {
+      id: string;
+      name: string;
+      description: string;
+      image: string;
+      latestGanttVersion: number;
+      jiraProject: string | null;
+      gitRepo: string | null;
+      tokenList: string[];
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get(`/project`)
         .then(response => {
-          resolve(response);
+          resolve(response.data);
         })
         .catch(error => {
           reject(error);
         });
     });
+  },
+
+  getProjectData: (projectId: string) => {
+    interface responseType {
+      id: string;
+      name: string;
+      description: string;
+      image: string;
+      latestGanttVersion: number;
+      jiraProject: string | null;
+      gitRepo: string | null;
+      tokenList: string[];
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      projectAxios
+        .get(`/project/${projectId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * 해당 유저가 가지고 있는 토큰과 연동되는 모든 우리 서비스의 프로젝트들을 주는 API
+   *
+   * @author bell
+   */
+  getProjects: async () => {
+    interface responseType {
+      id: number;
+      name: string;
+      descripton: string;
+      image: string;
+      gitRepo: string | null;
+      latestGanntVersion: 0;
+      tokenList: string[];
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get('/project')
+        .then(response => {
+          console.log(response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * 프로젝트를 생성하는 API
+   *
+   * @param {string}                              name           - 프로젝트의 이름
+   * @param {string}                              description    - 프로젝트의 상세 내용
+   * @param {ChangeEvent<HTMLInputElement>}       image          - file input의 ChangeEvent가 가지고 있는 데이터
+   * @author bell
+   */
+  postCreateProject: async (
+    name: string,
+    description: string,
+    image: ChangeEvent<HTMLInputElement>,
+  ) => {
+    try {
+      const formData = new FormData();
+      const data = {
+        description,
+        name,
+      };
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-ignore
+      if (image) formData.append('image', image.target.files[0]);
+      formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+      const response = await projectAxios.post('/project', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @descripton
+   * 해당 프로젝트를 삭제하는 API
+   *
+   * @param {number} projectId
+   *
+   * @author bell
+   */
+  deleteProject: async (projectId: number) => {
+    try {
+      await projectAxios.delete(`/project/${projectId}`);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

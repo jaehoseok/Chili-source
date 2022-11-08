@@ -29,25 +29,31 @@ interface propsType extends styledType {
  * @author inte
  */
 export const WidgetBlock = ({ height, width, type }: propsType) => {
+  let label;
   let text;
   let src;
 
   // 타입에 따른 위젯 설명
   switch (type) {
     case 'GanttChart':
+      label = '간트 차트';
       text = '프로젝트에 할 일을 간편하게 생성하고 이를 간트 차트화 하여 보여줍니다.';
       break;
     case 'Calendar':
+      label = '캘린더';
       text = '프로젝트의 일정을 달력으로 표현하여 한 눈에 확인 할 수 있습니다.';
       break;
     case 'JiraBucket':
+      label = '지라 버킷';
       text =
         'Jira 에 이슈들의 규격을 저장하거나, 규격에 맞게 다 수의 이슈를 스프린트에 자동 생성해줍니다.';
       break;
     case 'GitLog':
+      label = '깃 로그';
       text = '깃의 커밋과 지라 이슈 내역을 연결하여 그래프로 정리하여 보여줍니다.';
       break;
     default:
+      label = '정의되지 않은 위젯';
       text = `${type} 타입은 정의되지 않은 위젯입니다`;
       break;
   }
@@ -62,8 +68,9 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
   return (
     <>
+      <div> * {label}</div>
       <StyledWidgetBlock height={height} width={width}>
-        <Sheet height="100%" width="40%">
+        <Sheet isShadow={true} height="100%" width="40%">
           <img src={src} alt={type} style={{ height: '60%', width: '60%', objectFit: 'contain' }} />
         </Sheet>
         <StyledWidgetBlockLine />

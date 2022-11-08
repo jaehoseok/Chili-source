@@ -14,7 +14,7 @@ export interface styledType {
 }
 
 export const StyledSheet = styled.div<styledType>`
-  ${tw`flex p-4`}
+  ${tw`flex overflow-hidden`}
   flex-direction: ${({ flex }) => flex};
   border-radius: ${({ borderRadius }) => borderRadius};
   ${({ isShadow, borderColor }) =>

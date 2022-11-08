@@ -2,7 +2,7 @@
 import { createAxiosApi } from 'api/axios';
 
 // Init
-const authAxios = createAxiosApi('issue-service');
+const issueAxios = createAxiosApi('issue-service');
 
 /**
  * @description
@@ -27,7 +27,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      issueAxios
         .get(`/token-codes`)
         .then(response => {
           resolve(response);
@@ -36,5 +36,22 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * 가지고 있는 지라 토큰을 통해
+   * 지라의 모든 프로젝트를 알려주는 API
+   *
+   * @author bell
+   */
+  getJiraProjectList: async () => {
+    try {
+      const response = await issueAxios.get('/jira/project-list');
+      console.log(response);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
