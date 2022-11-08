@@ -27,7 +27,6 @@ const index = (props: any) => {
       bucket.push(issue);
       setBucket(bucket);
       props.setIsInsert(false);
-      console.log(bucket);
     }
   }, [props.isInsert]);
 
