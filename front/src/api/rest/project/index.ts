@@ -221,4 +221,37 @@ export default {
       console.log(e);
     }
   },
+
+  /**
+   * @description
+   * 프로젝트에 참여하고 있는 팀원 목록 조회
+   *
+   * @author bell
+   */
+  getTeamForProject: (projectId: number) => {
+    interface responseType {
+      projectId: number;
+      role: {
+        fire: boolean;
+        id: string;
+        invite: boolean;
+        modify: boolean;
+        remove: boolean;
+      };
+      userColor: string;
+      userId: number;
+      userImage: string;
+      userName: string;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get(`/team/${projectId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };
