@@ -2,13 +2,11 @@ package com.ssafy.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 @Slf4j
@@ -30,6 +28,13 @@ public class LogAopConfig {
         // 메서드 정보 받아오기
         Method method = getMethod(joinPoint);
         log.info("[Widget] [{}] END", method.getName());
+    }
+
+    @AfterThrowing(value = "cut()", throwing = "exception")
+    public void afterThrowingLog(JoinPoint joinPoint, Exception exception) throws IOException {
+        // 메서드 정보 받아오기
+        Method method = getMethod(joinPoint);
+        log.error("[Widget] [{}] {}", method.getName(), exception.getMessage());
     }
 
     private Method getMethod(JoinPoint joinPoint) {

@@ -46,10 +46,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectResponse getProject(Long projectId) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [getProject] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         return ProjectResponse.builder()
                 .id(project.getId())
@@ -85,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
     // 프로젝트 생성
     @Override
     @Transactional
-    public Long createProject(ProjectCreateRequest request, String image,Long userId) {
+    public Long createProject(ProjectCreateRequest request, String image, Long userId) {
         Project project = Project.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -110,10 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void updateProject(ProjectUpdateRequest request) {
         Project project = projectRepo.findById(request.getId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateProject] PROJECT_NOT_FOUND");
-                   return new NotFoundException(PROJECT_NOT_FOUND);
-                }
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND)
                 );
         project.update(request.getName(), request.getDescription());
     }
@@ -121,19 +115,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void updateProjectImage(String image, Long projectId, Long userId) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateProjectImage] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateProjectImage] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (!userProjectManager.getRole().getModify()) {
-            log.error("[Project] [updateProjectImage] MODIFY_NOT_AUTHORIZED");
             throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
         }
 
@@ -145,21 +132,14 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void deleteProject(Long projectId, Long userId, List<String> auths) {
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [deleteProject] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (userProjectManager.getRole().getRemove()) {
             Project project = projectRepo.findById(projectId)
-                    .orElseThrow(() -> {
-                        log.error("[Project] [deleteProject] PROJECT_NOT_FOUND");
-                        return new NotFoundException(PROJECT_NOT_FOUND);
-                    });
+                    .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
             projectRepo.delete(project);
             issueServiceClient.deleteAll(auths, projectId);
             widgetServiceClient.deleteAllWidget(projectId);
         } else {
-            log.error("[Project] [deleteProject] REMOVE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
     }
@@ -168,27 +148,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void updateProjectToken(User user, ProjectTokenUpdateRequest request, List<String> auths) {
         Project project = projectRepo.findById(request.getProjectId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateProjectToken] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(user.getId(), request.getProjectId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateProjectToken] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
-            log.error("[Project] [updateProjectToken] CREATE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
         TokenResponse tokenResponse;
-        try{
+        try {
             tokenResponse = authServiceClient.getToken(auths, request.getName());
         } catch (Exception e) {
-            log.error("[Project] [updateProjectToken] WRONG_TOKEN_CODE");
             throw new WrongAccessException(WRONG_TOKEN_CODE);
         }
 
@@ -201,7 +173,6 @@ public class ProjectServiceImpl implements ProjectService {
                 project.updateGit(tokenResponse.getValue(), request.getDetail());
                 break;
             default:
-                log.error("[Project] [updateProjectToken] TOKEN_CODE_NOT_FOUND");
                 throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }
@@ -210,19 +181,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     public void deleteProjectToken(User user, Long projectId, String name) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [deleteProjectToken] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(user.getId(), projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [deleteProjectToken] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
-            log.error("[Project] [deleteProjectToken] REMOVE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
 
@@ -235,7 +199,6 @@ public class ProjectServiceImpl implements ProjectService {
                 project.deleteGit();
                 break;
             default:
-                log.error("[Project] [deleteProjectToken] TOKEN_CODE_NOT_FOUND");
                 throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
         }
     }

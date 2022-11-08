@@ -56,7 +56,6 @@ public class IssueServiceImpl implements IssueService {
     public List<IssueTemplateResponse> getIssueTemplates(Long userId, Long projectId, Boolean me, List<String> auths) {
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [getIssueTemplates] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -89,18 +88,13 @@ public class IssueServiceImpl implements IssueService {
     public void createIssueTemplate(Long userId, IssueTemplateCreateRequest request, List<String> auths) {
         ProjectResponse response = projectServiceClient.getProject(auths, request.getProjectId());
         if (response == null) {
-            log.error("[Issue] [createIssueTemplate] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
         if (request.getSummary() == null) {
-            log.error("[Issue] [createIssueTemplate] SUMMARY_NOT_NULL");
             throw new WrongFormException(SUMMARY_NOT_NULL);
         }
         IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
-                .orElseThrow(() -> {
-                    log.error("[Issue] [createIssueTemplate] ISSUE_TYPE_NOT_FOUND");
-                    return new NotFoundException(ISSUE_TYPE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         IssueTemplate issueTemplate = IssueTemplate.builder()
                 .summary(request.getSummary())
@@ -121,21 +115,14 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void updateIssueTemplate(Long userId, Long issueTemplateId, IssueTemplateUpdateRequest request) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [updateIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
-                    return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
         if (!issueTemplate.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [updateIssueTemplate] CAN_NOT_MODIFY_ISSUE_TEMPLATE");
             throw new WrongAccessException(CAN_NOT_UPDATE_ISSUE_TEMPLATE);
         }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
-                    .orElseThrow(() -> {
-                        log.error("[Issue] [updateIssueTemplate] ISSUE_TYPE_NOT_FOUND");
-                        return new NotFoundException(ISSUE_TYPE_NOT_FOUND);
-                    });
+                    .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
         }
 
         issueTemplate.update(
@@ -154,12 +141,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void deleteIssueTemplate(Long userId, Long issueTemplateId) {
         IssueTemplate issueTemplate = issueTemplateRepo.findById(issueTemplateId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [deleteIssueTemplate] ISSUE_TEMPLATE_NOT_FOUND");
-                    return new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(ISSUE_TEMPLATE_NOT_FOUND));
         if (!issueTemplate.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [updateIssueTemplate] CAN_NOT_DELETE_ISSUE_TEMPLATE");
             throw new WrongAccessException(CAN_NOT_DELETE_ISSUE_TEMPLATE);
         }
         issueTemplateRepo.delete(issueTemplate);
@@ -169,7 +152,6 @@ public class IssueServiceImpl implements IssueService {
     public List<MiddleBucketResponse> getMiddleBuckets(Long userId, Long projectId, Boolean me, List<String> auths) {
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [getMiddleBuckets] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
@@ -196,13 +178,11 @@ public class IssueServiceImpl implements IssueService {
         Long projectId = request.getProjectId();
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [createMiddleBucket] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
         List<MiddleBucket> list = middleBucketRepo.findByProjectIdAndUserId(projectId, userId);
         if (list.stream().anyMatch(middleBucket -> middleBucket.getName().equals(request.getName()))) {
-            log.error("[Issue] [createMiddleBucket] MIDDLE_BUCKET_NAME_DUPLICATED");
             throw new DuplicateException(MIDDLE_BUCKET_NAME_DUPLICATED);
         }
 
@@ -219,12 +199,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void updateMiddleBucket(Long userId, Long middleBucketId, MiddleBucketUpdateRequest request) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [updateMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         if (!middleBucket.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [updateMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET");
             throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET);
         }
         middleBucket.update(request.getName());
@@ -234,12 +210,8 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void deleteMiddleBucket(Long userId, Long middleBucketId) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [deleteMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         if (!middleBucket.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [deleteMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET");
             throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET);
         }
         middleBucketRepo.delete(middleBucket);
@@ -248,10 +220,7 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public IssueListResponse getMiddleBucket(Long userId, Long middleBucketId) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [getMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
 
         List<IssueResponse> issueList = middleBucket.getMiddleBucketIssues().stream()
                 .map(middleBucketIssue -> IssueResponse.builder()
@@ -278,20 +247,13 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void createIssueIntoMiddleBucket(Long userId, Long middleBucketId, MiddleBucketIssueCreateRequest request) {
         if (request.getSummary() == null) {
-            log.error("[Issue] [createIssueIntoMiddleBucket] SUMMARY_NOT_NULL");
             throw new WrongFormException(SUMMARY_NOT_NULL);
         }
 
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [createIssueIntoMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         IssueType issueType = issueTypeRepo.findByName(request.getIssueType())
-                .orElseThrow(() -> {
-                    log.error("[Issue] [createIssueIntoMiddleBucket] ISSUE_TYPE_NOT_FOUND");
-                    return new NotFoundException(ISSUE_TYPE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
 
         MiddleBucketIssue middleBucketIssue = MiddleBucketIssue.builder()
                 .summary(request.getSummary())
@@ -311,30 +273,19 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void updateIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId, MiddleBucketIssueUpdateRequest request) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [updateIssueInMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [updateIssueInMiddleBucket] MIDDLE_BUCKET_ISSUE_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
         if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
-            log.error("[Issue] [updateIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
         if (!middleBucketIssue.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [updateIssueInMiddleBucket] CAN_NOT_MODIFY_MIDDLE_BUCKET_ISSUE");
             throw new WrongAccessException(CAN_NOT_UPDATE_MIDDLE_BUCKET_ISSUE);
         }
         IssueType issueType = null;
         if (request.getIssueType() != null) {
             issueType = issueTypeRepo.findByName(request.getIssueType())
-                    .orElseThrow(() -> {
-                        log.error("[Issue] [updateIssueInMiddleBucket] ISSUE_TYPE_NOT_FOUND");
-                        return new NotFoundException(ISSUE_TYPE_NOT_FOUND);
-                    });
+                    .orElseThrow(() -> new NotFoundException(ISSUE_TYPE_NOT_FOUND));
         }
 
         middleBucketIssue.update(
@@ -353,21 +304,13 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public void deleteIssueInMiddleBucket(Long userId, Long middleBucketId, Long middleBucketIssueId) {
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [deleteIssueInMiddleBucket] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
         MiddleBucketIssue middleBucketIssue = middleBucketIssueRepo.findById(middleBucketIssueId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [deleteIssueInMiddleBucket] MIDDLE_BUCKET_ISSUE_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_ISSUE_NOT_FOUND));
         if (!middleBucketIssue.getCreatedUser().equals(userId)) {
-            log.error("[Issue] [deleteIssueInMiddleBucket] CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE");
             throw new WrongAccessException(CAN_NOT_DELETE_MIDDLE_BUCKET_ISSUE);
         }
         if (!middleBucketIssue.getMiddleBucket().equals(middleBucket)) {
-            log.error("[Issue] [deleteIssueInMiddleBucket] ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET");
             throw new NotFoundException(ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET);
         }
 
@@ -417,7 +360,6 @@ public class IssueServiceImpl implements IssueService {
     public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [getTodoIssues] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
         String projectKey = response.getJiraProject();
@@ -450,10 +392,7 @@ public class IssueServiceImpl implements IssueService {
 //        String jiraProjectId = "10000";
 
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
-                .orElseThrow(() -> {
-                    log.error("[Issue] [addIssuesToJira] MIDDLE_BUCKET_NOT_FOUND");
-                    return new NotFoundException(MIDDLE_BUCKET_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
 
         List<JiraIssueCreateRequest> issueUpdates = new ArrayList<>();
         for (MiddleBucketIssue issue : middleBucket.getMiddleBucketIssues()) {
@@ -484,7 +423,6 @@ public class IssueServiceImpl implements IssueService {
                     break;
                 }
                 default: {
-                    log.error("[Issue] [addIssuesToJira] ISSUE_TYPE_NOT_FOUND");
                     throw new NotFoundException(ISSUE_TYPE_NOT_FOUND);
                 }
             }
@@ -566,7 +504,6 @@ public class IssueServiceImpl implements IssueService {
             } catch (IOException e) {
                 errorDetail = "IO Exception 발생";
             }
-            log.error("[Issue] [addIssuesToJira] {}", errorDetail);
             throw new BadRequestException(errorDetail);
         }
     }
