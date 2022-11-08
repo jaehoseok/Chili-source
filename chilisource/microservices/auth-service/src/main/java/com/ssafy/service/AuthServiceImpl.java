@@ -12,6 +12,7 @@ import com.ssafy.dto.response.TokenResponse;
 import com.ssafy.entity.Auth;
 import com.ssafy.entity.Token;
 import com.ssafy.entity.TokenCode;
+import com.ssafy.exception.InternalServerErrorException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.exception.NotMatchException;
 import com.ssafy.repository.AuthRepo;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.InternalServerErrorException.JIRA_COMMUNICATION_ERROR;
 import static com.ssafy.exception.NotFoundException.*;
 import static com.ssafy.exception.NotMatchException.AUTH_NOT_MATCH;
 
@@ -45,12 +47,8 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public ServiceTokenResponse refresh(String refreshToken, Long userId) {
         Auth auth = authRepo.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[Auth] [refresh] Redis - Auth is not found");
-                    return new NotFoundException(AUTH_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(AUTH_NOT_FOUND));
         if (!auth.getRefreshToken().equals(refreshToken)) {
-            log.error("[Auth] [refresh] Redis - Auth is not match");
             throw new NotMatchException(AUTH_NOT_MATCH);
         }
         ServiceTokenResponse response = ServiceTokenResponse.builder()
@@ -63,11 +61,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<TokenCodeResponse> getTokenCodeList() {
         List<TokenCodeResponse> tokenCodeResponses = tokenCodeRepo.findAll().stream()
-                .map(tokenCode -> {
-                    return TokenCodeResponse.builder()
-                            .id(tokenCode.getId())
-                            .build();
-                })
+                .map(tokenCode -> TokenCodeResponse.builder()
+                        .id(tokenCode.getId())
+                        .build())
                 .collect(Collectors.toList());
         return tokenCodeResponses;
     }
@@ -85,10 +81,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void updateTokenCode(String tokenCodeId, TokenCodeUpdateRequest request) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId)
-                .orElseThrow(() -> {
-                    log.error("[Auth] [updateTokenCode] token code is not found");
-                    return new NotFoundException(TOKEN_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenCode.update(request.getId());
     }
 
@@ -96,24 +89,19 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteTokenCode(String tokenCodeId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId.toUpperCase())
-                .orElseThrow(() -> {
-                    log.error("[Auth] [deleteTokenCode] token code is not found");
-                    return new NotFoundException(TOKEN_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         tokenCodeRepo.delete(tokenCode);
     }
 
     @Override
     public List<TokenResponse> getTokenList(Long userId) {
         List<TokenResponse> tokenResponses = tokenRepo.findByUserId(userId).stream()
-                .map(token -> {
-                    return TokenResponse.builder()
-                            .id(token.getId())
-                            .value(token.getValue())
-                            .email(token.getEmail())
-                            .tokenCodeId(token.getTokenCode().getId())
-                            .build();
-                })
+                .map(token -> TokenResponse.builder()
+                        .id(token.getId())
+                        .value(token.getValue())
+                        .email(token.getEmail())
+                        .tokenCodeId(token.getTokenCode().getId())
+                        .build())
                 .collect(Collectors.toList());
         return tokenResponses;
     }
@@ -121,15 +109,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public TokenResponse getToken(String tokenCodeId, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId.toUpperCase())
-                .orElseThrow(() -> {
-                    log.error("[Auth] [getToken] token code is not found");
-                    return new NotFoundException(TOKEN_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Token token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId)
-                .orElseThrow(() -> {
-                    log.error("[Auth] [getToken] token is not found");
-                    return new NotFoundException(TOKEN_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_NOT_FOUND));
         return TokenResponse.builder()
                 .id(token.getId())
                 .value(token.getValue())
@@ -143,15 +125,13 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void createToken(TokenCreateRequest request, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(request.getTokenCodeId().toUpperCase())
-                .orElseThrow(() -> {
-                    log.error("[Auth] [createToken] token code is not found");
-                    return new NotFoundException(TOKEN_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Optional<Token> token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId);
         if ("JIRA".equals(tokenCode.getId())) {
             String jiraBase64 = "Basic " + Base64Utils.encodeToString((request.getEmail() + ":" + request.getValue()).getBytes());
             JiraMySelfResponse jiraMySelfResponse = jiraClient.findMySelf(jiraBase64);
-            if (jiraMySelfResponse.getAccountId() == null) log.error("[Auth] [createToken] jira feign error");
+            if (jiraMySelfResponse.getAccountId() == null)
+                throw new InternalServerErrorException(JIRA_COMMUNICATION_ERROR);
             if (!token.isPresent()) {
                 Token newToken = Token.builder()
                         .value(request.getValue())
@@ -189,15 +169,9 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void deleteToken(String tokenCodeId, Long userId) {
         TokenCode tokenCode = tokenCodeRepo.findById(tokenCodeId.toUpperCase())
-                .orElseThrow(() -> {
-                    log.error("[Auth] [deleteToken] token code is not found");
-                    return new NotFoundException(TOKEN_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_CODE_NOT_FOUND));
         Token token = tokenRepo.findByTokenCodeAndUserId(tokenCode, userId)
-                .orElseThrow(() -> {
-                    log.error("[Auth] [deleteToken] token is not found");
-                    return new NotFoundException(TOKEN_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(TOKEN_NOT_FOUND));
         tokenRepo.delete(token);
     }
 }
