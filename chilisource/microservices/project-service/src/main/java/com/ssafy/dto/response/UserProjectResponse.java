@@ -25,16 +25,16 @@ public class UserProjectResponse {
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;
 
-    @ApiModelProperty(value = "권한 pk")
-    private String roleId;
+    @ApiModelProperty(value = "권한 정보")
+    private RoleResponse role;
 
     @Builder
-    public UserProjectResponse(String userColor, Long userId, String userName, String userImage, Long projectId, String roleId) {
+    public UserProjectResponse(String userColor, Long userId, String userName, String userImage, Long projectId, RoleResponse role) {
         this.userColor = userColor;
         this.userId = userId;
         this.userName = userName;
         this.userImage = userImage;
         this.projectId = projectId;
-        this.roleId = roleId;
+        this.role = role;
     }
 }
