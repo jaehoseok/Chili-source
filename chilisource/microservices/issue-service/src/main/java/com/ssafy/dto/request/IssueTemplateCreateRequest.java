@@ -27,7 +27,8 @@ public class IssueTemplateCreateRequest {
     @ApiModelProperty(value = "에픽 링크", notes = "에픽 이슈의 key를 입력합니다.")
     private String epicLink;
 
-//    private Long sprint;
+    @ApiModelProperty(value = "스프린트", notes = "스프린트를 선택합니다.")
+    private Long sprint;
 
     @ApiModelProperty(value = "스토리 포인트")
     private Double storyPoints;
