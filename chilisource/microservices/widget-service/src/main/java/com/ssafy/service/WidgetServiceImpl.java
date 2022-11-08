@@ -44,6 +44,7 @@ public class WidgetServiceImpl implements WidgetService {
         List<WidgetResponse> responses = widgetRepo.findByProjectId(projectId).stream()
                 .map(widget -> WidgetResponse.builder()
                         .id(widget.getId())
+                        .name(widget.getName())
                         .widgetRow(widget.getWidgetRow())
                         .widgetCol(widget.getWidgetCol())
                         .widgetCode(widget.getWidgetCode().getId())
