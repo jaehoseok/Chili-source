@@ -60,14 +60,12 @@ public class WidgetServiceImpl implements WidgetService {
     public WidgetResponse createWidget(WidgetCreateRequest request, Long userId) {
         try {
             UserProjectResponse userProjectResponse = projectServiceClient.findRole(request.getProjectId(), userId);
-            log.info("LOG INFO 받아와짐");
             if (!"MASTER".equals(userProjectResponse.getRole().getId())) {
                 throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
             }
         } catch (NotFoundException e) {
             throw new NotFoundException(USER_PROJECT_NOT_FOUND);
         } catch (Exception e) {
-            log.error("LOG ERROR {}",e.getMessage());
             throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
         }
         WidgetCode widgetCode = widgetCodeRepo.findById(request.getWidgetCodeId())
