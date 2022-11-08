@@ -105,7 +105,7 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/widgets/{projectId}")
+    @DeleteMapping("/widgets/all/{projectId}")
     @ApiOperation(value = "프로젝트에 생성된 위젯 삭제")
     public ResponseEntity<?> deleteAllWidget(
             @ApiParam(value = "프로젝트 pk") @PathVariable(name = "projectId") Long projectId
