@@ -1,9 +1,19 @@
-import { ReactNode } from 'react';
+import {
+  ReactNode,
+  ChangeEvent,
+  SetStateAction,
+  Dispatch,
+  useEffect,
+  useState,
+  useRef,
+  RefObject,
+} from 'react';
 
 import { StyledSelect, styledType } from './style';
 
 interface propsType extends styledType {
   children: ReactNode;
+  setJiraProject?: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -17,9 +27,30 @@ interface propsType extends styledType {
  *
  * @author bell
  */
-const index = ({ children, width, fontSize }: propsType) => {
+const index = ({ children, width, fontSize, setJiraProject }: propsType) => {
+  // const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+  //   console.log(e);
+  //   if (setJiraProject) {
+  //     const idx = e.target.selectedIndex;
+  //     setJiraProject(e.target.options[idx].value);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (setJiraProject) {
+  //     setJiraProject('반영은 됨');
+  //   }
+  // }, []);
+
+  const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+    const idx = e.target.selectedIndex;
+    if (setJiraProject) {
+      setJiraProject(e.target.options[idx].value);
+    }
+  };
+
   return (
-    <StyledSelect width={width} fontSize={fontSize}>
+    <StyledSelect width={width} fontSize={fontSize} onChange={changeJiraProjectHandler}>
       {children}
     </StyledSelect>
   );
