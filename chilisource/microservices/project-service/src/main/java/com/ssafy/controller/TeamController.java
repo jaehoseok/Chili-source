@@ -3,6 +3,7 @@ package com.ssafy.controller;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.UserProjectCreateRequest;
+import com.ssafy.dto.request.UserProjectRoleUpdateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.service.UserProjectService;
@@ -40,6 +41,17 @@ public class TeamController {
             @LoginUser User user,
             @RequestBody UserProjectUpdateRequest request) {
         userProjectService.updateUserProject(user.getId(), request);
+        return ResponseEntity.ok()
+                .build();
+    }
+
+    // 프로젝트 팀원 권한 수정
+    @PutMapping("/role")
+    @ApiOperation(value = "프로젝트 팀원 권한 수정")
+    public ResponseEntity<?> updateUserProjectRole(
+            @LoginUser User user,
+            @RequestBody UserProjectRoleUpdateRequest request) {
+        userProjectService.updateUserProjectRole(user.getId(), request);
         return ResponseEntity.ok()
                 .build();
     }
