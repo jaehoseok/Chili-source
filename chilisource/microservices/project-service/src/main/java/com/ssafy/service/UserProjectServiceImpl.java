@@ -45,7 +45,16 @@ public class UserProjectServiceImpl implements UserProjectService {
                     log.error("[Project] [createUserProject] PROJECT_NOT_FOUND");
                     return new NotFoundException(PROJECT_NOT_FOUND);
                 });
+
         // 유저 존재 확인
+        List<Long> userIds = new ArrayList<>();
+        userIds.add(request.getUserId());
+        UserResponse userResponse;
+        try {
+            userResponse = userServiceClient.getUserList(userIds).get(0);
+        } catch (Exception e) {
+            throw new NotFoundException(USER_NOT_FOUND);
+        }
 
         // 초대 권한 확인
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
