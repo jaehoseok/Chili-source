@@ -148,9 +148,9 @@ export default {
    * @description
    * 프로젝트를 생성하는 API
    *
-   * @param {string}                              name           - 프로젝트의 이름
-   * @param {string}                              description    - 프로젝트의 상세 내용
-   * @param {ChangeEvent<HTMLInputElement>}       image          - file input의 ChangeEvent가 가지고 있는 데이터
+   * @requestBody {string}                              name           - 프로젝트의 이름
+   * @requestBody {string}                              description    - 프로젝트의 상세 내용
+   * @requestBody {ChangeEvent<HTMLInputElement>}       image          - file input의 ChangeEvent가 가지고 있는 데이터
    * @author bell
    */
   postCreateProject: async (
@@ -158,6 +158,9 @@ export default {
     description: string,
     image: ChangeEvent<HTMLInputElement>,
   ) => {
+    interface responseType {
+      data: number;
+    }
     try {
       const formData = new FormData();
       const data = {
@@ -166,16 +169,16 @@ export default {
       };
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
+      // @ts-ignore
       if (image) formData.append('image', image.target.files[0]);
       formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-      const response = await projectAxios.post('/project', formData, {
+      const response: responseType = await projectAxios.post('/project', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response);
-      return response;
+      console.log(response.data);
+      return response.data;
     } catch (e) {
       console.log(e);
     }
@@ -192,6 +195,28 @@ export default {
   deleteProject: async (projectId: number) => {
     try {
       await projectAxios.delete(`/project/${projectId}`);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 생성한 프로젝트와 토큰을 연동하는 API
+   *
+   * @requestBody {string}              detail        -  Token 값
+   * @requestBody {string}              name          -  어떤 토큰 인지 (JIRA, SSAFYGITLAB)
+   * @requestBody {number}              projectId     -  연결할 projectId
+   *
+   * @author bell
+   */
+  postConnectTokenToProject: async (detail: string, name: string, projectId: number) => {
+    try {
+      await projectAxios.post('/project/token', {
+        detail,
+        name,
+        projectId,
+      });
     } catch (e) {
       console.log(e);
     }

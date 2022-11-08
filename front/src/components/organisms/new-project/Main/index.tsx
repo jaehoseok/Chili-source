@@ -11,6 +11,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { usePostLinkageTokenHandler } from 'hooks/auth';
 import { useGetJiraProjectList } from 'hooks/issue';
 import { useGetTokens } from 'hooks/auth';
+import { usePostConnectTokenToProject } from 'hooks/project';
 
 // CSS
 import { theme } from 'styles/theme';
@@ -60,16 +61,22 @@ const index = () => {
   // project-logo용 state
   const [image, setImage] = useState();
 
+  // project 생성시 받을 프로젝트 id 값
+  const [getProjectId, setProjectId] = useState<number>();
+
   // 현재 유저에게 연동된 토큰이 있는가 조회
   const [isJiraToken, setJiraToken] = useState(false);
   const [isGitLabToken, setGitLabToken] = useState(false);
 
   // 연동된 토큰이 있는 경우, 유저의 토큰 값을 저장
-  const [jiraTokenName, setJiraTokenName] = useState('');
-  const [gitLabTokenName, setGitLabTokenName] = useState('');
+  const [jiraTokenValue, setjiraTokenValue] = useState('');
+  const [gitLabTokenValue, setGitLabTokenValue] = useState('');
 
   // 연동퇸 토크인 있는 경우, 유저의 토큰 이메일 값을 저장
   const [getJiraEmail, setJiraEmail] = useState('');
+
+  // 유저가 프로젝트를 바꿀 때 마다 Option값 저장
+  const [getJiraProject, setJiraProject] = useState('');
 
   const navigate = useNavigate();
 
@@ -99,12 +106,12 @@ const index = () => {
       for (const item of getTokens.data) {
         if (item.tokenCodeId === 'JIRA') {
           setJiraToken(true);
-          setJiraTokenName(item.value);
+          setjiraTokenValue(item.value);
           setJiraEmail(item.email);
         }
         if (item.tokenCodeId === 'SSAFYGITLAB') {
           setGitLabToken(true);
-          setGitLabTokenName(item.value);
+          setGitLabTokenValue(item.value);
         }
       }
     }
@@ -116,7 +123,9 @@ const index = () => {
   const getUserInfo = useGetUserInfoHandler();
   // 지라 프로젝트 모두 가져오기
   const jiraProjectList = useGetJiraProjectList();
+  // 프로젝트 생성
   const createProjectData = usePostCreateProjectHandler();
+  const connectTokenToProject = usePostConnectTokenToProject();
 
   // 이미 유저가 토큰 값을 가지고 있다면
 
@@ -136,13 +145,29 @@ const index = () => {
 
   // 지라 연동이 성공한 경우에만 jiraProject를 가져와라
   useEffect(() => {
-    if (linkageJiraToken.isSuccess || (isJiraToken && jiraTokenName)) {
+    if (linkageJiraToken.isSuccess || (isJiraToken && jiraTokenValue)) {
       jiraProjectList.refetch();
     }
-  }, [linkageJiraToken.isSuccess, isJiraToken, jiraTokenName]);
+    if (createProjectData.isSuccess) {
+      setProjectId(createProjectData.data);
+    }
+    if (jiraProjectList.data) {
+      setJiraProject(jiraProjectList.data[0].name);
+    }
+    if (connectTokenToProject.isSuccess) {
+      navigate('/projects');
+    }
+  }, [
+    linkageJiraToken.isSuccess,
+    isJiraToken,
+    jiraTokenValue,
+    createProjectData.isSuccess,
+    connectTokenToProject.isSuccess,
+    jiraProjectList.data,
+  ]);
 
   // 버튼 클릭 시 지라 토큰 연동 및 해당 지라 프로젝트 가져오기
-  const linkageJiraTokenHandler = async () => {
+  const linkageJiraTokenHandler = () => {
     if (isJiraToken) {
       jiraProjectList.refetch();
     } else {
@@ -154,6 +179,17 @@ const index = () => {
           value: jiraToken,
         });
       }
+    }
+  };
+
+  // 프로젝트 생성 후 지라 토큰을 통해 지라 프로젝트와 연동
+  const connectTokenToProjectHandler = () => {
+    if (getProjectId && jiraToken) {
+      connectTokenToProject.mutate({
+        detail: getJiraProject,
+        name: 'JIRA',
+        projectId: getProjectId,
+      });
     }
   };
 
@@ -270,7 +306,7 @@ const index = () => {
                 containerWidth="100%"
                 useSetRecoilState={jiraSetRecoilState}
                 recoilParam={'jiraToken'}
-                inputValue={isJiraToken ? jiraTokenName : ''}
+                inputValue={isJiraToken ? jiraTokenValue : ''}
               ></InputBox>
               <InputBox
                 labelName="Jira 이메일"
@@ -296,15 +332,12 @@ const index = () => {
                 </StyledFlexRowEnd>
               </StyledMarginY>
               {/* {isLoading && <div>Loading...</div>} */}
-              {jiraProjectList.isLoading && <div>isLoading...</div>}
+              {/* {jiraProjectList.isLoading && <div>isLoading...</div>} */}
               {jiraProjectList.data && (
                 <>
                   <StyledMarginY>
-                    <Select width="100%">
-                      <Option
-                        messages={filteringJiraProjectHandler(jiraProjectList.data)}
-                        selected={jiraProjectList.data[0]}
-                      ></Option>
+                    <Select width="100%" setJiraProject={setJiraProject}>
+                      <Option messages={filteringJiraProjectHandler(jiraProjectList.data)}></Option>
                     </Select>
                   </StyledMarginY>
                   <StyledFlexRowEnd>
@@ -313,7 +346,7 @@ const index = () => {
                       borderColor={theme.button.gray}
                       backgroundColor={theme.button.green}
                       isHover={true}
-                      clickHandler={linkageJiraTokenHandler}
+                      clickHandler={connectTokenToProjectHandler}
                     >
                       프로젝트와 연동
                     </Button>
@@ -336,7 +369,7 @@ const index = () => {
                 isRow={false}
                 useSetRecoilState={gitSetRecoilState}
                 recoilParam={'gitLabToken'}
-                inputValue={isGitLabToken ? gitLabTokenName : ''}
+                inputValue={isGitLabToken ? gitLabTokenValue : ''}
               ></InputBox>
               <InputBox
                 labelName="Git 이메일"

@@ -17,7 +17,7 @@ const index = ({ messages, selected }: propsType) => {
   return (
     <>
       {messages.map((message, idx) => (
-        <option key={idx} selected={selected === message}>
+        <option key={idx} value={message} selected={selected === message}>
           {message}
         </option>
       ))}
