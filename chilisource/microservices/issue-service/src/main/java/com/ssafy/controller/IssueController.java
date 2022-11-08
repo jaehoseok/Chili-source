@@ -40,7 +40,6 @@ public class IssueController {
     ) {
         List<IssueTemplateResponse> responses = issueService.getIssueTemplates(
                 user.getId(),
-//                1L,
                 projectId,
                 me,
                 headers.get(HttpHeaders.AUTHORIZATION));
@@ -58,7 +57,6 @@ public class IssueController {
     ) {
         issueService.createIssueTemplate(
                 user.getId(),
-//                1L,
                 request,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
@@ -75,7 +73,6 @@ public class IssueController {
     ) {
         issueService.updateIssueTemplate(
                 user.getId(),
-//                1L,
                 issueTemplateId, request);
         return ResponseEntity.ok()
                 .build();
@@ -104,7 +101,6 @@ public class IssueController {
             @RequestHeader HttpHeaders headers) {
         List<MiddleBucketResponse> responses = issueService.getMiddleBuckets(
                 user.getId(),
-//                1L,
                 projectId,
                 me,
                 headers.get(HttpHeaders.AUTHORIZATION));
@@ -122,7 +118,6 @@ public class IssueController {
     ) {
         issueService.createMiddleBucket(
                 user.getId(),
-//                1L,
                 request,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
@@ -139,7 +134,6 @@ public class IssueController {
     ) {
         issueService.updateMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, request);
         return ResponseEntity.ok()
                 .build();
@@ -153,7 +147,6 @@ public class IssueController {
     ) {
         issueService.deleteMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId);
         return ResponseEntity.ok()
                 .build();
@@ -168,7 +161,6 @@ public class IssueController {
     ) {
         IssueListResponse response = issueService.getMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId);
         return ResponseEntity.ok()
                 .body(response);
@@ -184,7 +176,6 @@ public class IssueController {
     ) {
         issueService.createIssueIntoMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, request);
         return ResponseEntity.ok()
                 .build();
@@ -201,7 +192,6 @@ public class IssueController {
     ) {
         issueService.updateIssueInMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, middleBucketIssueId, request);
         return ResponseEntity.ok()
                 .build();
@@ -217,7 +207,6 @@ public class IssueController {
     ) {
         issueService.deleteIssueInMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, middleBucketIssueId);
         return ResponseEntity.ok()
                 .build();
