@@ -58,8 +58,8 @@ public class ProjectController {
         String projectImage;
         if (file != null) projectImage = awsS3Service.uploadFile(file, "project/");
         else projectImage = defaultImage;
-        projectService.createProject(request, baseURL + "project/" + projectImage, user.getId());
-        return ResponseEntity.ok().build();
+        Long response = projectService.createProject(request, baseURL + "project/" + projectImage, user.getId());
+        return ResponseEntity.ok(response);
     }
 
     // 프로젝트 수정

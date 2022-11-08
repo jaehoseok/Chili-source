@@ -16,7 +16,7 @@ public interface ProjectService {
     public List<ProjectResponse> getProjectByUserId(Long userId);
 
     // 프로젝트 생성
-    public void createProject(ProjectCreateRequest request, String image, Long userId);
+    public Long createProject(ProjectCreateRequest request, String image, Long userId);
 
     // 프로젝트 내용 수정
     public void updateProject(ProjectUpdateRequest request);
