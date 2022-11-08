@@ -3,9 +3,11 @@ package com.ssafy.service;
 import com.ssafy.client.UserServiceClient;
 import com.ssafy.dto.request.UserProjectCreateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
+import com.ssafy.dto.response.RoleResponse;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.Project;
+import com.ssafy.entity.Role;
 import com.ssafy.entity.UserProject;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
@@ -107,7 +109,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         List<UserProject> responses = userProjectRepo.findByProjectId(projectId);
 
         List<Long> userIds = responses.stream()
-                .map(response -> response.getUserId())
+                .map(UserProject::getUserId)
                 .collect(Collectors.toList());
 
         List<UserResponse> userResponses;
@@ -124,6 +126,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         return responses.stream()
                 .map(userProject -> {
                     UserResponse user = userMap.get(userProject.getUserId());
+                    Role role = userProject.getRole();
 
                     return UserProjectResponse.builder()
                             .userColor(userProject.getUserColor())
@@ -131,7 +134,13 @@ public class UserProjectServiceImpl implements UserProjectService {
                             .userName(user != null ? user.getName() : "없는 사용자입니다.")
                             .userImage(user != null ? user.getImage() : "없는 사용자입니다.")
                             .projectId(userProject.getProject().getId())
-                            .roleId(userProject.getRole().getId())
+                            .role(RoleResponse.builder()
+                                    .id(role.getId())
+                                    .fire(role.getFire())
+                                    .invite(role.getInvite())
+                                    .modify(role.getModify())
+                                    .remove(role.getRemove())
+                                    .build())
                             .build();
                 })
                 .collect(Collectors.toList());
@@ -156,13 +165,20 @@ public class UserProjectServiceImpl implements UserProjectService {
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
+        Role role = userProject.getRole();
         return UserProjectResponse.builder()
                 .userColor(userProject.getUserColor())
                 .userId(userProject.getUserId())
                 .userName(userResponse.getName())
                 .userImage(userResponse.getImage())
                 .projectId(projectId)
-                .roleId(userProject.getRole().getId())
+                .role(RoleResponse.builder()
+                        .id(role.getId())
+                        .fire(role.getFire())
+                        .invite(role.getInvite())
+                        .modify(role.getModify())
+                        .remove(role.getRemove())
+                        .build())
                 .build();
     }
 
