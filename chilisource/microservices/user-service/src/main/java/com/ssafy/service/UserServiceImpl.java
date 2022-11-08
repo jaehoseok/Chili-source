@@ -56,9 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserInfo(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -69,40 +67,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserInfo(UserUpdateRequest request, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.updateInfo(request.getName());
     }
 
     @Override
     public void updateUserImage(String image, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.updateImage(image);
     }
 
     @Override
     public void withdraw(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.withdraw();
     }
 
     @Override
     public List<UserResponse> getUserList(List<Long> userIds) {
         List<UserResponse> userResponses = userRepo.findByIdIn(userIds).stream()
-                .map(user -> {
-                    return UserResponse.builder()
-                            .id(user.getId())
-                            .name(user.getName())
-                            .image(user.getImage())
-                            .build();
-                })
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .image(user.getImage())
+                        .build())
                 .collect(Collectors.toList());
         return userResponses;
     }

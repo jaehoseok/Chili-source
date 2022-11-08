@@ -29,13 +29,11 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Override
     public List<WidgetCodeResponse> getWidgetCodeList() {
         List<WidgetCodeResponse> responses = widgetCodeRepo.findAll().stream()
-                .map(widgetCode -> {
-                    return WidgetCodeResponse.builder()
-                            .id(widgetCode.getId())
-                            .requestUrl(widgetCode.getRequestUrl())
-                            .detailRequestUrl(widgetCode.getDetailRequestUrl())
-                            .build();
-                })
+                .map(widgetCode -> WidgetCodeResponse.builder()
+                        .id(widgetCode.getId())
+                        .requestUrl(widgetCode.getRequestUrl())
+                        .detailRequestUrl(widgetCode.getDetailRequestUrl())
+                        .build())
                 .collect(Collectors.toList());
         return responses;
     }
@@ -58,9 +56,7 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Transactional
     public void updateWidgetCode(WidgetCodeUpdateRequest request) {
         WidgetCode widgetCode = widgetCodeRepo.findById(request.getId().toUpperCase())
-                .orElseThrow(() -> {
-                    return new NotFoundException(WIDGET_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(WIDGET_CODE_NOT_FOUND));
         if (widgetCodeRepo.findById(request.getId().toUpperCase()).isPresent()) {
             throw new DuplicateException(WIDGET_CODE_DUPLICATED);
         }
@@ -71,9 +67,7 @@ public class WidgetCodeServiceImpl implements WidgetCodeService {
     @Transactional
     public void deleteWidgetCode(String widgetCodeId) {
         WidgetCode widgetCode = widgetCodeRepo.findById(widgetCodeId.toUpperCase())
-                .orElseThrow(() -> {
-                    return new NotFoundException(WIDGET_CODE_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(WIDGET_CODE_NOT_FOUND));
         widgetCodeRepo.delete(widgetCode);
     }
 }
