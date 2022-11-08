@@ -12,7 +12,7 @@ public class WidgetUpdateRequest {
     private String name;
 
     @Builder
-    public WidgetUpdateRequest(String name, Integer row, Integer col){
+    public WidgetUpdateRequest(String name){
         this.name = name;
     }
 }

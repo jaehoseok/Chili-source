@@ -1,12 +1,16 @@
 package com.ssafy.service;
 
+import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.dto.request.WidgetCreateRequest;
 import com.ssafy.dto.request.WidgetLocUpdateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
+import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.dto.response.WidgetResponse;
 import com.ssafy.entity.Widget;
 import com.ssafy.entity.WidgetCode;
 import com.ssafy.exception.DuplicateException;
+import com.ssafy.exception.InternalServerErrorException;
+import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.WidgetCodeRepo;
 import com.ssafy.repository.WidgetRepo;
@@ -19,8 +23,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.WIDGET_DUPLICATED;
-import static com.ssafy.exception.NotFoundException.WIDGET_CODE_NOT_FOUND;
-import static com.ssafy.exception.NotFoundException.WIDGET_NOT_FOUND;
+import static com.ssafy.exception.InternalServerErrorException.PROJECT_COMMUNICATION_ERROR;
+import static com.ssafy.exception.NotAuthorizedException.CREATE_NOT_AUTHORIZED;
+import static com.ssafy.exception.NotAuthorizedException.MODIFY_NOT_AUTHORIZED;
+import static com.ssafy.exception.NotFoundException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +35,7 @@ import static com.ssafy.exception.NotFoundException.WIDGET_NOT_FOUND;
 public class WidgetServiceImpl implements WidgetService {
     private final WidgetRepo widgetRepo;
     private final WidgetCodeRepo widgetCodeRepo;
+    private final ProjectServiceClient projectServiceClient;
 
     @Override
     @Transactional
@@ -51,7 +58,20 @@ public class WidgetServiceImpl implements WidgetService {
 
     @Override
     @Transactional
-    public WidgetResponse createWidget(WidgetCreateRequest request) {
+    public WidgetResponse createWidget(WidgetCreateRequest request, Long userId) {
+        try {
+            UserProjectResponse userProjectResponse = projectServiceClient.findRole(request.getProjectId(), userId);
+            if(!"MASTER".equals(userProjectResponse.getRole().getId())){
+                log.error("[Widget] [createWidget] USER_PROJECT_NOT_FOUND");
+                throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
+            }
+        }catch (NotFoundException e) {
+            log.error("[Widget] [createWidget] USER_PROJECT_NOT_FOUND");
+            throw new NotFoundException(USER_PROJECT_NOT_FOUND);
+        }catch (Exception e){
+            log.error("[Widget] [createWidget] PROJECT_COMMUNICATION_ERROR");
+            throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
+        }
         WidgetCode widgetCode = widgetCodeRepo.findById(request.getWidgetCodeId())
                 .orElseThrow(() -> {
                     log.error("[Widget] [createWidget] widget code is not found");
@@ -82,12 +102,25 @@ public class WidgetServiceImpl implements WidgetService {
 
     @Override
     @Transactional
-    public WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId) {
+    public WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId, Long userId) {
         Widget widget = widgetRepo.findById(widgetId)
                 .orElseThrow(() -> {
                     log.error("[Widget] [updateWidget] widget is not found");
                     return new NotFoundException(WIDGET_NOT_FOUND);
                 });
+        try {
+            UserProjectResponse userProjectResponse = projectServiceClient.findRole(widget.getProjectId(), userId);
+            if(!"MASTER".equals(userProjectResponse.getRole().getId())){
+                log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+                throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
+            }
+        }catch (NotFoundException e) {
+            log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+            throw new NotFoundException(USER_PROJECT_NOT_FOUND);
+        }catch (Exception e){
+            log.error("[Widget] [updateWidget] PROJECT_COMMUNICATION_ERROR");
+            throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
+        }
         widget.update(request.getName());
         return WidgetResponse.builder()
                 .id(widget.getId())
@@ -102,25 +135,51 @@ public class WidgetServiceImpl implements WidgetService {
 
     @Override
     @Transactional
-    public void updateLoc(List<WidgetLocUpdateRequest> requests) {
+    public void updateLoc(List<WidgetLocUpdateRequest> requests, Long userId) {
         requests.forEach(request -> {
             Widget widget = widgetRepo.findById(request.getId())
                     .orElseThrow(() -> {
                         log.error("[Widget] [updateLoc] widget is not found");
                         return new NotFoundException(WIDGET_NOT_FOUND);
                     });
+            try {
+                UserProjectResponse userProjectResponse = projectServiceClient.findRole(widget.getProjectId(), userId);
+                if(!"MASTER".equals(userProjectResponse.getRole().getId())){
+                    log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+                    throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
+                }
+            }catch (NotFoundException e) {
+                log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+                throw new NotFoundException(USER_PROJECT_NOT_FOUND);
+            }catch (Exception e){
+                log.error("[Widget] [updateWidget] PROJECT_COMMUNICATION_ERROR");
+                throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
+            }
             widget.locUpdate(request.getWidgetRow(), request.getWidgetCol());
         });
     }
 
     @Override
     @Transactional
-    public void deleteWidget(Long widgetId) {
+    public void deleteWidget(Long widgetId, Long userId) {
         Widget widget = widgetRepo.findById(widgetId)
                 .orElseThrow(() -> {
                     log.error("[Widget] [deleteWidget] widget is not found");
                     return new NotFoundException(WIDGET_NOT_FOUND);
                 });
+        try {
+            UserProjectResponse userProjectResponse = projectServiceClient.findRole(widget.getProjectId(), userId);
+            if(!"MASTER".equals(userProjectResponse.getRole().getId())){
+                log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+                throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
+            }
+        }catch (NotFoundException e) {
+            log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
+            throw new NotFoundException(USER_PROJECT_NOT_FOUND);
+        }catch (Exception e){
+            log.error("[Widget] [updateWidget] PROJECT_COMMUNICATION_ERROR");
+            throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
+        }
         widgetRepo.delete(widget);
     }
 

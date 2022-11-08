@@ -71,18 +71,20 @@ public class WidgetController {
     @PostMapping("/widgets")
     @ApiOperation(value = "위젯 생성")
     public ResponseEntity<?> createWidget(
-            @RequestBody WidgetCreateRequest request
+            @RequestBody WidgetCreateRequest request,
+            @LoginUser User user
     ) {
-        widgetService.createWidget(request);
+        widgetService.createWidget(request, user.getId());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/widgets/loc")
     @ApiOperation(value = "위젯 순서 수정")
     public ResponseEntity<?> updateLocWidget(
-            @RequestBody List<WidgetLocUpdateRequest> requests
+            @RequestBody List<WidgetLocUpdateRequest> requests,
+            @LoginUser User user
     ) {
-        widgetService.updateLoc(requests);
+        widgetService.updateLoc(requests, user.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -90,18 +92,20 @@ public class WidgetController {
     @ApiOperation(value = "위젯 수정")
     public ResponseEntity<?> updateWidget(
             @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId,
-            @RequestBody WidgetUpdateRequest request
+            @RequestBody WidgetUpdateRequest request,
+            @LoginUser User user
     ) {
-        widgetService.updateWidget(request, widgetId);
+        widgetService.updateWidget(request, widgetId, user.getId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/widgets/{widgetId}")
     @ApiOperation(value = "위젯 삭제")
     public ResponseEntity<?> deleteWidget(
-            @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId
+            @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId,
+            @LoginUser User user
     ) {
-        widgetService.deleteWidget(widgetId);
+        widgetService.deleteWidget(widgetId, user.getId());
         return ResponseEntity.ok().build();
     }
 
