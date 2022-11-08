@@ -16,13 +16,8 @@ const index = (props: any) => {
       : props.info.type === 'bug'
       ? '버그'
       : '';
-  // epicLink:epicLink,
-  // reporter:reporter,
-  // assignee:assignee,
-  // rank:rank,
-  // type:type,
-  // sprint:sprint,
-  const pjtRef = useRef<HTMLInputElement>(null);
+
+  const projectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const reporterRef = useRef<HTMLSelectElement>(null);
@@ -30,17 +25,7 @@ const index = (props: any) => {
   const rankRef = useRef<HTMLSelectElement>(null);
   const epicLinkRef = useRef<HTMLSelectElement>(null);
   const sprintRef = useRef<HTMLSelectElement>(null);
-  const pointRef = useRef<HTMLInputElement>(null);
-
-  const [project, setProject] = useState(props.info.project);
-  const [type, setType] = useState(props.info.type);
-  const [summary, setSummary] = useState(props.info.summary);
-  const [reporter, setReporter] = useState(props.info.reporter);
-  const [assignee, setAssignee] = useState(props.info.assignee);
-  const [rank, setRank] = useState(props.info.rank);
-  const [epicLink, setEpicLink] = useState(props.info.epicLink);
-  const [sprint, setSprint] = useState(props.info.sprint);
-  const [storyPoints, setStoryPoints] = useState(props.info.storyPoints);
+  const storyPointsRef = useRef<HTMLInputElement>(null);
 
   return (
     <StyledIssueInfo>
@@ -49,10 +34,9 @@ const index = (props: any) => {
           isRow={false}
           labelName={'프로젝트'}
           inputValue={props.info.project}
-          ref={pjtRef}
-          setValue={setProject}
+          ref={projectRef}
         />
-        <SelectBox labelName={'이슈 유형'} ref={typeRef} setValue={setType}>
+        <SelectBox labelName={'이슈 유형'} ref={typeRef}>
           <Option messages={['스토리', '태스크', '버그']} selected={issueType}></Option>
         </SelectBox>
         <InputBox
@@ -60,34 +44,28 @@ const index = (props: any) => {
           labelName={'요약'}
           inputValue={props.info.summary}
           ref={summaryRef}
-          setValue={setSummary}
         />
-        <TextAreaBox
-          isRow={false}
-          labelName={'설명'}
-          textAreaValue={props.info.summary}
-          setValue={setSummary}
-        />
-        <SelectBox labelName={'보고자'} setValue={setReporter}>
+        <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
+        <SelectBox labelName={'보고자'} ref={reporterRef}>
           <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
         </SelectBox>
-        <SelectBox labelName={'담당자'} setValue={setAssignee}>
+        <SelectBox labelName={'담당자'} ref={assigneeRef}>
           <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.assignee}></Option>
         </SelectBox>
         <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-        <SelectBox labelName={'우선순위'} setValue={setRank}>
+        <SelectBox labelName={'우선순위'} ref={rankRef}>
           <Option
             messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
             selected={props.info.rank}
           ></Option>
         </SelectBox>
-        <SelectBox labelName={'Epic Link'} setValue={setEpicLink}>
+        <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
           <Option
             messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
             selected={props.info.epicLink}
           ></Option>
         </SelectBox>
-        <SelectBox labelName={'Sprint'} setValue={setSprint}>
+        <SelectBox labelName={'Sprint'} ref={sprintRef}>
           <Option
             messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
             selected={props.info.sprint}
@@ -97,8 +75,7 @@ const index = (props: any) => {
           isRow={false}
           labelName={'Story Points'}
           inputValue={props.info.storyPoints + ''}
-          ref={pointRef}
-          setValue={setStoryPoints}
+          ref={storyPointsRef}
         />
       </Sheet>
       <Button borderColor="blue" clickHandler={() => console.log(props.info)}>
@@ -106,19 +83,28 @@ const index = (props: any) => {
       </Button>
       <Button
         borderColor="green"
-        clickHandler={() =>
+        clickHandler={() => {
           props.setInfo({
-            project: project,
-            type: type,
-            summary: summary,
-            epicLink: epicLink,
-            reporter: reporter,
-            assignee: assignee,
-            rank: rank,
-            sprint: sprint,
-            storyPoints: storyPoints,
-          })
-        }
+            project: projectRef.current ? projectRef.current.value : '',
+            type: typeRef.current
+              ? typeRef.current.value === '스토리'
+                ? 'story'
+                : typeRef.current.value === '태스크'
+                ? 'task'
+                : typeRef.current.value === '버그'
+                ? 'bug'
+                : 'error'
+              : '',
+            summary: summaryRef.current ? summaryRef.current.value : '',
+            epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+            reporter: reporterRef.current ? reporterRef.current.value : '',
+            assignee: assigneeRef.current ? assigneeRef.current.value : '',
+            rank: rankRef.current ? rankRef.current.value : '',
+            sprint: sprintRef.current ? sprintRef.current.value : '',
+            storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+          });
+          props.setIsInsert(true);
+        }}
       >
         IssueInfo Test
       </Button>

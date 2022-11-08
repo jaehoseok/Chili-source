@@ -8,7 +8,6 @@ interface propsType extends styledContainerType, styledLabelType {
   textAreaValue?: string;
   textAreaWidth?: string;
   textAreaHeight?: string;
-  setValue?: any;
 }
 
 /**
@@ -54,7 +53,6 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
       isRow,
       containerWidth,
       containerPadding,
-      setValue,
     },
     ref,
   ) => {
@@ -76,9 +74,6 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
 
     const [text, setText] = useState(textAreaValue);
     const inputRef = useForwardRef<HTMLTextAreaElement>(ref);
-    useEffect(() => {
-      setValue(text);
-    }, [text]);
     return (
       <StyledContainer
         isRow={isRow}

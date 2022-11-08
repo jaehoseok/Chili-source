@@ -8,8 +8,19 @@ import Button from '../atoms/Button';
 import NavProject from '../molecules/NavProject';
 import NavWidget from '../molecules/NavWidget';
 
+export type issueType = {
+  project: string;
+  type: string;
+  summary: string;
+  reporter: string;
+  assignee: string;
+  rank: string;
+  epicLink: string;
+  sprint: string;
+  storyPoints: number;
+};
 const IssuesPage = () => {
-  const issue = {
+  const issue: issueType = {
     project: '',
     type: '',
     summary: '',
@@ -20,8 +31,9 @@ const IssuesPage = () => {
     sprint: '',
     storyPoints: 0,
   };
-  const [info, setInfo] = useState(issue);
-  const setInfoHandler = (props: any) => {
+  const [info, setInfo] = useState<issueType>(issue);
+  const [isInsert, setIsInsert] = useState(false);
+  const setInfoHandler = (props: issueType) => {
     setInfo(props);
   };
   return (
@@ -49,8 +61,8 @@ const IssuesPage = () => {
         storyPoints={4}
         clickHandler={setInfoHandler}
       />
-      <IssueInfo info={info} setInfo={setInfo}></IssueInfo>
-      <MiddleBucket info={info}></MiddleBucket>
+      <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
+      <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
     </>
   );
 };

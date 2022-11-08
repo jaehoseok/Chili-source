@@ -9,7 +9,6 @@ interface propsType extends styledContainerType, styledLabelType {
   inputHeight?: string;
   inputWidth?: string;
   inputType?: string;
-  setValue?: any;
 }
 
 /**
@@ -56,7 +55,6 @@ const index = forwardRef<HTMLInputElement, propsType>(
       isRow,
       containerWidth,
       containerPadding,
-      setValue,
     },
     ref,
   ) => {
@@ -78,9 +76,6 @@ const index = forwardRef<HTMLInputElement, propsType>(
 
     const [text, setText] = useState(inputValue);
     const inputRef = useForwardRef<HTMLInputElement>(ref);
-    useEffect(() => {
-      setValue(text);
-    }, [text]);
 
     return (
       <StyledContainer

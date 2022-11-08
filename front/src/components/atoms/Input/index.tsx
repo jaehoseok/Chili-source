@@ -27,7 +27,6 @@ interface propsType extends styledType {
  */
 const index = forwardRef<HTMLInputElement, propsType>(
   ({ height, width, type, placeHolder, defaultValue, text, setText }, ref) => {
-    // const [text, setText] = useState(defaultValue);
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
       const targetRef = useRef<T>(initialValue);
 

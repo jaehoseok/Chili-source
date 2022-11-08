@@ -347,3 +347,11 @@
 
 - `IssueInfo` 문제 해결
   >- inputbox에 값을 입력 후 이슈 템플릿을 클릭하면 컴포넌트에 값 표시가 안 되는 문제 해결
+
+## 221107
+
+### 성현
+
+- `IssueInfo`-`SelectBox` 데이터 불러오기 해결
+  >- SelectBox 컴포넌트 형식을 forwardRef<HTMLSelectElement, propsType>으로 변경
+  >- 'setValue is not a function' 에러 해결

@@ -9,7 +9,6 @@ interface propsType extends styledLabelType, styledContainerType {
   selectWidth?: string;
   selectSize?: string;
   children?: ReactNode;
-  setValue?: any;
 }
 
 /**
@@ -44,7 +43,6 @@ const index = forwardRef<HTMLSelectElement, propsType>(
       selectSize,
       containerPadding,
       children,
-      setValue,
     },
     ref,
   ) => {
@@ -65,10 +63,6 @@ const index = forwardRef<HTMLSelectElement, propsType>(
     };
     const [text, setText] = useState('');
     const inputRef = useForwardRef<HTMLSelectElement>(ref);
-    useEffect(() => {
-      console.log(text);
-      setValue(text);
-    }, [text]);
     return (
       <StyledContainer containerPadding={containerPadding}>
         <StyledLabel
@@ -83,6 +77,7 @@ const index = forwardRef<HTMLSelectElement, propsType>(
           fontSize={selectSize}
           children={children}
           ref={inputRef}
+          text={text}
           setText={setText}
         ></Select>
       </StyledContainer>
