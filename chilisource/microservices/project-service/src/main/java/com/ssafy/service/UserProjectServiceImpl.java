@@ -53,6 +53,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         try {
             userResponse = userServiceClient.getUserList(userIds).get(0);
         } catch (Exception e) {
+            log.error("[Project] [createUserProject] USER_NOT_FOUND");
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
@@ -113,6 +114,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         try {
             userResponses = userServiceClient.getUserList(userIds);
         } catch (Exception e) {
+            log.error("[Project] [getUserProjectList] USER_NOT_FOUND");
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
@@ -150,6 +152,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         try {
             userResponse = userServiceClient.getUserList(userIds).get(0);
         } catch (Exception e) {
+            log.error("[Project] [getUserProject] USER_NOT_FOUND");
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
