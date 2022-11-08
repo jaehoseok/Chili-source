@@ -9,7 +9,6 @@ import {
   StyledWidth100px,
   StyledInlineBlock,
   StyledFlexCenter,
-  StyledProjectWrapper,
 } from './style';
 
 import Sheet from 'components/atoms/Sheet';

@@ -2,29 +2,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { useDeleteProject, useGetProjects } from 'hooks/project';
 
-import { theme } from 'styles/theme';
-
-import {
-  StyledContainer,
-  StyledFlex,
-  StyledFlexBetween,
-  StyledFlexItemsCenter,
-  StyledFlexColumn,
-  StyledWidth100px,
-  StyledWidth80,
-  StyledMarginY,
-  StyledProjectWrapper,
-} from './style';
+import { StyledContainer, StyledFlexBetween, StyledProjectWrapper } from './style';
 
 // IMAGE
 // import example from 'assets/logo/ssafyLogo2.png';
 // import user1 from 'assets/images/user1.png';
 
 // COMPONENTS
-import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import Text from 'components/atoms/Text';
-import Circle from 'components/atoms/Circle';
 import ProjectSummary from 'components/molecules/ProjectSummary';
 import { useEffect } from 'react';
 
