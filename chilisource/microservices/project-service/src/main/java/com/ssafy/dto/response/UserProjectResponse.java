@@ -16,6 +16,12 @@ public class UserProjectResponse {
     @ApiModelProperty(value = "팀원 유저 pk")
     private Long userId;
 
+    @ApiModelProperty(value = "팀원 유저 이름")
+    private String userName;
+
+    @ApiModelProperty(value = "팀원 유저 이미지 주소")
+    private String userImage;
+
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;
 
@@ -23,9 +29,11 @@ public class UserProjectResponse {
     private String roleId;
 
     @Builder
-    public UserProjectResponse(String userColor, Long userId, Long projectId, String roleId) {
+    public UserProjectResponse(String userColor, Long userId, String userName, String userImage, Long projectId, String roleId) {
         this.userColor = userColor;
         this.userId = userId;
+        this.userName = userName;
+        this.userImage = userImage;
         this.projectId = projectId;
         this.roleId = roleId;
     }
