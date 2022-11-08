@@ -164,20 +164,16 @@ public class WidgetServiceImpl implements WidgetService {
     public void deleteWidget(Long widgetId, Long userId) {
         Widget widget = widgetRepo.findById(widgetId)
                 .orElseThrow(() -> {
-                    log.error("[Widget] [deleteWidget] widget is not found");
                     return new NotFoundException(WIDGET_NOT_FOUND);
                 });
         try {
             UserProjectResponse userProjectResponse = projectServiceClient.findRole(widget.getProjectId(), userId);
             if(!"MASTER".equals(userProjectResponse.getRole().getId())){
-                log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
                 throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
             }
         }catch (NotFoundException e) {
-            log.error("[Widget] [updateWidget] USER_PROJECT_NOT_FOUND");
             throw new NotFoundException(USER_PROJECT_NOT_FOUND);
         }catch (Exception e){
-            log.error("[Widget] [updateWidget] PROJECT_COMMUNICATION_ERROR");
             throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
         }
         widgetRepo.delete(widget);

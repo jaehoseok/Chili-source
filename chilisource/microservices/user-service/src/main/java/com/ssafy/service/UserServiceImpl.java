@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
                         .build();
             }
             default: {
-                log.error("[User] [getUser] social login type is not found");
                 throw new IllegalArgumentException("알 수 없는 소셜 유저 형식입니다.");
             }
         }
@@ -58,7 +57,6 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserInfo(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("[User] [getUserInfo] user is not found");
                     return new NotFoundException(USER_NOT_FOUND);
                 });
         return UserResponse.builder()
@@ -72,7 +70,6 @@ public class UserServiceImpl implements UserService {
     public void updateUserInfo(UserUpdateRequest request, Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("[User] [updateUserInfo] user is not found");
                     return new NotFoundException(USER_NOT_FOUND);
                 });
         user.updateInfo(request.getName());
@@ -82,7 +79,6 @@ public class UserServiceImpl implements UserService {
     public void updateUserImage(String image, Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("[User] [updateUserImage] user is not found");
                     return new NotFoundException(USER_NOT_FOUND);
                 });
         user.updateImage(image);
@@ -92,7 +88,6 @@ public class UserServiceImpl implements UserService {
     public void withdraw(Long userId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> {
-                    log.error("[User] [withdraw] user is not found");
                     return new NotFoundException(USER_NOT_FOUND);
                 });
         user.withdraw();
