@@ -9,6 +9,7 @@ import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.Role;
 import com.ssafy.entity.UserProject;
+import com.ssafy.exception.DuplicateException;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.DuplicateException.USER_PROJECT_DUPLICATED;
 import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
 
@@ -55,12 +57,18 @@ public class UserProjectServiceImpl implements UserProjectService {
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
+        // 중복 여부 확인
+        if (userProjectRepo.findByUserIdAndProjectId(request.getUserId(), request.getProjectId()).isPresent()) {
+            throw new DuplicateException(USER_PROJECT_DUPLICATED);
+        }
+
         // 초대 권한 확인
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (!userProjectManager.getRole().getInvite()) {
             throw new NotAuthorizedException(INVITE_NOT_AUTHORIZED);
         }
+
         // 프로젝트 초대
         UserProject userProject = UserProject.builder()
                 .userColor(request.getUserColor())
