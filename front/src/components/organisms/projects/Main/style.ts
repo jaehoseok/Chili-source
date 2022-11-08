@@ -3,7 +3,6 @@ import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
   ${tw`w-8/12 flex flex-col justify-center h-full m-auto`}
-  max-width: 1500px;
 `;
 
 export const StyledMarginY = styled.div`
@@ -37,4 +36,9 @@ export const StyledWidth80 = styled.div`
 
 export const StyledInlineBlock = styled.div`
   ${tw`inline-block mr-1`}
+`;
+
+export const StyledProjectWrapper = styled.div`
+  ${tw`overflow-y-scroll px-10 py-5`}
+  max-height: 1000px;
 `;

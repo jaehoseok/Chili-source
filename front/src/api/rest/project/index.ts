@@ -120,14 +120,28 @@ export default {
    *
    * @author bell
    */
-  getProjectWithToken: async () => {
-    try {
-      const response = await projectAxios.get('/project');
-      console.log(response.data);
-      return response.data;
-    } catch (e) {
-      console.log(e);
+  getProjects: async () => {
+    interface responseType {
+      id: number;
+      name: string;
+      descripton: string;
+      image: string;
+      gitRepo: string | null;
+      latestGanntVersion: 0;
+      tokenList: string[];
     }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get('/project')
+        .then(response => {
+          console.log(response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   },
 
   /**
@@ -160,8 +174,24 @@ export default {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data);
-      return response.data;
+      console.log(response);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @descripton
+   * 해당 프로젝트를 삭제하는 API
+   *
+   * @param {number} projectId
+   *
+   * @author bell
+   */
+  deleteProject: async (projectId: number) => {
+    try {
+      await projectAxios.delete(`/project/${projectId}`);
     } catch (e) {
       console.log(e);
     }

@@ -2,6 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
+
+import { useGetTokens } from 'hooks/auth';
 import { useGetUserInfoHandler } from 'hooks/user';
 
 import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './style';
@@ -26,6 +28,12 @@ const index = () => {
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
+
+  if (isLogin) {
+    // react-query
+    useGetUserInfoHandler();
+    useGetTokens();
+  }
 
   const clickLoginHandler = async () => {
     await auth.login('google');

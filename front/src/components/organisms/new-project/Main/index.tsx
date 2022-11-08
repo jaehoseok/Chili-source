@@ -1,16 +1,16 @@
 // LIBRARY
 import { ChangeEvent, useEffect, useState } from 'react';
 
+import { AiOutlineCamera } from 'react-icons/ai';
+
 import { linkageTokenState } from 'recoil/atoms/auth/linkageToken';
 import { createProjectState } from 'recoil/atoms/project/createProject';
-
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-
-import { AiOutlineCamera } from 'react-icons/ai';
 
 // hooks
 import { usePostLinkageTokenHandler } from 'hooks/auth';
 import { useGetJiraProjectList } from 'hooks/issue';
+import { useGetTokens } from 'hooks/auth';
 
 // CSS
 import { theme } from 'styles/theme';
@@ -42,6 +42,12 @@ import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
 import { usePostCreateProjectHandler } from 'hooks/project';
 import { useNavigate } from 'react-router-dom';
+import { useGetUserInfoHandler } from 'hooks/user';
+
+interface jiraProjectType {
+  key: string;
+  name: string;
+}
 
 /**
  * @description
@@ -53,12 +59,27 @@ import { useNavigate } from 'react-router-dom';
 const index = () => {
   // project-logo용 state
   const [image, setImage] = useState();
+
+  // 현재 유저에게 연동된 토큰이 있는가 조회
+  const [isJiraToken, setJiraToken] = useState(false);
+  const [isGitLabToken, setGitLabToken] = useState(false);
+
+  // 연동된 토큰이 있는 경우, 유저의 토큰 값을 저장
+  const [jiraTokenName, setJiraTokenName] = useState('');
+  const [gitLabTokenName, setGitLabTokenName] = useState('');
+
+  // 연동퇸 토크인 있는 경우, 유저의 토큰 이메일 값을 저장
+  const [getJiraEmail, setJiraEmail] = useState('');
+
   const navigate = useNavigate();
 
   // 토큰 연동시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
   const { jiraToken } = useRecoilValue(linkageTokenState);
-  const { gitToken } = useRecoilValue(linkageTokenState);
+  const { jiraEmail } = useRecoilValue(linkageTokenState);
+  // const { gitLabToken } = useRecoilValue(linkageTokenState);
+
   const jiraSetRecoilState = useSetRecoilState(linkageTokenState);
+  const jiraEmailSetRecoilState = useSetRecoilState(linkageTokenState);
   const gitSetRecoilState = useSetRecoilState(linkageTokenState);
 
   // 프로젝트 생성 시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
@@ -69,29 +90,83 @@ const index = () => {
   const descriptionSetRecoilState = useSetRecoilState(createProjectState);
   const imageSetRecoilState = useSetRecoilState(createProjectState);
 
+  // 자신의 토큰이 연동되어 있는 것이 있는지 확인하기
+  const getTokens = useGetTokens();
+
+  // 토큰이 있다면 연동하기로
   useEffect(() => {
-    console.log(projectName, projectDescription, projectImage);
-  }, [projectName, projectImage, projectDescription]);
+    if (getTokens.data && getTokens.data.length > 0) {
+      for (const item of getTokens.data) {
+        if (item.tokenCodeId === 'JIRA') {
+          setJiraToken(true);
+          setJiraTokenName(item.value);
+          setJiraEmail(item.email);
+        }
+        if (item.tokenCodeId === 'SSAFYGITLAB') {
+          setGitLabToken(true);
+          setGitLabTokenName(item.value);
+        }
+      }
+    }
+  }, []);
 
   // query 처리
   // 토큰 연동
-  const { mutate } = usePostLinkageTokenHandler();
+  const linkageJiraToken = usePostLinkageTokenHandler();
+  const getUserInfo = useGetUserInfoHandler();
   // 지라 프로젝트 모두 가져오기
-  const { isError, error, refetch } = useGetJiraProjectList();
+  const jiraProjectList = useGetJiraProjectList();
   const createProjectData = usePostCreateProjectHandler();
 
+  // 이미 유저가 토큰 값을 가지고 있다면
+
+  // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
+  const filteringJiraProjectHandler = (datas: jiraProjectType[]) => {
+    const temp: string[] = [];
+    for (const data of datas) temp.push(data.name);
+    return temp;
+  };
+
+  // 생성 버튼 클릭시 프로젝트 생성 (POST) 요청 실행
   const creaetProjectHandler = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     createProjectData.mutate({ projectName, projectDescription, image });
   };
 
-  if (createProjectData.isSuccess) {
-    navigate('/projects');
-  }
+  // 지라 연동이 성공한 경우에만 jiraProject를 가져와라
+  useEffect(() => {
+    if (linkageJiraToken.isSuccess || (isJiraToken && jiraTokenName)) {
+      jiraProjectList.refetch();
+    }
+  }, [linkageJiraToken.isSuccess, isJiraToken, jiraTokenName]);
+
+  // 버튼 클릭 시 지라 토큰 연동 및 해당 지라 프로젝트 가져오기
+  const linkageJiraTokenHandler = async () => {
+    if (isJiraToken) {
+      jiraProjectList.refetch();
+    } else {
+      if (getUserInfo.data) {
+        console.log(jiraEmail, jiraToken);
+        linkageJiraToken.mutate({
+          email: jiraEmail,
+          tokenCodeId: 'JIRA',
+          value: jiraToken,
+        });
+      }
+    }
+  };
 
   return (
     <StyledContainer>
+      {createProjectData.isSuccess && (
+        <Notification
+          width="300px"
+          check={true}
+          message={'프로젝트가 성공적으로 생성되었습니다!'}
+        ></Notification>
+      )}
+
       <Text
         isFill={false}
         message={'프로젝트 생성'}
@@ -99,84 +174,6 @@ const index = () => {
         fontWeight={'900'}
         display={'block'}
       ></Text>
-      <StyledFlex>
-        <Sheet width="100%" height="300px" minHeight="150px" maxWidth="2000px">
-          <StyledFlexAround>
-            <StyledMarginY>
-              <InputBox
-                labelName="Jira 토큰"
-                labelSize="1.3rem"
-                labelMarginBottom="20px"
-                isRow={false}
-                containerWidth="100%"
-                useSetRecoilState={jiraSetRecoilState}
-                recoilParam={'jiraToken'}
-              ></InputBox>
-              <StyledMarginY>
-                <StyledFlexRowEnd>
-                  <Button
-                    width="100px"
-                    borderColor={theme.button.gray}
-                    backgroundColor={theme.button.green}
-                    isHover={true}
-                    clickHandler={() => {
-                      mutate({
-                        email: 'woaol@naver.com',
-                        tokenCodeId: 'JIRA',
-                        value: jiraToken,
-                      });
-                      refetch();
-                    }}
-                  >
-                    입력
-                  </Button>
-                </StyledFlexRowEnd>
-              </StyledMarginY>
-              {/* {isLoading && <div>Loading...</div>} */}
-              {/* {data && (
-                <Select width="100%">
-                  <Option messages={dat}></Option>
-                </Select>
-              )} */}
-              {isError && (
-                <Notification width="200px" check={false} message={error.message}></Notification>
-              )}
-            </StyledMarginY>
-            <StyledMarginY>
-              <InputBox
-                labelName="Git 토큰"
-                labelSize="1.3rem"
-                labelMarginBottom="20px"
-                isRow={false}
-                useSetRecoilState={gitSetRecoilState}
-                recoilParam={'gitToken'}
-              ></InputBox>
-              <StyledMarginY>
-                <StyledFlexRowEnd>
-                  <Button
-                    width="100px"
-                    borderColor={theme.button.gray}
-                    backgroundColor={theme.button.green}
-                    isHover={true}
-                    clickHandler={() =>
-                      mutate({
-                        email: 'woaol@naver.com',
-                        tokenCodeId: 'SSAFYGITLAB',
-                        value: gitToken,
-                      })
-                    }
-                  >
-                    입력
-                  </Button>
-                </StyledFlexRowEnd>
-              </StyledMarginY>
-              <Select width="100%">
-                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-              </Select>
-            </StyledMarginY>
-          </StyledFlexAround>
-        </Sheet>
-      </StyledFlex>
       <StyledFlex>
         <Sheet width="100%" height="30vh" minHeight="450px" maxWidth="2000px">
           <StyledInputBox>
@@ -246,18 +243,129 @@ const index = () => {
             </StyledMarginY>
           </StyledInputBox>
         </Sheet>
+
+        <StyledMarginY>
+          <StyledFlexRowEnd>
+            <Button
+              width="100px"
+              borderColor={theme.button.gray}
+              backgroundColor={theme.button.green}
+              isHover={true}
+              clickHandler={() => creaetProjectHandler()}
+            >
+              생성
+            </Button>
+          </StyledFlexRowEnd>
+        </StyledMarginY>
       </StyledFlex>
-      <StyledFlexRowEnd>
-        <Button
-          width="100px"
-          borderColor={theme.button.gray}
-          backgroundColor={theme.button.green}
-          isHover={true}
-          clickHandler={() => creaetProjectHandler()}
-        >
-          생성
-        </Button>
-      </StyledFlexRowEnd>
+      <StyledFlex>
+        <Sheet width="100%" height="25vh" minHeight="400px" maxWidth="2000px">
+          <StyledFlexAround>
+            <StyledMarginY>
+              <InputBox
+                labelName="Jira 토큰"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                containerWidth="100%"
+                useSetRecoilState={jiraSetRecoilState}
+                recoilParam={'jiraToken'}
+                inputValue={isJiraToken ? jiraTokenName : ''}
+              ></InputBox>
+              <InputBox
+                labelName="Jira 이메일"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                containerWidth="100%"
+                useSetRecoilState={jiraEmailSetRecoilState}
+                recoilParam={'jiraEmail'}
+                inputValue={isJiraToken ? getJiraEmail : ''}
+              ></InputBox>
+              <StyledMarginY>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="100px"
+                    borderColor={theme.button.gray}
+                    backgroundColor={theme.button.green}
+                    isHover={true}
+                    clickHandler={linkageJiraTokenHandler}
+                  >
+                    입력
+                  </Button>
+                </StyledFlexRowEnd>
+              </StyledMarginY>
+              {/* {isLoading && <div>Loading...</div>} */}
+              {jiraProjectList.isLoading && <div>isLoading...</div>}
+              {jiraProjectList.data && (
+                <>
+                  <StyledMarginY>
+                    <Select width="100%">
+                      <Option
+                        messages={filteringJiraProjectHandler(jiraProjectList.data)}
+                        selected={jiraProjectList.data[0]}
+                      ></Option>
+                    </Select>
+                  </StyledMarginY>
+                  <StyledFlexRowEnd>
+                    <Button
+                      width="150px"
+                      borderColor={theme.button.gray}
+                      backgroundColor={theme.button.green}
+                      isHover={true}
+                      clickHandler={linkageJiraTokenHandler}
+                    >
+                      프로젝트와 연동
+                    </Button>
+                  </StyledFlexRowEnd>
+                </>
+              )}
+              {jiraProjectList.isError && (
+                <Notification
+                  width="200px"
+                  check={false}
+                  message={jiraProjectList.error.message}
+                ></Notification>
+              )}
+            </StyledMarginY>
+            <StyledMarginY>
+              <InputBox
+                labelName="GitLab 토큰"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                useSetRecoilState={gitSetRecoilState}
+                recoilParam={'gitLabToken'}
+                inputValue={isGitLabToken ? gitLabTokenName : ''}
+              ></InputBox>
+              <InputBox
+                labelName="Git 이메일"
+                labelSize="1.3rem"
+                labelMarginBottom="20px"
+                isRow={false}
+                containerWidth="100%"
+                useSetRecoilState={jiraEmailSetRecoilState}
+                recoilParam={'gitLabEmail'}
+              ></InputBox>
+              <StyledMarginY>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="100px"
+                    borderColor={theme.button.gray}
+                    backgroundColor={theme.button.green}
+                    isHover={true}
+                  >
+                    입력
+                  </Button>
+                </StyledFlexRowEnd>
+              </StyledMarginY>
+              {/* <Select width="100%">
+                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
+              </Select> */}
+            </StyledMarginY>
+          </StyledFlexAround>
+        </Sheet>
+      </StyledFlex>
     </StyledContainer>
   );
 };

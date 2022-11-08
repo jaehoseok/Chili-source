@@ -1,17 +1,12 @@
 // API & Library
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useGetUserInfoHandler } from 'hooks/user';
-
 import { auth } from 'api/rest';
 
 const UserLoginLoadingPage = () => {
   // Init
   const location = useLocation();
   const navigate = useNavigate();
-
-  // react-query
-  useGetUserInfoHandler();
 
   const clickHandler = async () => {
     // IFFE
