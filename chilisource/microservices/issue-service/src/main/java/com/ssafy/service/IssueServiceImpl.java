@@ -561,6 +561,8 @@ public class IssueServiceImpl implements IssueService {
                     .assignee(assignee)
                     .priority(priority)
                     .project(project)
+//                    .customfield_10031(issue.getStoryPoints()) // 스토리포인트
+                    .customfield_10020(issue.getSprint())
                     .build();
 
             JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()
