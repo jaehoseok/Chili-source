@@ -1,8 +1,10 @@
 package com.ssafy.service;
 
+import com.ssafy.client.UserServiceClient;
 import com.ssafy.dto.request.UserProjectCreateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
+import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.UserProject;
 import com.ssafy.exception.NotAuthorizedException;
@@ -15,12 +17,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ssafy.exception.NotAuthorizedException.*;
-import static com.ssafy.exception.NotFoundException.PROJECT_NOT_FOUND;
-import static com.ssafy.exception.NotFoundException.USER_PROJECT_NOT_FOUND;
+import static com.ssafy.exception.NotFoundException.*;
 
 @RequiredArgsConstructor
 @Service
@@ -30,7 +33,7 @@ public class UserProjectServiceImpl implements UserProjectService {
     private final ProjectRepo projectRepo;
     private final UserProjectRepo userProjectRepo;
     private final RoleRepo roleRepo;
-//    private final Role DEFAULT_ROLE = roleRepo.findById(3L).get();
+    private final UserServiceClient userServiceClient;
 
     // 프로젝트 초대
     @Override
@@ -93,13 +96,33 @@ public class UserProjectServiceImpl implements UserProjectService {
         // 팀원 리스트 조회
         List<UserProject> responses = userProjectRepo.findByProjectId(projectId);
 
+        List<Long> userIds = responses.stream()
+                .map(response -> response.getUserId())
+                .collect(Collectors.toList());
+
+        List<UserResponse> userResponses;
+        try {
+            userResponses = userServiceClient.getUserList(userIds);
+        } catch (Exception e) {
+            throw new NotFoundException(USER_NOT_FOUND);
+        }
+
+        Map<Long, UserResponse> userMap = userResponses.stream()
+                .collect(Collectors.toMap(UserResponse::getId, userResponse -> userResponse));
+
         return responses.stream()
-                .map(userProject -> UserProjectResponse.builder()
-                        .userColor(userProject.getUserColor())
-                        .userId(userProject.getUserId())
-                        .projectId(userProject.getProject().getId())
-                        .roleId(userProject.getRole().getId())
-                        .build())
+                .map(userProject -> {
+                    UserResponse user = userMap.get(userProject.getUserId());
+
+                    return UserProjectResponse.builder()
+                            .userColor(userProject.getUserColor())
+                            .userId(userProject.getUserId())
+                            .userName(user != null ? user.getName() : "없는 사용자입니다.")
+                            .userImage(user != null ? user.getImage() : "없는 사용자입니다.")
+                            .projectId(userProject.getProject().getId())
+                            .roleId(userProject.getRole().getId())
+                            .build();
+                })
                 .collect(Collectors.toList());
     }
 
@@ -111,9 +134,21 @@ public class UserProjectServiceImpl implements UserProjectService {
                     log.error("[Project] [getUserProject] USER_PROJECT_NOT_FOUND");
                     return new NotFoundException(USER_PROJECT_NOT_FOUND);
                 });
+
+        List<Long> userIds = new ArrayList<>();
+        userIds.add(userProject.getUserId());
+        UserResponse userResponse;
+        try {
+            userResponse = userServiceClient.getUserList(userIds).get(0);
+        } catch (Exception e) {
+            throw new NotFoundException(USER_NOT_FOUND);
+        }
+
         return UserProjectResponse.builder()
                 .userColor(userProject.getUserColor())
                 .userId(userProject.getUserId())
+                .userName(userResponse.getName())
+                .userImage(userResponse.getImage())
                 .projectId(projectId)
                 .roleId(userProject.getRole().getId())
                 .build();

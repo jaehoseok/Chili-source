@@ -10,7 +10,7 @@ import java.util.List;
 @FeignClient(name = "user-service", url = "https://k7b2071.p.ssafy.io/user-service")
 public interface UserServiceClient {
     @GetMapping("/users/list")
-    UserResponse getUserList(
+    List<UserResponse> getUserList(
             @RequestParam("userIds") List<Long> userIds
     );
 }
