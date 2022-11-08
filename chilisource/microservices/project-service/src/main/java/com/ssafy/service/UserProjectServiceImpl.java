@@ -108,7 +108,7 @@ public class UserProjectServiceImpl implements UserProjectService {
         }
 
         Map<Long, UserResponse> userMap = userResponses.stream()
-                .collect(Collectors.toMap(UserResponse::getId, userResponse -> userResponse));
+                .collect(Collectors.toMap(UserResponse::getId, UserResponse::getThis));
 
         return responses.stream()
                 .map(userProject -> {

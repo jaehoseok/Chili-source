@@ -19,4 +19,8 @@ public class UserResponse {
         this.name = name;
         this.image = image;
     }
+
+    public UserResponse getThis() {
+        return this;
+    }
 }
