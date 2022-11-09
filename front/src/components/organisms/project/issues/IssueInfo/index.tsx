@@ -77,7 +77,12 @@ const index = (props: any) => {
             inputValue={props.info.summary}
             ref={summaryRef}
           />
-          <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.description} />
+          <TextAreaBox
+            isRow={false}
+            labelName={'설명'}
+            textAreaValue={props.info.description}
+            ref={descriptionRef}
+          />
           <SelectBox labelName={'보고자'} ref={reporterRef}>
             <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
           </SelectBox>

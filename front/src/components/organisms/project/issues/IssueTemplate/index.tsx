@@ -17,6 +17,7 @@ const index = (props: any) => {
       project={issue.project}
       type={issue.type}
       summary={issue.summary}
+      description={issue.description}
       reporter={issue.reporter}
       assignee={issue.assignee}
       rank={issue.rank}
