@@ -96,7 +96,7 @@ const index = memo(() => {
   // const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
   // let projectTabList: tabType[];
 
-  // portal 용
+  // portal 용 태그
   const el = document.getElementById('nav-root');
 
   const navigate = useNavigate();
@@ -107,6 +107,8 @@ const index = memo(() => {
   const getProject = useGetProject(+currProjectId);
 
   const GETTABPROJECT = localStorage.getItem('project-tab-list');
+
+  // 첫 유저인 경우, localStorage에 'project-tab-list' 아직 안만든 경우
   if (!GETTABPROJECT) {
     localStorage.setItem(
       'project-tab-list',
@@ -121,8 +123,10 @@ const index = memo(() => {
     );
   }
 
+  // 현재 탭리스트 값
   let projectTabList: tabType[] = JSON.parse(GETTABPROJECT as string);
 
+  // 현재 탭리스트 변경시 리렌더링 되도록 설정
   useEffect(() => {
     console.log('리렌더링');
   }, [projectTabList]);
@@ -132,15 +136,12 @@ const index = memo(() => {
   // 활성화 된 컴포넌트에 맞게 경로가 이동되어야 한다.
   // 프로젝트 데이터가 없는 경우는 ProjectSelectPage로 이동한다.
   const activateToggleHandler = (id: number, isActivated: boolean) => {
-    console.log('토글됨');
     let idx = -1;
 
     if (projectTabList.length <= 0) navigate('/projects');
 
-    projectTabList.forEach((projectTab: tabType) => {
-      projectTab.isActivated = false;
-    });
-
+    // 일급함수 유지를 위해, 데이터 복사
+    // 복사시 설정 주의할것!
     const newTabs = projectTabList.map(({ id, isActivated, title, widgetList }: tabType) => {
       return {
         id,
@@ -150,6 +151,12 @@ const index = memo(() => {
       };
     });
 
+    // 복사한 데이터의 isActivated를 모두 false로
+    newTabs.forEach((projectTab: tabType) => {
+      projectTab.isActivated = false;
+    });
+
+    // 활성화 시킬 idx 찾기
     idx = newTabs.findIndex(projectTab => projectTab.id === id);
     let currId: number;
     try {
@@ -161,12 +168,18 @@ const index = memo(() => {
         currId = newTabs[idx].id;
       }
     } catch (e) {
+      // 삭제된 이전 데이터때문에 배열의 갯수와 idx 맞지 않아 indexError가 나오는 경우가 았다.
+      // 필요없는 값은 삭제되었을테니, 활성화된 탭이 존재하는
+      // 이전의 값을 반환하는 것으로, 에러를 해결하였다.
       return projectTabList;
     }
+    // 해당 id값을 토대로 경로 이동
     navigate(`/project/${currId}/dashboard`);
+    // 프로젝트 탭이 바뀌는 경우, 위젯탭은 항상 대시보드가 활성화되도록 설정
     activatedToggleWidgetHandler(idx, '대시보드', false);
+    // 로컬스토리지 데이터 변경
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
-    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+
     // if(GETTABPROJECT?.length < 0)
     // setTabList((prevArr: tabType[]) => {
     //   if (prevArr.length <= 0) navigate('/projects');
@@ -214,17 +227,26 @@ const index = memo(() => {
   // 해당 프로젝트 탭을 삭제하는 함수
   const closeTabHandler = (id: number) => {
     const newTabs = [...projectTabList];
-    // console.log(newTabs);
 
+    // const idx = newTabs.findIndex(tab => tab.id === id);
+    // const activatedIdx = newTabs.findIndex(tab => tab.isActivated);
+    // 필터링을 통해, 해당 id를 제외한
+    // 새 프로젝트 데이터를 반환하다.
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs.filter(tab => tab.id !== id)));
     projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
-    // setTabList((prevArr: tabType[]) => {
-    //   const newTabs = [...prevArr];
-    //   // 필터링을 통해, 해당 id를 제외한
-    //   // 새 프로젝트 데이터를 반환하다.
-    //   return newTabs.filter(tab => tab.id !== id);
-    // });
+    // 이거 에러 처리하려면 오래걸릴듯
+    // 더 완벽한 nav 탭을 짤 수있음
+    // 나중에 한번 보자
+    // if (idx >= newTabs.length - 1) {
+    //   navigate(`/project/${projectTabList[idx - 1].id}/dashboard`);
+    // } else if (idx === 0 && !newTabs[idx].isActivated) {
+    //   navigate(`/project/${projectTabList[activatedIdx - 1].id}/dashboard`);
+    // } else if (idx === 0) {
+    //   navigate(`/project/${projectTabList[0].id}/dashboard`);
+    // } else {
+    //   navigate(`/project/${projectTabList[idx - 1].id}/dashboard`);
+    // }
   };
 
   // 위젯 탭을 활성화, 비활성화시키는 함수
@@ -391,7 +413,6 @@ const index = memo(() => {
   // console.log(projectTabList.length);
 
   // 현재 킨 프로젝트가 이미 localStorage로 데이터가 있는지 확인
-  console.log(projectTabList);
   let check = true;
   for (let i = 0; i < projectTabList.length; i++) {
     if (projectTabList[i].id === +currProjectId) {
@@ -412,7 +433,8 @@ const index = memo(() => {
     projectTabList.forEach(item => {
       item.isActivated = false;
     });
-    if (getProject.isSuccess) {
+    // 프로젝트 데이터 추가
+    if (getProject.data) {
       localStorage.setItem(
         'project-tab-list',
         JSON.stringify([
