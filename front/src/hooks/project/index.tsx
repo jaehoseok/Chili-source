@@ -6,6 +6,16 @@ import { project } from 'api/rest';
 
 /**
  * @description
+ * 해당 프로젝트id의 데이터를 가져오는 API 요처함수를 다루는 custom-hook
+ *
+ * @author bell
+ */
+export const useGetProject = (projectId: number) => {
+  return useQuery(['get-project', projectId], () => project.getProject(projectId));
+};
+
+/**
+ * @description
  * 해당 유저가 가지고 있는 토큰과 연관되는 우리 서비스를 모두 가져오는
  * API 요청 함수를 다루는 custom-hook
  *

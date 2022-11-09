@@ -1,7 +1,6 @@
 import { memo, useEffect } from 'react';
-
-import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 // import { useRecoilState } from 'recoil';
 // import { tabListState, tabType, widgetType } from '../../../../recoil/atoms/projectList';
@@ -9,15 +8,18 @@ import { createPortal } from 'react-dom';
 import NavProject from 'components/molecules/NavProject';
 import NavWidget from 'components/molecules/NavWidget';
 import Tab from 'components/atoms/Tab';
+import { useGetProject } from 'hooks/project';
 
 interface widgetType {
   isActivated: boolean;
   title: string;
 }
 
-interface tabType extends widgetType {
+interface tabType {
   id: number;
   widgetList: widgetType[];
+  title: string;
+  isActivated: boolean;
 }
 
 // const CHILISOURCE = {
@@ -94,14 +96,32 @@ const index = memo(() => {
   // const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
   // let projectTabList: tabType[];
 
-  const GETTABPROJECT = localStorage.getItem('project-tab-list');
-  if (!GETTABPROJECT) localStorage.setItem('project-tab-list', JSON.stringify([]));
-
-  const projectTabList: tabType[] = JSON.parse(GETTABPROJECT as string);
+  // portal 용
+  const el = document.getElementById('nav-root');
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const currProjectId = location.pathname.split('/')[2];
 
-  const el = document.getElementById('nav-root');
+  // 쿼리 데이터
+  const getProject = useGetProject(+currProjectId);
+
+  const GETTABPROJECT = localStorage.getItem('project-tab-list');
+  if (!GETTABPROJECT) {
+    localStorage.setItem(
+      'project-tab-list',
+      JSON.stringify([
+        {
+          id: +currProjectId,
+          isActivated: true,
+          title: getProject.data && getProject.data.name,
+          widgetList: [{ isActivated: true, title: '대시보드' }],
+        },
+      ]),
+    );
+  }
+
+  let projectTabList: tabType[] = JSON.parse(GETTABPROJECT as string);
 
   useEffect(() => {
     console.log('리렌더링');
@@ -112,9 +132,11 @@ const index = memo(() => {
   // 활성화 된 컴포넌트에 맞게 경로가 이동되어야 한다.
   // 프로젝트 데이터가 없는 경우는 ProjectSelectPage로 이동한다.
   const activateToggleHandler = (id: number, isActivated: boolean) => {
+    console.log('토글됨');
     let idx = -1;
 
     if (projectTabList.length <= 0) navigate('/projects');
+
     projectTabList.forEach((projectTab: tabType) => {
       projectTab.isActivated = false;
     });
@@ -144,6 +166,7 @@ const index = memo(() => {
     navigate(`/project/${currId}/dashboard`);
     activatedToggleWidgetHandler(idx, '대시보드', false);
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
+    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
     // if(GETTABPROJECT?.length < 0)
     // setTabList((prevArr: tabType[]) => {
     //   if (prevArr.length <= 0) navigate('/projects');
@@ -191,7 +214,11 @@ const index = memo(() => {
   // 해당 프로젝트 탭을 삭제하는 함수
   const closeTabHandler = (id: number) => {
     const newTabs = [...projectTabList];
+    // console.log(newTabs);
+
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs.filter(tab => tab.id !== id)));
+    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+
     // setTabList((prevArr: tabType[]) => {
     //   const newTabs = [...prevArr];
     //   // 필터링을 통해, 해당 id를 제외한
@@ -255,6 +282,7 @@ const index = memo(() => {
         break;
     }
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
+    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
     // projectIdx가 -1이 들어올 수 있다. (이미 데이터가 삭제되고 프로젝트 데이터가 없는 경우)
     // 그러한 경우에는 업데이트 할게 없으니 그냥 리턴 하면 된다.
@@ -336,6 +364,7 @@ const index = memo(() => {
     newTabs[projectIdx].widgetList = [...newWidgets];
     console.log(newTabs);
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
+    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
     // setTabList((prevArr: tabType[]) => {
     //   const currWidgetList = prevArr[projectIdx].widgetList;
     //   // 결과적으로 이중 배열의 형태이기 때문에
@@ -359,6 +388,47 @@ const index = memo(() => {
     // });
   };
 
+  // console.log(projectTabList.length);
+
+  // 현재 킨 프로젝트가 이미 localStorage로 데이터가 있는지 확인
+  console.log(projectTabList);
+  let check = true;
+  for (let i = 0; i < projectTabList.length; i++) {
+    if (projectTabList[i].id === +currProjectId) {
+      projectTabList.forEach(item => {
+        item.isActivated = false;
+      });
+      projectTabList[i].isActivated = true;
+      localStorage.setItem('project-tab-list', JSON.stringify(projectTabList));
+      projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+      check = false;
+      break;
+    }
+  }
+
+  if (check) {
+    // 현재 킨 프로젝트가 처음 들어가는 프로젝트 인 경우 -> 프로젝트 탭을 만들어야 하는 경우
+    // 일단 모든 탭 false로
+    projectTabList.forEach(item => {
+      item.isActivated = false;
+    });
+    if (getProject.isSuccess) {
+      localStorage.setItem(
+        'project-tab-list',
+        JSON.stringify([
+          ...projectTabList,
+          {
+            id: +currProjectId,
+            isActivated: true,
+            title: getProject.data.name,
+            widgetList: [{ isActivated: true, title: '대시보드' }],
+          },
+        ]),
+      );
+    }
+    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+  }
+
   return createPortal(
     <>
       <NavProject>
@@ -370,7 +440,7 @@ const index = memo(() => {
             title={title}
             toggleHandler={activateToggleHandler.bind(null, id, isActivated)}
             closeHandler={closeTabHandler.bind(null, id)}
-            xBtn={true}
+            xBtn={isActivated}
           ></Tab>
         ))}
         <Tab
@@ -380,6 +450,7 @@ const index = memo(() => {
           title={'+'}
           plus={true}
           xBtn={false}
+          createHandler={() => navigate('/projects')}
         ></Tab>
       </NavProject>
       <NavWidget>
@@ -387,7 +458,6 @@ const index = memo(() => {
           ({ isActivated, widgetList }: tabType, projectIdx: number) =>
             isActivated &&
             widgetList.map(({ isActivated, title }: widgetType, idx: number) => {
-              console.log(widgetList[idx]);
               return (
                 <Tab
                   key={idx}
@@ -413,6 +483,7 @@ const index = memo(() => {
           title={'+'}
           plus={true}
           xBtn={false}
+          createHandler={() => navigate(`/project/${currProjectId}/widgets`)}
         ></Tab>
       </NavWidget>
     </>,

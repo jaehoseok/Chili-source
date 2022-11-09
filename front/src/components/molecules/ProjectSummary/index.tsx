@@ -1,4 +1,4 @@
-import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import {
   StyledFlex,
@@ -19,7 +19,7 @@ import Button from 'components/atoms/Button';
 import { useGetTeamForProject } from 'hooks/project';
 
 import { theme } from 'styles/theme';
-import { useNavigate } from 'react-router-dom';
+
 import { UseMutationResult } from '@tanstack/react-query';
 import { useGetUserInfoHandler } from 'hooks/user';
 

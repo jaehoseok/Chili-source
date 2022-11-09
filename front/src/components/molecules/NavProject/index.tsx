@@ -17,7 +17,7 @@ interface propsType {
 const index = ({ children }: propsType) => {
   const navigate = useNavigate();
   const linkToProjectSelectHandler = () => {
-    navigate('/projects');
+    navigate('/');
   };
   return (
     <>
