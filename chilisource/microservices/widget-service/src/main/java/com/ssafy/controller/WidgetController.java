@@ -134,8 +134,8 @@ public class WidgetController {
     public ResponseEntity<?> getSmallWidget(
             HttpServletRequest request,
             @LoginUser User user,
-            @ApiParam(value = "프로젝트 pk") @PathVariable("projectId") Long projectId,
-            @ApiParam(value = "위젯 타입 (SSAFYGITLAB, GITLAB, GITHUB)") @RequestParam("widgetType") String widgetType,
+            @ApiParam(value = "프로젝트 pk") @RequestParam("projectId") Long projectId,
+            @ApiParam(value = "위젯 타입 (SSAFYGITLAB, GITLAB, GITHUB)") @PathVariable("widgetType") String widgetType,
             @ApiParam(value = "토큰 코드 pk") @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId,
             @ApiParam(value = "브랜치 (null일때는 MR 리스트)") @RequestParam(required = false, name = "branch") String branch
     ) {
@@ -143,7 +143,7 @@ public class WidgetController {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         switch (type) {
             case SSAFYGITLAB: {
-                if (branch == null)
+                if (branch.isEmpty())
                     return ResponseEntity.ok(ssafyGitlabService.findMergeRequest(accessToken, tokenCodeId, projectId, user.getId()));
                 else
                     return ResponseEntity.ok(ssafyGitlabService.findCommits(accessToken, tokenCodeId, projectId, user.getId(), branch));
