@@ -95,7 +95,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .userId(userId)
                 .project(project)
                 .userColor(DEFAULT_COLOR)
-                .role(roleRepo.findById("MASTER").get())
+                .role(roleRepo.findById("MASTER").orElseThrow(() -> new NotFoundException(ROLE_NOT_FOUND)))
                 .build();
         userProjectRepo.save(userProject);
 
@@ -157,20 +157,22 @@ public class ProjectServiceImpl implements ProjectService {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
+        String tokenCode = request.getName().toUpperCase();
         TokenResponse tokenResponse;
         try {
-            tokenResponse = authServiceClient.getToken(auths, request.getName());
+            tokenResponse = authServiceClient.getToken(auths, tokenCode);
         } catch (Exception e) {
             throw new WrongAccessException(WRONG_TOKEN_CODE);
         }
 
-        switch (request.getName().toUpperCase()) {
+        switch (tokenCode) {
             case "JIRA":
-                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getJiraAccountId(), tokenResponse.getEmail());
+            case "SSAFYJIRA":
+                project.updateJira(tokenResponse.getValue(), request.getDetail(), tokenResponse.getJiraAccountId(), tokenResponse.getEmail(), tokenCode);
                 break;
             case "GIT":
             case "SSAFYGITLAB":
-                project.updateGit(tokenResponse.getValue(), request.getDetail());
+                project.updateGit(tokenResponse.getValue(), request.getDetail(), tokenCode);
                 break;
             default:
                 throw new NotFoundException(TOKEN_CODE_NOT_FOUND);
@@ -192,6 +194,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         switch (name.toUpperCase()) {
             case "JIRA":
+            case "SSAFYJIRA":
                 project.deleteJira();
                 break;
             case "GIT":
@@ -206,8 +209,8 @@ public class ProjectServiceImpl implements ProjectService {
     private List<String> getTokenList(Project project) {
         List<String> tokenList = new ArrayList<>();
 
-        if (project.getJiraToken() != null) tokenList.add("JIRA");
-        if (project.getGitToken() != null) tokenList.add("GIT");
+        if (project.getJiraType() != null) tokenList.add(project.getJiraType());
+        if (project.getGitType() != null) tokenList.add(project.getGitType());
 
         return tokenList;
     }
