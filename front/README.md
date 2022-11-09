@@ -439,3 +439,14 @@
 - `IssueInfo`-`InputBox` 컴포넌트 형식 forwardRef<HTMLInputElement, propsType>로 변경
 - `IssueInfo`-`SelectBox` 컴포넌트 형식 forwardRef<HTMLSelectElement, propsType>로 변경
   >- 내부에 targetRef를 새로 만들어 자식 컴포넌트에 ref로 접근할 수 있게 작성
+
+  ## 221108
+
+  ### 성현
+
+  - `MiddleBucket`에서 `IssueInfo` 데이터 수신 후 `IssueBar` 생성
+  - `IssuesPage` 스타일링
+  - `IssuesPage` 디렉토리 구조 수정
+    >- IssuesPage.tsx -> IssuesPage/index.tsx, style.ts
+  - 미들버킷 관련 Organism 디렉토리 구조 수정
+    >- organism/IssueInfo, MiddleBucket -> organism/issues/IssueInfo, MiddleBucket

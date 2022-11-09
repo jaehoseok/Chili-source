@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledIssueInfo = styled.div`
-  ${tw`flex flex-col w-3/5 px-4`}
+  ${tw`flex flex-col w-1/2 px-4`}
 `;
 
 export const StyledIssueHeader = styled.div`

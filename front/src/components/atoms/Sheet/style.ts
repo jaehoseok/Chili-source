@@ -41,10 +41,10 @@ export const StyledSheet = styled.div<styledType>`
           &::-webkit-scrollbar {
             width: 8px;
             border-radius: 6px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0);
           }
           &::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 6px;
           }
         `
