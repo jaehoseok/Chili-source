@@ -23,6 +23,14 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
     private final SsafyGitlabClient ssafyGitlabClient;
 
     @Override
+    public List<GitlabRepositoryResponse> findRepositoryList(String accessToken, String tokenCodeId, Long userId) {
+        TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
+
+        List<GitlabRepositoryResponse> repositories = ssafyGitlabClient.findRepository(tokenResponse.getValue());
+        return repositories;
+    }
+
+    @Override
     public GitlabDefaultResponse findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
         TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
