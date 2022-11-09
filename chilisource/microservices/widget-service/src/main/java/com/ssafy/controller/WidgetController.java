@@ -54,7 +54,7 @@ public class WidgetController {
     @DeleteMapping("/widget-codes/{widgetCodeId}")
     @ApiOperation(value = "위젯 코드 삭제")
     public ResponseEntity<?> deleteWidgetCode(
-            @ApiParam(value = "위젯 코드 pk")  @PathVariable(name = "widgetCodeId") String widgetCodeId
+            @ApiParam(value = "위젯 코드 pk") @PathVariable(name = "widgetCodeId") String widgetCodeId
     ) {
         widgetCodeService.deleteWidgetCode(widgetCodeId);
         return ResponseEntity.ok().build();
@@ -116,6 +116,17 @@ public class WidgetController {
     ) {
         widgetService.deleteAllWidget(projectId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/git/repositories")
+    @ApiOperation(value = "연동한 GIT에 있는 Repository 리스트 조회")
+    public ResponseEntity<?> getGitRepository(
+            HttpServletRequest request,
+            @LoginUser User user,
+            @ApiParam(value = "토큰 코드 pk") @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId
+    ) {
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return ResponseEntity.ok(ssafyGitlabService.findRepositoryList(accessToken, tokenCodeId, user.getId()));
     }
 
     @GetMapping("/widgets/small/{widgetType}")
