@@ -58,3 +58,7 @@ export const usePostConnectTokenToProject = () => {
     project.postConnectTokenToProject(detail, name, projectId),
   );
 };
+
+export const useGetTeamForProject = (projectId: number) => {
+  return useQuery(['get-team-for-project', projectId], () => project.getTeamForProject(projectId));
+};

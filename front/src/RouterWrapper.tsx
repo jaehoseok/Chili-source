@@ -24,9 +24,6 @@ import IssuesPage from 'components/pages/IssuesPage';
 import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
-// common
-import HeaderInit from 'components/organisms/common/HeaderInitNav';
-
 /**
  *
  * @description
