@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, ChangeEvent } from 'react';
+import { useEffect, useState, useRef, forwardRef, ForwardedRef, ChangeEvent } from 'react';
 
 import { SetterOrUpdater } from 'recoil';
 
@@ -8,6 +8,8 @@ interface propsType extends styledType {
   type?: string;
   placeHolder?: string;
   defaultValue?: string;
+  text?: any;
+  setText?: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useSetRecoilState?: SetterOrUpdater<any>;
   recoilParam?: string;
@@ -29,58 +31,77 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-const index = ({
-  height,
-  width,
-  type,
-  placeHolder,
-  defaultValue,
-  useSetRecoilState,
-  recoilParam,
-}: propsType) => {
-  const [text, setText] = useState(defaultValue);
 
-  const inputTag = useRef<HTMLInputElement>(null);
+const index = forwardRef<HTMLInputElement, propsType>(
+  (
+    {
+      height,
+      width,
+      type,
+      placeHolder,
+      defaultValue,
+      text,
+      setText,
+      useSetRecoilState,
+      recoilParam,
+    },
+    ref,
+  ) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
 
-  const setInputValue = useSetRecoilState;
+      useEffect(() => {
+        if (!ref) return;
 
-  const changeHandler = (e?: ChangeEvent<HTMLInputElement>) => {
-    e && setText(e.target.value);
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
 
-    if (useSetRecoilState && recoilParam)
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setInputValue(prevObj => {
-        return {
-          ...prevObj,
-          [recoilParam]: e ? e.target.value : defaultValue ? defaultValue : '',
-        };
-      });
-  };
+      return targetRef;
+    };
 
-  useEffect(() => {
-    setText(defaultValue);
-    changeHandler();
-  }, [defaultValue]);
-  useEffect(() => {
-    if (inputTag.current) {
-      inputTag.current.value = text ? text : '';
-    }
-  }, [text]);
+    const inputRef = useForwardRef<HTMLInputElement>(ref);
+    useEffect(() => {
+      setText(defaultValue);
+      changeHandler();
+    }, [defaultValue]);
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.value = text ? text : '';
+      }
+    }, [text]);
+    const setInputValue = useSetRecoilState;
 
-  return (
-    <>
-      <StyledInput
-        ref={inputTag}
-        height={height}
-        width={width}
-        type={type}
-        placeholder={placeHolder}
-        onChange={changeHandler}
-        defaultValue={text}
-      ></StyledInput>
-    </>
-  );
-};
+    const changeHandler = (e?: ChangeEvent<HTMLInputElement>) => {
+      e && setText(e.target.value);
+
+      if (useSetRecoilState && recoilParam)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        setInputValue(prevObj => {
+          return {
+            ...prevObj,
+            [recoilParam]: e ? e.target.value : defaultValue ? defaultValue : '',
+          };
+        });
+    };
+    return (
+      <>
+        <StyledInput
+          ref={inputRef}
+          height={height}
+          width={width}
+          type={type}
+          placeholder={placeHolder}
+          onChange={changeHandler}
+          defaultValue={text}
+        ></StyledInput>
+      </>
+    );
+  },
+);
 
 export default index;

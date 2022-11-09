@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef, ForwardedRef, useRef, useEffect, useState } from 'react';
 
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 
@@ -32,28 +32,57 @@ interface propsType extends styledLabelType, styledContainerType {
  *
  * @author bell
  */
-const index = ({
-  labelName,
-  labelSize,
-  labelWeight,
-  labelMarginBottom,
-  selectWidth,
-  selectSize,
-  containerPadding,
-  children,
-}: propsType) => {
-  return (
-    <StyledContainer containerPadding={containerPadding}>
-      <StyledLabel
-        labelSize={labelSize}
-        labelWeight={labelWeight}
-        labelMarginBottom={labelMarginBottom}
-      >
-        {labelName}
-      </StyledLabel>
-      <Select width={selectWidth} fontSize={selectSize} children={children}></Select>
-    </StyledContainer>
-  );
-};
+const index = forwardRef<HTMLSelectElement, propsType>(
+  (
+    {
+      labelName,
+      labelSize,
+      labelWeight,
+      labelMarginBottom,
+      selectWidth,
+      selectSize,
+      containerPadding,
+      children,
+    },
+    ref,
+  ) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+    const [text, setText] = useState('');
+    const inputRef = useForwardRef<HTMLSelectElement>(ref);
+    return (
+      <StyledContainer containerPadding={containerPadding}>
+        <StyledLabel
+          labelSize={labelSize}
+          labelWeight={labelWeight}
+          labelMarginBottom={labelMarginBottom}
+        >
+          {labelName}
+        </StyledLabel>
+        <Select
+          width={selectWidth}
+          fontSize={selectSize}
+          children={children}
+          ref={inputRef}
+          text={text}
+          setText={setText}
+        ></Select>
+      </StyledContainer>
+    );
+  },
+);
 
 export default index;

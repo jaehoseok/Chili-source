@@ -421,6 +421,14 @@
 - Notification
   > - 프로젝트가 성공적으로 생성시 성공적으로 생성되었다는 알림이 나오게 함
 
+### 성현
+
+- `IssueInfo`-`SelectBox` 에러 해결
+  >- 'setValue is not a function' 에러 - 생성된 해당 컴포넌트 전부에 props를 넣으니 해결됐다.
+
+- `IssueInfo`-`InputBox` 컴포넌트 형식 forwardRef<HTMLInputElement, propsType>로 변경
+- `IssueInfo`-`SelectBox` 컴포넌트 형식 forwardRef<HTMLSelectElement, propsType>로 변경
+  >- 내부에 targetRef를 새로 만들어 자식 컴포넌트에 ref로 접근할 수 있게 작성
 
 ## 221108
 ### 종현
@@ -436,3 +444,10 @@
   > - 팀원 조회 통신 완료
   > - 팀장 및 팀원 이미지 렌더링 projectSummary 컴포넌트에 렌더링
 
+### 성현
+  - `MiddleBucket`에서 `IssueInfo` 데이터 수신 후 `IssueBar` 생성
+  - `IssuesPage` 스타일링
+  - `IssuesPage` 디렉토리 구조 수정
+    >- IssuesPage.tsx -> IssuesPage/index.tsx, style.ts
+  - 미들버킷 관련 Organism 디렉토리 구조 수정
+    >- organism/IssueInfo, MiddleBucket -> organism/issues/IssueInfo, MiddleBucket

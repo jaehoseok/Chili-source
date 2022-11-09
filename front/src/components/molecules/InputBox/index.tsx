@@ -1,3 +1,4 @@
+import { forwardRef, ForwardedRef, useRef, useEffect, useState } from 'react';
 import { StyledLabel, StyledContainer, styledLabelType, styledContainerType } from './style';
 import Input from 'components/atoms/Input';
 import { SetterOrUpdater } from 'recoil';
@@ -43,47 +44,75 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
-const index = ({
-  inputHeight,
-  inputWidth,
-  inputValue,
-  inputType,
-  inputPlaceHolder,
-  labelName,
-  labelSize,
-  labelWeight,
-  labelMarginBottom,
-  isRow,
-  containerWidth,
-  containerPadding,
-  useSetRecoilState,
-  recoilParam,
-}: propsType) => {
-  return (
-    <StyledContainer
-      isRow={isRow}
-      containerPadding={containerPadding}
-      containerWidth={containerWidth}
-    >
-      <StyledLabel
+
+const index = forwardRef<HTMLInputElement, propsType>(
+  (
+    {
+      inputHeight,
+      inputWidth,
+      inputValue,
+      inputType,
+      inputPlaceHolder,
+      labelName,
+      labelSize,
+      labelWeight,
+      labelMarginBottom,
+      isRow,
+      containerWidth,
+      containerPadding,
+      useSetRecoilState,
+      recoilParam,
+    },
+    ref,
+  ) => {
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const [text, setText] = useState(inputValue);
+    const inputRef = useForwardRef<HTMLInputElement>(ref);
+
+    return (
+      <StyledContainer
         isRow={isRow}
-        labelSize={labelSize}
-        labelWeight={labelWeight}
-        labelMarginBottom={labelMarginBottom}
+        containerPadding={containerPadding}
+        containerWidth={containerWidth}
       >
-        {labelName}
-      </StyledLabel>
-      <Input
-        height={inputHeight}
-        width={inputWidth}
-        type={inputType}
-        placeHolder={inputPlaceHolder}
-        defaultValue={inputValue}
-        useSetRecoilState={useSetRecoilState}
-        recoilParam={recoilParam}
-      ></Input>
-    </StyledContainer>
-  );
-};
+        <StyledLabel
+          isRow={isRow}
+          labelSize={labelSize}
+          labelWeight={labelWeight}
+          labelMarginBottom={labelMarginBottom}
+        >
+          {labelName}
+        </StyledLabel>
+        <Input
+          ref={inputRef}
+          height={inputHeight}
+          width={inputWidth}
+          type={inputType}
+          placeHolder={inputPlaceHolder}
+          defaultValue={inputValue}
+          text={text}
+          setText={setText}
+          useSetRecoilState={useSetRecoilState}
+          recoilParam={recoilParam}
+        ></Input>
+      </StyledContainer>
+    );
+  },
+);
 
 export default index;
