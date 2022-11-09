@@ -9,6 +9,7 @@ import { issueType } from 'components/pages/IssuesPage';
 
 const index = (props: any) => {
   const issue = {
+    templateId: props.info.templateId,
     project: props.info.project,
     type: props.info.type,
     summary: props.info.summary,
@@ -33,6 +34,7 @@ const index = (props: any) => {
 
   const BarList = bucket.map(issue => (
     <IssueBar
+      templateId={issue.templateId}
       project={issue.project}
       type={issue.type}
       summary={issue.summary}

@@ -7,6 +7,7 @@ import Issue from 'components/molecules/Issue';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
 export type issueType = {
+  templateId: number;
   project: string;
   type: string;
   summary: string;
@@ -20,6 +21,7 @@ export type issueType = {
 };
 const index = () => {
   const issue: issueType = {
+    templateId: 0,
     project: '',
     type: '',
     summary: '',

@@ -14,6 +14,7 @@ const index = (props: any) => {
   const [issues, setIssues] = useState<issueType[]>([]);
   const IssueList = issues.map(issue => (
     <Issue
+      templateId={issue.templateId}
       project={issue.project}
       type={issue.type}
       summary={issue.summary}
@@ -28,6 +29,7 @@ const index = (props: any) => {
     />
   ));
   const issue1: issueType = {
+    templateId: 1,
     project: '프로젝트1',
     type: 'story',
     summary: '이슈1',
@@ -40,6 +42,7 @@ const index = (props: any) => {
     storyPoints: 8,
   };
   const issue2: issueType = {
+    templateId: 2,
     project: '프로젝트2',
     type: 'task',
     summary: '이슈2',
@@ -52,6 +55,7 @@ const index = (props: any) => {
     storyPoints: 4,
   };
   const issue3: issueType = {
+    templateId: 3,
     project: '프로젝트3',
     type: 'bug',
     summary: '이슈3',

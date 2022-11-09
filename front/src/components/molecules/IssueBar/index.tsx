@@ -10,6 +10,7 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 interface propsType extends styledType {
+  templateId?: number;
   project?: string;
   summary?: string;
   description?: string;
@@ -32,10 +33,11 @@ interface propsType extends styledType {
  * <IssueBar summary={'이슈 제목'} epicLink={'에픽'} assignee={'담당자'} rank={'우선순위'} type={'bug'} storyPoints={4}/>
  *
  *
- * @param {string?} width           - 이슈 템플릿 넓이 [default: 400px]
- * @param {string?} height          - 이슈 템플릿 높이 [default: 90px]
- * @param {string} type             - 이슈 유형 ['story', 'task', 'bug']
+ * @param {string?} width           - 이슈 바 넓이 [default: 400px]
+ * @param {string?} height          - 이슈 바 높이 [default: 90px]
+ * @param {string?} templateId      - 이슈 템플릿 ID
  * @param {string?} project         - 프로젝트 이름
+ * @param {string} type             - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary         - 이슈 제목
  * @param {string?} description     - 이슈 설명
  * @param {string?} reporter        - 보고자
@@ -51,6 +53,7 @@ interface propsType extends styledType {
 const index = ({
   width,
   height,
+  templateId,
   project,
   type,
   summary,
