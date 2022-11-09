@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { StyledIssuesPage, StyledHeader, StyledBody } from './style';
-import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
+import IssueTemplate from 'components/organisms/project/issues/IssueTemplate';
 import IssueInfo from 'components/organisms/project/issues/IssueInfo';
+import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
 import Issue from 'components/molecules/Issue';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
@@ -39,7 +40,8 @@ const index = () => {
         <HeaderNav></HeaderNav>
       </StyledHeader>
       <StyledBody>
-        <div>
+        <IssueTemplate></IssueTemplate>
+        {/* <div>
           <Issue
             project={'프로젝트 명'}
             summary={'이슈 제목'}
@@ -63,7 +65,7 @@ const index = () => {
             storyPoints={4}
             clickHandler={setInfoHandler}
           />
-        </div>
+        </div> */}
         <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
         <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>
