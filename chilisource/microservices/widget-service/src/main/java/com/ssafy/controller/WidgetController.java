@@ -143,9 +143,8 @@ public class WidgetController {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         switch (type) {
             case SSAFYGITLAB: {
-                System.out.println("branch : " + branch + " is Empty : " + branch.isEmpty() );
                 if (branch.isEmpty())
-                    return ResponseEntity.ok(ssafyGitlabService.findMergeRequest(accessToken, type.name(), projectId, user.getId()));
+                    return ResponseEntity.ok(ssafyGitlabService.findMergeRequest(accessToken, tokenCodeId, projectId, user.getId()));
                 else
                     return ResponseEntity.ok(ssafyGitlabService.findCommits(accessToken, tokenCodeId, projectId, user.getId(), branch));
             }
