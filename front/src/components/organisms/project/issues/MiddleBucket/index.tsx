@@ -12,6 +12,7 @@ const index = (props: any) => {
     project: props.info.project,
     type: props.info.type,
     summary: props.info.summary,
+    description: props.info.description,
     reporter: props.info.reporter,
     assignee: props.info.assignee,
     rank: props.info.rank,
@@ -33,12 +34,13 @@ const index = (props: any) => {
   const BarList = bucket.map(issue => (
     <IssueBar
       project={issue.project}
+      type={issue.type}
       summary={issue.summary}
+      description={issue.description}
       epicLink={issue.epicLink}
       reporter={issue.reporter}
       assignee={issue.assignee}
       rank={issue.rank}
-      type={issue.type}
       sprint={issue.sprint}
       storyPoints={issue.storyPoints}
     />

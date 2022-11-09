@@ -11,7 +11,7 @@ export interface styledIssueType {
 }
 
 export const StyledIssue = styled.div<styledType>`
-  ${tw`flex flex-col rounded-2xl shadow font-bold my-1`};
+  ${tw`flex flex-col rounded-2xl shadow font-bold`};
 
   ${({ width }) => `width: ${width}`};
   ${({ height }) => `height: ${height}`};
@@ -27,7 +27,9 @@ export const StyledIssueBottom = styled.div`
   height: 50%;
 `;
 
-export const StyledIssueTopLeft = styled.div``;
+export const StyledIssueTopRight = styled.div`
+  ${tw`flex items-center px-2`}
+`;
 
 export const StyledIssueBottomElement = styled.div`
   ${tw`flex justify-end items-center`};

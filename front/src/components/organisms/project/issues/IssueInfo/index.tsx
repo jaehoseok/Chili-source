@@ -20,6 +20,7 @@ const index = (props: any) => {
   const projectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const reporterRef = useRef<HTMLSelectElement>(null);
   const assigneeRef = useRef<HTMLSelectElement>(null);
   const rankRef = useRef<HTMLSelectElement>(null);
@@ -45,6 +46,7 @@ const index = (props: any) => {
                   : 'error'
                 : '',
               summary: summaryRef.current ? summaryRef.current.value : '',
+              description: descriptionRef.current ? descriptionRef.current.value : '',
               epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
               reporter: reporterRef.current ? reporterRef.current.value : '',
               assignee: assigneeRef.current ? assigneeRef.current.value : '',
@@ -75,7 +77,7 @@ const index = (props: any) => {
             inputValue={props.info.summary}
             ref={summaryRef}
           />
-          <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.summary} />
+          <TextAreaBox isRow={false} labelName={'설명'} textAreaValue={props.info.description} />
           <SelectBox labelName={'보고자'} ref={reporterRef}>
             <Option messages={['팀원1', '팀원2', '팀원3']} selected={props.info.reporter}></Option>
           </SelectBox>

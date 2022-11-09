@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { StyledIssueTemplate, StyledHeader, StyledBody } from './style';
-import Issue from 'components/molecules/Issue';
 import { issueType } from 'components/pages/IssuesPage';
+import Issue from 'components/molecules/Issue';
+import Circle from 'components/atoms/Circle';
+import Text from 'components/atoms/Text';
+import Button from 'components/atoms/Button';
 
 const index = (props: any) => {
   const setInfoHandler = (issue: issueType) => {
@@ -27,6 +30,7 @@ const index = (props: any) => {
     project: '프로젝트1',
     type: 'story',
     summary: '이슈1',
+    description: '설명1',
     reporter: '팀원1',
     assignee: '팀원3',
     rank: 'Low',
@@ -38,6 +42,7 @@ const index = (props: any) => {
     project: '프로젝트2',
     type: 'task',
     summary: '이슈2',
+    description: '설명2',
     reporter: '팀원2',
     assignee: '팀원2',
     rank: 'Medium',
@@ -49,6 +54,7 @@ const index = (props: any) => {
     project: '프로젝트3',
     type: 'bug',
     summary: '이슈3',
+    description: '설명3',
     reporter: '팀원3',
     assignee: '팀원1',
     rank: 'Highest',
@@ -62,8 +68,24 @@ const index = (props: any) => {
 
   return (
     <StyledIssueTemplate>
-      <StyledHeader>header</StyledHeader>
-      <StyledBody>{IssueList}</StyledBody>
+      <StyledHeader>
+        <Circle height={'5rem'}>로고</Circle>
+        <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
+      </StyledHeader>
+      <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
+
+      <StyledBody>
+        <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
+        {IssueList}
+        <Button
+          width={'400px'}
+          height={'90px'}
+          borderColor={'#d9d9d9'}
+          clickHandler={() => alert('btn test')}
+        >
+          +
+        </Button>
+      </StyledBody>
     </StyledIssueTemplate>
   );
 };

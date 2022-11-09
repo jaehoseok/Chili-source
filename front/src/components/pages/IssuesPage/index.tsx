@@ -10,6 +10,7 @@ export type issueType = {
   project: string;
   type: string;
   summary: string;
+  description: string;
   reporter: string;
   assignee: string;
   rank: string;
@@ -22,6 +23,7 @@ const index = () => {
     project: '',
     type: '',
     summary: '',
+    description: '',
     reporter: '',
     assignee: '',
     rank: '',
