@@ -47,3 +47,14 @@ export const useDeleteProject = () => {
   }
   return useMutation(({ projectId }: pathType) => project.deleteProject(projectId));
 };
+
+export const usePostConnectTokenToProject = () => {
+  interface requestBodyType {
+    detail: string;
+    name: string;
+    projectId: number;
+  }
+  return useMutation(({ detail, name, projectId }: requestBodyType) =>
+    project.postConnectTokenToProject(detail, name, projectId),
+  );
+};

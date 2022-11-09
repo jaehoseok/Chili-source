@@ -1,11 +1,28 @@
+<<<<<<< HEAD
 import { ReactNode, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
+=======
+import {
+  ReactNode,
+  ChangeEvent,
+  SetStateAction,
+  Dispatch,
+  useEffect,
+  useState,
+  useRef,
+  RefObject,
+} from 'react';
+>>>>>>> fa3ba9846c6d898da2f45cd795dae5a8dc0268be
 
 import { StyledSelect, styledType } from './style';
 
 interface propsType extends styledType {
   children: ReactNode;
+<<<<<<< HEAD
   text?: any;
   setText?: any;
+=======
+  setJiraProject?: Dispatch<SetStateAction<string>>;
+>>>>>>> fa3ba9846c6d898da2f45cd795dae5a8dc0268be
 }
 
 /**
@@ -19,6 +36,7 @@ interface propsType extends styledType {
  *
  * @author bell
  */
+<<<<<<< HEAD
 const index = forwardRef<HTMLSelectElement, propsType>(
   ({ children, width, fontSize, setText }, ref) => {
     const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
@@ -50,5 +68,35 @@ const index = forwardRef<HTMLSelectElement, propsType>(
     );
   },
 );
+=======
+const index = ({ children, width, fontSize, setJiraProject }: propsType) => {
+  // const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+  //   console.log(e);
+  //   if (setJiraProject) {
+  //     const idx = e.target.selectedIndex;
+  //     setJiraProject(e.target.options[idx].value);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (setJiraProject) {
+  //     setJiraProject('반영은 됨');
+  //   }
+  // }, []);
+
+  const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+    const idx = e.target.selectedIndex;
+    if (setJiraProject) {
+      setJiraProject(e.target.options[idx].value);
+    }
+  };
+
+  return (
+    <StyledSelect width={width} fontSize={fontSize} onChange={changeJiraProjectHandler}>
+      {children}
+    </StyledSelect>
+  );
+};
+>>>>>>> fa3ba9846c6d898da2f45cd795dae5a8dc0268be
 
 export default index;
