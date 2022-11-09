@@ -451,3 +451,9 @@
     >- IssuesPage.tsx -> IssuesPage/index.tsx, style.ts
   - 미들버킷 관련 Organism 디렉토리 구조 수정
     >- organism/IssueInfo, MiddleBucket -> organism/issues/IssueInfo, MiddleBucket
+
+## 221109
+### 종현
+- NavProject & NavWidget
+  > - recoil nav데이터 localStorage로 이관
+  > - tab 삭제, tab 활성화 함수 정상작동하도록 이관
