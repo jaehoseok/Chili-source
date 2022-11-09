@@ -31,41 +31,14 @@ const index = () => {
   };
   const [info, setInfo] = useState<issueType>(issue);
   const [isInsert, setIsInsert] = useState(false);
-  const setInfoHandler = (props: issueType) => {
-    setInfo(props);
-  };
+
   return (
     <StyledIssuesPage>
       <StyledHeader>
         <HeaderNav></HeaderNav>
       </StyledHeader>
       <StyledBody>
-        <IssueTemplate></IssueTemplate>
-        {/* <div>
-          <Issue
-            project={'프로젝트 명'}
-            summary={'이슈 제목'}
-            epicLink={'에픽1'}
-            reporter={'팀원1'}
-            assignee={'팀원3'}
-            rank={'Low'}
-            type={'story'}
-            sprint={'스프린트1'}
-            storyPoints={8}
-            clickHandler={setInfoHandler}
-          />
-          <Issue
-            summary={'이슈 제목2'}
-            epicLink={'에픽2'}
-            reporter={'팀원2'}
-            assignee={'팀원2'}
-            rank={'High'}
-            type={'task'}
-            sprint={'스프린트2'}
-            storyPoints={4}
-            clickHandler={setInfoHandler}
-          />
-        </div> */}
+        <IssueTemplate setInfo={setInfo}></IssueTemplate>
         <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
         <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>

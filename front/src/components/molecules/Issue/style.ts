@@ -11,7 +11,7 @@ export interface styledIssueType {
 }
 
 export const StyledIssue = styled.div<styledType>`
-  ${tw`flex flex-col rounded-2xl shadow font-bold`};
+  ${tw`flex flex-col rounded-2xl shadow font-bold my-1`};
 
   ${({ width }) => `width: ${width}`};
   ${({ height }) => `height: ${height}`};
