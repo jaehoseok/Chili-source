@@ -34,7 +34,7 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
     public GitlabDefaultResponse findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
         TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
-
+        log.info("token feign : {}",tokenResponse.getValue());
         List<Branch> branches = ssafyGitlabClient.findBranch(tokenResponse.getValue(), projectResponse.getGitRepo());
         if (branches.isEmpty()) throw new InternalServerErrorException(GIT_COMMUNICATION_ERROR);
         List<GitlabMergeRequestResponse> gitlabMergeRequestResponses = ssafyGitlabClient.findMergeRequest(tokenResponse.getValue(), projectResponse.getGitRepo());

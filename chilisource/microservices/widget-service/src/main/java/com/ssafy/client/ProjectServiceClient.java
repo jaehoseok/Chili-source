@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "project-service", url = "https://k7b2071.p.ssafy.io/project-service")
 public interface ProjectServiceClient {
-    @GetMapping("/{projectId}")
+    @GetMapping("/project/{projectId}")
     ProjectResponse findProject(
             @PathVariable(value = "projectId") Long project_id);
 
