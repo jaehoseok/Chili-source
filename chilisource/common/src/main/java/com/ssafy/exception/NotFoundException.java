@@ -17,6 +17,7 @@ public class NotFoundException extends RuntimeException {
     public static final String WIDGET_CODE_NOT_FOUND = "존재하지 않는 WIDGET CODE 입니다.";
     public static final String WIDGET_NOT_FOUND = "존재하지 않는 WIDGET 입니다.";
     public static final String ISSUE_NOT_FOUND_IN_MIDDLE_BUCKET = "해당 이슈는 미들 버킷 내에 없습니다.";
+    public static final String ROLE_NOT_FOUND = "존재하지 않는 권한 입니다.";
 
     public NotFoundException(String message) {
         super(message);

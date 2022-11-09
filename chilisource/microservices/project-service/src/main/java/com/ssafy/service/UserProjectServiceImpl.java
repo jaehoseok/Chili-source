@@ -2,6 +2,7 @@ package com.ssafy.service;
 
 import com.ssafy.client.UserServiceClient;
 import com.ssafy.dto.request.UserProjectCreateRequest;
+import com.ssafy.dto.request.UserProjectRoleUpdateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.RoleResponse;
 import com.ssafy.dto.response.UserProjectResponse;
@@ -9,6 +10,7 @@ import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.Project;
 import com.ssafy.entity.Role;
 import com.ssafy.entity.UserProject;
+import com.ssafy.exception.DuplicateException;
 import com.ssafy.exception.NotAuthorizedException;
 import com.ssafy.exception.NotFoundException;
 import com.ssafy.repository.ProjectRepo;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.ssafy.exception.DuplicateException.USER_PROJECT_DUPLICATED;
 import static com.ssafy.exception.NotAuthorizedException.*;
 import static com.ssafy.exception.NotFoundException.*;
 
@@ -55,12 +58,18 @@ public class UserProjectServiceImpl implements UserProjectService {
             throw new NotFoundException(USER_NOT_FOUND);
         }
 
+        // 중복 여부 확인
+        if (userProjectRepo.findByUserIdAndProjectId(request.getUserId(), request.getProjectId()).isPresent()) {
+            throw new DuplicateException(USER_PROJECT_DUPLICATED);
+        }
+
         // 초대 권한 확인
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
         if (!userProjectManager.getRole().getInvite()) {
             throw new NotAuthorizedException(INVITE_NOT_AUTHORIZED);
         }
+
         // 프로젝트 초대
         UserProject userProject = UserProject.builder()
                 .userColor(request.getUserColor())
@@ -81,11 +90,51 @@ public class UserProjectServiceImpl implements UserProjectService {
         // 변경 권한 확인
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
-        if (!userProjectManager.getRole().getInvite()) {
+        if (!userProjectManager.getRole().getModify()) {
             throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
         }
         // 팀원 정보 수정
-        userProject.update(request.getUserColor(), roleRepo.findById(request.getRoleId()).get());
+        userProject.update(request.getUserColor());
+    }
+
+    // 프로젝트 팀원 권한 수정
+    @Override
+    @Transactional
+    public void updateUserProjectRole(Long userId, UserProjectRoleUpdateRequest request) {
+        // 팀원 존재 확인
+        UserProject userProject = userProjectRepo.findByUserIdAndProjectId(request.getUserId(), request.getProjectId())
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        // 변경 권한 확인
+        UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
+        if (!userProjectManager.getRole().getModify()) {
+            throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
+        }
+
+        Role role = roleRepo.findById(request.getRoleId().toUpperCase())
+                .orElseThrow(() -> new NotFoundException(ROLE_NOT_FOUND));
+
+        // 마스터 권한 위임 아니면서 본인 여부 확인
+        if (!"MASTER".equalsIgnoreCase(role.getId()) && userId.equals(request.getUserId())) {
+            throw new NotAuthorizedException(SELF_MODIFY_NOT_AUTHORIZED);
+        }
+
+        switch (userProjectManager.getRole().getId().toUpperCase()) {
+            case "MASTER":
+                // 마스터 권한 위임
+                if ("MASTER".equalsIgnoreCase(role.getId())) {
+                    userProjectManager.updateRole(roleRepo.findById("MAINTAINER").get());
+                }
+                break;
+            case "MAINTAINER":
+                if ("MASTER".equalsIgnoreCase(role.getId())) {
+                    throw new NotAuthorizedException(MODIFY_HIGHER_AUTHORITY_NOT_AUTHORIZED);
+                }
+                break;
+        }
+
+        // 팀원 권한 수정
+        userProject.updateRole(role);
     }
 
     // 프로젝트 팀원 목록 조회
