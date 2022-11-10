@@ -110,17 +110,7 @@ const index = memo(() => {
 
   // 첫 유저인 경우, localStorage에 'project-tab-list' 아직 안만든 경우
   if (!GETTABPROJECT) {
-    localStorage.setItem(
-      'project-tab-list',
-      JSON.stringify([
-        {
-          id: +currProjectId,
-          isActivated: true,
-          title: getProject.data && getProject.data.name,
-          widgetList: [{ isActivated: true, title: '대시보드' }],
-        },
-      ]),
-    );
+    if (getProject) localStorage.setItem('project-tab-list', JSON.stringify([]));
   }
 
   // 현재 탭리스트 값
@@ -129,7 +119,7 @@ const index = memo(() => {
   // 현재 탭리스트 변경시 리렌더링 되도록 설정
   useEffect(() => {
     console.log('리렌더링');
-  }, [projectTabList]);
+  }, [projectTabList, getProject, GETTABPROJECT]);
 
   // 프로젝트 탭을 활성화시키는 함수
   // 해당 Tab이 활성화 되는 경우, 다른 Tab은 활성화가 종료 되며,
@@ -414,11 +404,11 @@ const index = memo(() => {
 
   // 현재 킨 프로젝트가 이미 localStorage로 데이터가 있는지 확인
   let check = true;
+  projectTabList.forEach(item => {
+    item.isActivated = false;
+  });
   for (let i = 0; i < projectTabList.length; i++) {
     if (projectTabList[i].id === +currProjectId) {
-      projectTabList.forEach(item => {
-        item.isActivated = false;
-      });
       projectTabList[i].isActivated = true;
       localStorage.setItem('project-tab-list', JSON.stringify(projectTabList));
       projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
@@ -428,13 +418,9 @@ const index = memo(() => {
   }
 
   if (check) {
-    // 현재 킨 프로젝트가 처음 들어가는 프로젝트 인 경우 -> 프로젝트 탭을 만들어야 하는 경우
-    // 일단 모든 탭 false로
-    projectTabList.forEach(item => {
-      item.isActivated = false;
-    });
     // 프로젝트 데이터 추가
     if (getProject.data) {
+      console.log(getProject.data);
       localStorage.setItem(
         'project-tab-list',
         JSON.stringify([
