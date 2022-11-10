@@ -35,6 +35,7 @@ const index = (props: any) => {
           borderColor="green"
           clickHandler={() => {
             props.setInfo({
+              templateId: props.info.templateId,
               project: projectRef.current ? projectRef.current.value : '',
               type: typeRef.current
                 ? typeRef.current.value === '스토리'

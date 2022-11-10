@@ -8,8 +8,10 @@ import IssueBar from 'components/molecules/IssueBar';
 import { issueType } from 'components/pages/IssuesPage';
 
 const index = (props: any) => {
+  const [issueId, setIssueId] = useState(0);
   const issue = {
     templateId: props.info.templateId,
+    issueId: issueId,
     project: props.info.project,
     type: props.info.type,
     summary: props.info.summary,
@@ -28,6 +30,7 @@ const index = (props: any) => {
     if (props.isInsert) {
       bucket.push(issue);
       setBucket(bucket);
+      setIssueId(issueId + 1);
       props.setIsInsert(false);
     }
   }, [props.isInsert]);
@@ -35,6 +38,7 @@ const index = (props: any) => {
   const BarList = bucket.map(issue => (
     <IssueBar
       templateId={issue.templateId}
+      issueId={issue.issueId}
       project={issue.project}
       type={issue.type}
       summary={issue.summary}

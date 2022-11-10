@@ -11,6 +11,7 @@ import Circle from '../../atoms/Circle';
 
 interface propsType extends styledType {
   templateId?: number;
+  issueId?: number;
   project?: string;
   summary?: string;
   description?: string;
@@ -36,6 +37,7 @@ interface propsType extends styledType {
  * @param {string?} width           - 이슈 바 넓이 [default: 400px]
  * @param {string?} height          - 이슈 바 높이 [default: 90px]
  * @param {string?} templateId      - 이슈 템플릿 ID
+ * @param {string?} issueId         - 이슈 ID
  * @param {string?} project         - 프로젝트 이름
  * @param {string} type             - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary         - 이슈 제목
@@ -54,6 +56,7 @@ const index = ({
   width,
   height,
   templateId,
+  issueId,
   project,
   type,
   summary,

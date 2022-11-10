@@ -6,7 +6,10 @@ import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
 import Issue from 'components/molecules/Issue';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
-export type issueType = {
+export interface issueType extends templateType {
+  issueId: number;
+}
+export interface templateType {
   templateId: number;
   project: string;
   type: string;
@@ -18,10 +21,11 @@ export type issueType = {
   epicLink: string;
   sprint: string;
   storyPoints: number;
-};
+}
 const index = () => {
   const issue: issueType = {
     templateId: 0,
+    issueId: 0,
     project: '',
     type: '',
     summary: '',

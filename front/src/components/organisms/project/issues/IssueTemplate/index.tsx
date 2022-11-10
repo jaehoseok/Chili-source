@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react';
 import { StyledIssueTemplate, StyledHeader, StyledBody } from './style';
-import { issueType } from 'components/pages/IssuesPage';
+import { issueType, templateType } from 'components/pages/IssuesPage';
 import Issue from 'components/molecules/Issue';
 import Circle from 'components/atoms/Circle';
 import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
 
 const index = (props: any) => {
-  const setInfoHandler = (issue: issueType) => {
+  const setInfoHandler = (issue: templateType) => {
     props.setInfo(issue);
   };
 
-  const [issues, setIssues] = useState<issueType[]>([]);
+  const [issues, setIssues] = useState<templateType[]>([]);
   const IssueList = issues.map(issue => (
     <Issue
       templateId={issue.templateId}
@@ -28,7 +28,7 @@ const index = (props: any) => {
       clickHandler={setInfoHandler}
     />
   ));
-  const issue1: issueType = {
+  const issue1: templateType = {
     templateId: 1,
     project: '프로젝트1',
     type: 'story',
@@ -41,7 +41,7 @@ const index = (props: any) => {
     sprint: '스프린트1',
     storyPoints: 8,
   };
-  const issue2: issueType = {
+  const issue2: templateType = {
     templateId: 2,
     project: '프로젝트2',
     type: 'task',
@@ -54,7 +54,7 @@ const index = (props: any) => {
     sprint: '스프린트2',
     storyPoints: 4,
   };
-  const issue3: issueType = {
+  const issue3: templateType = {
     templateId: 3,
     project: '프로젝트3',
     type: 'bug',
