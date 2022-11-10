@@ -5,6 +5,7 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
+import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -50,5 +51,12 @@ public interface JiraFeignClient {
     JiraSprintListResponse getSprints(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable(name = "boardId") Long boardId
+    );
+
+    // JQL 검색 결과
+    @GetMapping("/api/3/search?jql={query}")
+    JiraSearchIssueListResponse getSearchIssues(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("query") String query
     );
 }
