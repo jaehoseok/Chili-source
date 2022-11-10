@@ -12,6 +12,9 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintResponse;
+import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
@@ -534,5 +537,55 @@ public class IssueServiceImpl implements IssueService {
             }
             throw new BadRequestException(errorDetail);
         }
+    }
+
+    @Override
+    public JiraSprintProgressResponse getSprintProgress(User user, List<String> auths, Long projectId, Long sprintId) {
+        JiraSprintListResponse sprints = getSprints(user, auths, projectId);
+
+        List<JiraSprintResponse> sprintList = sprints.getValues();
+
+        if (sprintId == null) {
+            for (JiraSprintResponse sprint : sprintList) {
+                if ("active".equalsIgnoreCase(sprint.getState())) {
+                    sprintId = sprint.getId();
+                    break;
+                }
+            }
+        } else {
+            boolean find = false;
+            for (JiraSprintResponse sprint : sprintList) {
+                if (sprintId.equals(sprint.getId())) {
+                    find = true;
+                    break;
+                }
+            }
+
+            if (!find) throw new NotFoundException(SPRINT_ID_NOT_FOUND);
+        }
+
+        if (sprintId == null) {
+            throw new NotFoundException(SPRINT_NOT_FOUND);
+        }
+
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        String projectKey = response.getJiraProject();
+
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+
+        String query = "project = " + projectKey + " AND assignee = currentUser() AND sprint = " + sprintId + " ORDER BY created DESC";
+        JiraSearchIssueListResponse totalIssues = jiraFeignClient.getSearchIssues(jiraBase64, query);
+
+        query = "project = " + projectKey + " AND assignee = currentUser() AND sprint = " + sprintId + " AND status = Done ORDER BY created DESC";
+        JiraSearchIssueListResponse doneIssues = jiraFeignClient.getSearchIssues(jiraBase64, query);
+
+        return JiraSprintProgressResponse.builder()
+                .sprintList(sprintList)
+                .sprintId(sprintId)
+                .total(totalIssues.getTotal())
+                .done(doneIssues.getTotal())
+                .build();
     }
 }

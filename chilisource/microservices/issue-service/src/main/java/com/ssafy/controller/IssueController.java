@@ -9,6 +9,7 @@ import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.service.IssueService;
 import io.swagger.annotations.Api;
@@ -303,5 +304,17 @@ public class IssueController {
                 middleBucketId,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok().build();
+    }
+
+    // 지라 위젯 - 스프린트 목록 및 선택된 스프린트의 달성도 조회
+    @GetMapping("/jira/widget")
+    public ResponseEntity<JiraSprintProgressResponse> getProgress(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
+            @ApiParam(value = "JIRA 와 연동된 프로젝트 id") @RequestParam Long projectId,
+            @ApiParam(value = "조회하고싶은 스프린트 id") @RequestParam(required = false) Long sprintId
+    ) {
+        JiraSprintProgressResponse response = issueService.getSprintProgress(user, headers.get(HttpHeaders.AUTHORIZATION), projectId, sprintId);
+        return ResponseEntity.ok(response);
     }
 }
