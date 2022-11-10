@@ -90,7 +90,7 @@ export default {
     });
   },
 
-  getProjectData: (projectId: string) => {
+  getProject: (projectId: number) => {
     interface responseType {
       id: string;
       name: string;

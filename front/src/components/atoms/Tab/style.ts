@@ -8,7 +8,7 @@ export interface styledType {
 }
 
 export const StyledXBtn = styled.span<styledType>`
-  ${tw`text-white hidden`}
+  ${tw`text-white hidden cursor-pointer`}
   &: hover {
     color: ${({ theme, type, isActivated }) =>
       isActivated
