@@ -6,6 +6,7 @@ import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
@@ -50,5 +51,11 @@ public interface JiraFeignClient {
     JiraSprintListResponse getSprints(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable(name = "boardId") Long boardId
+    );
+
+    @GetMapping("/api/3/issue/{issueKey}")
+    JiraTodoIssueResponse getIssue(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable(name = "issueKey") String issueKey
     );
 }

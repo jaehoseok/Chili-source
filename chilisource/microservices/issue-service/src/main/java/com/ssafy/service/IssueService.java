@@ -9,6 +9,7 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -63,4 +64,6 @@ public interface IssueService {
     List<JiraProjectResponse> getProjectList(User user, List<String> auths);
 
     JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId);
+
+    JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey);
 }
