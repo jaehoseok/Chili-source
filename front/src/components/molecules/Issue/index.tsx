@@ -24,6 +24,8 @@ interface propsType extends styledType {
   sprint?: string;
   storyPoints?: number;
   clickHandler?: any;
+  deleteHandler?: any;
+  editEnableHandler?: any;
 }
 
 /**
@@ -69,6 +71,8 @@ const index = ({
   sprint,
   storyPoints,
   clickHandler,
+  deleteHandler,
+  editEnableHandler,
 }: propsType) => {
   let issueType: string;
   switch (type) {
@@ -113,8 +117,8 @@ const index = ({
         <StyledIssueTop type={type}>
           <Text isFill={false} message={issueType} color={'white'}></Text>
           <StyledIssueTopRight>
-            <ImBin onClick={() => alert('이슈 삭제')} />
-            <HiPencil onClick={() => alert('이슈 편집')} />
+            <ImBin onClick={() => deleteHandler(templateId)} />
+            <HiPencil onClick={() => editEnableHandler()} />
           </StyledIssueTopRight>
         </StyledIssueTop>
         <StyledIssueBottom>

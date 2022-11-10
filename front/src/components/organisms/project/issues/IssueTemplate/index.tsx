@@ -5,12 +5,18 @@ import Issue from 'components/molecules/Issue';
 import Circle from 'components/atoms/Circle';
 import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
+import { issue } from 'api/rest';
 
 const index = (props: any) => {
   const setInfoHandler = (issue: templateType) => {
     props.setInfo(issue);
   };
-
+  const deleteHandler = (templateId: number) => {
+    setIssues(issues.filter(issue => issue.templateId !== templateId));
+  };
+  const editEnableHandler = (templateId: number) => {
+    alert('이슈 수정 활성화');
+  };
   const [issues, setIssues] = useState<templateType[]>([]);
   const IssueList = issues.map(issue => (
     <Issue
@@ -26,8 +32,11 @@ const index = (props: any) => {
       sprint={issue.sprint}
       storyPoints={issue.storyPoints}
       clickHandler={setInfoHandler}
+      deleteHandler={deleteHandler}
+      editEnableHandler={editEnableHandler}
     />
   ));
+
   const issue1: templateType = {
     templateId: 1,
     project: '프로젝트1',
