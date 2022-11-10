@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @ApiModel(value = "그 외 이슈에 대한 정보 가지고 있는 객체")
@@ -34,17 +36,19 @@ public class JiraTodoIssueFieldsResponse {
     @ApiModelProperty(value = "보고자")
     private JiraTodoIssueReporterResponse reporter;
 
-//    private JiraTodoIssueSprintResponse customfield_10020; // 스프린트
+    @ApiModelProperty(value = "스프린트")
+    private List<JiraTodoIssueSprintResponse> customfield_10020;
 
     @Builder
-    public JiraTodoIssueFieldsResponse(JiraTodoIssueTypeResponse issuetype, JiraTodoIssueParentResponse parent, JiraTodoIssueProjectResponse project, JiraTodoIssuePriorityResponse priority, JiraTodoIssueAssigneeResponse assignee, JiraTodoIssueStatusResponse status, JiraTodoIssueSummaryResponse summary, JiraTodoIssueReporterResponse reporter) {
-        this.issuetype = issuetype;
-        this.parent = parent;
+    public JiraTodoIssueFieldsResponse(JiraTodoIssueTypeResponse issuetype, JiraTodoIssueParentResponse parent, JiraTodoIssueProjectResponse project, JiraTodoIssuePriorityResponse priority, JiraTodoIssueAssigneeResponse assignee, JiraTodoIssueStatusResponse status, JiraTodoIssueSummaryResponse summary, JiraTodoIssueReporterResponse reporter, List<JiraTodoIssueSprintResponse> customfield_10020) {
         this.project = project;
+        this.parent = parent;
+        this.summary = summary;
+        this.status = status;
+        this.issuetype = issuetype;
         this.priority = priority;
         this.assignee = assignee;
-        this.status = status;
-        this.summary = summary;
         this.reporter = reporter;
+        this.customfield_10020 = customfield_10020;
     }
 }
