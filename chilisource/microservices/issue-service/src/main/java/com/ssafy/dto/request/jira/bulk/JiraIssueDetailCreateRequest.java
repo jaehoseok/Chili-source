@@ -1,4 +1,4 @@
-package com.ssafy.dto.request.jira;
+package com.ssafy.dto.request.jira.bulk;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;

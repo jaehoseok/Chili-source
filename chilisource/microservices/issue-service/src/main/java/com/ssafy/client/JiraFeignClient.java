@@ -1,6 +1,6 @@
 package com.ssafy.client;
 
-import com.ssafy.dto.request.jira.JiraIssueBulkCreateRequest;
+import com.ssafy.dto.request.jira.bulk.JiraIssueBulkCreateRequest;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;

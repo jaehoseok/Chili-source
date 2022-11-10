@@ -1,4 +1,4 @@
-package com.ssafy.dto.request.jira;
+package com.ssafy.dto.request.jira.bulk;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -7,12 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JiraIssueTypeCreateRequest {
+public class JiraIssueProjectCreateRequest {
+    @ApiModelProperty(hidden = true)
+    private String key;
+
     @ApiModelProperty(hidden = true)
     private String id;
 
     @Builder
-    public JiraIssueTypeCreateRequest(String id) {
+    public JiraIssueProjectCreateRequest(String key, String id) {
+        this.key = key;
         this.id = id;
     }
 }

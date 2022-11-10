@@ -6,7 +6,7 @@ import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
-import com.ssafy.dto.request.jira.*;
+import com.ssafy.dto.request.jira.bulk.*;
 import com.ssafy.dto.response.*;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
