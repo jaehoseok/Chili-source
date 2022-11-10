@@ -10,6 +10,8 @@ import com.ssafy.dto.request.jira.*;
 import com.ssafy.dto.response.*;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
+import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
@@ -70,16 +72,16 @@ public class IssueServiceImpl implements IssueService {
 
         return responses.stream()
                 .map(issueTemplate -> IssueTemplateResponse.builder()
-                                .issueTemplateId(issueTemplate.getId())
-                                .issueType(issueTemplate.getIssueType().getName())
-                                .summary(issueTemplate.getSummary())
-                                .description(issueTemplate.getDescription())
-                                .assignee(issueTemplate.getAssignee())
-                                .priority(issueTemplate.getPriority())
-                                .epicLink(issueTemplate.getEpicLink())
-//                        .sprint(issueTemplate.getSprint())
-                                .storyPoints(issueTemplate.getStoryPoints())
-                                .build()
+                        .issueTemplateId(issueTemplate.getId())
+                        .issueType(issueTemplate.getIssueType().getName())
+                        .summary(issueTemplate.getSummary())
+                        .description(issueTemplate.getDescription())
+                        .assignee(issueTemplate.getAssignee())
+                        .priority(issueTemplate.getPriority())
+                        .epicLink(issueTemplate.getEpicLink())
+                        .sprint(issueTemplate.getSprint())
+                        .storyPoints(issueTemplate.getStoryPoints())
+                        .build()
                 ).collect(Collectors.toList());
     }
 
@@ -102,7 +104,7 @@ public class IssueServiceImpl implements IssueService {
                 .assignee(request.getAssignee())
                 .priority(request.getPriority())
                 .epicLink(request.getEpicLink())
-//                .sprint(request.getSprint())
+                .sprint(request.getSprint())
                 .storyPoints(request.getStoryPoints())
                 .issueType(issueType)
                 .userId(userId)
@@ -131,7 +133,7 @@ public class IssueServiceImpl implements IssueService {
                 request.getAssignee(),
                 request.getPriority(),
                 request.getEpicLink(),
-//                request.getSprint(),
+                request.getSprint(),
                 request.getStoryPoints(),
                 issueType
         );
@@ -231,7 +233,7 @@ public class IssueServiceImpl implements IssueService {
                         .assignee(middleBucketIssue.getAssignee())
                         .priority(middleBucketIssue.getPriority())
                         .epicLink(middleBucketIssue.getEpicLink())
-//                        .sprint(middleBucketIssue.getSprint())
+                        .sprint(middleBucketIssue.getSprint())
                         .storyPoints(middleBucketIssue.getStoryPoints())
                         .build())
                 .collect(Collectors.toList());
@@ -261,7 +263,7 @@ public class IssueServiceImpl implements IssueService {
                 .assignee(request.getAssignee())
                 .priority(request.getPriority())
                 .epicLink(request.getEpicLink())
-//                .sprint(request.getSprint())
+                .sprint(request.getSprint())
                 .storyPoints(request.getStoryPoints())
                 .middleBucket(middleBucket)
                 .issueType(issueType)
@@ -294,7 +296,7 @@ public class IssueServiceImpl implements IssueService {
                 request.getAssignee(),
                 request.getPriority(),
                 request.getEpicLink(),
-//                request.getSprint(),
+                request.getSprint(),
                 request.getStoryPoints(),
                 issueType
         );
@@ -343,10 +345,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public JiraEpicListResponse getEpicList(
-            User user,
-            List<String> auths
-    ) {
+    public JiraEpicListResponse getEpicList(User user, List<String> auths) {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
@@ -354,6 +353,29 @@ public class IssueServiceImpl implements IssueService {
 //        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
         return jiraFeignClient.getJiraEpics(jiraBase64);
+    }
+
+
+    @Override
+    public JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId) {
+        // 프로젝트를 가져온다
+        ProjectResponse response = projectServiceClient.getProject(auths, projectId);
+        if (response == null) {
+            log.error("[Issue] [getSprints] PROJECT_NOT_FOUND");
+            throw new NotFoundException(PROJECT_NOT_FOUND);
+        }
+
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        // 프로젝트의 보드 id를 가져온다
+        JiraProjectBoardListResponse projectBoardList = jiraFeignClient.getProjectBoard(jiraBase64);
+        Long boardId = projectBoardList.getValues().get(0).getId();
+
+        // 보드 id로 스프린트 목록을 가져온다
+        JiraSprintListResponse sprints = jiraFeignClient.getSprints(jiraBase64, boardId);
+
+        return sprints;
     }
 
     @Override
@@ -436,9 +458,13 @@ public class IssueServiceImpl implements IssueService {
                     .build();
 
             // description
+            String text = issue.getDescription();
+            if (text == null) {
+                text = "";
+            }
             List<JiraIssueDescriptionContentContentCreateRequest> list = new ArrayList<>();
             JiraIssueDescriptionContentContentCreateRequest contentContentCreateRequest = JiraIssueDescriptionContentContentCreateRequest.builder()
-                    .text(issue.getDescription())
+                    .text(text)
                     .build();
             list.add(contentContentCreateRequest);
 
@@ -473,6 +499,8 @@ public class IssueServiceImpl implements IssueService {
                     .assignee(assignee)
                     .priority(priority)
                     .project(project)
+                    .customfield_10031(issue.getStoryPoints()) // 스토리포인트
+                    .customfield_10020(issue.getSprint())
                     .build();
 
             JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()

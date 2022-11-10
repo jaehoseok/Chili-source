@@ -7,6 +7,7 @@ import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 
 import java.io.IOException;
@@ -60,4 +61,6 @@ public interface IssueService {
     JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception;
 
     List<JiraProjectResponse> getProjectList(User user, List<String> auths);
+
+    JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId);
 }

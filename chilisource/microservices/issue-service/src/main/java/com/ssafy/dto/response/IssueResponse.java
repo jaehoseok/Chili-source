@@ -31,13 +31,14 @@ public class IssueResponse {
     @ApiModelProperty(value = "에픽 링크")
     private String epicLink;
 
-//    private Long sprint;
+    @ApiModelProperty(value = "스프린트")
+    private Long sprint;
 
     @ApiModelProperty(value = "스토리 포인트")
     private Double storyPoints;
 
     @Builder
-    public IssueResponse(Long issueId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Double storyPoints) {
+    public IssueResponse(Long issueId, String issueType, String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints) {
         this.issueId = issueId;
         this.issueType = issueType;
         this.summary = summary;
@@ -45,7 +46,7 @@ public class IssueResponse {
         this.assignee = assignee;
         this.priority = priority;
         this.epicLink = epicLink;
-//        this.sprint = sprint;
+        this.sprint = sprint;
         this.storyPoints = storyPoints;
     }
 }

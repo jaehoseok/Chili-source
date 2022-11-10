@@ -5,9 +5,10 @@ import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
 import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
-import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
+import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.service.IssueService;
 import io.swagger.annotations.Api;
@@ -40,7 +41,6 @@ public class IssueController {
     ) {
         List<IssueTemplateResponse> responses = issueService.getIssueTemplates(
                 user.getId(),
-//                1L,
                 projectId,
                 me,
                 headers.get(HttpHeaders.AUTHORIZATION));
@@ -58,7 +58,6 @@ public class IssueController {
     ) {
         issueService.createIssueTemplate(
                 user.getId(),
-//                1L,
                 request,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
@@ -75,7 +74,6 @@ public class IssueController {
     ) {
         issueService.updateIssueTemplate(
                 user.getId(),
-//                1L,
                 issueTemplateId, request);
         return ResponseEntity.ok()
                 .build();
@@ -104,7 +102,6 @@ public class IssueController {
             @RequestHeader HttpHeaders headers) {
         List<MiddleBucketResponse> responses = issueService.getMiddleBuckets(
                 user.getId(),
-//                1L,
                 projectId,
                 me,
                 headers.get(HttpHeaders.AUTHORIZATION));
@@ -122,7 +119,6 @@ public class IssueController {
     ) {
         issueService.createMiddleBucket(
                 user.getId(),
-//                1L,
                 request,
                 headers.get(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok()
@@ -139,7 +135,6 @@ public class IssueController {
     ) {
         issueService.updateMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, request);
         return ResponseEntity.ok()
                 .build();
@@ -153,7 +148,6 @@ public class IssueController {
     ) {
         issueService.deleteMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId);
         return ResponseEntity.ok()
                 .build();
@@ -168,7 +162,6 @@ public class IssueController {
     ) {
         IssueListResponse response = issueService.getMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId);
         return ResponseEntity.ok()
                 .body(response);
@@ -184,7 +177,6 @@ public class IssueController {
     ) {
         issueService.createIssueIntoMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, request);
         return ResponseEntity.ok()
                 .build();
@@ -201,7 +193,6 @@ public class IssueController {
     ) {
         issueService.updateIssueInMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, middleBucketIssueId, request);
         return ResponseEntity.ok()
                 .build();
@@ -217,7 +208,6 @@ public class IssueController {
     ) {
         issueService.deleteIssueInMiddleBucket(
                 user.getId(),
-//                1L,
                 middleBucketId, middleBucketIssueId);
         return ResponseEntity.ok()
                 .build();
@@ -261,6 +251,23 @@ public class IssueController {
         JiraEpicListResponse response = issueService.getEpicList(
                 user,
                 headers.get(HttpHeaders.AUTHORIZATION));
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    // 현 프로젝트의 스프린트 목록 가져오기
+    @GetMapping("/jira/sprint/{projectId}")
+    @ApiOperation(value = "현재 프로젝트의 스프린트 목록 가져오기")
+    public ResponseEntity<JiraSprintListResponse> getSprints(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
+            @ApiParam(value = "JIRA와 연동된 프로젝트 id") @PathVariable Long projectId
+    ) {
+        JiraSprintListResponse response = issueService.getSprints(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION),
+                projectId
+        );
         return ResponseEntity.ok()
                 .body(response);
     }
