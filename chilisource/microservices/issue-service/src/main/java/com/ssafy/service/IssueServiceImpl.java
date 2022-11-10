@@ -545,7 +545,10 @@ public class IssueServiceImpl implements IssueService {
 
         List<JiraSprintResponse> sprintList = sprints.getValues();
 
+        if (sprintList.size() == 0) throw new NotFoundException(SPRINT_NOT_FOUND);
+
         if (sprintId == null) {
+            sprintId = sprintList.get(0).getId();
             for (JiraSprintResponse sprint : sprintList) {
                 if ("active".equalsIgnoreCase(sprint.getState())) {
                     sprintId = sprint.getId();
@@ -562,10 +565,6 @@ public class IssueServiceImpl implements IssueService {
             }
 
             if (!find) throw new NotFoundException(SPRINT_ID_NOT_FOUND);
-        }
-
-        if (sprintId == null) {
-            throw new NotFoundException(SPRINT_NOT_FOUND);
         }
 
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
