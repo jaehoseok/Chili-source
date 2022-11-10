@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // TODO 개인 테스트 지라 프로젝트에서 수정하기
-@FeignClient(name = "jira", url = "https://ssasfy.atlassian.net/rest")
+@FeignClient(name = "jira", url = "https://ssafy.atlassian.net/rest")
 public interface JiraFeignClient {
     // 지라에 이슈 추가
     @PostMapping("/api/3/issue/bulk")
