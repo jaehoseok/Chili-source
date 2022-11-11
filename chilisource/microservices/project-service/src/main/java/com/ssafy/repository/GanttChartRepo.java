@@ -24,4 +24,6 @@ public interface GanttChartRepo extends JpaRepository<GanttChart, Long>, GanttCh
     List<GanttChart> findByProjectAndUserIdIsNullAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(Project project, Long version, LocalDateTime endTime, LocalDateTime startTime, Sort sort);
 
     List<GanttChart> findByProjectAndUserIdAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(Project project, Long userId, Long version, LocalDateTime endTime, LocalDateTime startTime, Sort sort);
+
+    List<GanttChart> findByProjectAndIssueCode(Project project, String issueCode);
 }
