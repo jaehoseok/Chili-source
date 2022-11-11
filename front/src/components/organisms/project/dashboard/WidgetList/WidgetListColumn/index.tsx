@@ -4,7 +4,11 @@ import { useDrag } from 'react-dnd';
 import { itemType } from '../';
 
 // Styles
-import { StyledWidgetListColumn, StyledWidgetListItemContainer } from './style';
+import {
+  StyledWidgetListColumn,
+  StyledWidgetListItemContainer,
+  StyledWidgetListItemBox,
+} from './style';
 
 // Components
 import { WidgetDropSpace } from '../WidgetDropSpace';
@@ -13,19 +17,20 @@ import { Widget } from 'components/molecules/Widget';
 
 interface propsType {
   id: number;
+  type: string;
   children?: itemType[];
   dropHandler?: any;
   path?: string;
 }
 
-export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType) => {
+export const WidgetListColumn = ({ id, type, path, dropHandler, children }: propsType) => {
   const col = useRef(null);
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'COLUMN',
+    type,
     item: {
       id,
-      type: 'COLUMN',
+      type,
       path,
       children,
     },
@@ -39,9 +44,8 @@ export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType)
 
   return (
     <StyledWidgetListColumn className="widget-list-column" ref={col} style={{ opacity }}>
-      <div>컬럼{id}</div>
       {children
-        ? children.map(({ id }, index) => {
+        ? children.map(({ id, type }, index) => {
             return (
               <StyledWidgetListItemContainer key={index}>
                 <WidgetDropSpace
@@ -50,7 +54,11 @@ export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType)
                   path={`${path}-${index}`}
                   isHorizontal={true}
                 />
-                <WidgetListItem id={id} path={`${path}-${index}`} />
+                <StyledWidgetListItemBox>
+                  <WidgetDropSpace onDrop={dropHandler} type="ITEM" path={`${path}-${index}`} />
+                  <WidgetListItem id={id} type={type} path={`${path}-${index}`} />
+                  <WidgetDropSpace onDrop={dropHandler} type="ITEM" path={`${path}-${index + 1}`} />
+                </StyledWidgetListItemBox>
                 <WidgetDropSpace
                   onDrop={dropHandler}
                   type="ITEM"

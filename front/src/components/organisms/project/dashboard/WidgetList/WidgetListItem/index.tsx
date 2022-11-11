@@ -10,17 +10,18 @@ import { Widget } from 'components/molecules/Widget';
 
 interface propsType {
   id?: number;
+  type?: string;
   path?: string;
 }
 
-export const WidgetListItem = ({ id, path }: propsType) => {
+export const WidgetListItem = ({ id, type, path }: propsType) => {
   const item = useRef(null);
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'ITEM',
+    type: type ? type : 'ITEM',
     item: {
       id,
-      type: 'ITEM',
+      type,
       path,
     },
     collect: monitor => ({
@@ -33,7 +34,7 @@ export const WidgetListItem = ({ id, path }: propsType) => {
 
   return (
     <StyledWidgetListItem className="widget-list-item" ref={item} style={{ opacity }}>
-      <Widget type="TEST">{id}</Widget>
+      <Widget type={type}>{id}</Widget>
     </StyledWidgetListItem>
   );
 };

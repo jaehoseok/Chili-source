@@ -38,15 +38,16 @@ export const WidgetList = ({}: propsType) => {
 
   const [layout, setLayout] = useState<itemType[]>([
     { id: 0, children: [] },
-    { id: 0, children: [] },
     {
       id: 0,
       children: [
-        { id: 9, children: [] },
-        { id: 10, children: [] },
-        { id: 11, children: [] },
+        { id: 9, type: 'CALENLDAR', children: [] },
+        { id: 10, type: 'GANTT', children: [] },
+        { id: 11, type: 'JIRA', children: [] },
+        { id: 12, type: 'SSAFYGITLAB', children: [] },
       ],
     },
+    { id: 0, children: [] },
   ]);
 
   // Methods
@@ -324,7 +325,7 @@ export const WidgetList = ({}: propsType) => {
 
       // 아이템 삭제
       else {
-        console.log('[delete widget]', await widget.deleteWidget(item.id));
+        // console.log('[delete widget]', await widget.deleteWidget(item.id));
         const splitItemPath = item.path ? item.path.split('-') : [''];
         const columnIndex = Number(splitItemPath[0]);
         const itemIndex = Number(splitItemPath[1]);
@@ -361,8 +362,7 @@ export const WidgetList = ({}: propsType) => {
       }
     });
 
-    setLayout(updatedLayout);
-    console.log(updatedLayout.length);
+    // setLayout(updatedLayout);
   }, [getWidgetList.data]);
 
   return (
@@ -376,6 +376,7 @@ export const WidgetList = ({}: propsType) => {
                 <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index}`} />
                 <WidgetListColumn
                   id={id}
+                  type="COLUMN"
                   dropHandler={dropHandler}
                   path={`${index}`}
                   children={children}

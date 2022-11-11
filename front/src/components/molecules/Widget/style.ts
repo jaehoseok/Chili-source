@@ -8,16 +8,14 @@ export interface styledType {
 
 export const StyledWidget = styled.div<styledType>`
   ${tw`flex justify-center items-center`}
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
 `;
-StyledWidget.defaultProps = {
-  height: '180px',
-  width: '400px',
-};
 
 export const StyledWidgetData = styled.div<styledType>`
   ${tw`flex justify-center items-center`}
-  height: 100%;
-  width: 100%;
+  height: ${({ height }) => height};
+  width: ${({ width }) => width};
 `;
+StyledWidgetData.defaultProps = {
+  height: '180px',
+  width: '400px',
+};

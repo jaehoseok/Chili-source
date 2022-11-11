@@ -29,8 +29,38 @@ export const Widget = ({ type, children, width, height }: propsType) => {
 
   const widgetData = (type: string, children: ReactNode) => {
     switch (type) {
-      case 'TEST':
-        return <StyledWidgetData>[{children}] 테스트</StyledWidgetData>;
+      case 'CALENLDAR':
+        return (
+          <StyledWidgetData className="calendar" height="480px" width="480px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'GANTT':
+        return (
+          <StyledWidgetData className="gantt-chart" height="480px" width="480px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'JIRA':
+        return (
+          <StyledWidgetData className="jira" width="224px" height="224px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'SSAFYGITLAB':
+        return (
+          <StyledWidgetData className="ssafy-gitlab" width="224px" height="224px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
       default:
         return <StyledWidgetData onClick={addWidgetHandler}>+</StyledWidgetData>;
     }
