@@ -8,6 +8,7 @@ import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
+import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 
@@ -71,4 +72,6 @@ public interface IssueService {
 
     // jira의 이슈 단일 조회
     JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey);
+
+    JiraSprintProgressResponse getSprintProgress(User user, List<String> auths, Long projectId, Long sprintId);
 }

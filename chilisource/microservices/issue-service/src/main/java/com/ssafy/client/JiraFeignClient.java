@@ -5,6 +5,7 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
+import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 import feign.Response;
@@ -57,5 +58,12 @@ public interface JiraFeignClient {
     JiraTodoIssueResponse getIssue(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable(name = "issueKey") String issueKey
+    );
+
+    // JQL 검색 결과
+    @GetMapping("/api/3/search?jql={query}")
+    JiraSearchIssueListResponse getSearchIssues(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("query") String query
     );
 }
