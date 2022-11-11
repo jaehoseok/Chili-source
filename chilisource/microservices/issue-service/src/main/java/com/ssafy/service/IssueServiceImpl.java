@@ -6,7 +6,7 @@ import com.ssafy.client.JiraFeignClient;
 import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
-import com.ssafy.dto.request.jira.*;
+import com.ssafy.dto.request.jira.bulk.*;
 import com.ssafy.dto.response.*;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
@@ -16,6 +16,7 @@ import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintResponse;
 import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -399,6 +400,14 @@ public class IssueServiceImpl implements IssueService {
         String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
 
         return jiraFeignClient.getTodoIssues(jiraBase64, query);
+    }
+
+    @Override
+    public JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        return jiraFeignClient.getIssue(jiraBase64, issueKey);
     }
 
     @Transactional

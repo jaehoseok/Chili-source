@@ -11,6 +11,7 @@ import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
 import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
+import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
 import com.ssafy.service.IssueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -285,6 +286,23 @@ public class IssueController {
                 user,
                 headers.get(HttpHeaders.AUTHORIZATION),
                 projectId);
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
+    // 지라의 이슈 조회
+    @GetMapping("/jira/issues/{issueKey}")
+    @ApiOperation(value = "issueKey로 jira의 이슈를 조회")
+    public ResponseEntity<JiraTodoIssueResponse> getIssue(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
+            @ApiParam(value = "JIRA issue key") @PathVariable String issueKey
+    ) {
+        JiraTodoIssueResponse response = issueService.getIssue(
+                user,
+                headers.get(HttpHeaders.AUTHORIZATION),
+                issueKey
+        );
         return ResponseEntity.ok()
                 .body(response);
     }

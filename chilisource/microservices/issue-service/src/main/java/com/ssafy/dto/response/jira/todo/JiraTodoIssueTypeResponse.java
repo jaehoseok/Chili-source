@@ -13,8 +13,12 @@ public class JiraTodoIssueTypeResponse {
     @ApiModelProperty(value = "이슈 타입 id")
     private String id;
 
+    @ApiModelProperty(value = "이슈 타입 이름")
+    private String name;
+
     @Builder
-    public JiraTodoIssueTypeResponse(String id) {
+    public JiraTodoIssueTypeResponse(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 }
