@@ -37,7 +37,9 @@ import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.MIDDLE_BUCKET_NAME_DUPLICATED;
@@ -416,24 +418,25 @@ public class IssueServiceImpl implements IssueService {
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
         if (request.getStatusId() != null) {
-            JiraIssueStatusUpdateRequest statusUpdateRequest = JiraIssueStatusUpdateRequest.builder()
-                    .transition(JiraIssueStatusDetailUpdateRequest.builder()
-                            .id(request.getStatusId())
-                            .build())
-                    .build();
+            Map<String, Object> statusUpdateRequest = new HashMap<>();
+            Map<String, Object> transition = new HashMap<>();
+            transition.put("id", request.getStatusId());
+            statusUpdateRequest.put("transition", transition);
 
             jiraFeignClient.updateIssueStatus(jiraBase64, issueKey, statusUpdateRequest);
-
         }
 
+        Map<String, Object> updateRequest = new HashMap<>();
+        Map<String, Object> fields = new HashMap<>();
+        boolean summaryChanged = false;
         if (request.getSummary() != null) {
-            JiraIssueUpdateRequest updateRequest = JiraIssueUpdateRequest.builder()
-                    .fields(JiraIssueDetailUpdateRequest.builder()
-                            .summary(request.getSummary())
-                            .build())
-                    .build();
+            fields.put("summary", request.getSummary());
+            summaryChanged = true;
+        }
+        updateRequest.put("fields", fields);
 
-            jiraFeignClient.updateIssue(jiraBase64, issueKey, updateRequest);
+        jiraFeignClient.updateIssue(jiraBase64, issueKey, updateRequest);
+                            .summary(request.getSummary())
         }
     }
 

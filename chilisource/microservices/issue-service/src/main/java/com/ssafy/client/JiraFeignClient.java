@@ -1,8 +1,6 @@
 package com.ssafy.client;
 
 import com.ssafy.dto.request.jira.bulk.JiraIssueBulkCreateRequest;
-import com.ssafy.dto.request.jira.bulk.JiraIssueStatusUpdateRequest;
-import com.ssafy.dto.request.jira.bulk.JiraIssueUpdateRequest;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
@@ -16,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 // TODO 개인 테스트 지라 프로젝트에서 수정하기
 @FeignClient(name = "jira", url = "https://ssafy.atlassian.net/rest")
@@ -73,14 +72,14 @@ public interface JiraFeignClient {
     Response updateIssue(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("issueKey") String issueKey,
-            @RequestBody JiraIssueUpdateRequest request
+            @RequestBody Map<String, Object> request
     );
 
     @PostMapping("/api/3/issue/{issueKey}/transitions")
     Response updateIssueStatus(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("issueKey") String issueKey,
-            @RequestBody JiraIssueStatusUpdateRequest request
+            @RequestBody Map<String, Object> request
             );
 
 }
