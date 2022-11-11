@@ -3,7 +3,6 @@ package com.ssafy.controller;
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
 import com.ssafy.dto.request.*;
-import com.ssafy.dto.request.jira.JiraIssueUpdateRequest;
 import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
