@@ -28,6 +28,9 @@ const index = ({
   children,
   height,
   backgroundColor,
+  fontColor,
+  fontWeight,
+  margin,
   isDropShadow,
   isInnerShadow,
   isClickable,
@@ -39,6 +42,9 @@ const index = ({
     <StyledCircle
       height={height}
       backgroundColor={backgroundColor}
+      fontColor={fontColor}
+      fontWeight={fontWeight}
+      margin={margin}
       isDropShadow={isDropShadow}
       isInnerShadow={isInnerShadow}
       isClickable={isClickable}

@@ -9,6 +9,7 @@ import {
 } from './style';
 import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
+import Button from '../../atoms/Button';
 import { ImBin } from 'react-icons/im';
 import { HiPencil } from 'react-icons/hi';
 
@@ -117,8 +118,26 @@ const index = ({
         <StyledIssueTop type={type}>
           <Text isFill={false} message={issueType} color={'white'}></Text>
           <StyledIssueTopRight>
-            <ImBin onClick={() => deleteHandler(templateId)} />
-            <HiPencil onClick={() => editEnableHandler()} />
+            <ImBin
+              onClick={() => {
+                issueData.project = '';
+                issueData.type = '';
+                issueData.summary = '';
+                issueData.description = '';
+                issueData.reporter = '';
+                issueData.assignee = '';
+                issueData.rank = '';
+                issueData.epicLink = '';
+                issueData.sprint = '';
+                issueData.storyPoints = 0;
+                deleteHandler(templateId);
+              }}
+            />
+            <HiPencil
+              onClick={() => {
+                editEnableHandler(templateId);
+              }}
+            />
           </StyledIssueTopRight>
         </StyledIssueTop>
         <StyledIssueBottom>

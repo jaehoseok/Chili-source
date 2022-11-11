@@ -5,20 +5,31 @@ import Issue from 'components/molecules/Issue';
 import Circle from 'components/atoms/Circle';
 import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
-import { issue } from 'api/rest';
 
 const index = (props: any) => {
   const setInfoHandler = (issue: templateType) => {
     props.setInfo(issue);
   };
   const deleteHandler = (templateId: number) => {
-    setIssues(issues.filter(issue => issue.templateId !== templateId));
+    props.setIssues(props.issues.filter((issue: templateType) => issue.templateId !== templateId));
   };
   const editEnableHandler = (templateId: number) => {
-    alert('이슈 수정 활성화');
+    alert('이슈 수정 버튼 활성화');
+    props.setIsEdit(true);
   };
-  const [issues, setIssues] = useState<templateType[]>([]);
-  const IssueList = issues.map(issue => (
+  const addEnableHandler = () => {
+    alert('이슈 추가 버튼 활성화');
+    props.setIsAdd(true);
+  };
+  useEffect(() => {
+    if (!props.isAdd) {
+      props.issues.push(props.info);
+      props.setIssues(props.issues);
+      props.setIsAdd(false);
+    }
+  }, [props.isAdd]);
+
+  const IssueList = props.issues.map((issue: templateType) => (
     <Issue
       templateId={issue.templateId}
       project={issue.project}
@@ -77,13 +88,15 @@ const index = (props: any) => {
     storyPoints: 2,
   };
   useEffect(() => {
-    setIssues([issue1, issue2, issue3]);
+    props.setIssues([issue1, issue2, issue3]);
   }, []);
 
   return (
     <StyledIssueTemplate>
       <StyledHeader>
-        <Circle height={'5rem'}>로고</Circle>
+        <Circle height={'5rem'} margin={'1rem'}>
+          로고
+        </Circle>
         <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
       </StyledHeader>
       <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
@@ -95,7 +108,7 @@ const index = (props: any) => {
           width={'400px'}
           height={'90px'}
           borderColor={'#d9d9d9'}
-          clickHandler={() => alert('btn test')}
+          clickHandler={addEnableHandler}
         >
           +
         </Button>

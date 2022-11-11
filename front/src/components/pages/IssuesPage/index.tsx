@@ -27,7 +27,7 @@ const index = () => {
     templateId: 0,
     issueId: 0,
     project: '',
-    type: '',
+    type: 'story',
     summary: '',
     description: '',
     reporter: '',
@@ -38,7 +38,10 @@ const index = () => {
     storyPoints: 0,
   };
   const [info, setInfo] = useState<issueType>(issue);
+  const [issues, setIssues] = useState<templateType[]>([]);
   const [isInsert, setIsInsert] = useState(false);
+  const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
     <StyledIssuesPage>
@@ -46,8 +49,24 @@ const index = () => {
         <HeaderNav></HeaderNav>
       </StyledHeader>
       <StyledBody>
-        <IssueTemplate setInfo={setInfo}></IssueTemplate>
-        <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
+        <IssueTemplate
+          issues={issues}
+          setIssues={setIssues}
+          setInfo={setInfo}
+          setIsAdd={setIsAdd}
+          setIsEdit={setIsEdit}
+        ></IssueTemplate>
+        <IssueInfo
+          info={info}
+          issues={issues}
+          isAdd={isAdd}
+          isEdit={isEdit}
+          setInfo={setInfo}
+          setIssues={setIssues}
+          setIsInsert={setIsInsert}
+          setIsAdd={setIsAdd}
+          setIsEdit={setIsEdit}
+        ></IssueInfo>
         <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>
     </StyledIssuesPage>

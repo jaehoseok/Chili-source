@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { StyledIssueInfo, StyledIssueHeader, StyledIssueBody } from './style';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
@@ -28,37 +28,77 @@ const index = (props: any) => {
   const sprintRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
+  const addTemplateHandler = () => {
+    alert('이슈 템플릿 추가 완료');
+    props.setInfo({
+      templateId: templateId,
+      project: projectRef.current ? projectRef.current.value : '',
+      type: typeRef.current
+        ? typeRef.current.value === '스토리'
+          ? 'story'
+          : typeRef.current.value === '태스크'
+          ? 'task'
+          : typeRef.current.value === '버그'
+          ? 'bug'
+          : 'error'
+        : '',
+      summary: summaryRef.current ? summaryRef.current.value : '',
+      description: descriptionRef.current ? descriptionRef.current.value : '',
+      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+      reporter: reporterRef.current ? reporterRef.current.value : '',
+      assignee: assigneeRef.current ? assigneeRef.current.value : '',
+      rank: rankRef.current ? rankRef.current.value : '',
+      sprint: sprintRef.current ? sprintRef.current.value : '',
+      storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+    });
+    setTemplateId(templateId + 1);
+
+    props.setIsAdd(false);
+    console.log(props.info);
+  };
+
+  const editTemplateHandler = () => {
+    alert('이슈 템플릿 편집 완료');
+    props.setIsEdit(false);
+  };
+
+  const insertIssueHandler = () => {
+    props.setInfo({
+      templateId: props.info.templateId,
+      project: projectRef.current ? projectRef.current.value : '',
+      type: typeRef.current
+        ? typeRef.current.value === '스토리'
+          ? 'story'
+          : typeRef.current.value === '태스크'
+          ? 'task'
+          : typeRef.current.value === '버그'
+          ? 'bug'
+          : 'error'
+        : '',
+      summary: summaryRef.current ? summaryRef.current.value : '',
+      description: descriptionRef.current ? descriptionRef.current.value : '',
+      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+      reporter: reporterRef.current ? reporterRef.current.value : '',
+      assignee: assigneeRef.current ? assigneeRef.current.value : '',
+      rank: rankRef.current ? rankRef.current.value : '',
+      sprint: sprintRef.current ? sprintRef.current.value : '',
+      storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+    });
+    console.log(props.info);
+    props.setIsInsert(true);
+  };
+  const [templateId, setTemplateId] = useState<number>(0);
   return (
     <StyledIssueInfo>
       <StyledIssueHeader>
-        <Button
-          borderColor="green"
-          clickHandler={() => {
-            props.setInfo({
-              templateId: props.info.templateId,
-              project: projectRef.current ? projectRef.current.value : '',
-              type: typeRef.current
-                ? typeRef.current.value === '스토리'
-                  ? 'story'
-                  : typeRef.current.value === '태스크'
-                  ? 'task'
-                  : typeRef.current.value === '버그'
-                  ? 'bug'
-                  : 'error'
-                : '',
-              summary: summaryRef.current ? summaryRef.current.value : '',
-              description: descriptionRef.current ? descriptionRef.current.value : '',
-              epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-              reporter: reporterRef.current ? reporterRef.current.value : '',
-              assignee: assigneeRef.current ? assigneeRef.current.value : '',
-              rank: rankRef.current ? rankRef.current.value : '',
-              sprint: sprintRef.current ? sprintRef.current.value : '',
-              storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
-            });
-            props.setIsInsert(true);
-          }}
-        >
-          IssueInfo Test
+        <Button borderColor="red" isDisabled={!props.isAdd} clickHandler={addTemplateHandler}>
+          Add Template
+        </Button>
+        <Button borderColor="green" isDisabled={!props.isEdit} clickHandler={editTemplateHandler}>
+          Edit Template
+        </Button>
+        <Button borderColor="blue" isHover clickHandler={insertIssueHandler}>
+          Insert to Bucket
         </Button>
       </StyledIssueHeader>
       <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>
