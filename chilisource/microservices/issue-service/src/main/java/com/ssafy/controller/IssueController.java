@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -314,7 +315,7 @@ public class IssueController {
             @LoginUser User user,
             @RequestHeader HttpHeaders headers,
             @ApiParam(value = "JIRA issue key") @PathVariable String issueKey,
-            @RequestBody IssueUpdateRequest request
+            @Valid @RequestBody IssueUpdateRequest request
     ) {
         issueService.updateIssueStatus(user, headers.get(HttpHeaders.AUTHORIZATION), issueKey, request);
         return ResponseEntity.ok()

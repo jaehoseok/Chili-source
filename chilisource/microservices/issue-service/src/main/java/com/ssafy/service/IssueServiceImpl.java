@@ -433,11 +433,19 @@ public class IssueServiceImpl implements IssueService {
             fields.put("summary", request.getSummary());
             summaryChanged = true;
         }
+        if (request.getStoryPoints() != null) fields.put("customfield_10031", request.getStoryPoints());
         updateRequest.put("fields", fields);
 
         jiraFeignClient.updateIssue(jiraBase64, issueKey, updateRequest);
+        if (summaryChanged) {
+            projectServiceClient.updateAllGanttChart(
+                    AllGanttChartUpdateRequest.builder()
+                            .projectId(request.getProjectId())
+                            .issueCode(issueKey)
                             .summary(request.getSummary())
+                            .build());
         }
+
     }
 
     @Transactional
