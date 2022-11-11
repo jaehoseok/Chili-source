@@ -1,15 +1,18 @@
 import styled from 'styled-components';
-import tw from 'twin.macro';
 
 export interface styledType {
   isActive?: boolean;
   isHorizontal?: boolean;
+  isLast?: boolean;
 }
 
 export const StyledWidgetDropSpace = styled.div<styledType>`
-  ${tw`bg-blue-200`}
-  ${({ isHorizontal }) => (isHorizontal ? 'width: 100%;' : '')}
-  padding: 4px;
-  background-color: ${({ isActive }) => (isActive ? 'green' : 'red')};
+  padding: 8px;
   transition: 200ms all;
+  ${({ isHorizontal }) => (isHorizontal ? 'width: 100%;' : '')}
+  ${({ isLast }) =>
+    isLast
+      ? 'width: 100%; padding-top: 16px; padding-bottom: 16px; padding-left: 0px; padding-right: 0px;'
+      : ''}
+  ${({ isActive }) => (isActive ? 'background-color: lightBlue;' : '')};
 `;

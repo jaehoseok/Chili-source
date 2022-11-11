@@ -9,7 +9,7 @@ import { StyledWidgetListItem } from './style';
 import { Widget } from 'components/molecules/Widget';
 
 interface propsType {
-  id?: string;
+  id?: number;
   path?: string;
 }
 
@@ -32,7 +32,7 @@ export const WidgetListItem = ({ id, path }: propsType) => {
   drag(item);
 
   return (
-    <StyledWidgetListItem ref={item} style={{ opacity }}>
+    <StyledWidgetListItem className="widget-list-item" ref={item} style={{ opacity }}>
       <Widget type="TEST">{id}</Widget>
     </StyledWidgetListItem>
   );

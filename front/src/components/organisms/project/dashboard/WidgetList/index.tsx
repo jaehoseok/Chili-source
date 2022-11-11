@@ -1,9 +1,18 @@
 // API & Library
-import { ReactNode, useState, useCallback } from 'react';
+import { ReactNode, useState, useCallback, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { widget } from 'api/rest';
+import { useGetWidgetListHandler } from 'hooks/widget';
+
 // Styles
-import { StyledWidgetList, StyledWidgetListColumnContainer, styledType } from './style';
+import {
+  StyledWidgetListContainer,
+  StyledWidgetList,
+  StyledWidgetListColumnContainer,
+  styledType,
+} from './style';
 
 // Components
 import { WidgetListColumn } from './WidgetListColumn';
@@ -16,22 +25,34 @@ interface propsType extends styledType {
 }
 
 export interface itemType {
-  id?: string;
+  id: number;
   type?: string;
   path?: string;
-  children?: itemType[];
+  children: itemType[];
 }
 
 export const WidgetList = ({}: propsType) => {
+  // Init
+  const location = useLocation();
+  const getWidgetList = useGetWidgetListHandler(Number(location.pathname.split('/')[2]));
+
   const [layout, setLayout] = useState<itemType[]>([
-    { id: '1', children: [{ id: '6' }, { id: '7' }] },
-    { id: '2', children: [{ id: '8' }] },
-    { id: '3', children: [{ id: '9' }, { id: '10' }, { id: '11' }] },
-    { id: '4', children: [{ id: '12' }, { id: '13' }] },
-    { id: '5', children: [{ id: '14' }, { id: '15' }, { id: '16' }] },
+    { id: 0, children: [] },
+    { id: 0, children: [] },
+    {
+      id: 0,
+      children: [
+        { id: 9, children: [] },
+        { id: 10, children: [] },
+        { id: 11, children: [] },
+      ],
+    },
   ]);
 
-  // 드롭 시, 레이아웃 순서를 바꾸는 콜백함수
+  // Methods
+  /**
+   * 드롭 시, 레이아웃 순서를 바꾸는 콜백함수
+   */
   const dropHandler = useCallback(
     (dropSpace: itemType, dropItem: itemType) => {
       let updatedLayout: itemType[] = [];
@@ -73,7 +94,7 @@ export const WidgetList = ({}: propsType) => {
         }
 
         // 아이템의 컬럼 이동
-        if (dropItem.type === 'ITEM') {
+        else {
           // 새로만들기
           if (Number(splitDropSpacePath[0]) == layout.length) {
             const columnIndex = Number(splitDropItemPath[0]);
@@ -88,7 +109,8 @@ export const WidgetList = ({}: propsType) => {
               },
               ...layout.slice(columnIndex + 1),
               {
-                children: [{ path: `${layout.length}-0`, children: [dropItem] }],
+                id: 0,
+                children: [dropItem],
               },
             ];
           }
@@ -104,7 +126,8 @@ export const WidgetList = ({}: propsType) => {
               updatedLayout = [
                 ...layout.slice(0, dropIndex),
                 {
-                  children: [{ children: [dropItem] }],
+                  id: 0,
+                  children: [dropItem],
                 },
                 ...layout.slice(dropIndex, columnIndex),
                 {
@@ -128,21 +151,24 @@ export const WidgetList = ({}: propsType) => {
                 },
                 ...layout.slice(columnIndex, dropIndex),
                 {
-                  children: [{ children: [dropItem] }],
+                  id: 0,
+                  children: [dropItem],
                 },
                 ...layout.slice(dropIndex + 1),
               ];
             }
           }
         }
-      }
-
-      if (dropSpace.type === 'ITEM') {
-        // 컬럼 안에 다 집어넣기
+      } else {
+        // 컬럼 안에 다 집어넣고 삭제
         if (dropItem.type === 'COLUMN') {
           const dropIndex = Number(splitDropSpacePath[0]);
           const dropItemIndex = Number(splitDropSpacePath[1]);
           const columnIndex = Number(splitDropItemPath[0]);
+
+          // 같은 곳에 또 두는 것은 의미 없음
+          if (dropIndex == columnIndex) return;
+
           const dropChildren = [...(layout[dropIndex].children || [])];
           const columnChildren = [...(layout[columnIndex].children || [])];
 
@@ -159,19 +185,11 @@ export const WidgetList = ({}: propsType) => {
                 ],
               },
               ...layout.slice(dropIndex + 1, columnIndex),
-              {
-                ...layout[columnIndex],
-                children: [],
-              },
               ...layout.slice(columnIndex + 1),
             ];
           } else {
             updatedLayout = [
               ...layout.slice(0, columnIndex),
-              {
-                ...layout[columnIndex],
-                children: [],
-              },
               ...layout.slice(columnIndex + 1, dropIndex),
               {
                 ...layout[dropIndex],
@@ -184,8 +202,7 @@ export const WidgetList = ({}: propsType) => {
               ...layout.slice(dropIndex + 1),
             ];
           }
-        }
-        if (dropItem.type === 'ITEM') {
+        } else {
           // 같은 컬럼 안에서 순서만 바꾸기
           if (splitDropSpacePath[0] == splitDropItemPath[0]) {
             console.log('순서만 바꾸기');
@@ -290,26 +307,25 @@ export const WidgetList = ({}: propsType) => {
     [layout],
   );
 
-  // 드롭 시, 레이아웃에서 컴포넌트를 제거하는 콜백함수
+  /**
+   * 드롭 시, 레이아웃에서 컴포넌트를 제거하는 콜백함수
+   */
   const throwHandler = useCallback(
-    (item: itemType) => {
+    async (item: itemType) => {
       let updatedLayout: itemType[] = [];
-
-      console.log('[throw]');
 
       // 컬럼 삭제
       if (item.type == 'COLUMN') {
         const splitItemPath = item.path ? item.path.split('-') : [''];
-        console.log('[item.path]', splitItemPath);
 
         const index = Number(splitItemPath[0]);
         updatedLayout = [...layout.slice(0, index), ...layout.slice(index + 1)];
       }
 
       // 아이템 삭제
-      if (item.type == 'ITEM') {
+      else {
+        console.log('[delete widget]', await widget.deleteWidget(item.id));
         const splitItemPath = item.path ? item.path.split('-') : [''];
-        console.log('[item.path]', splitItemPath);
         const columnIndex = Number(splitItemPath[0]);
         const itemIndex = Number(splitItemPath[1]);
         const columnChild = [...(layout[columnIndex].children || [])];
@@ -329,26 +345,47 @@ export const WidgetList = ({}: propsType) => {
     [layout],
   );
 
+  // LifeCycle
+  useEffect(() => {
+    const updatedLayout: itemType[] = [];
+    getWidgetList.data?.map(({ id, widgetCode, widgetRow, widgetCol }) => {
+      console.log(getWidgetList.data);
+      while (updatedLayout.length <= widgetCol) {
+        updatedLayout.push({ id: 0, children: [] });
+      }
+      while ((updatedLayout[widgetCol].children.length || 0) <= widgetRow) {
+        updatedLayout[widgetCol].children.push({ id: 0, children: [] });
+      }
+      if (updatedLayout[widgetCol].children) {
+        updatedLayout[widgetCol].children[widgetRow] = { id, type: widgetCode, children: [] };
+      }
+    });
+
+    setLayout(updatedLayout);
+    console.log(updatedLayout.length);
+  }, [getWidgetList.data]);
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <StyledWidgetList>
+      <StyledWidgetListContainer className="widget-list-container">
         <WidgetTrashCan onThrow={throwHandler} />
-        {layout.map(({ id, children }, index) => {
-          return (
-            <StyledWidgetListColumnContainer key={index}>
-              <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index}`} />
-              <WidgetListColumn
-                id={id}
-                dropHandler={dropHandler}
-                path={`${index}`}
-                children={children}
-              />
-              <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index + 1}`} />
-            </StyledWidgetListColumnContainer>
-          );
-        })}
-        {/* <WidgetDropSpace isHorizontal={true} type="LAST" /> */}
-      </StyledWidgetList>
+        <StyledWidgetList className="widget-list">
+          {layout.map(({ id, children }, index) => {
+            return (
+              <StyledWidgetListColumnContainer key={index}>
+                <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index}`} />
+                <WidgetListColumn
+                  id={id}
+                  dropHandler={dropHandler}
+                  path={`${index}`}
+                  children={children}
+                />
+                <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index + 1}`} />
+              </StyledWidgetListColumnContainer>
+            );
+          })}
+        </StyledWidgetList>
+      </StyledWidgetListContainer>
     </DndProvider>
   );
 };

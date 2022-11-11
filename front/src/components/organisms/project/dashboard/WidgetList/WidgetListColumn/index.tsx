@@ -12,7 +12,7 @@ import { WidgetListItem } from '../WidgetListItem';
 import { Widget } from 'components/molecules/Widget';
 
 interface propsType {
-  id?: string;
+  id: number;
   children?: itemType[];
   dropHandler?: any;
   path?: string;
@@ -38,7 +38,7 @@ export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType)
   drag(col);
 
   return (
-    <StyledWidgetListColumn ref={col} style={{ opacity }}>
+    <StyledWidgetListColumn className="widget-list-column" ref={col} style={{ opacity }}>
       <div>컬럼{id}</div>
       {children
         ? children.map(({ id }, index) => {
@@ -61,8 +61,15 @@ export const WidgetListColumn = ({ id, path, dropHandler, children }: propsType)
             );
           })
         : ''}
-
-      <Widget>{id}</Widget>
+      <WidgetDropSpace
+        onDrop={dropHandler}
+        type="ITEM"
+        path={`${path}-${children?.length}`}
+        isHorizontal={true}
+        isLast={true}
+      >
+        <Widget>{id}</Widget>
+      </WidgetDropSpace>
     </StyledWidgetListColumn>
   );
 };

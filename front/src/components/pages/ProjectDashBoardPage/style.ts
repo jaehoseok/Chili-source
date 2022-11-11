@@ -2,11 +2,11 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledPage = styled.div`
-  ${tw`h-screen w-screen flex flex-col`}
+  ${tw`h-screen w-full flex flex-col`}
 `;
 StyledPage.defaultProps = {};
 
-export const StyledHeaderGap = styled.div`
+export const StyledHeader = styled.div`
   height: 6rem;
   min-height: 6rem;
 `;
