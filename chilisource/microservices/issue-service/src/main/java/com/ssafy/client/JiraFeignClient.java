@@ -1,6 +1,8 @@
 package com.ssafy.client;
 
 import com.ssafy.dto.request.jira.bulk.JiraIssueBulkCreateRequest;
+import com.ssafy.dto.request.jira.bulk.JiraIssueStatusUpdateRequest;
+import com.ssafy.dto.request.jira.bulk.JiraIssueUpdateRequest;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
@@ -66,4 +68,19 @@ public interface JiraFeignClient {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("query") String query
     );
+
+    @PutMapping("/api/3/issue/{issueKey}")
+    Response updateIssue(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("issueKey") String issueKey,
+            @RequestBody JiraIssueUpdateRequest request
+    );
+
+    @PostMapping("/api/3/issue/{issueKey}/transitions")
+    Response updateIssueStatus(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("issueKey") String issueKey,
+            @RequestBody JiraIssueStatusUpdateRequest request
+            );
+
 }

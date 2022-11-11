@@ -410,6 +410,33 @@ public class IssueServiceImpl implements IssueService {
         return jiraFeignClient.getIssue(jiraBase64, issueKey);
     }
 
+    @Override
+    public void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        if (request.getStatusId() != null) {
+            JiraIssueStatusUpdateRequest statusUpdateRequest = JiraIssueStatusUpdateRequest.builder()
+                    .transition(JiraIssueStatusDetailUpdateRequest.builder()
+                            .id(request.getStatusId())
+                            .build())
+                    .build();
+
+            jiraFeignClient.updateIssueStatus(jiraBase64, issueKey, statusUpdateRequest);
+
+        }
+
+        if (request.getSummary() != null) {
+            JiraIssueUpdateRequest updateRequest = JiraIssueUpdateRequest.builder()
+                    .fields(JiraIssueDetailUpdateRequest.builder()
+                            .summary(request.getSummary())
+                            .build())
+                    .build();
+
+            jiraFeignClient.updateIssue(jiraBase64, issueKey, updateRequest);
+        }
+    }
+
     @Transactional
     @Override
     public void addIssuesToJira(User user, Long projectId, Long middleBucketId, List<String> auths) throws IOException {
