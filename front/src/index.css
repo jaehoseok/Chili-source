@@ -22,14 +22,12 @@ code {
 }
 
 #nav-root {
-  position: fixed;
   width: 100vw;
+  --height: 100px;
   background-color: #ffffff;
 }
 
 #root {
-  height: 100vh;
   display: flex;
-  flex-direction: column;
   justify-content: center;
 }
