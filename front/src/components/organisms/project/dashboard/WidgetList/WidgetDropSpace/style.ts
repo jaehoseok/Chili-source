@@ -7,6 +7,8 @@ export interface styledType {
 }
 
 export const StyledWidgetDropSpace = styled.div<styledType>`
+  display: flex;
+  justify-content: center;
   padding: 8px;
   transition: 200ms all;
   ${({ isHorizontal }) => (isHorizontal ? 'width: 100%;' : '')}

@@ -11,7 +11,10 @@ export const StyledWidgetListContainer = styled.div<styledType>`
 `;
 
 export const StyledWidgetList = styled.div<styledType>`
-  ${tw`min-h-screen w-11/12 flex justify-start overflow-x-auto bg-red-200`}
+  ${tw`flex-shrink-[1] flex justify-start overflow-x-auto`}
+  max-width: 96%;
+  padding-top: 16px;
+  padding-bottom: 16px;
   border-radius: 32px;
   background-color: #fafafa;
   box-shadow: inset 4px 4px 10px -1px rgba(0, 0, 0, 0.25),

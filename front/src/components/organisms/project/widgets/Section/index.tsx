@@ -1,6 +1,3 @@
-// API & Library
-import { INITIAL_DATA } from './constants';
-
 // Styles
 import { StyledSection, StyledSectionColumn } from './style';
 
@@ -16,18 +13,10 @@ function Section({}: propTypes) {
     <>
       <StyledSection>
         <StyledSectionColumn>
-          <WidgetBlock type="GanttChart"></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-        </StyledSectionColumn>
-
-        <StyledSectionColumn>
-          <WidgetBlock type="GanttChart"></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
-          <WidgetBlock type=""></WidgetBlock>
+          <WidgetBlock type="GANTT"></WidgetBlock>
+          <WidgetBlock type="CALENDAR"></WidgetBlock>
+          <WidgetBlock type="JIRA"></WidgetBlock>
+          <WidgetBlock type="SSAFYGITLAB"></WidgetBlock>
           <WidgetBlock type=""></WidgetBlock>
         </StyledSectionColumn>
 

@@ -8,6 +8,10 @@ export const StyledWidgetListColumn = styled.div`
   width: 512px;
 `;
 
+export const StyledWidgetListColumnLabel = styled.div`
+  ${tw`w-full flex justify-center`}
+`;
+
 export const StyledWidgetListItemContainer = styled.div``;
 
 export const StyledWidgetListItemBox = styled.div`

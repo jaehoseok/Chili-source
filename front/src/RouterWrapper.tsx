@@ -44,7 +44,7 @@ const RouterWrapper = () => {
         <Route path="/project/:projectId/*">
           <Route path="dashboard" element={<ProjectDashBoardPage />} />
           <Route path="setting" element={<ProjectSettingPage />} />
-          <Route path="widgets" element={<WidgetSelectPage />} />
+          <Route path="widgets/:columnIdx/:itemIdx" element={<WidgetSelectPage />} />
           <Route path="gantt-chart" element={<GanttChartPage />} />
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="issues" element={<IssuesPage />} />

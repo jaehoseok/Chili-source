@@ -41,7 +41,7 @@ export const WidgetList = ({}: propsType) => {
     {
       id: 0,
       children: [
-        { id: 9, type: 'CALENLDAR', children: [] },
+        { id: 9, type: 'CALENDAR', children: [] },
         { id: 10, type: 'GANTT', children: [] },
         { id: 11, type: 'JIRA', children: [] },
         { id: 12, type: 'SSAFYGITLAB', children: [] },
@@ -320,12 +320,15 @@ export const WidgetList = ({}: propsType) => {
         const splitItemPath = item.path ? item.path.split('-') : [''];
 
         const index = Number(splitItemPath[0]);
+        layout[index].children.map(async id => {
+          console.log('[delete widget]', await widget.deleteWidget(Number(id)));
+        });
         updatedLayout = [...layout.slice(0, index), ...layout.slice(index + 1)];
       }
 
       // 아이템 삭제
       else {
-        // console.log('[delete widget]', await widget.deleteWidget(item.id));
+        console.log('[delete widget]', await widget.deleteWidget(item.id));
         const splitItemPath = item.path ? item.path.split('-') : [''];
         const columnIndex = Number(splitItemPath[0]);
         const itemIndex = Number(splitItemPath[1]);
@@ -348,9 +351,8 @@ export const WidgetList = ({}: propsType) => {
 
   // LifeCycle
   useEffect(() => {
-    const updatedLayout: itemType[] = [];
+    let updatedLayout: itemType[] = [];
     getWidgetList.data?.map(({ id, widgetCode, widgetRow, widgetCol }) => {
-      console.log(getWidgetList.data);
       while (updatedLayout.length <= widgetCol) {
         updatedLayout.push({ id: 0, children: [] });
       }
@@ -362,7 +364,9 @@ export const WidgetList = ({}: propsType) => {
       }
     });
 
-    // setLayout(updatedLayout);
+    if (updatedLayout.length == 0) updatedLayout = [{ id: 0, children: [] }];
+
+    setLayout(updatedLayout);
   }, [getWidgetList.data]);
 
   return (

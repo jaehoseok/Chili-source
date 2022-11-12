@@ -17,4 +17,5 @@ export const StyledBody = styled.div`
 
 export const StyledSection = styled.div`
   ${tw`w-full flex`}
+  max-width: 100%;
 `;

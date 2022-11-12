@@ -1,4 +1,9 @@
-// styles
+// API & Library
+import { useNavigate, useParams } from 'react-router-dom';
+import { widget } from 'api/rest';
+import { useSetWidgetListHandler } from 'hooks/widget';
+
+// Styles
 import {
   StyledWidgetBlock,
   StyledWidgetBlockLine,
@@ -6,7 +11,7 @@ import {
   styledType,
 } from './style';
 
-// components
+// Components
 import Sheet from 'components/atoms/Sheet';
 
 interface propsType extends styledType {
@@ -29,28 +34,58 @@ interface propsType extends styledType {
  * @author inte
  */
 export const WidgetBlock = ({ height, width, type }: propsType) => {
-  let label;
-  let text;
+  // Init
+  let label = '';
+  let text = '';
   let src;
+  let clickHandler = () => {
+    console.log('이거왜이럼');
+  };
+
+  const navigate = useNavigate();
+  const { projectId, columnIdx, itemIdx } = useParams();
+  const setWidgetList = useSetWidgetListHandler();
 
   // 타입에 따른 위젯 설명
   switch (type) {
-    case 'GanttChart':
+    case 'GANTT':
       label = '간트 차트';
       text = '프로젝트에 할 일을 간편하게 생성하고 이를 간트 차트화 하여 보여줍니다.';
+      clickHandler = async () => {
+        // setWidgetList.mutate({ projectId: 0, widgetCodeId: 'string', widgetCol: 0, widgetRow: 0 });
+        await widget.addWidget(Number(projectId), 'GANTT', Number(columnIdx), Number(itemIdx));
+        navigate(`/project/${projectId}/dashboard`);
+      };
       break;
-    case 'Calendar':
+    case 'CALENDAR':
       label = '캘린더';
       text = '프로젝트의 일정을 달력으로 표현하여 한 눈에 확인 할 수 있습니다.';
+      clickHandler = async () => {
+        await widget.addWidget(Number(projectId), 'CALENDAR', Number(columnIdx), Number(itemIdx));
+        navigate(`/project/${projectId}/dashboard`);
+      };
       break;
-    case 'JiraBucket':
+    case 'JIRA':
       label = '지라 버킷';
       text =
         'Jira 에 이슈들의 규격을 저장하거나, 규격에 맞게 다 수의 이슈를 스프린트에 자동 생성해줍니다.';
+      clickHandler = async () => {
+        await widget.addWidget(Number(projectId), 'JIRA', Number(columnIdx), Number(itemIdx));
+        navigate(`/project/${projectId}/dashboard`);
+      };
       break;
-    case 'GitLog':
+    case 'SSAFYGITLAB':
       label = '깃 로그';
       text = '깃의 커밋과 지라 이슈 내역을 연결하여 그래프로 정리하여 보여줍니다.';
+      clickHandler = async () => {
+        await widget.addWidget(
+          Number(projectId),
+          'SSAFYGITLAB',
+          Number(columnIdx),
+          Number(itemIdx),
+        );
+        navigate(`/project/${projectId}/dashboard`);
+      };
       break;
     default:
       label = '정의되지 않은 위젯';
@@ -68,8 +103,8 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
   return (
     <>
-      <div> * {label}</div>
-      <StyledWidgetBlock height={height} width={width}>
+      <div onClick={clickHandler}> * 버튼</div>
+      <StyledWidgetBlock height={height} width={width} onClick={clickHandler}>
         <Sheet isShadow={true} height="100%" width="40%">
           <img src={src} alt={type} style={{ height: '60%', width: '60%', objectFit: 'contain' }} />
         </Sheet>

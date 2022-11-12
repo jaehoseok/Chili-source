@@ -6,6 +6,7 @@ import { itemType } from '../';
 // Styles
 import {
   StyledWidgetListColumn,
+  StyledWidgetListColumnLabel,
   StyledWidgetListItemContainer,
   StyledWidgetListItemBox,
 } from './style';
@@ -44,6 +45,9 @@ export const WidgetListColumn = ({ id, type, path, dropHandler, children }: prop
 
   return (
     <StyledWidgetListColumn className="widget-list-column" ref={col} style={{ opacity }}>
+      <StyledWidgetListColumnLabel className="widget-list-column-label">
+        <Widget></Widget>
+      </StyledWidgetListColumnLabel>
       {children
         ? children.map(({ id, type }, index) => {
             return (
@@ -76,7 +80,7 @@ export const WidgetListColumn = ({ id, type, path, dropHandler, children }: prop
         isHorizontal={true}
         isLast={true}
       >
-        <Widget>{id}</Widget>
+        <Widget type="ADD" path={`${path}-${children?.length}`}></Widget>
       </WidgetDropSpace>
     </StyledWidgetListColumn>
   );
