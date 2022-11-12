@@ -44,24 +44,7 @@ const index = () => {
         <HeaderNav></HeaderNav>
       </StyledHeader>
       <StyledBody>
-        <IssueTemplate
-          issue={issue}
-          // issues={issues}
-          // setIssues={setIssues}
-          setIssue={setIssue}
-          setIsInsert={setIsInsert}
-        ></IssueTemplate>
-        {/* <IssueInfo
-          info={info}
-          issues={issues}
-          isAdd={isAdd}
-          isEdit={isEdit}
-          setInfo={setInfo}
-          setIssues={setIssues}
-          setIsInsert={setIsInsert}
-          setIsAdd={setIsAdd}
-          setIsEdit={setIsEdit}
-        ></IssueInfo> */}
+        <IssueTemplate issue={issue} setIssue={setIssue} setIsInsert={setIsInsert}></IssueTemplate>
         <MiddleBucket issue={issue} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>
     </StyledIssuesPage>
