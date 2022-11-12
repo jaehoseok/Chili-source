@@ -113,6 +113,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional
     public void updateProjectImage(String image, Long projectId, Long userId) {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
