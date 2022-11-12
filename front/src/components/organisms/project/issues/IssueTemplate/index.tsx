@@ -35,29 +35,25 @@ const index = (props: any) => {
   };
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [editNo, setEditNo] = useState(0);
+  const [issues, setIssues] = useState<templateType[]>([]);
   const setInfoHandler = (issue: templateType) => {
     props.setIssue(issue);
   };
   const deleteHandler = (templateId: number) => {
-    props.setIssues(props.issues.filter((issue: templateType) => issue.templateId !== templateId));
+    setIssues(issues.filter((issue: templateType) => issue.templateId !== templateId));
   };
   const editEnableHandler = (templateId: number) => {
-    alert('이슈 수정 버튼 활성화');
     setIsEdit(true);
+    setIsAdd(false);
+    setEditNo(templateId);
   };
   const addEnableHandler = () => {
-    alert('이슈 추가 버튼 활성화');
     setIsAdd(true);
+    setIsEdit(false);
   };
-  useEffect(() => {
-    if (!isAdd) {
-      props.issues.push(issue);
-      props.setIssues(props.issues);
-      setIsAdd(false);
-    }
-  }, [isAdd]);
 
-  const IssueList = props.issues.map((issue: templateType) => (
+  const IssueList = issues.map((issue: templateType) => (
     <Issue
       templateId={issue.templateId}
       project={issue.project}
@@ -116,7 +112,7 @@ const index = (props: any) => {
     storyPoints: 2,
   };
   useEffect(() => {
-    props.setIssues([issue1, issue2, issue3]);
+    setIssues([issue1, issue2, issue3]);
   }, []);
 
   // IssueInfo 부분
@@ -143,35 +139,66 @@ const index = (props: any) => {
 
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
-    alert('이슈 템플릿 추가 완료');
-    props.setIssue({
-      templateId: templateId,
-      project: projectRef.current ? projectRef.current.value : '',
-      type: typeRef.current
-        ? typeRef.current.value === '스토리'
-          ? 'story'
-          : typeRef.current.value === '태스크'
-          ? 'task'
-          : typeRef.current.value === '버그'
-          ? 'bug'
-          : 'error'
-        : '',
-      summary: summaryRef.current ? summaryRef.current.value : '',
-      description: descriptionRef.current ? descriptionRef.current.value : '',
-      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      reporter: reporterRef.current ? reporterRef.current.value : '',
-      assignee: assigneeRef.current ? assigneeRef.current.value : '',
-      rank: rankRef.current ? rankRef.current.value : '',
-      sprint: sprintRef.current ? sprintRef.current.value : '',
-      storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
-    });
-    setTemplateId(templateId + 1);
+    issue.templateId = templateId;
+    issue.project = projectRef.current ? projectRef.current.value : '';
+    issue.type = typeRef.current
+      ? typeRef.current.value === '스토리'
+        ? 'story'
+        : typeRef.current.value === '태스크'
+        ? 'task'
+        : typeRef.current.value === '버그'
+        ? 'bug'
+        : 'error'
+      : '';
+    issue.summary = summaryRef.current ? summaryRef.current.value : '';
+    issue.description = descriptionRef.current ? descriptionRef.current.value : '';
+    issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
+    issue.reporter = reporterRef.current ? reporterRef.current.value : '';
+    issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
+    issue.rank = rankRef.current ? rankRef.current.value : '';
+    issue.sprint = sprintRef.current ? sprintRef.current.value : '';
+    issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
+    projectRef.current ? (projectRef.current.value = '') : '';
+    // typeRef.current ? (typeRef.current.value = '') : '';
+    summaryRef.current ? (summaryRef.current.value = '') : '';
+    descriptionRef.current ? (descriptionRef.current.value = '') : '';
+    // reporterRef.current ? (reporterRef.current.value = '') : '';
+    // assigneeRef.current ? (assigneeRef.current.value = '') : '';
+    // rankRef.current ? (rankRef.current.value = '') : '';
+    // epicLinkRef.current ? (epicLinkRef.current.value = '') : '';
+    // sprintRef.current ? (sprintRef.current.value = '') : '';
+    storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';
+    setTemplateId(templateId + 1);
+    issues.push(issue);
+    setIssues(issues);
     setIsAdd(false);
   };
 
   const editTemplateHandler = () => {
-    alert('이슈 템플릿 편집 완료');
+    issues.forEach(issue => {
+      if (issue.templateId === editNo) {
+        projectRef.current ? (issue.project = projectRef.current.value) : '';
+        typeRef.current
+          ? (issue.type =
+              typeRef.current.value === '스토리'
+                ? 'story'
+                : typeRef.current.value === '태스크'
+                ? 'task'
+                : typeRef.current.value === '버그'
+                ? 'bug'
+                : 'error')
+          : '';
+        summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
+        descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
+        reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
+        assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
+        rankRef.current ? (issue.rank = rankRef.current.value) : '';
+        epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
+        sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
+        storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
+      }
+    });
     setIsEdit(false);
   };
 
@@ -199,6 +226,7 @@ const index = (props: any) => {
     });
     props.setIsInsert(true);
   };
+
   return (
     <StyledIssueBundle>
       <StyledIssueTemplate>

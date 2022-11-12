@@ -36,7 +36,6 @@ const index = () => {
     storyPoints: 0,
   };
   const [issue, setIssue] = useState<issueType>(dummyIssue);
-  const [issues, setIssues] = useState<templateType[]>([]);
   const [isInsert, setIsInsert] = useState(false);
 
   return (
@@ -47,8 +46,8 @@ const index = () => {
       <StyledBody>
         <IssueTemplate
           issue={issue}
-          issues={issues}
-          setIssues={setIssues}
+          // issues={issues}
+          // setIssues={setIssues}
           setIssue={setIssue}
           setIsInsert={setIsInsert}
         ></IssueTemplate>
