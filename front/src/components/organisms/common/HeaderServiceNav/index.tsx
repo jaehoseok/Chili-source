@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -11,76 +11,19 @@ import Tab from 'components/atoms/Tab';
 import { useGetProject } from 'hooks/project';
 
 interface widgetType {
-  isActivated: boolean;
-  title: string;
+  dashboard: boolean;
+  'gantt-chart': boolean;
+  calendar: boolean;
+  setting: boolean;
+  issues: boolean;
 }
 
 interface tabType {
   id: number;
-  widgetList: widgetType[];
+  widgetList: widgetType;
   title: string;
   isActivated: boolean;
 }
-
-// const CHILISOURCE = {
-//   id: 1,
-//   isActivated: false,
-//   title: '칠리소스',
-//   widgetList: [
-//     {
-//       isActivated: true,
-//       title: '대시보드',
-//     },
-//     {
-//       isActivated: false,
-//       title: '캘린더',
-//     },
-//     {
-//       isActivated: false,
-//       title: '간트차트',
-//     },
-//     {
-//       isActivated: false,
-//       title: '이슈',
-//     },
-//   ],
-// };
-
-// const APICLOUD = {
-//   id: 2,
-//   isActivated: false,
-//   title: 'API cloud',
-//   widgetList: [
-//     {
-//       isActivated: true,
-//       title: '대시보드',
-//     },
-//   ],
-// };
-
-// const MOTOO = {
-//   id: 3,
-//   isActivated: false,
-//   title: '모투',
-//   widgetList: [
-//     {
-//       isActivated: true,
-//       title: '대시보드',
-//     },
-//   ],
-// };
-
-// const FOODTRUCK = {
-//   id: 4,
-//   isActivated: false,
-//   title: '푸드트럭 서비스!',
-//   widgetList: [
-//     {
-//       isActivated: true,
-//       title: '대시보드',
-//     },
-//   ],
-// };
 
 /**
  *
@@ -91,16 +34,14 @@ interface tabType {
  * @author bell
  */
 const index = memo(() => {
-  // project용 recoil 데이터 가져오기, set 적용하기
-
-  // const [tabList, setTabList] = useRecoilState<tabType[]>(tabListState);
-  // let projectTabList: tabType[];
-
   // portal 용 태그
   const el = document.getElementById('nav-root');
 
+  // React-router
   const navigate = useNavigate();
   const location = useLocation();
+
+  // 현재 프로젝트 id 값 구해두기
   const currProjectId = location.pathname.split('/')[2];
 
   // 쿼리 데이터
@@ -110,346 +51,155 @@ const index = memo(() => {
 
   // 첫 유저인 경우, localStorage에 'project-tab-list' 아직 안만든 경우
   if (!GETTABPROJECT) {
-    localStorage.setItem(
-      'project-tab-list',
-      JSON.stringify([
-        {
-          id: +currProjectId,
-          isActivated: true,
-          title: getProject.data && getProject.data.name,
-          widgetList: [{ isActivated: true, title: '대시보드' }],
-        },
-      ]),
-    );
+    if (getProject) localStorage.setItem('project-tab-list', JSON.stringify([]));
   }
 
-  // 현재 탭리스트 값
-  let projectTabList: tabType[] = JSON.parse(GETTABPROJECT as string);
-
-  // 현재 탭리스트 변경시 리렌더링 되도록 설정
-  useEffect(() => {
-    console.log('리렌더링');
-  }, [projectTabList]);
+  // 현재 탭리스트 데이터
+  let projectTabList: tabType[] = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
   // 프로젝트 탭을 활성화시키는 함수
   // 해당 Tab이 활성화 되는 경우, 다른 Tab은 활성화가 종료 되며,
   // 활성화 된 컴포넌트에 맞게 경로가 이동되어야 한다.
   // 프로젝트 데이터가 없는 경우는 ProjectSelectPage로 이동한다.
-  const activateToggleHandler = (id: number, isActivated: boolean) => {
-    let idx = -1;
+  const activateToggleHandler = (e: MouseEvent<HTMLSpanElement>, id: number) => {
+    const target = e.target as HTMLElement;
+    // X 태그는 탭 안에 있다.
+    // X 태그 함수를 실행하면, event 버블을 통해, 탭 활성 함수도 실행되게 된다.
+    // 이러한 경우 에러가 나타날 수 있으니
+    // 간이적으로 이벤트 전파를 차단하는 조건을 걸었다.
+    if (target.innerHTML === 'X') {
+      return;
+    }
 
     if (projectTabList.length <= 0) navigate('/projects');
 
-    // 일급함수 유지를 위해, 데이터 복사
-    // 복사시 설정 주의할것!
-    const newTabs = projectTabList.map(({ id, isActivated, title, widgetList }: tabType) => {
-      return {
-        id,
-        isActivated,
-        title,
-        widgetList,
-      };
-    });
+    const newProjectTabList = [...projectTabList];
+    const currProjectIdx = newProjectTabList.findIndex(project => project.id === id);
 
-    // 복사한 데이터의 isActivated를 모두 false로
-    newTabs.forEach((projectTab: tabType) => {
-      projectTab.isActivated = false;
-    });
-
-    // 활성화 시킬 idx 찾기
-    idx = newTabs.findIndex(projectTab => projectTab.id === id);
-    let currId: number;
-    try {
-      if (idx === -1 && isActivated) {
-        newTabs[0].isActivated = !newTabs[0].isActivated;
-        currId = newTabs[0].id;
-      } else {
-        newTabs[idx].isActivated = !newTabs[idx].isActivated;
-        currId = newTabs[idx].id;
-      }
-    } catch (e) {
-      // 삭제된 이전 데이터때문에 배열의 갯수와 idx 맞지 않아 indexError가 나오는 경우가 았다.
-      // 필요없는 값은 삭제되었을테니, 활성화된 탭이 존재하는
-      // 이전의 값을 반환하는 것으로, 에러를 해결하였다.
-      return projectTabList;
-    }
-    // 해당 id값을 토대로 경로 이동
-    navigate(`/project/${currId}/dashboard`);
-    // 프로젝트 탭이 바뀌는 경우, 위젯탭은 항상 대시보드가 활성화되도록 설정
-    activatedToggleWidgetHandler(idx, '대시보드', false);
-    // 로컬스토리지 데이터 변경
-    localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
-
-    // if(GETTABPROJECT?.length < 0)
-    // setTabList((prevArr: tabType[]) => {
-    //   if (prevArr.length <= 0) navigate('/projects');
-
-    //   // 데이터 복사
-    //   // recoil은 primitive 데이터 외에는 모두 읽기전용으로만 가져오기 떄문에,
-    //   // 복사시 설정 주의할것!
-    //   const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
-    //     return {
-    //       id,
-    //       isActivated,
-    //       title,
-    //       widgetList,
-    //     };
-    //   });
-
-    //   // 복사한 데이터의 isActivated를 모두 false로
-    //   newTabs.forEach((newTab: tabType) => (newTab.isActivated = false));
-
-    //   // 활성화 시킬 idx 찾기
-    //   idx = newTabs.findIndex(newTab => newTab.id === id);
-    //   // 경로 이동을 위한, id룰 확인
-    //   let currId: number;
-    //   try {
-    //     if (idx === -1 && isActivated) {
-    //       newTabs[0].isActivated = !newTabs[0].isActivated;
-    //       currId = newTabs[0].id;
-    //     } else {
-    //       newTabs[idx].isActivated = !newTabs[idx].isActivated;
-    //       currId = newTabs[idx].id;
-    //     }
-    //   } catch (e) {
-    //     // 삭제된 이전 데이터때문에 배열의 갯수와 idx 맞지 않아 indexError가 나오는 경우가 았다.
-    //     // 필요없는 값은 삭제되었을테니, 활성화된 탭이 존재하는
-    //     // 이전의 값을 반환하는 것으로, 에러를 해결하였다.
-    //     return prevArr;
-    //   }
-    //   // 해당 id값을 토대로 경로 이동
-    //   navigate(`/project/${currId}/dashboard`);
-    //   return newTabs;
-    // });
-    // activatedToggleWidgetHandler(idx, '대시보드', false);
+    newProjectTabList[currProjectIdx].isActivated = true;
+    localStorage.setItem('project-tab-list', JSON.stringify(newProjectTabList));
+    navigate(`/project/${id}/dashboard`, { state: 'toggleTabEvent' });
   };
 
   // 해당 프로젝트 탭을 삭제하는 함수
   const closeTabHandler = (id: number) => {
     const newTabs = [...projectTabList];
-
-    // const idx = newTabs.findIndex(tab => tab.id === id);
-    // const activatedIdx = newTabs.findIndex(tab => tab.isActivated);
     // 필터링을 통해, 해당 id를 제외한
     // 새 프로젝트 데이터를 반환하다.
     localStorage.setItem('project-tab-list', JSON.stringify(newTabs.filter(tab => tab.id !== id)));
-    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
-    // 이거 에러 처리하려면 오래걸릴듯
-    // 더 완벽한 nav 탭을 짤 수있음
-    // 나중에 한번 보자
-    // if (idx >= newTabs.length - 1) {
-    //   navigate(`/project/${projectTabList[idx - 1].id}/dashboard`);
-    // } else if (idx === 0 && !newTabs[idx].isActivated) {
-    //   navigate(`/project/${projectTabList[activatedIdx - 1].id}/dashboard`);
-    // } else if (idx === 0) {
-    //   navigate(`/project/${projectTabList[0].id}/dashboard`);
-    // } else {
-    //   navigate(`/project/${projectTabList[idx - 1].id}/dashboard`);
-    // }
+    // tab을 다 삭제해서 데이터가 없는 경우 index 에러가 난다.
+    // index 에러가 나면 더이상 탭이 없기 때문에
+    // 프로젝트 선택 페이지로 이동하도록 처리했다.
+    try {
+      const projectId = JSON.parse(localStorage.getItem('project-tab-list') as string)[0].id;
+      navigate(`/project/${projectId}/dashboard`);
+    } catch {
+      navigate(`/projects`);
+    }
   };
 
   // 위젯 탭을 활성화, 비활성화시키는 함수
-  // 설계 방식은 actiavatedToggleHandler와 동일하나, 내부에 속해있는 widgetList[] 를 업데이트 해주는 함수이다.
+  // 설계 방식은 actiavatedToggleHandler와 비슷하다.
   const activatedToggleWidgetHandler = (
-    projectIdx: number, // 현재 projectList 중 해당 project의 idx값
-    title: string, // 현재 위젯 탭의 title 값
-    isActivated: boolean, // 현재 위젯 탭의 활성화 여부
+    projectId: number,
+    projectName: string, // 현재 projectList 중 해당 project의 idx값
   ) => {
-    if (projectIdx < 0) return;
-    const widgetTabList = projectTabList[projectIdx].widgetList;
-    const projectId = projectTabList[projectIdx].id;
+    const newProjectList = [...projectTabList];
+    const idx = newProjectList.findIndex(project => project.id === projectId);
 
-    const idx = widgetTabList.findIndex(widget => widget.title === title);
-
-    const newTabs = projectTabList.map(({ id, isActivated, title, widgetList }: tabType) => {
-      return { id, isActivated, title, widgetList };
-    });
-
-    const newWidgets = widgetTabList.map(({ title, isActivated }: widgetType) => {
-      return {
-        title,
-        isActivated,
-      };
-    });
-
-    newWidgets.forEach(widget => (widget.isActivated = false));
-    let currTitle: string;
-    try {
-      if (idx === -1 && isActivated) {
-        newWidgets[0].isActivated = !newWidgets[0].isActivated;
-        currTitle = newWidgets[0].title;
-      } else {
-        newWidgets[idx].isActivated = !newWidgets[idx].isActivated;
-        currTitle = newWidgets[idx].title;
-      }
-    } catch (e) {
-      return projectTabList;
-    }
-
-    newTabs[projectIdx].widgetList = [...newWidgets];
-
-    switch (currTitle) {
+    newProjectList[idx].widgetList = {
+      dashboard: false,
+      'gantt-chart': false,
+      calendar: false,
+      setting: false,
+      issues: false,
+    };
+    switch (projectName) {
       case '대시보드':
+        newProjectList[idx].widgetList.dashboard = true;
         navigate(`/project/${projectId}/dashboard`);
         break;
-      case '이슈':
+      case '미들버킷':
+        newProjectList[idx].widgetList.issues = true;
         navigate(`/project/${projectId}/issues`);
         break;
       case `캘린더`:
+        newProjectList[idx].widgetList.calendar = true;
         navigate(`/project/${projectId}/calendar`);
         break;
       case '간트차트':
+        newProjectList[idx].widgetList['gantt-chart'] = true;
         navigate(`/project/${projectId}/gantt-chart`);
         break;
+      case '설정':
+        newProjectList[idx].widgetList.setting = true;
+        navigate(`/project/${projectId}/setting`);
+        break;
     }
-    localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
-    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
-    // projectIdx가 -1이 들어올 수 있다. (이미 데이터가 삭제되고 프로젝트 데이터가 없는 경우)
-    // 그러한 경우에는 업데이트 할게 없으니 그냥 리턴 하면 된다.
-    // if (projectIdx < 0) return;
-    // setTabList((prevArr: tabType[]) => {
-    //   // 현재 수정이 이루어져야 하는 widgetList
-    //   const currWidgetList = prevArr[projectIdx].widgetList;
-    //   // 실제 프로젝트의 id값
-    //   // 이후 경로 이동에 필요하다.
-    //   const projectId = prevArr[projectIdx].id;
-    //   // widgetList 안의 현재 widget의 idx 값
-    //   const idx: number = currWidgetList.findIndex(widget => widget.title === title);
-    //   // 배열 복제
-    //   const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
-    //     return {
-    //       id,
-    //       isActivated,
-    //       title,
-    //       widgetList,
-    //     };
-    //   });
-    //   // 위젯 복제
-    //   // 위젯도 배열이기에, 복제를 하지 않으면 수정이 불가능하다.
-    //   const newWidgets: widgetType[] = currWidgetList.map(({ title, isActivated }: widgetType) => {
-    //     return {
-    //       title,
-    //       isActivated,
-    //     };
-    //   });
-    //   // 해당 프로젝트의 모든 위젯의 활성화 여부를 모두 false로
-    //   newWidgets.forEach(widget => (widget.isActivated = false));
-    //   let currTitle: string;
-    //   try {
-    //     if (idx === -1 && isActivated) {
-    //       newWidgets[0].isActivated = !newWidgets[0].isActivated;
-    //       currTitle = newWidgets[0].title;
-    //     } else {
-    //       newWidgets[idx].isActivated = !newWidgets[idx].isActivated;
-    //       currTitle = newWidgets[idx].title;
-    //     }
-    //   } catch (e) {
-    //     return prevArr;
-    //   }
-    //   newTabs[projectIdx].widgetList = [...newWidgets];
-    //   // 확인된 currTitle 값을 토대로, 경로 이동
-    //   // 고유의 id값을 지정할까 생각했지만
-    //   // 서비스에서 나타날 수 있는 경우의 수가 4개뿐이라
-    //   // 그냥 title로 확인함
-    //   switch (currTitle) {
-    //     case '대시보드':
-    //       navigate(`/project/${projectId}/dashboard`);
-    //       break;
-    //     case '이슈':
-    //       navigate(`/project/${projectId}/issues`);
-    //       break;
-    //     case `캘린더`:
-    //       navigate(`/project/${projectId}/calendar`);
-    //       break;
-    //     case '간트차트':
-    //       navigate(`/project/${projectId}/gantt-chart`);
-    //       break;
-    //   }
-    //   return newTabs;
-    // });
+    localStorage.setItem('project-tab-list', JSON.stringify(newProjectList));
   };
-
-  // 위젯 탭을 삭제하는 함수
-  const closeWidgetHandler = (projectIdx: number, title: string) => {
-    const currWidgetList = projectTabList[projectIdx].widgetList;
-    const newTabs = projectTabList.map(({ id, isActivated, title, widgetList }: tabType) => {
-      return {
-        id,
-        isActivated,
-        title,
-        widgetList,
-      };
-    });
-    const newWidgets: widgetType[] = currWidgetList.filter(widget => widget.title !== title);
-    newTabs[projectIdx].widgetList = [...newWidgets];
-    console.log(newTabs);
-    localStorage.setItem('project-tab-list', JSON.stringify(newTabs));
-    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
-    // setTabList((prevArr: tabType[]) => {
-    //   const currWidgetList = prevArr[projectIdx].widgetList;
-    //   // 결과적으로 이중 배열의 형태이기 때문에
-    //   // 한번의 복제를 해야한다.
-    //   const newTabs = prevArr.map(({ id, isActivated, title, widgetList }: tabType) => {
-    //     return {
-    //       id,
-    //       isActivated,
-    //       title,
-    //       widgetList,
-    //     };
-    //   });
-    //   const newWidgets: widgetType[] = currWidgetList.filter(
-    //     (widget: widgetType) => widget.title !== title,
-    //   );
-    //   // 해당 프로젝트의 widgetList에
-    //   // 수정 값을 반영
-    //   newTabs[projectIdx].widgetList = [...newWidgets];
-    //   // 수정환 newTabs를 반환
-    //   return newTabs;
-    // });
-  };
-
-  // console.log(projectTabList.length);
 
   // 현재 킨 프로젝트가 이미 localStorage로 데이터가 있는지 확인
-  let check = true;
-  for (let i = 0; i < projectTabList.length; i++) {
-    if (projectTabList[i].id === +currProjectId) {
-      projectTabList.forEach(item => {
-        item.isActivated = false;
-      });
-      projectTabList[i].isActivated = true;
-      localStorage.setItem('project-tab-list', JSON.stringify(projectTabList));
-      projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
-      check = false;
-      break;
-    }
-  }
+  const idx = projectTabList.findIndex(project => project.id === +currProjectId);
 
-  if (check) {
-    // 현재 킨 프로젝트가 처음 들어가는 프로젝트 인 경우 -> 프로젝트 탭을 만들어야 하는 경우
-    // 일단 모든 탭 false로
-    projectTabList.forEach(item => {
+  // idx가 -1이면 처음 들어오는 프로젝트 데이터 이므로, 기존의 데이터 뒤에 추가해주어야 한다.
+  if (idx < 0) {
+    const newProjectTabList = [...projectTabList];
+    newProjectTabList.forEach(item => {
       item.isActivated = false;
     });
+
     // 프로젝트 데이터 추가
     if (getProject.data) {
       localStorage.setItem(
         'project-tab-list',
         JSON.stringify([
-          ...projectTabList,
+          ...newProjectTabList,
           {
             id: +currProjectId,
             isActivated: true,
             title: getProject.data.name,
-            widgetList: [{ isActivated: true, title: '대시보드' }],
+            widgetList: {
+              dashboard: true,
+              'gantt-chart': false,
+              calendar: false,
+              setting: false,
+              issues: false,
+            },
           },
         ]),
       );
     }
-    projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+    // 기존의 데이터가 있는 경우에는 경우가 2가지가 있따.
+    // 탭을 선택하여 오는 활성화를 건드리는 경우와,
+    // 프로젝트 선택페이지에서 선택하여 활성화되는 경우이다.
+    // 다른 프로젝트에 있다가, 프로젝트 선택페이지를 직접 선택하는 경우
+  } else if (location.state === 'toggleTabEvent') {
+    const newProjectTabList = [...projectTabList];
+    newProjectTabList.forEach(item => {
+      item.isActivated = false;
+    });
+    newProjectTabList[idx].isActivated = true;
+    newProjectTabList[idx].widgetList = {
+      dashboard: true,
+      'gantt-chart': false,
+      calendar: false,
+      setting: false,
+      issues: false,
+    };
+    localStorage.setItem('project-tab-list', JSON.stringify(newProjectTabList));
+    // 프로젝트 선택페이지에서 직접 선택하여 탭을 활성화하는 경우
+  } else {
+    const newProjectTabList = [...projectTabList];
+    newProjectTabList.forEach(item => {
+      item.isActivated = false;
+    });
+    newProjectTabList[idx].isActivated = true;
+    localStorage.setItem('project-tab-list', JSON.stringify(newProjectTabList));
   }
+  projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
 
   return createPortal(
     <>
@@ -460,8 +210,8 @@ const index = memo(() => {
             type={'project'}
             isActivated={isActivated}
             title={title}
-            toggleHandler={activateToggleHandler.bind(null, id, isActivated)}
-            closeHandler={closeTabHandler.bind(null, id)}
+            toggleHandler={e => activateToggleHandler(e, id)}
+            closeHandler={() => closeTabHandler(id)}
             xBtn={isActivated}
           ></Tab>
         ))}
@@ -477,36 +227,47 @@ const index = memo(() => {
       </NavProject>
       <NavWidget>
         {projectTabList.map(
-          ({ isActivated, widgetList }: tabType, projectIdx: number) =>
-            isActivated &&
-            widgetList.map(({ isActivated, title }: widgetType, idx: number) => {
-              return (
+          ({ isActivated, widgetList, id }: tabType) =>
+            isActivated && (
+              <>
                 <Tab
-                  key={idx}
-                  type={'widget'}
-                  isActivated={isActivated}
-                  title={title}
-                  toggleHandler={activatedToggleWidgetHandler.bind(
-                    null,
-                    projectIdx,
-                    title,
-                    isActivated,
-                  )}
-                  closeHandler={closeWidgetHandler.bind(null, projectIdx, title)}
-                  xBtn={true}
+                  title={'대시보드'}
+                  isActivated={widgetList.dashboard}
+                  xBtn={false}
+                  type="widget"
+                  toggleHandler={() => activatedToggleWidgetHandler(id, '대시보드')}
                 ></Tab>
-              );
-            }),
+                <Tab
+                  title={'미들버킷'}
+                  isActivated={widgetList.issues}
+                  xBtn={false}
+                  type="widget"
+                  toggleHandler={() => activatedToggleWidgetHandler(id, '미들버킷')}
+                ></Tab>
+                <Tab
+                  title={'간트차트'}
+                  isActivated={widgetList['gantt-chart']}
+                  xBtn={widgetList['gantt-chart']}
+                  type="widget"
+                  toggleHandler={() => activatedToggleWidgetHandler(id, '간트차트')}
+                ></Tab>
+                <Tab
+                  title={'캘린더'}
+                  isActivated={widgetList.calendar}
+                  xBtn={false}
+                  type="widget"
+                  toggleHandler={() => activatedToggleWidgetHandler(id, '캘린더')}
+                ></Tab>
+                <Tab
+                  title={'설정'}
+                  isActivated={widgetList.setting}
+                  xBtn={false}
+                  type="widget"
+                  toggleHandler={() => activatedToggleWidgetHandler(id, '설정')}
+                ></Tab>
+              </>
+            ),
         )}
-        <Tab
-          key={-2}
-          type={'widget'}
-          isActivated={false}
-          title={'+'}
-          plus={true}
-          xBtn={false}
-          createHandler={() => navigate(`/project/${currProjectId}/widgets`)}
-        ></Tab>
       </NavWidget>
     </>,
     el as HTMLElement,

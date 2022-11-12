@@ -43,8 +43,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   const getTeamForProject = useGetTeamForProject(item.id);
   const getUserInfo = useGetUserInfoHandler();
 
-  console.log(item.id, getTeamForProject.data, getTeamForProject.isFetching);
-
   const deleteProjectHandler = (projectId: number) => {
     deleteProject.mutate({ projectId });
   };
