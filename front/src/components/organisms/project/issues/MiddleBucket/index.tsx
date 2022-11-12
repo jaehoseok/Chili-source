@@ -73,13 +73,15 @@ const index = (props: any) => {
     <MiddleBucket>
       <StyledBucketHeader>
         <Button
-          borderColor={'red'}
+          borderColor={'#1973ee'}
+          isHover
           clickHandler={() => {
+            alert('미들버킷 이슈 지라로 전송');
             console.log(props.issue);
             console.log(bucket);
           }}
         >
-          Bucket Test
+          Send To Jira
         </Button>
       </StyledBucketHeader>
       <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>

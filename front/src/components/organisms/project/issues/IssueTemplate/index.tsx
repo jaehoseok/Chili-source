@@ -264,7 +264,7 @@ const index = (props: any) => {
           >
             Edit Template
           </Button>
-          <Button borderColor="blue" isHover clickHandler={insertIssueHandler}>
+          <Button borderColor="#2684ff" isHover clickHandler={insertIssueHandler}>
             Insert to Bucket
           </Button>
         </StyledIssueInfoHeader>
