@@ -8,7 +8,7 @@ import {
   StyledIssueInfoHeader,
   StyledIssueInfoBody,
 } from './style';
-import { issueType, templateType } from 'components/pages/IssuesPage';
+import { templateType } from 'components/pages/IssuesPage';
 import Issue from 'components/molecules/Issue';
 import Circle from 'components/atoms/Circle';
 import Text from 'components/atoms/Text';
@@ -18,6 +18,7 @@ import InputBox from 'components/molecules/InputBox';
 import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
+import { theme } from 'styles/theme';
 
 const index = (props: any) => {
   const issue = {
@@ -253,18 +254,23 @@ const index = (props: any) => {
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
-          <Button borderColor="red" isDisabled={!isAdd} isHover clickHandler={addTemplateHandler}>
+          <Button
+            borderColor={theme.issue.bug}
+            isDisabled={!isAdd}
+            isHover
+            clickHandler={addTemplateHandler}
+          >
             Add Template
           </Button>
           <Button
-            borderColor="green"
+            borderColor={theme.issue.story}
             isDisabled={!isEdit}
             isHover
             clickHandler={editTemplateHandler}
           >
             Edit Template
           </Button>
-          <Button borderColor="#2684ff" isHover clickHandler={insertIssueHandler}>
+          <Button borderColor={theme.issue.task} isHover clickHandler={insertIssueHandler}>
             Insert to Bucket
           </Button>
         </StyledIssueInfoHeader>
