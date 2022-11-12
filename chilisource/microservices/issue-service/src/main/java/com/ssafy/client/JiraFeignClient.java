@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 // TODO 개인 테스트 지라 프로젝트에서 수정하기
 @FeignClient(name = "jira", url = "https://ssafy.atlassian.net/rest")
@@ -66,4 +67,19 @@ public interface JiraFeignClient {
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("query") String query
     );
+
+    @PutMapping("/api/3/issue/{issueKey}")
+    Response updateIssue(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("issueKey") String issueKey,
+            @RequestBody Map<String, Object> request
+    );
+
+    @PostMapping("/api/3/issue/{issueKey}/transitions")
+    Response updateIssueStatus(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
+            @PathVariable("issueKey") String issueKey,
+            @RequestBody Map<String, Object> request
+            );
+
 }

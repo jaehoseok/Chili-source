@@ -73,5 +73,7 @@ public interface IssueService {
     // jira의 이슈 단일 조회
     JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey);
 
+    void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request);
+
     JiraSprintProgressResponse getSprintProgress(User user, List<String> auths, Long projectId, Long sprintId);
 }

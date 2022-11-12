@@ -37,7 +37,9 @@ import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ssafy.exception.DuplicateException.MIDDLE_BUCKET_NAME_DUPLICATED;
@@ -408,6 +410,42 @@ public class IssueServiceImpl implements IssueService {
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
         return jiraFeignClient.getIssue(jiraBase64, issueKey);
+    }
+
+    @Override
+    public void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request) {
+        TokenResponse jira = authServiceClient.getToken(auths, "jira");
+        String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
+
+        if (request.getStatusId() != null) {
+            Map<String, Object> statusUpdateRequest = new HashMap<>();
+            Map<String, Object> transition = new HashMap<>();
+            transition.put("id", request.getStatusId());
+            statusUpdateRequest.put("transition", transition);
+
+            jiraFeignClient.updateIssueStatus(jiraBase64, issueKey, statusUpdateRequest);
+        }
+
+        Map<String, Object> updateRequest = new HashMap<>();
+        Map<String, Object> fields = new HashMap<>();
+        boolean summaryChanged = false;
+        if (request.getSummary() != null) {
+            fields.put("summary", request.getSummary());
+            summaryChanged = true;
+        }
+        if (request.getStoryPoints() != null) fields.put("customfield_10031", request.getStoryPoints());
+        updateRequest.put("fields", fields);
+
+        jiraFeignClient.updateIssue(jiraBase64, issueKey, updateRequest);
+        if (summaryChanged) {
+            projectServiceClient.updateAllGanttChart(
+                    AllGanttChartUpdateRequest.builder()
+                            .projectId(request.getProjectId())
+                            .issueCode(issueKey)
+                            .summary(request.getSummary())
+                            .build());
+        }
+
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package com.ssafy.controller;
 
 import com.ssafy.config.loginuser.LoginUser;
 import com.ssafy.config.loginuser.User;
+import com.ssafy.dto.request.AllGanttChartUpdateRequest;
 import com.ssafy.dto.request.GanttChartCreateRequest;
 import com.ssafy.dto.request.GanttChartUpdateRequest;
 import com.ssafy.dto.response.GanttChartResponse;
@@ -74,6 +75,15 @@ public class GanttController {
             @LoginUser User user,
             @RequestBody GanttChartUpdateRequest request) {
         ganttChartService.updateGanttChart(user.getId(), request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/all")
+    @ApiOperation(value = "Jira 수정된 간트 차트 내용 수정")
+    public ResponseEntity<?> updateAllGanttChart(
+            @RequestBody AllGanttChartUpdateRequest request
+    ) {
+        ganttChartService.updateAllGanttChart(request);
         return ResponseEntity.ok().build();
     }
 

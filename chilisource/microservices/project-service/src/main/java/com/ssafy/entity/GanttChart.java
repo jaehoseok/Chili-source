@@ -49,12 +49,16 @@ public class GanttChart extends BaseEntity {
     }
 
     public void update(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId) {
-        if(startTime != null) this.startTime = startTime;
-        if(endTime != null) this.endTime = endTime;
-        if(issueSummary != null) this.issueSummary = issueSummary;
-        if(version != null) this.version = version;
-        if(issueCode != null) this.issueCode = issueCode;
-        if(progress != null) this.progress = progress;
-        if(userId != null) this.userId = userId;
+        if (startTime != null) this.startTime = startTime;
+        if (endTime != null) this.endTime = endTime;
+        if (issueSummary != null) this.issueSummary = issueSummary;
+        if (version != null) this.version = version;
+        if (issueCode != null) this.issueCode = issueCode;
+        if (progress != null) this.progress = progress;
+        if (userId != null) this.userId = userId;
+    }
+
+    public void updateIssueSummary(String issueSummary) {
+        this.issueSummary = issueSummary;
     }
 }

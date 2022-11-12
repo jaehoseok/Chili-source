@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -305,6 +306,20 @@ public class IssueController {
         );
         return ResponseEntity.ok()
                 .body(response);
+    }
+
+    // 지라의 이슈 수정
+    @PutMapping("/jira/issues/{issueKey}")
+    @ApiOperation(value = "issueKey 에 해당하는 jira 이슈")
+    public ResponseEntity<?> updateIssue(
+            @LoginUser User user,
+            @RequestHeader HttpHeaders headers,
+            @ApiParam(value = "JIRA issue key") @PathVariable String issueKey,
+            @Valid @RequestBody IssueUpdateRequest request
+    ) {
+        issueService.updateIssueStatus(user, headers.get(HttpHeaders.AUTHORIZATION), issueKey, request);
+        return ResponseEntity.ok()
+                .build();
     }
 
     // 미들버킷 내의 이슈들을 지라의 이슈로 생성

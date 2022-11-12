@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.dto.request.AllGanttChartUpdateRequest;
 import com.ssafy.dto.request.GanttChartCreateRequest;
 import com.ssafy.dto.request.GanttChartUpdateRequest;
 import com.ssafy.dto.response.GanttChartResponse;
@@ -209,5 +210,18 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .userId(ganttChart.getUserId())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateAllGanttChart(AllGanttChartUpdateRequest request) {
+        Project project = projectRepo.findById(request.getProjectId())
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        List<GanttChart> ganttCharts = ganttChartRepo.findByProjectAndIssueCode(project, request.getIssueCode());
+
+        for (GanttChart ganttChart : ganttCharts) {
+            ganttChart.updateIssueSummary(request.getSummary());
+        }
     }
 }
