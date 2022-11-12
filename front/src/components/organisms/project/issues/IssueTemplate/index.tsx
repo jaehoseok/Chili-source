@@ -1,33 +1,61 @@
-import { useState, useEffect } from 'react';
-import { StyledIssueTemplate, StyledHeader, StyledBody } from './style';
+import { useState, useEffect, useRef } from 'react';
+import {
+  StyledIssueTemplate,
+  StyledIssueTemplateHeader,
+  StyledIssueTemplateBody,
+  StyledIssueBundle,
+  StyledIssueInfo,
+  StyledIssueInfoHeader,
+  StyledIssueInfoBody,
+} from './style';
 import { issueType, templateType } from 'components/pages/IssuesPage';
 import Issue from 'components/molecules/Issue';
 import Circle from 'components/atoms/Circle';
 import Text from 'components/atoms/Text';
+import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
+import InputBox from 'components/molecules/InputBox';
+import SelectBox from 'components/molecules/SelectBox';
+import TextAreaBox from 'components/molecules/TextAreaBox';
+import Option from 'components/atoms/Option';
 
 const index = (props: any) => {
+  const issue = {
+    templateId: props.issue.templateId,
+    project: props.issue.project,
+    type: props.issue.type,
+    summary: props.issue.summary,
+    description: props.issue.description,
+    reporter: props.issue.reporter,
+    assignee: props.issue.assignee,
+    rank: props.issue.rank,
+    epicLink: props.issue.epicLink,
+    sprint: props.issue.sprint,
+    storyPoints: props.issue.storyPoints,
+  };
+  const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const setInfoHandler = (issue: templateType) => {
-    props.setInfo(issue);
+    props.setIssue(issue);
   };
   const deleteHandler = (templateId: number) => {
     props.setIssues(props.issues.filter((issue: templateType) => issue.templateId !== templateId));
   };
   const editEnableHandler = (templateId: number) => {
     alert('이슈 수정 버튼 활성화');
-    props.setIsEdit(true);
+    setIsEdit(true);
   };
   const addEnableHandler = () => {
     alert('이슈 추가 버튼 활성화');
-    props.setIsAdd(true);
+    setIsAdd(true);
   };
   useEffect(() => {
-    if (!props.isAdd) {
-      props.issues.push(props.info);
+    if (!isAdd) {
+      props.issues.push(issue);
       props.setIssues(props.issues);
-      props.setIsAdd(false);
+      setIsAdd(false);
     }
-  }, [props.isAdd]);
+  }, [isAdd]);
 
   const IssueList = props.issues.map((issue: templateType) => (
     <Issue
@@ -91,29 +119,186 @@ const index = (props: any) => {
     props.setIssues([issue1, issue2, issue3]);
   }, []);
 
-  return (
-    <StyledIssueTemplate>
-      <StyledHeader>
-        <Circle height={'5rem'} margin={'1rem'}>
-          로고
-        </Circle>
-        <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
-      </StyledHeader>
-      <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
+  // IssueInfo 부분
 
-      <StyledBody>
-        <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
-        {IssueList}
-        <Button
-          width={'400px'}
-          height={'90px'}
-          borderColor={'#d9d9d9'}
-          clickHandler={addEnableHandler}
-        >
-          +
-        </Button>
-      </StyledBody>
-    </StyledIssueTemplate>
+  const iType =
+    props.issue.type === 'story'
+      ? '스토리'
+      : props.issue.type === 'task'
+      ? '태스크'
+      : props.issue.type === 'bug'
+      ? '버그'
+      : '';
+
+  const projectRef = useRef<HTMLInputElement>(null);
+  const typeRef = useRef<HTMLSelectElement>(null);
+  const summaryRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement>(null);
+  const reporterRef = useRef<HTMLSelectElement>(null);
+  const assigneeRef = useRef<HTMLSelectElement>(null);
+  const rankRef = useRef<HTMLSelectElement>(null);
+  const epicLinkRef = useRef<HTMLSelectElement>(null);
+  const sprintRef = useRef<HTMLSelectElement>(null);
+  const storyPointsRef = useRef<HTMLInputElement>(null);
+
+  const [templateId, setTemplateId] = useState<number>(0);
+  const addTemplateHandler = () => {
+    alert('이슈 템플릿 추가 완료');
+    props.setIssue({
+      templateId: templateId,
+      project: projectRef.current ? projectRef.current.value : '',
+      type: typeRef.current
+        ? typeRef.current.value === '스토리'
+          ? 'story'
+          : typeRef.current.value === '태스크'
+          ? 'task'
+          : typeRef.current.value === '버그'
+          ? 'bug'
+          : 'error'
+        : '',
+      summary: summaryRef.current ? summaryRef.current.value : '',
+      description: descriptionRef.current ? descriptionRef.current.value : '',
+      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+      reporter: reporterRef.current ? reporterRef.current.value : '',
+      assignee: assigneeRef.current ? assigneeRef.current.value : '',
+      rank: rankRef.current ? rankRef.current.value : '',
+      sprint: sprintRef.current ? sprintRef.current.value : '',
+      storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+    });
+    setTemplateId(templateId + 1);
+
+    setIsAdd(false);
+  };
+
+  const editTemplateHandler = () => {
+    alert('이슈 템플릿 편집 완료');
+    setIsEdit(false);
+  };
+
+  const insertIssueHandler = () => {
+    props.setIssue({
+      templateId: props.issue.templateId,
+      project: projectRef.current ? projectRef.current.value : '',
+      type: typeRef.current
+        ? typeRef.current.value === '스토리'
+          ? 'story'
+          : typeRef.current.value === '태스크'
+          ? 'task'
+          : typeRef.current.value === '버그'
+          ? 'bug'
+          : 'error'
+        : '',
+      summary: summaryRef.current ? summaryRef.current.value : '',
+      description: descriptionRef.current ? descriptionRef.current.value : '',
+      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
+      reporter: reporterRef.current ? reporterRef.current.value : '',
+      assignee: assigneeRef.current ? assigneeRef.current.value : '',
+      rank: rankRef.current ? rankRef.current.value : '',
+      sprint: sprintRef.current ? sprintRef.current.value : '',
+      storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
+    });
+    props.setIsInsert(true);
+  };
+  return (
+    <StyledIssueBundle>
+      <StyledIssueTemplate>
+        <StyledIssueTemplateHeader>
+          <Circle height={'5rem'} margin={'1rem'}>
+            로고
+          </Circle>
+          <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
+        </StyledIssueTemplateHeader>
+        <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
+
+        <StyledIssueTemplateBody>
+          <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
+          {IssueList}
+          <Button
+            width={'400px'}
+            height={'90px'}
+            borderColor={'#d9d9d9'}
+            clickHandler={addEnableHandler}
+          >
+            +
+          </Button>
+        </StyledIssueTemplateBody>
+      </StyledIssueTemplate>
+      <StyledIssueInfo>
+        <StyledIssueInfoHeader>
+          <Button borderColor="red" isDisabled={!isAdd} clickHandler={addTemplateHandler}>
+            Add Template
+          </Button>
+          <Button borderColor="green" isDisabled={!isEdit} clickHandler={editTemplateHandler}>
+            Edit Template
+          </Button>
+          <Button borderColor="blue" isHover clickHandler={insertIssueHandler}>
+            Insert to Bucket
+          </Button>
+        </StyledIssueInfoHeader>
+        <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>
+          <StyledIssueInfoBody>
+            <InputBox
+              isRow={false}
+              labelName={'프로젝트'}
+              inputValue={props.issue.project}
+              ref={projectRef}
+            />
+            <SelectBox labelName={'이슈 유형'} ref={typeRef}>
+              <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
+            </SelectBox>
+            <InputBox
+              isRow={false}
+              labelName={'요약'}
+              inputValue={props.issue.summary}
+              ref={summaryRef}
+            />
+            <TextAreaBox
+              isRow={false}
+              labelName={'설명'}
+              textAreaValue={props.issue.description}
+              ref={descriptionRef}
+            />
+            <SelectBox labelName={'보고자'} ref={reporterRef}>
+              <Option
+                messages={['팀원1', '팀원2', '팀원3']}
+                selected={props.issue.reporter}
+              ></Option>
+            </SelectBox>
+            <SelectBox labelName={'담당자'} ref={assigneeRef}>
+              <Option
+                messages={['팀원1', '팀원2', '팀원3']}
+                selected={props.issue.assignee}
+              ></Option>
+            </SelectBox>
+            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
+            <SelectBox labelName={'우선순위'} ref={rankRef}>
+              <Option
+                messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
+                selected={props.issue.rank}
+              ></Option>
+            </SelectBox>
+            <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
+              <Option
+                messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
+                selected={props.issue.epicLink}
+              ></Option>
+            </SelectBox>
+            <SelectBox labelName={'Sprint'} ref={sprintRef}>
+              <Option
+                messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
+                selected={props.issue.sprint}
+              ></Option>
+            </SelectBox>
+            <InputBox
+              isRow={false}
+              labelName={'Story Points'}
+              inputValue={props.issue.storyPoints + ''}
+              ref={storyPointsRef}
+            />
+          </StyledIssueInfoBody>
+        </Sheet>
+      </StyledIssueInfo>
+    </StyledIssueBundle>
   );
 };
 

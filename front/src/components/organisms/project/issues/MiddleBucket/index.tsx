@@ -11,18 +11,18 @@ import { issueType } from 'components/pages/IssuesPage';
 const index = (props: any) => {
   const [issueId, setIssueId] = useState(0);
   const issue = {
-    templateId: props.info.templateId,
+    templateId: props.issue.templateId,
     issueId: issueId,
-    project: props.info.project,
-    type: props.info.type,
-    summary: props.info.summary,
-    description: props.info.description,
-    reporter: props.info.reporter,
-    assignee: props.info.assignee,
-    rank: props.info.rank,
-    epicLink: props.info.epicLink,
-    sprint: props.info.sprint,
-    storyPoints: props.info.storyPoints,
+    project: props.issue.project,
+    type: props.issue.type,
+    summary: props.issue.summary,
+    description: props.issue.description,
+    reporter: props.issue.reporter,
+    assignee: props.issue.assignee,
+    rank: props.issue.rank,
+    epicLink: props.issue.epicLink,
+    sprint: props.issue.sprint,
+    storyPoints: props.issue.storyPoints,
   };
 
   const [bucket, setBucket] = useState<issueType[]>([]);
@@ -75,7 +75,7 @@ const index = (props: any) => {
         <Button
           borderColor={'red'}
           clickHandler={() => {
-            console.log(props.info);
+            console.log(props.issue);
             console.log(bucket);
           }}
         >

@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { StyledIssuesPage, StyledHeader, StyledBody } from './style';
 import IssueTemplate from 'components/organisms/project/issues/IssueTemplate';
-import IssueInfo from 'components/organisms/project/issues/IssueInfo';
 import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
-import Issue from 'components/molecules/Issue';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
 export interface issueType extends templateType {
@@ -23,7 +21,7 @@ export interface templateType {
   storyPoints: number;
 }
 const index = () => {
-  const issue: issueType = {
+  const dummyIssue: issueType = {
     templateId: 0,
     issueId: 0,
     project: '',
@@ -37,11 +35,9 @@ const index = () => {
     sprint: '',
     storyPoints: 0,
   };
-  const [info, setInfo] = useState<issueType>(issue);
+  const [issue, setIssue] = useState<issueType>(dummyIssue);
   const [issues, setIssues] = useState<templateType[]>([]);
   const [isInsert, setIsInsert] = useState(false);
-  const [isAdd, setIsAdd] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
 
   return (
     <StyledIssuesPage>
@@ -50,13 +46,13 @@ const index = () => {
       </StyledHeader>
       <StyledBody>
         <IssueTemplate
+          issue={issue}
           issues={issues}
           setIssues={setIssues}
-          setInfo={setInfo}
-          setIsAdd={setIsAdd}
-          setIsEdit={setIsEdit}
+          setIssue={setIssue}
+          setIsInsert={setIsInsert}
         ></IssueTemplate>
-        <IssueInfo
+        {/* <IssueInfo
           info={info}
           issues={issues}
           isAdd={isAdd}
@@ -66,8 +62,8 @@ const index = () => {
           setIsInsert={setIsInsert}
           setIsAdd={setIsAdd}
           setIsEdit={setIsEdit}
-        ></IssueInfo>
-        <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
+        ></IssueInfo> */}
+        <MiddleBucket issue={issue} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>
     </StyledIssuesPage>
   );

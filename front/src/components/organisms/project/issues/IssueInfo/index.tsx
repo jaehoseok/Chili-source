@@ -8,7 +8,7 @@ import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 
 const index = (props: any) => {
-  const issueType =
+  const iType =
     props.info.type === 'story'
       ? '스토리'
       : props.info.type === 'task'
@@ -110,7 +110,7 @@ const index = (props: any) => {
             ref={projectRef}
           />
           <SelectBox labelName={'이슈 유형'} ref={typeRef}>
-            <Option messages={['스토리', '태스크', '버그']} selected={issueType}></Option>
+            <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
           </SelectBox>
           <InputBox
             isRow={false}
