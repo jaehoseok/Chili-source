@@ -253,10 +253,15 @@ const index = (props: any) => {
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
-          <Button borderColor="red" isDisabled={!isAdd} clickHandler={addTemplateHandler}>
+          <Button borderColor="red" isDisabled={!isAdd} isHover clickHandler={addTemplateHandler}>
             Add Template
           </Button>
-          <Button borderColor="green" isDisabled={!isEdit} clickHandler={editTemplateHandler}>
+          <Button
+            borderColor="green"
+            isDisabled={!isEdit}
+            isHover
+            clickHandler={editTemplateHandler}
+          >
             Edit Template
           </Button>
           <Button borderColor="blue" isHover clickHandler={insertIssueHandler}>
