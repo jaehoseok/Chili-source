@@ -12,8 +12,7 @@ import { ProjectInfo, WidgetList } from 'components/organisms/project/dashboard'
 
 const GanttChartPage = () => {
   // Init
-  const [projectData, setProjectData] =
-    useState<Awaited<ReturnType<typeof project.getProjectData>>>();
+  const [projectData, setProjectData] = useState<Awaited<ReturnType<typeof project.getProject>>>();
   const location = useLocation();
 
   // Methods
@@ -23,7 +22,7 @@ const GanttChartPage = () => {
 
   useEffect(() => {
     (async () => {
-      const resp = await project.getProjectData(location.pathname.split('/')[2]);
+      const resp = await project.getProject(+location.pathname.split('/')[2]);
       setProjectData(resp);
     })();
   }, []);

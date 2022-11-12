@@ -451,3 +451,27 @@
     >- IssuesPage.tsx -> IssuesPage/index.tsx, style.ts
   - 미들버킷 관련 Organism 디렉토리 구조 수정
     >- organism/IssueInfo, MiddleBucket -> organism/issues/IssueInfo, MiddleBucket
+
+## 221109
+### 종현
+- NavProject & NavWidget
+  > - recoil nav데이터 localStorage로 이관
+  > - tab 삭제, tab 활성화 함수 정상작동하도록 이관
+  > - 프로젝트 선택 시 프로젝트 탭이 활성화 되면서 생성되도록 설정
+  > - localStorage 안에 이미 데이터가 있는데, 또 선택해서 오는 경우에는 그냥 탭 활성화만 시킴
+  > - + 버튼 클릭시 프로젝트 선택 페이지로 이동, 이어서 프로젝트를 또 생성할 수 있음
+- 탭이 활성화되지 않은 경우, 탭을 삭제 할때, localStorage 상에서 삭제는 되지만, 리렌더링이 안됨
+  > - 시간 없어서 그냥 활성화된 탭만 x 할 수 있도록 처리  
+ 
+ ## 221110
+ ### 종현
+- Error : 처음 getProject 요청을 보낼때, 값을 못가져와 탭에 이름이 없이 렌더링이 됨
+  > - api 성공 시의 상태를 useEffect 의존성으로 추가하여 해결
+
+## 221110
+- 위젯 탭
+  > - localStorage로 이관 완료
+- 위젯 타입 변환
+  > - 프로젝트 탭이 생성될 때, 한번에 모든 위젯이 생성되도록 전환
+  > - 단순하게 현재 경로에서 활성화된 곳만 파악하도록 설정
+  > - list 형태가 아닌 단순 boolean이기 때문에 파악하기 쉽고, 유지 보수도 더욱 쉬워졌다.
