@@ -26,7 +26,5 @@ interface userInfoType {
  * @author bell
  */
 export const useGetUserInfoHandler = () => {
-  return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo(), {
-    staleTime: Infinity,
-  });
+  return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo());
 };
