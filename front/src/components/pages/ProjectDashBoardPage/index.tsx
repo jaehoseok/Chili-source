@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { project, widget } from 'api/rest';
-import { useGetLayoutHandler } from 'hooks/widget';
+import { useGetLayout } from 'hooks/widget';
 
 // Styles
 import { StyledPage, StyledHeader, StyledBody, StyledSection } from './style';
@@ -17,7 +17,7 @@ const GanttChartPage = () => {
   const [widgetList, setWidgetList] = useState<Awaited<ReturnType<typeof widget.getWidgetList>>>();
   const location = useLocation();
   const { projectId } = useParams();
-  const getLayout = useGetLayoutHandler(Number(projectId));
+  const getLayout = useGetLayout(Number(projectId));
 
   // Methods
   useEffect(() => {
@@ -72,19 +72,6 @@ const GanttChartPage = () => {
               );
             })
           : '<div>위젯없음</div>'}
-        <div>-------------------------</div>
-        <div>---[리액트 쿼리 테스트 공간]---</div>
-        {getLayout.data?.map(({ children }, index) => {
-          console.log('[index]', index);
-          children.map(({ type }) => {
-            console.log('[type]', type);
-          });
-          return (
-            <div key={index}>
-              <div>컬럼{index}</div>
-            </div>
-          );
-        })}
         <div>-------------------------</div>
       </StyledPage>
     </>

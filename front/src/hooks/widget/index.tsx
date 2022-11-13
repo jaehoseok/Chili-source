@@ -3,40 +3,11 @@ import { widget } from 'api/rest';
 
 /**
  * @description
- * 커스텀 훅
+ * 위젯의 레이아웃을 서버 단에서 가져와 생성하고 클라이언트 단에 저장하는 커스텀 훅
  *
  * @author inte
  */
-export const useGetWidgetListHandler = (projectId: number) => {
-  return useQuery(['widget-list'], () => widget.getWidgetList(projectId), {
-    staleTime: Infinity,
-  });
-};
-
-export const useSetWidgetListHandler = () => {
-  //  Init
-  interface requestType {
-    projectId: number;
-    widgetCodeId: string;
-    widgetCol: number;
-    widgetRow: number;
-  }
-  const queryClient = useQueryClient();
-
-  return useMutation(
-    ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
-      widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
-    {
-      onSuccess: () => {
-        // 요청이 성공한 경우
-        console.log('onSuccess');
-        queryClient.invalidateQueries(['widget-list']); // queryKey 유효성 제거
-      },
-    },
-  );
-};
-
-export const useGetLayoutHandler = (projectId: number) => {
+export const useGetLayout = (projectId: number) => {
   interface itemType {
     id: number;
     type?: string;
@@ -71,7 +42,7 @@ export const useGetLayoutHandler = (projectId: number) => {
   );
 };
 
-export const usePostTestHandler = () => {
+export const usePostLayout = () => {
   //  Init
   interface requestType {
     projectId: number;
@@ -79,6 +50,7 @@ export const usePostTestHandler = () => {
     widgetCol: number;
     widgetRow: number;
   }
+
   const queryClient = useQueryClient();
 
   return useMutation(
@@ -87,8 +59,38 @@ export const usePostTestHandler = () => {
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[onSuccess]');
-        queryClient.invalidateQueries(['test']); // queryKey 유효성 제거
+        console.log('[post layout success]');
+        queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+      },
+    },
+  );
+};
+
+/**
+ * @description
+ * 위젯들의 위치 변경이 있을 경우, 재조정을 하는 함수
+ *
+ * @returns
+ */
+export const useSetLayout = () => {
+  //  Init
+  interface requestType {
+    projectId: number;
+    widgetCodeId: string;
+    widgetCol: number;
+    widgetRow: number;
+  }
+
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
+      widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
+    {
+      onSuccess: () => {
+        // 요청이 성공한 경우
+        console.log('[post layout success]');
+        queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
       },
     },
   );

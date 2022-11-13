@@ -1,7 +1,7 @@
 // API & Library
 import { useNavigate, useParams } from 'react-router-dom';
 import { widget } from 'api/rest';
-import { useSetWidgetListHandler } from 'hooks/widget';
+// import { useSetWidgetListHandler } from 'hooks/widget';
 
 // Styles
 import {
@@ -44,7 +44,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
   const navigate = useNavigate();
   const { projectId, columnIdx, itemIdx } = useParams();
-  const setWidgetList = useSetWidgetListHandler();
+  // const setWidgetList = useSetWidgetListHandler();
 
   // 타입에 따른 위젯 설명
   switch (type) {
