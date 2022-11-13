@@ -127,8 +127,6 @@ public class WidgetServiceImpl implements WidgetService {
                     .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
             try {
                 UserProjectResponse userProjectResponse = projectServiceClient.findRole(widget.getProjectId(), userId);
-                System.out.println(userProjectResponse.getRole().getId());
-                System.out.println(!"MASTER".equals(userProjectResponse.getRole().getId()));
                 if (!"MASTER".equals(userProjectResponse.getRole().getId())) {
                     throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
                 }
