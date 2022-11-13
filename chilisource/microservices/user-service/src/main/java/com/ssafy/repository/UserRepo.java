@@ -13,5 +13,11 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     Optional<User> findByKakao(String kakao);
 
+    List<User> findByGoogleContains(String google);
+
+    List<User> findByNaverContains(String naver);
+
+    List<User> findByKakaoContains(String kakao);
+
     List<User> findByIdIn(List<Long> userIds);
 }

@@ -3,6 +3,7 @@ package com.ssafy.service;
 import com.ssafy.config.Constant;
 import com.ssafy.dto.request.UserCreateRequest;
 import com.ssafy.dto.request.UserUpdateRequest;
+import com.ssafy.dto.response.UserListResponse;
 import com.ssafy.dto.response.UserResponse;
 
 import java.util.List;
@@ -13,6 +14,9 @@ public interface UserService {
 
     //유저정보조회
     public UserResponse getUserInfo(Long userId);
+
+    //유저 검색
+    public UserListResponse getUserList(String email);
 
     //유저정보수정(이름)
     public void updateUserInfo(UserUpdateRequest request, Long userId);

@@ -3,6 +3,7 @@ package com.ssafy.service;
 import com.ssafy.config.Constant;
 import com.ssafy.dto.request.UserCreateRequest;
 import com.ssafy.dto.request.UserUpdateRequest;
+import com.ssafy.dto.response.UserListResponse;
 import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.User;
 import com.ssafy.exception.NotFoundException;
@@ -61,6 +62,36 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .name(user.getName())
                 .image(user.getImage())
+                .build();
+    }
+
+    @Override
+    public UserListResponse getUserList(String email) {
+        List<UserResponse> googleUsers = userRepo.findByGoogleContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getImage())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        List<UserResponse> naverUsers = userRepo.findByNaverContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getImage())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        List<UserResponse> kakaoUsers = userRepo.findByKakaoContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getImage())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        return UserListResponse.builder()
+                .googleUsers(googleUsers)
+                .naverUsers(naverUsers)
+                .kakaoUsers(kakaoUsers)
                 .build();
     }
 
