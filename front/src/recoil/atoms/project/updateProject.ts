@@ -14,5 +14,6 @@ export const updateProjectState = atom({
     projectName: '',
     projectDescription: '',
     projectImage: null || '',
+    projectInviteUser: '',
   },
 });

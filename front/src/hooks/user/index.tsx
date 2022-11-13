@@ -14,11 +14,7 @@ import { AxiosError } from 'axios';
 // 반환 데이터의 타입을 interface로 선언해준다.
 // 이걸 해서 useQuery의 성공 데이터 타입을 똑같이 맞춰줘야
 // 타입스크립트에서 react-query를 사용하기 한결 수월해진다.
-interface userInfoType {
-  id: number;
-  image: string;
-  name: string;
-}
+
 /**
  * @description
  * 비동기 함수 getUserInfo를 수행하는 useQuery 함수를 관리하는 커스텀 훅
@@ -26,5 +22,20 @@ interface userInfoType {
  * @author bell
  */
 export const useGetUserInfoHandler = () => {
+  interface userInfoType {
+    id: number;
+    image: string;
+    name: string;
+  }
   return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo());
+};
+
+/**
+ * @description
+ * 팀원 초대에 필요한 유저 검색 데이터 요청 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useGetUserSearch = (email: string) => {
+  return useQuery(['get-user-search'], () => user.getUserSearch(email), { enabled: false });
 };

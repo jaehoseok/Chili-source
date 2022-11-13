@@ -154,3 +154,35 @@ export const useUpdateTeamColor = () => {
     project.updateTeamColor(projectId, userColor, userId),
   );
 };
+
+/**
+ * @description
+ * 프로젝트에 유저를 초대하는 API 요청하는 함수를 다루는 커스텀 훅
+ *
+ * @author bell
+ */
+export const usePostInviteTeam = () => {
+  interface requestBodyType {
+    projectId: number;
+    userId: number;
+  }
+  return useMutation(({ projectId, userId }: requestBodyType) =>
+    project.postInviteTeam(projectId, userId),
+  );
+};
+
+/**
+ * @description
+ * 프로젝트에서 해당 유저를 강퇴시키는 API를 요청하는 함수를 다루는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useDeleteFireTeam = () => {
+  interface queryType {
+    fireUserId: number;
+    projectId: number;
+  }
+  return useMutation(({ fireUserId, projectId }: queryType) =>
+    project.deleteTeamFire(fireUserId, projectId),
+  );
+};

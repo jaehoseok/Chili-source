@@ -8,14 +8,16 @@ import { updateProjectState } from 'recoil/atoms/project/updateProject';
 
 // REACT-QUERY
 import {
+  useDeleteFireTeam,
   useGetProject,
   useGetTeamForProject,
+  usePostInviteTeam,
   useUpdateProject,
   useUpdateProjectImage,
   useUpdateTeamColor,
   useUpdateTeamRole,
 } from 'hooks/project';
-import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetUserInfoHandler, useGetUserSearch } from 'hooks/user';
 
 // STYLED-COMPONENT
 import {
@@ -37,6 +39,7 @@ import Notification from 'components/atoms/Notification';
 // COMPONENT - MOLECULES
 import SettingAuth from 'components/molecules/SettingAuth';
 import SettingColor from 'components/molecules/SettingColor';
+import InviteUser from 'components/molecules/InviteUser';
 import InputBox from 'components/molecules/InputBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 
@@ -56,19 +59,23 @@ const index = () => {
   // 프로젝트 ID
   const projectId = +location.pathname.split('/')[2];
 
+  // update 요청시 필요한 recoil 작업
+  const { projectName, projectDescription, projectInviteUser } = useRecoilValue(updateProjectState);
+  const projectNameSetRecoilState = useSetRecoilState(updateProjectState);
+  const projectDescriptionSetRecoilState = useSetRecoilState(updateProjectState);
+  const projectInviteUserSerRecoilState = useSetRecoilState(updateProjectState);
+
   // 프로젝트 API
   const getUserInfo = useGetUserInfoHandler();
   const getProject = useGetProject(projectId);
+  const getUserSearch = useGetUserSearch(projectInviteUser);
   const getTeamForProject = useGetTeamForProject(projectId);
+  const postInviteTeam = usePostInviteTeam();
   const updateProject = useUpdateProject();
   const updateProjectImage = useUpdateProjectImage();
   const updateTeamRole = useUpdateTeamRole();
   const updateTeamColor = useUpdateTeamColor();
-
-  // update 요청시 필요한 recoil 작업
-  const { projectName, projectDescription } = useRecoilValue(updateProjectState);
-  const projectNameSetRecoilState = useSetRecoilState(updateProjectState);
-  const projectDescriptionSetRecoilState = useSetRecoilState(updateProjectState);
+  const deleteFireTeam = useDeleteFireTeam();
 
   const myInfo = () => {
     if (getTeamForProject.data && getUserInfo.data) {
@@ -104,6 +111,18 @@ const index = () => {
       getTeamForProject.refetch();
     }
 
+    if (deleteFireTeam.isSuccess) {
+      getTeamForProject.refetch();
+    }
+
+    if (postInviteTeam.isSuccess) {
+      getTeamForProject.refetch();
+      projectDescriptionSetRecoilState(prevData => {
+        return { ...prevData, projectInviteUser: '' };
+      });
+      getUserSearch.remove();
+    }
+
     // getProject가 refetch를 시도하는 경우
     // localStorage를 업데이트하여 탭의 값도 바꾼다!
     if (updateProject.isSuccess && getProject.isRefetching) {
@@ -118,7 +137,13 @@ const index = () => {
     updateProjectImage.isSuccess,
     updateTeamRole.isSuccess,
     updateTeamColor.isSuccess,
+    postInviteTeam.isSuccess,
+    deleteFireTeam.isSuccess,
   ]);
+
+  useEffect(() => {
+    if (projectInviteUser !== '') getUserSearch.refetch();
+  }, [projectInviteUser]);
 
   return (
     <>
@@ -147,6 +172,20 @@ const index = () => {
         <Notification
           check={true}
           message={'프로젝트 팀원의 색상이 수정되었습니다.'}
+          width={'300px'}
+        ></Notification>
+      )}
+      {postInviteTeam.isSuccess && (
+        <Notification
+          check={true}
+          message={'프로젝트에 해당 팀원을 초대하였습니다.'}
+          width={'300px'}
+        ></Notification>
+      )}
+      {deleteFireTeam.isSuccess && (
+        <Notification
+          check={true}
+          message={'프로젝트에서 해당 팀원을 강퇴시켰습니다'}
           width={'300px'}
         ></Notification>
       )}
@@ -270,20 +309,20 @@ const index = () => {
                           inputHeight={'40px'}
                           labelSize={'1.3rem'}
                           inputPlaceHolder={'초대하고 싶은 팀원의 이메일을 적어주세요!'}
+                          useSetRecoilState={projectInviteUserSerRecoilState}
+                          recoilParam={'projectInviteUser'}
                         ></InputBox>
                       </StyledMarginY>
-                      <StyledMarginY>
-                        <StyledFlexRowEnd>
-                          <Button
-                            width="100px"
-                            borderColor={theme.button.gray}
-                            backgroundColor={theme.button.green}
-                            isHover={true}
-                          >
-                            팀원 초대
-                          </Button>
-                        </StyledFlexRowEnd>
-                      </StyledMarginY>
+                      {getUserSearch.data &&
+                        getUserSearch.data.googleUsers.map(({ id, image, name }) => (
+                          <InviteUser
+                            userImage={image}
+                            userName={name}
+                            userId={id}
+                            projectId={projectId}
+                            postInviteTeam={postInviteTeam.mutate}
+                          />
+                        ))}
                     </>
                   )}
                   <StyledMarginY>
@@ -298,6 +337,7 @@ const index = () => {
                             projectId={projectId}
                             userId={userId}
                             updateTeamRole={updateTeamRole.mutate}
+                            deleteFireTeam={deleteFireTeam.mutate}
                           ></SettingAuth>
                         ),
                       )

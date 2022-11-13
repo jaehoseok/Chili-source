@@ -22,6 +22,12 @@ interface propsType {
     { projectId: number; roleId: string; userId: number },
     unknown
   >;
+  deleteFireTeam: UseMutateFunction<
+    void,
+    unknown,
+    { projectId: number; fireUserId: number },
+    unknown
+  >;
 }
 
 /**
@@ -30,7 +36,15 @@ interface propsType {
  *
  * @author bell
  */
-const index = ({ roleId, userImage, userName, projectId, userId, updateTeamRole }: propsType) => {
+const index = ({
+  roleId,
+  userImage,
+  userName,
+  projectId,
+  userId,
+  updateTeamRole,
+  deleteFireTeam,
+}: propsType) => {
   // 권한 설정용 state
   const [authorization, setAuthorization] = useState(roleId as string);
 
@@ -67,6 +81,12 @@ const index = ({ roleId, userImage, userName, projectId, userId, updateTeamRole 
           borderColor={theme.button.gray}
           backgroundColor={theme.color.bug}
           isHover={true}
+          clickHandler={() => {
+            deleteFireTeam({
+              projectId: projectId,
+              fireUserId: userId,
+            });
+          }}
         >
           강퇴
         </Button>

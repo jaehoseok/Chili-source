@@ -1,5 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { stringify } from 'querystring';
 import { ChangeEvent } from 'react';
 
 // Init
@@ -327,6 +328,42 @@ export default {
         projectId,
         userColor,
         userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 팀원을 초대합니다
+   *
+   * @author bell
+   */
+  postInviteTeam: async (projectId: number, userId: number) => {
+    try {
+      await projectAxios.post('/team', {
+        projectId,
+        userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 팀원을 강퇴합니다
+   *
+   * @author bell
+   */
+  deleteTeamFire: async (fireUserId: number, projectId: number) => {
+    try {
+      await projectAxios.delete('/team/fire', {
+        params: {
+          fireUserId,
+          projectId,
+        },
       });
     } catch (e) {
       console.log(e);
