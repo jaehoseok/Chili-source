@@ -1,5 +1,7 @@
 // Library
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useGetProject } from 'hooks/project';
 
 // Styles
 import { StyledProjectInfo, StyledProjectInfoLine, styledType } from './style';
@@ -18,12 +20,16 @@ interface propsType extends styledType {
  * @author inte
  */
 export const ProjectInfo = ({ children }: propsType) => {
+  // Init
+  const { projectId } = useParams();
+  const getProject = useGetProject(Number(projectId)).data;
+
   return (
     <>
       <StyledProjectInfo>
-        <Circle></Circle>
-        <div>프로젝트 명</div>
-        <div>프로젝트 상세 설명</div>
+        <Circle height={'150px'} isImage={true} url={getProject ? getProject.image : ''} />
+        <div>{getProject ? getProject.name : ''}</div>
+        <div>{getProject ? getProject.description : ''}</div>
         <div>{children}</div>
         <StyledProjectInfoLine />
       </StyledProjectInfo>

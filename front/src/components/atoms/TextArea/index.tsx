@@ -71,6 +71,7 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
     }, [text]);
     return (
       <TextArea
+        ref={inputRef}
         width={width}
         height={height}
         placeholder={placeholder}
