@@ -53,9 +53,6 @@ const index = () => {
         droppable={true}
         editable={true}
         events={renderingDBIssuesForHandler()}
-        addEvent={() => {
-          console.log();
-        }}
         // eventReceive={handleEventReceive}
       />
     </StyledCalendar>
