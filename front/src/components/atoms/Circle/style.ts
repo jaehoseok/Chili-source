@@ -5,6 +5,9 @@ import { theme } from '../../../styles/theme';
 export interface styledType {
   height?: string;
   backgroundColor?: string;
+  fontColor?: string;
+  fontWeight?: string;
+  margin?: string;
   isDropShadow?: boolean;
   isInnerShadow?: boolean;
   isClickable?: boolean;
@@ -24,6 +27,7 @@ export const StyledCircle = styled.span.attrs({
   ${({ height }) => height && `min-width: ${height}`};
   ${({ height }) => height && `min-height: ${height}`};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
+  ${({ margin }) => margin && `margin: ${margin}`}
   ${({ isInnerShadow }) =>
     isInnerShadow &&
     css`
@@ -56,4 +60,7 @@ StyledCircle.defaultProps = {
   isDropShadow: false,
   isInnerShadow: false,
   isClickable: false,
+  margin: '0px',
+  fontColor: 'black',
+  fontWeight: 'normal',
 };
