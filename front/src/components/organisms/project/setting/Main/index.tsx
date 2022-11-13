@@ -17,19 +17,16 @@ import {
   StyledFlex,
   StyledFlexRowEnd,
   StyledFlexCenter,
-  StyledFlexRowItemsCenter,
   StyledInputLogo,
-  StyledUserName,
   StyledLabel,
-  StyledMarginL,
 } from './style';
 
 import Sheet from 'components/atoms/Sheet';
 import Circle from 'components/atoms/Circle';
 import Button from 'components/atoms/Button';
-import Select from 'components/atoms/Select';
-import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
+import SettingAuth from 'components/molecules/SettingAuth';
+import SettingColor from 'components/molecules/SettingColor';
 import InputBox from 'components/molecules/InputBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 
@@ -45,15 +42,6 @@ import { useGetUserInfoHandler } from 'hooks/user';
 const index = () => {
   const location = useLocation();
   // const navigate = useNavigate();
-
-  // project-logo용 state
-  const [image, setImage] = useState();
-  // 권한 설정용 state
-  const [authorization, setAuthorization] = useState('');
-
-  useEffect(() => {
-    console.log(authorization);
-  }, [authorization]);
 
   // 프로젝트 ID
   const projectId = +location.pathname.split('/')[2];
@@ -71,17 +59,21 @@ const index = () => {
   const projectNameSetRecoilState = useSetRecoilState(updateProjectState);
   const projectDescriptionSetRecoilState = useSetRecoilState(updateProjectState);
 
-  const currentAuthHandler = () => {
+  const myInfo = () => {
     if (getTeamForProject.data && getUserInfo.data) {
       const idx = getTeamForProject.data.findIndex(item => item.userId === getUserInfo.data.id);
       if (idx > -1) {
-        return getTeamForProject.data[idx].role.id;
+        return getTeamForProject.data[idx];
       }
     }
   };
 
   // 현재 로그인한 유저의 프로젝트 등급
-  const currentAuth = currentAuthHandler();
+  const currentAuth = myInfo()?.role.id;
+  const currentColor = myInfo()?.userColor;
+
+  // project-logo용 state
+  const [image, setImage] = useState();
 
   useEffect(() => {
     // update 요청을 통해 성공하면 getProject를 다시금 불러온다.
@@ -96,7 +88,6 @@ const index = () => {
 
     if (updateTeamRole.isSuccess) {
       getTeamForProject.refetch();
-      setAuthorization('');
     }
 
     // getProject가 refetch를 시도하는 경우
@@ -138,7 +129,7 @@ const index = () => {
         ></Notification>
       )}
       <StyledPadding>
-        {currentAuth === 'MASTER' && getProject.data ? (
+        {currentAuth !== 'DEVELOPER' && getProject.data ? (
           <Sheet width={'70vw'} maxWidth={'900px'} isShadow={true}>
             <StyledFlex>
               <StyledPadding>
@@ -276,46 +267,35 @@ const index = () => {
                   <StyledMarginY>
                     {currentAuth === 'MASTER' && <StyledLabel>팀원 권한 변경</StyledLabel>}
                     {currentAuth === 'MASTER' && getTeamForProject.data ? (
-                      getTeamForProject.data.map(item => (
-                        <>
-                          <StyledMarginY>
-                            <StyledFlexRowItemsCenter>
-                              <Circle height="60px" isImage={true} url={item.userImage}></Circle>
-                              <StyledUserName>{item.userName}</StyledUserName>
-                              <Select setState={setAuthorization}>
-                                <Option
-                                  messages={['MASTER', 'MAINTAINER', 'DEVELOPER']}
-                                  selected={item.role.id}
-                                ></Option>
-                              </Select>
-                              <StyledMarginL />
-                              <Button
-                                width="70px"
-                                borderColor={theme.button.gray}
-                                backgroundColor={theme.button.green}
-                                isHover={true}
-                                clickHandler={() => {
-                                  updateTeamRole.mutate({
-                                    projectId: item.projectId,
-                                    roleId: authorization,
-                                    userId: item.userId,
-                                  });
-                                }}
-                              >
-                                변경
-                              </Button>
-                              <StyledMarginL />
-                              <Button
-                                width="70px"
-                                borderColor={theme.button.gray}
-                                backgroundColor={theme.color.bug}
-                                isHover={true}
-                              >
-                                강퇴
-                              </Button>
-                            </StyledFlexRowItemsCenter>
-                          </StyledMarginY>
-                        </>
+                      getTeamForProject.data.map(
+                        ({ role, userImage, userName, projectId, userId }) => (
+                          <SettingAuth
+                            roleId={role.id}
+                            userImage={userImage}
+                            userName={userName}
+                            projectId={projectId}
+                            userId={userId}
+                            updateTeamRole={updateTeamRole.mutate}
+                          ></SettingAuth>
+                        ),
+                      )
+                    ) : (
+                      <Notification
+                        message="팀원 정보를 수정할 권한을 가지고 있지 않습니다!"
+                        check={false}
+                        width="300px"
+                      ></Notification>
+                    )}
+                  </StyledMarginY>
+                  <StyledMarginY>
+                    {currentAuth !== 'DEVELOPER' && <StyledLabel>팀원 색상 변경</StyledLabel>}
+                    {currentAuth !== 'DEVELOPER' && getTeamForProject.data ? (
+                      getTeamForProject.data.map(({ userName, userImage, userColor }) => (
+                        <SettingColor
+                          userImage={userImage}
+                          userName={userName}
+                          userColor={userColor}
+                        />
                       ))
                     ) : (
                       <Notification
