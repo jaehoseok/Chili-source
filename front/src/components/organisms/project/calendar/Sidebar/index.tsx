@@ -116,7 +116,7 @@ const index = () => {
 
   return (
     <StyledJiraIssues>
-      <div id="external-events">
+      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '700px' }}>
         {getIssuesNotDone.data &&
           getIssuesNotDone.data.map(({ id, fields, key }) => (
             <div

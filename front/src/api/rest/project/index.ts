@@ -370,4 +370,42 @@ export default {
       console.log(e);
     }
   },
+
+  getGanttChart: async (
+    op: number,
+    projectId: number,
+    userId?: number,
+    start?: string,
+    end?: string,
+  ) => {
+    interface responseType {
+      startTime: string;
+      endTime: string;
+      id: number;
+      issueCode: string;
+      issueSummary: string;
+      progress: number;
+      userId: string;
+      version: number;
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get(`/gantt`, {
+          params: {
+            start,
+            end,
+            op,
+            projectId,
+            userId,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };

@@ -186,3 +186,20 @@ export const useDeleteFireTeam = () => {
     project.deleteTeamFire(fireUserId, projectId),
   );
 };
+
+/**
+ * @description
+ *
+ * @author bell
+ */
+export const useGetGanttChart = (
+  op: number,
+  projectId: number,
+  userId?: number,
+  start?: string,
+  end?: string,
+) => {
+  return useQuery(['get-gantt-chart'], () =>
+    project.getGanttChart(op, projectId, userId, start, end),
+  );
+};
