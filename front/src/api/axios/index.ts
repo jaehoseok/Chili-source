@@ -13,7 +13,7 @@ const createAxiosApi = (url?: string) => {
   const AxiosApi = axios.create({
     baseURL: process.env.REACT_APP_SERVER + (url ? url : ''),
     headers: {
-      'content-type': 'application/json; charset=UTF-8',
+      'Content-Type': 'application/json; charset=UTF-8',
     },
   });
 

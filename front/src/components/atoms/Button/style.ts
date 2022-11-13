@@ -9,6 +9,7 @@ export interface styledType {
   borderColor?: string;
   isHover?: boolean;
   isDisabled?: boolean;
+  fontColor?: string;
 }
 
 export const Button = styled.button<styledType>`
@@ -26,6 +27,7 @@ export const Button = styled.button<styledType>`
       : backgroundColor === '#F8F8F8'
       ? '#000000'
       : '#FFFFFF'};
+  color: ${({ fontColor }) => fontColor};
   ${({ isHover, borderColor }) =>
     isHover &&
     css`

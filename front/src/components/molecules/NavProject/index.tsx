@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { StyledImg, StyledNav } from './style';
 
 interface propsType {
@@ -14,10 +15,14 @@ interface propsType {
  * @author bell
  */
 const index = ({ children }: propsType) => {
+  const navigate = useNavigate();
+  const linkToProjectSelectHandler = () => {
+    navigate('/');
+  };
   return (
     <>
       <StyledNav>
-        <StyledImg></StyledImg>
+        <StyledImg onClick={linkToProjectSelectHandler}></StyledImg>
         {children}
       </StyledNav>
     </>

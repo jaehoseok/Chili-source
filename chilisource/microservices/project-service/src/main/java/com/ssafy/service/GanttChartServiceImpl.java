@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.dto.request.AllGanttChartUpdateRequest;
 import com.ssafy.dto.request.GanttChartCreateRequest;
 import com.ssafy.dto.request.GanttChartUpdateRequest;
 import com.ssafy.dto.response.GanttChartResponse;
@@ -37,10 +38,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     public List<GanttChartResponse> getProjectGanttChartAllLatest(Long projectId, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [getProjectGanttChartAllLatest] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         return getProjectGanttChartByVersion(projectId, project.getLatestGanttVersion(), start, end);
     }
@@ -48,10 +46,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     public List<GanttChartResponse> getProjectGanttChartEachLatest(Long userId, Long projectId, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [getProjectGanttChartEachLatest] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         return getProjectGanttChartByVersionEach(userId, projectId, project.getLatestGanttVersion(), start, end);
     }
@@ -59,10 +54,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     public List<GanttChartResponse> getProjectGanttChartByVersion(Long projectId, Long version, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [getProjectGanttChartByVersion] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         List<GanttChart> responses = ganttChartRepo.findByProjectAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, version, start, end, ganttSort);
         return responses.stream()
@@ -82,14 +74,11 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     public List<GanttChartResponse> getProjectGanttChartByVersionEach(Long userId, Long projectId, Long version, LocalDateTime start, LocalDateTime end) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [getProjectGanttChartByVersionEach] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         List<GanttChart> responses;
         if (userId == null) {
-            responses = ganttChartRepo.findByProjectAndUserIdIsNullAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, version, start, end,ganttSort);
+            responses = ganttChartRepo.findByProjectAndUserIdIsNullAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, version, start, end, ganttSort);
         } else {
             responses = ganttChartRepo.findByProjectAndUserIdAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(project, userId, version, start, end, ganttSort);
         }
@@ -112,16 +101,10 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Transactional
     public void createGanttChart(Long userId, GanttChartCreateRequest request) {
         Project project = projectRepo.findById(request.getProjectId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [createGanttChart] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, request.getProjectId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [createGanttChart] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (userProjectManager.getRole().getModify() || userId.equals(request.getUserId())) {
             GanttChart ganttChart = GanttChart.builder()
@@ -136,7 +119,6 @@ public class GanttChartServiceImpl implements GanttChartService {
                     .build();
             ganttChartRepo.save(ganttChart);
         } else {
-            log.error("[Project] [createGanttChart] CREATE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
     }
@@ -146,16 +128,10 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Transactional
     public void updateGanttChart(Long userId, GanttChartUpdateRequest request) {
         GanttChart ganttChart = ganttChartRepo.findById(request.getId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateGanttChart] GANTT_CHART_NOT_FOUND");
-                    return new NotFoundException(GANTT_CHART_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(GANTT_CHART_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, ganttChart.getProject().getId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [updateGanttChart] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (userProjectManager.getRole().getModify() || userId.equals(request.getUserId())) {
             ganttChart.update(
@@ -168,7 +144,6 @@ public class GanttChartServiceImpl implements GanttChartService {
                     request.getUserId()
             );
         } else {
-            log.error("[Project] [updateGanttChart] MODIFY_NOT_AUTHORIZED");
             throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
         }
     }
@@ -178,21 +153,14 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Transactional
     public void deleteGanttChart(Long userId, Long ganttChartId) {
         GanttChart ganttChart = ganttChartRepo.findById(ganttChartId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [deleteGanttChart] GANTT_CHART_NOT_FOUND");
-                    return new NotFoundException(GANTT_CHART_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(GANTT_CHART_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, ganttChart.getProject().getId())
-                .orElseThrow(() -> {
-                    log.error("[Project] [deleteGanttChart] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (userProjectManager.getRole().getRemove() || userId.equals(ganttChart.getUserId())) {
             ganttChartRepo.delete(ganttChart);
         } else {
-            log.error("[Project] [deleteGanttChart] REMOVE_NOT_AUTHORIZED");
             throw new NotAuthorizedException(REMOVE_NOT_AUTHORIZED);
         }
     }
@@ -201,19 +169,12 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Transactional
     public List<GanttChartResponse> duplicateGanttCharts(Long userId, Long projectId) {
         Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [duplicateGanttCharts] PROJECT_NOT_FOUND");
-                    return new NotFoundException(PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
 
         UserProject userProjectManager = userProjectRepo.findByUserIdAndProjectId(userId, projectId)
-                .orElseThrow(() -> {
-                    log.error("[Project] [duplicateGanttCharts] USER_PROJECT_NOT_FOUND");
-                    return new NotFoundException(USER_PROJECT_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
-        if(!userProjectManager.getRole().getName().equalsIgnoreCase("MASTER")) {
-            log.error("[Project] [duplicateGanttCharts] CREATE_NOT_AUTHORIZED");
+        if (!"MASTER".equalsIgnoreCase(userProjectManager.getRole().getId())) {
             throw new NotAuthorizedException(CREATE_NOT_AUTHORIZED);
         }
 
@@ -230,6 +191,8 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .version(version)
                         .issueCode(oldGanttChart.getIssueCode())
                         .progress(oldGanttChart.getProgress())
+                        .project(oldGanttChart.getProject())
+                        .userId(oldGanttChart.getUserId())
                         .build())
                 .collect(Collectors.toList());
 
@@ -247,5 +210,18 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .userId(ganttChart.getUserId())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void updateAllGanttChart(AllGanttChartUpdateRequest request) {
+        Project project = projectRepo.findById(request.getProjectId())
+                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
+
+        List<GanttChart> ganttCharts = ganttChartRepo.findByProjectAndIssueCode(project, request.getIssueCode());
+
+        for (GanttChart ganttChart : ganttCharts) {
+            ganttChart.updateIssueSummary(request.getSummary());
+        }
     }
 }

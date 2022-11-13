@@ -2,7 +2,7 @@
 import { createAxiosApi } from 'api/axios';
 
 // Init
-const authAxios = createAxiosApi('widget-service');
+const widgetAxios = createAxiosApi('widget-service');
 
 /**
  * @description
@@ -20,15 +20,80 @@ const authAxios = createAxiosApi('widget-service');
  * @author inte
  */
 export default {
-  /**
-   * @description widget 서버의 token code 들을 받아옴
-   *
-   * @author inte
-   */
-  getTokenCodes: () => {
+  getWidgetList: (projectId: number) => {
+    interface responseType {
+      id: number;
+      name: string;
+      widgetRow: number;
+      widgetCol: number;
+      widgetCode: string;
+      requestUrl: string | null;
+      detailRequestUrl: string | null;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      widgetAxios
+        .get(`/widgets/${projectId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  addWidget: (projectId: number, widgetCodeId: string, widgetCol: number, widgetRow: number) => {
+    // Init
+    interface requestType {
+      name: string;
+      projectId: number;
+      widgetCodeId: string;
+      widgetCol: number;
+      widgetRow: number;
+    }
+
+    interface responseType {
+      message: string;
+    }
+
+    // Data
+    const payload: requestType = {
+      name: '-',
+      projectId,
+      widgetCodeId,
+      widgetCol,
+      widgetRow,
+    };
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      widgetAxios
+        .post(`/widgets/`, payload)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  deleteWidget: (widgetId: number) => {
+    return new Promise<string>((resolve, reject) => {
+      widgetAxios
+        .delete(`/widgets/${widgetId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  setWidgetList: (payload: { id: number; widgetRow: number; widgetCol: number }[]) => {
     return new Promise((resolve, reject) => {
-      authAxios
-        .get(`/token-codes`)
+      widgetAxios
+        .put(`/widgets/loc`, payload)
         .then(response => {
           resolve(response);
         })

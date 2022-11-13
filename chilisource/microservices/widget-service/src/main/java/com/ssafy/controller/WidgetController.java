@@ -54,7 +54,7 @@ public class WidgetController {
     @DeleteMapping("/widget-codes/{widgetCodeId}")
     @ApiOperation(value = "위젯 코드 삭제")
     public ResponseEntity<?> deleteWidgetCode(
-            @ApiParam(value = "위젯 코드 pk")  @PathVariable(name = "widgetCodeId") String widgetCodeId
+            @ApiParam(value = "위젯 코드 pk") @PathVariable(name = "widgetCodeId") String widgetCodeId
     ) {
         widgetCodeService.deleteWidgetCode(widgetCodeId);
         return ResponseEntity.ok().build();
@@ -71,18 +71,20 @@ public class WidgetController {
     @PostMapping("/widgets")
     @ApiOperation(value = "위젯 생성")
     public ResponseEntity<?> createWidget(
-            @RequestBody WidgetCreateRequest request
+            @RequestBody WidgetCreateRequest request,
+            @LoginUser User user
     ) {
-        widgetService.createWidget(request);
+        widgetService.createWidget(request, user.getId());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/widgets/loc")
     @ApiOperation(value = "위젯 순서 수정")
     public ResponseEntity<?> updateLocWidget(
-            @RequestBody List<WidgetLocUpdateRequest> requests
+            @RequestBody List<WidgetLocUpdateRequest> requests,
+            @LoginUser User user
     ) {
-        widgetService.updateLoc(requests);
+        widgetService.updateLoc(requests, user.getId());
         return ResponseEntity.ok().build();
     }
 
@@ -90,22 +92,24 @@ public class WidgetController {
     @ApiOperation(value = "위젯 수정")
     public ResponseEntity<?> updateWidget(
             @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId,
-            @RequestBody WidgetUpdateRequest request
+            @RequestBody WidgetUpdateRequest request,
+            @LoginUser User user
     ) {
-        widgetService.updateWidget(request, widgetId);
+        widgetService.updateWidget(request, widgetId, user.getId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/widgets/{widgetId}")
     @ApiOperation(value = "위젯 삭제")
     public ResponseEntity<?> deleteWidget(
-            @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId
+            @ApiParam(value = "위젯 pk") @PathVariable(name = "widgetId") Long widgetId,
+            @LoginUser User user
     ) {
-        widgetService.deleteWidget(widgetId);
+        widgetService.deleteWidget(widgetId, user.getId());
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/widgets/{projectId}")
+    @DeleteMapping("/widgets/all/{projectId}")
     @ApiOperation(value = "프로젝트에 생성된 위젯 삭제")
     public ResponseEntity<?> deleteAllWidget(
             @ApiParam(value = "프로젝트 pk") @PathVariable(name = "projectId") Long projectId
@@ -114,13 +118,24 @@ public class WidgetController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/git/repositories")
+    @ApiOperation(value = "연동한 GIT에 있는 Repository 리스트 조회")
+    public ResponseEntity<?> getGitRepository(
+            HttpServletRequest request,
+            @LoginUser User user,
+            @ApiParam(value = "토큰 코드 pk") @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId
+    ) {
+        String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+        return ResponseEntity.ok(ssafyGitlabService.findRepositoryList(accessToken, tokenCodeId, user.getId()));
+    }
+
     @GetMapping("/widgets/small/{widgetType}")
     @ApiOperation(value = "프로젝트에 생성된 GIT 위젯 정보 조회")
     public ResponseEntity<?> getSmallWidget(
             HttpServletRequest request,
             @LoginUser User user,
-            @ApiParam(value = "프로젝트 pk") @PathVariable("projectId") Long projectId,
-            @ApiParam(value = "위젯 타입 (SSAFYGITLAB, GITLAB, GITHUB)") @RequestParam("widgetType") String widgetType,
+            @ApiParam(value = "프로젝트 pk") @RequestParam("projectId") Long projectId,
+            @ApiParam(value = "위젯 타입 (SSAFYGITLAB, GITLAB, GITHUB)") @PathVariable("widgetType") String widgetType,
             @ApiParam(value = "토큰 코드 pk") @RequestParam(required = false, name = "tokenCodeId") String tokenCodeId,
             @ApiParam(value = "브랜치 (null일때는 MR 리스트)") @RequestParam(required = false, name = "branch") String branch
     ) {
@@ -128,7 +143,7 @@ public class WidgetController {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         switch (type) {
             case SSAFYGITLAB: {
-                if (branch == null)
+                if (branch.isEmpty())
                     return ResponseEntity.ok(ssafyGitlabService.findMergeRequest(accessToken, tokenCodeId, projectId, user.getId()));
                 else
                     return ResponseEntity.ok(ssafyGitlabService.findCommits(accessToken, tokenCodeId, projectId, user.getId(), branch));

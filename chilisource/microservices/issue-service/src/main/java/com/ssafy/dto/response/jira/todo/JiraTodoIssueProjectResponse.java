@@ -16,9 +16,13 @@ public class JiraTodoIssueProjectResponse {
     @ApiModelProperty(value = "프로젝트 key")
     private String key;
 
+    @ApiModelProperty(value = "프로젝트 이름")
+    private String name;
+
     @Builder
-    public JiraTodoIssueProjectResponse(String id, String key) {
+    public JiraTodoIssueProjectResponse(String id, String key, String name) {
         this.id = id;
         this.key = key;
+        this.name = name;
     }
 }

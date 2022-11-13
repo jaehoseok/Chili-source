@@ -1,6 +1,7 @@
 package com.ssafy.service;
 
 import com.ssafy.dto.request.UserProjectCreateRequest;
+import com.ssafy.dto.request.UserProjectRoleUpdateRequest;
 import com.ssafy.dto.request.UserProjectUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 
@@ -12,6 +13,8 @@ public interface UserProjectService {
 
     // 프로젝트 팀원 정보 수정
     public void updateUserProject(Long userId, UserProjectUpdateRequest request);
+
+    public void updateUserProjectRole(Long userId, UserProjectRoleUpdateRequest request);
 
     // 프로젝트 팀원 목록 조회
     public List<UserProjectResponse> getUserProjectList(Long projectId);

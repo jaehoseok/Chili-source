@@ -17,9 +17,9 @@ public class Widget extends BaseEntity {
 
     private String name;
 
-    private Integer row;
+    private Long widgetRow;
 
-    private Integer col;
+    private Long widgetCol;
 
     private Long projectId;
 
@@ -28,10 +28,10 @@ public class Widget extends BaseEntity {
     private WidgetCode widgetCode;
 
     @Builder
-    public Widget(String name, Integer row, Integer col, Long projectId, WidgetCode widgetCode) {
+    public Widget(String name, Long widgetRow, Long widgetCol, Long projectId, WidgetCode widgetCode) {
         this.name = name;
-        this.row = row;
-        this.col = col;
+        this.widgetRow = widgetRow;
+        this.widgetCol = widgetCol;
         this.projectId = projectId;
         this.widgetCode = widgetCode;
     }
@@ -40,8 +40,8 @@ public class Widget extends BaseEntity {
         this.name = name;
     }
 
-    public void locUpdate(Integer row, Integer col){
-        this.row = row;
-        this.col = col;
+    public void locUpdate(Long widgetRow, Long widgetCol){
+        this.widgetRow = widgetRow;
+        this.widgetCol = widgetCol;
     }
 }

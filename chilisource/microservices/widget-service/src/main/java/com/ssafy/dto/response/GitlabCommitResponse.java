@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,13 +17,13 @@ public class GitlabCommitResponse {
     private String author_email;
     private String committer_name;
     private String committer_email;
-    private LocalDateTime created_at;
+    private String created_at;
     private String message;
     private List<String> parent_ids;
     private String web_url;
 
     @Builder
-    public GitlabCommitResponse(String id, String short_id, String author_name, String author_email, String committer_name, String committer_email, LocalDateTime created_at, String message, List<String> parent_ids, String web_url) {
+    public GitlabCommitResponse(String id, String short_id, String author_name, String author_email, String committer_name, String committer_email, String created_at, String message, List<String> parent_ids, String web_url) {
         this.id = id;
         this.short_id = short_id;
         this.author_name = author_name;

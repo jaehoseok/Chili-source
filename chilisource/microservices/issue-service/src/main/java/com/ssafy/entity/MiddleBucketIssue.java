@@ -57,15 +57,13 @@ public class MiddleBucketIssue extends BaseEntity {
         this.issueType = issueType;
     }
 
-    public void update(String summary, String description, String assignee, String priority, String epicLink,
-//                       Long sprint,
-                       Double storyPoints, IssueType issueType) {
+    public void update(String summary, String description, String assignee, String priority, String epicLink, Long sprint, Double storyPoints, IssueType issueType) {
         if (summary != null) this.summary = summary;
         if (description != null) this.description = description;
         if (assignee != null) this.assignee = assignee;
         if (priority != null) this.priority = priority;
         if (epicLink != null) this.epicLink = epicLink;
-//        if (sprint != null) this.sprint = sprint;
+        if (sprint != null) this.sprint = sprint;
         if (storyPoints != null) this.storyPoints = storyPoints;
         if (issueType != null) this.issueType = issueType;
     }

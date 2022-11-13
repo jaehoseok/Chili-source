@@ -13,10 +13,10 @@ public class WidgetCreateRequest {
     private String name;
 
     @ApiModelProperty(value = "위젯 위치(행)")
-    private Integer row;
+    private Long widgetRow;
 
     @ApiModelProperty(value = "위젯 위치(열)")
-    private Integer col;
+    private Long widgetCol;
 
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;

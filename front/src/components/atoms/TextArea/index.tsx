@@ -1,9 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
 import { TextArea, styledType } from './style';
+
+import { SetterOrUpdater } from 'recoil';
 
 interface propsType extends styledType {
   placeholder?: string;
   defaultValue?: string;
+  text?: any;
+  setText?: any;
+  useSetRecoilState?: SetterOrUpdater<any>;
+  recoilParam?: string;
 }
 
 /**
@@ -19,21 +25,61 @@ interface propsType extends styledType {
  * @author dbcs
  */
 
-const index = ({ width, height, placeholder, defaultValue }: propsType) => {
-  const [value, setValue] = useState<string>(defaultValue ? defaultValue : '');
+const index = forwardRef<HTMLTextAreaElement, propsType>(
+  (
+    { width, height, placeholder, defaultValue, text, setText, useSetRecoilState, recoilParam },
+    ref,
+  ) => {
+    // const [text, setText] = useState<string>(defaultValue ? defaultValue : '');
 
-  const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(e.target.value);
-  };
-  return (
-    <TextArea
-      width={width}
-      height={height}
-      placeholder={placeholder}
-      defaultValue={defaultValue}
-      onChange={changeHandler}
-    ></TextArea>
-  );
-};
+    const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setText(e.target.value);
+      if (useSetRecoilState && recoilParam)
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        useSetRecoilState(prevObj => {
+          return {
+            ...prevObj,
+            [recoilParam]: e.target.value,
+          };
+        });
+    };
+
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+    const inputRef = useForwardRef<HTMLTextAreaElement>(ref);
+    useEffect(() => {
+      setText(defaultValue);
+    }, [defaultValue]);
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.value = text ? text : '';
+      }
+    }, [text]);
+    return (
+      <TextArea
+        ref={inputRef}
+        width={width}
+        height={height}
+        placeholder={placeholder}
+        defaultValue={text}
+        onChange={changeHandler}
+      ></TextArea>
+    );
+  },
+);
 
 export default index;

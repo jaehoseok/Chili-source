@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @ApiModel(value = "팀원 정보", description = "설명")
 public class UserProjectCreateRequest {
     @ApiModelProperty(value = "팀원 색깔")
-    private String userColor = "FFFFFF";
+    private String userColor = "#e9e9e9";
 
     @ApiModelProperty(value = "팀원 유저 pk")
     private Long userId;

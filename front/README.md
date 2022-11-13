@@ -362,5 +362,196 @@
   > - 지라 토큰 입력 창 생성
   > - 깃 토큰 입력 창 생성
   > - 연동 시 불러온 Select 생성
-  
+- `Navigation`
+  > - `Portal`을 활용한, 재배치 완료
+  > - root 컴포넌트와 전혀 다르게 배치함으로써, 컴포넌트 생성시 크기 부담 줄임
+- `recoil 설계`
+  > - react 식 form 형태 데이터 설계
+  > - api에 requestBody에 필요한 데이터를 모아둘 recoil 설계
+  > - Input 컴포넌트가 직접 setRecoil 함수를 받아 본인의 e.target.value를 지속적으로 업데이트
+  > - button 클릭으로 api에 시전되도록 
 
+## 221106
+### 종현
+- 415 error
+  > - customAxios의 content-type -> Content-Type 오타로 인한 에러
+- `/auth-service/tokens` (POST)
+  > - requestBody를 위한 recoil 설계 반영 완료
+  > - custom hook 구현 완료
+  > - jira 및 gitlab 토큰 연동 api 
+  > - 통신 완료
+- `Notifiacation 알림 컴포넌트`
+  > - navigation 재 배치에 맞게 렌더링 배치 변환
+- `/project-service/project`(GET)
+  > - 토큰을 활용한 프로젝트 리스트 가져오기
+  > - api 구현 완료
+  > - custom hook 구현 완료
+  > - 통신 완료
+  > - 알고보니 우리 서비스에서 생성한 프로젝트 리스트 가져오는 거였음
+  > - 잘못 만든건데 혹시나 싶어서 그냥 놔둠
+- `/issue-service/project-list (GET)
+  > - jira 토큰과 연관되는 jira 프로젝트를 모두 가져오는 api
+  > - 확인결과 500 error로 연기
+- `/project-service/project (POST)
+  > - 우리 서비스에 프로젝트 생성하기
+  > - requestBody를 위한 recoil 설계 반영 완료
+  > - textAreaBox,  textArea에 recoil props 반영
+  > - image file blob 화하여 저장완료
+  > - api 구현 완료
+  > - custom hook 구현 완료
+  > - 통신 완료
+  > - 정상적으로 통신 된 경우, project 목록 페이지로 이동하도록 설정
+
+## 221107
+### 종현
+- API
+  > - 지라 토큰 값을 통해, 지라 프로젝트 목록 가져오기
+  > - 프로젝트 목록 필터링하여 `<Option>` 컴포넌트에 매핑하기
+- API 설계 다시
+  > - 응답 데이터 interface화 하여 반영하기
+  > - 기존의 코드 짜진 설계대로 고쳐보기
+- 로그인 이후 처리해야하는 유저 정보 및 토큰 데이터를 가지고 오는 요청 시 에러
+  > - LandingPage로 리다이렉트 전 api 요청을 하니 에러가 나서, LandingPage까지 접근한 후, localStroge에 Access 토큰 저장되었는지 확인 한 후에 api 요청이 오도록 처리, 
+  > - 추측하건데, 아마 customAxios가 만들어지기전에 호출해서 서버에서 거절을 한 것이 아닌가 추측
+- API 지라 연동
+  > - 기존의 연동 토큰을 가지고 있으면 입력창에 바로 반영됨
+  > - 기존의 연동 토큰을 가지고 있으면 프로젝트도 미리 가져옴
+  > - 이메일도 입력하도록 입력창 생성
+  > - 이메일 입력창 저장하기 위한 recoil 설계
+- Notification
+  > - 프로젝트가 성공적으로 생성시 성공적으로 생성되었다는 알림이 나오게 함
+
+### 준혁
+- 대쉬보드→ 위젯선택 → 간트차트 연동 확인
+- 전체 서비스 플로우 ui 무시하고 확인
+- 서버 데이터 확인
+
+### 성현
+
+- `IssueInfo`-`SelectBox` 에러 해결
+  >- 'setValue is not a function' 에러 - 생성된 해당 컴포넌트 전부에 props를 넣으니 해결됐다.
+
+- `IssueInfo`-`InputBox` 컴포넌트 형식 forwardRef<HTMLInputElement, propsType>로 변경
+- `IssueInfo`-`SelectBox` 컴포넌트 형식 forwardRef<HTMLSelectElement, propsType>로 변경
+  >- 내부에 targetRef를 새로 만들어 자식 컴포넌트에 ref로 접근할 수 있게 작성
+
+## 221108
+### 종현
+- API
+  > - 프로젝트 선택 페이지에서 자신과 연관되는 프로젝트 데이터 가져오기
+  > - 클릭하면 해당 projectId의 대시보드로 이동하도록 설정
+  > - 프로젝트 개수가 많은 경우, Navigation bar를 넘어가지 않도록, max-height 및 스크롤 바 고정
+  > - 프로젝트 삭제 기능 구현
+  > - 자기가 팀장이 아닌 경우, 삭제하지 못하도록 처리 필요 있음
+  > - 지라 프로젝트와 생성한 프로젝트가 서로 연동되도록 설정
+  > - 팀원 조회 API 연결 완료
+  > - projectSummary 컴포넌트 생성
+  > - 팀원 조회 통신 완료
+  > - 팀장 및 팀원 이미지 렌더링 projectSummary 컴포넌트에 렌더링
+
+  ### 준혁
+  - 대쉬보드→ 위젯선택 → 대쉬보드에 위젯추가 로직 에러 잡기
+  - 리액트 쿼리 데이터를 코드에 적용하는 테스트 코드 제작
+
+### 성현
+  - `MiddleBucket`에서 `IssueInfo` 데이터 수신 후 `IssueBar` 생성
+  - `IssuesPage` 스타일링
+  - `IssuesPage` 디렉토리 구조 수정
+    >- IssuesPage.tsx -> IssuesPage/index.tsx, style.ts
+  - 미들버킷 관련 Organism 디렉토리 구조 수정
+    >- organism/IssueInfo, MiddleBucket -> organism/issues/IssueInfo, MiddleBucket
+
+## 221109
+### 종현
+- NavProject & NavWidget
+  > - recoil nav데이터 localStorage로 이관
+  > - tab 삭제, tab 활성화 함수 정상작동하도록 이관
+  > - 프로젝트 선택 시 프로젝트 탭이 활성화 되면서 생성되도록 설정
+  > - localStorage 안에 이미 데이터가 있는데, 또 선택해서 오는 경우에는 그냥 탭 활성화만 시킴
+  > - + 버튼 클릭시 프로젝트 선택 페이지로 이동, 이어서 프로젝트를 또 생성할 수 있음
+- 탭이 활성화되지 않은 경우, 탭을 삭제 할때, localStorage 상에서 삭제는 되지만, 리렌더링이 안됨
+  > - 시간 없어서 그냥 활성화된 탭만 x 할 수 있도록 처리  
+
+  ### 준혁
+- 간트차트 드래그 시 에러나고 멈추는 문제 해결
+- UI/UX 잔조정 - 대시보드가 가운데 정렬이 안되는 문제 해결
+ 
+### 성현
+- IssueTemplate
+  > - 이슈 템플릿 삭제 구현
+
+## 221110
+ ### 종현
+- Error : 처음 getProject 요청을 보낼때, 값을 못가져와 탭에 이름이 없이 렌더링이 됨
+  > - api 성공 시의 상태를 useEffect 의존성으로 추가하여 해결
+
+### 준혁
+- 서버에 간트이슈 생성 버그 해결
+- 위젯 생성이 가데이터 말고 여러 위젯이 생성가능하도록 타입 수정
+
+## 221111
+### 종현
+- 위젯 탭
+  > - localStorage로 이관 완료
+- 위젯 타입 변환
+  > - 프로젝트 탭이 생성될 때, 한번에 모든 위젯이 생성되도록 전환
+  > - 단순하게 현재 경로에서 활성화된 곳만 파악하도록 설정
+  > - list 형태가 아닌 단순 boolean이기 때문에 파악하기 쉽고, 유지 보수도 더욱 쉬워졌다.
+
+### 준혁
+- 대쉬보드 내용과 간트차트 내용이 꼬여버린 브랜치를 정리
+- 생성 할 때, 올바른 행렬에서 생성될 수 있도록 주소 params 에 행 index 번호를 추가함
+
+## 221112
+### 종현
+- 프로젝트 설정 페이지 생성
+  > - 프로젝트 이미지 변경 컴포넌트 생성 완료
+  > - 프로젝트 이름/설명 컴포넌트 생성 완료
+  > - 팀원 초대 컴포넌트 생성 완료
+  > - 팀원 권한 변경 및 강퇴 컴포넌트 생성 완료
+- API 요청 함수
+  > - 프로젝트 로고 수정 API 요청 함수 생성 완료
+  > - 프로젝트 이름, 상세 수정 API 요청 함수 생성 완료
+  > - 팀원 권한 수정 API 요청 함수 생성 완료
+- 커스텀 훅
+  > - 프로젝트 로고 수정 커스텀 훅 생성 완료
+  > - 프로젝트 이름, 상세 수정 커스텀 훅 생성 완료
+  > - 팀원 권한 변경 커스텀 훅 생성 완료
+- API 연결
+  > - 프로젝트 로고 수정 통신 연결 완료
+  > - 프로젝트 이름, 상세 수정 연결 완료
+  > - 팀원 권한 수정 연결 완료 
+
+### 성현
+- IssueTemplate
+  > - 이슈 템플릿 추가 구현
+- Organism 구조 변경
+  > - IssueTemplate, IssueInfo -> IssueTemplate으로 통합
+- IssueTemplate
+  > - 이슈 템플릿 편집 구현
+
+## 221113
+### 종현
+- 권한 변경 컴포넌트 생성 완료
+- 컬러 변경 컴포넌트 생성 완료
+- 해당 권한마다 옵션에 접근할 수 있도록 설정완료
+  > - 컬러 색상 변경을 위한 `react-colorful` 설치
+- API 요청 함수
+  > - 프로젝트 컬러 변경 API 요청 함수 생성 완료
+  > - 유저 검색 API 요청 함수 생성 완료
+  > - 팀원 초대 API 요청 함수 생성 완료
+  > - 유저 강퇴 API 요청 함수 생성 완료
+- 커스텀 훅
+  > - 프로젝트 컬러 변경 커스텀 훅 생성 완료
+  > - 유저 검색 조회 커스텀 훅 생성 완료
+  > - 팀원 초대 커스텀 훅 생성 완료
+  > - 유저 강퇴 커스텀 훅 생성 완료
+- API 연결
+  > - 프로젝트 컬러 변경 통신 연결 완료
+  > - 유저 검색 통신 연결 완료
+  > - 팀원 초대 통신 연결 완료
+  > - 유저 강퇴 통신 연결 완료
+
+### 준혁
+- dashboard 에 project 정보 띄우기
+- 위젯 변경 사항을 hooks/widget 의 커스텀 훅을 통하여 값을 받고 레이아웃 형식으로 변환한 뒤, 캐싱으로 저장한다.

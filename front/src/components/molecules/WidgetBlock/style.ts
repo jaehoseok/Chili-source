@@ -7,8 +7,7 @@ export interface styledType {
 }
 
 export const StyledWidgetBlock = styled.div<styledType>`
-  display: flex;
-  align-items: center;
+  ${tw`flex items-center`}
   margin: 16px;
   padding: 16px;
   height: ${({ height }) => height};

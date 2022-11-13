@@ -5,11 +5,14 @@ import com.ssafy.client.ProjectServiceClient;
 import com.ssafy.client.SsafyGitlabClient;
 import com.ssafy.dto.gitlab.Branch;
 import com.ssafy.dto.response.*;
+import com.ssafy.exception.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.ssafy.exception.InternalServerErrorException.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,12 +23,18 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
     private final SsafyGitlabClient ssafyGitlabClient;
 
     @Override
+    public List<GitlabRepositoryResponse> findRepositoryList(String accessToken, String tokenCodeId, Long userId) {
+        TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
+        List<GitlabRepositoryResponse> repositories = ssafyGitlabClient.findRepository(tokenResponse.getValue());
+        return repositories;
+    }
+
+    @Override
     public GitlabDefaultResponse findMergeRequest(String accessToken, String tokenCodeId, Long projectId, Long userId) {
         TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
-
         List<Branch> branches = ssafyGitlabClient.findBranch(tokenResponse.getValue(), projectResponse.getGitRepo());
-        if (branches.isEmpty()) log.error("[Widget] [findMergeRequest] ssafy gitlab feign error");
+        if (branches.isEmpty()) throw new InternalServerErrorException(GIT_COMMUNICATION_ERROR);
         List<GitlabMergeRequestResponse> gitlabMergeRequestResponses = ssafyGitlabClient.findMergeRequest(tokenResponse.getValue(), projectResponse.getGitRepo());
         GitlabDefaultResponse gitlabDefaultResponse = GitlabDefaultResponse.builder()
                 .branchs(branches)
@@ -37,9 +46,9 @@ public class SsafyGitlabServiceImpl implements SsafyGitlabService {
     @Override
     public List<GitlabCommitResponse> findCommits(String accessToken, String tokenCodeId, Long projectId, Long userId, String branch) {
         TokenResponse tokenResponse = authServiceClient.findToken(accessToken, tokenCodeId);
-        if (tokenResponse.getValue() == null) log.error("[Widget] [findCommits] auth service feign error");
+        if (tokenResponse.getValue() == null) throw new InternalServerErrorException(AUTH_COMMUNICATION_ERROR);
         ProjectResponse projectResponse = projectServiceClient.findProject(projectId);
-        if (projectResponse.getId() == null) log.error("[Widget] [findCommits] project service feign error");
+        if (projectResponse.getId() == null) throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
         return ssafyGitlabClient.findCommits(tokenResponse.getValue(), projectResponse.getGitRepo(), branch);
     }
 }

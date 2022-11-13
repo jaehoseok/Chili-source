@@ -15,10 +15,10 @@ public class WidgetResponse {
     private String name;
 
     @ApiModelProperty(value = "위젯 위치(행)")
-    private Integer row;
+    private Long widgetRow;
 
     @ApiModelProperty(value = "위젯 위치(열)")
-    private Integer col;
+    private Long widgetCol;
 
     @ApiModelProperty(value = "위젯 코드 pk")
     private String widgetCode;
@@ -30,11 +30,11 @@ public class WidgetResponse {
     private String detailRequestUrl;
 
     @Builder
-    public WidgetResponse(Long id, String name, Integer row, Integer col, String widgetCode, String requestUrl, String detailRequestUrl) {
+    public WidgetResponse(Long id, String name, Long widgetRow, Long widgetCol, String widgetCode, String requestUrl, String detailRequestUrl) {
         this.id = id;
         this.name = name;
-        this.row = row;
-        this.col = col;
+        this.widgetRow = widgetRow;
+        this.widgetCol = widgetCol;
         this.widgetCode = widgetCode;
         this.requestUrl = requestUrl;
         this.detailRequestUrl = detailRequestUrl;
