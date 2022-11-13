@@ -41,7 +41,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final AuthServiceClient authServiceClient;
     private final IssueServiceClient issueServiceClient;
     private final WidgetServiceClient widgetServiceClient;
-    private final String DEFAULT_COLOR = "FFFFFF";
+    private final String DEFAULT_COLOR = "#e9e9e9";
 
     @Override
     public ProjectResponse getProject(Long projectId) {
