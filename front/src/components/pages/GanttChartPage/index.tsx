@@ -1,5 +1,5 @@
 // styles
-import { StyledPage, StyledHeader, StyledBody, StyledLetterBox } from './style';
+import { StyledPage, StyledHeader, StyledBody } from './style';
 
 // Components
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';

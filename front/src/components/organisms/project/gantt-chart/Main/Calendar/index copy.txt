@@ -97,6 +97,7 @@ export const Calendar = ({
     }
   };
 
+  // 년 기준
   const getCalendarValuesForYear = () => {
     const topValues = [];
     const bottomValues = [];
@@ -210,7 +211,7 @@ export const Calendar = ({
         // if last day is new month
         if (i !== dates.length - 1) {
           topValues.push(
-            <TopPartOfCalendar
+            <CalendarTop
               key={topValue}
               value={topValue}
               x1Line={columnWidth * i + weeksCount * columnWidth}
@@ -253,7 +254,7 @@ export const Calendar = ({
         const topValue = getLocaleMonth(date, locale);
 
         topValues.push(
-          <TopPartOfCalendar
+          <CalendarTop
             key={topValue + date.getFullYear()}
             value={topValue}
             x1Line={columnWidth * (i + 1)}
@@ -272,8 +273,8 @@ export const Calendar = ({
   };
 
   const getCalendarValuesForPartOfDay = () => {
-    const topValues: ReactChild[] = [];
-    const bottomValues: ReactChild[] = [];
+    const topValues = [];
+    const bottomValues = [];
     const ticks = viewMode === ViewMode.HalfDay ? 2 : 4;
     const topDefaultHeight = headerHeight * 0.5;
     const dates = dateSetup.dates;
@@ -301,7 +302,7 @@ export const Calendar = ({
           'short',
         )}, ${date.getDate()} ${getLocaleMonth(date, locale)}`;
         topValues.push(
-          <TopPartOfCalendar
+          <CalendarTop
             key={topValue + date.getFullYear()}
             value={topValue}
             x1Line={columnWidth * i + ticks * columnWidth}
@@ -348,7 +349,7 @@ export const Calendar = ({
         )}, ${displayDate.getDate()} ${getLocaleMonth(displayDate, locale)}`;
         const topPosition = (date.getHours() - 24) / 2;
         topValues.push(
-          <TopPartOfCalendar
+          <CalendarTop
             key={topValue + displayDate.getFullYear()}
             value={topValue}
             x1Line={columnWidth * i}
@@ -364,8 +365,8 @@ export const Calendar = ({
     return [topValues, bottomValues];
   };
 
-  let topValues: ReactChild[] = [];
-  let bottomValues: ReactChild[] = [];
+  let topValues = [];
+  let bottomValues = [];
   switch (dateSetup.viewMode) {
     case ViewMode.Year:
       [topValues, bottomValues] = getCalendarValuesForYear();
