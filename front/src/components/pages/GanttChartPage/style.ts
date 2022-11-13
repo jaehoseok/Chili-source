@@ -4,7 +4,6 @@ import tw from 'twin.macro';
 export const StyledPage = styled.div`
   ${tw`h-screen w-screen flex flex-col`}
 `;
-StyledPage.defaultProps = {};
 
 export const StyledHeader = styled.div`
   height: 6rem;
@@ -16,5 +15,5 @@ export const StyledBody = styled.div`
 `;
 
 export const StyledLetterBox = styled.div`
-  ${tw`w-1/12`}
+  ${tw`w-1/5`}
 `;

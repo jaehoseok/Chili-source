@@ -1,7 +1,7 @@
 // https://github.com/MaTeMaTuK/gantt-task-react
 
 // Styles
-import { StyledSection } from './style';
+import { StyledGanttGraph } from './style';
 
 import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
 import 'gantt-task-react/dist/index.css';
@@ -19,12 +19,12 @@ const tasks: Task[] = [
   },
 ];
 
-export const Section = () => {
+export const GanttGraph = () => {
   return (
     <>
-      <StyledSection>
+      <StyledGanttGraph>
         <Gantt tasks={tasks} />
-      </StyledSection>
+      </StyledGanttGraph>
     </>
   );
 };
