@@ -90,6 +90,7 @@ export default {
     assignee: string,
     priority: string,
     epicLink: string,
+    sprint: number,
     storyPoints: number,
   ) => {
     try {
@@ -103,9 +104,7 @@ export default {
         epicLink: string;
         storyPoints: number;
       }
-      const data = {
-        template,
-      };
+      const data = {};
       const response = await issueAxios.post('/', data);
       console.log(response);
       return response;
