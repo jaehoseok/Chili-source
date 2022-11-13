@@ -1,3 +1,5 @@
+//  API & Library
+import { useParams } from 'react-router-dom';
 import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
 import { widget } from 'api/rest';
 
@@ -7,7 +9,7 @@ import { widget } from 'api/rest';
  *
  * @author inte
  */
-export const useGetLayout = (projectId: number) => {
+export const useGetLayout = () => {
   interface itemType {
     id: number;
     type?: string;
@@ -15,12 +17,14 @@ export const useGetLayout = (projectId: number) => {
     children: itemType[];
   }
 
+  const { projectId } = useParams();
+
   return useQuery(
-    ['layout'],
+    ['layout', projectId],
     async () => {
       const updatedLayout: itemType[] = [{ id: 0, children: [] }];
 
-      const response = await widget.getWidgetList(projectId);
+      const response = await widget.getWidgetList(Number(projectId));
 
       response.map(({ id, widgetCode, widgetRow, widgetCol }) => {
         while (updatedLayout.length <= widgetCol) {
@@ -117,16 +121,16 @@ export const useDeleteLayout = () => {
       });
       console.log('[삭제할 위젯]', deletedItems);
       console.log('[변경된 레이아웃]', updatedWidgetList);
-      // deletedItems.map(async ({ id }) => {
-      //   await widget.deleteWidget(id);
-      // });
+      await deletedItems.map(async ({ id }) => {
+        await widget.deleteWidget(id);
+      });
 
-      // await widget.setWidgetList(updatedWidgetList);
+      await widget.setWidgetList(updatedWidgetList);
     },
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[set layout success]');
+        console.log('[delete layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
       },
     },
@@ -182,6 +186,7 @@ export const useSetLayout = () => {
         // 요청이 성공한 경우
         console.log('[set layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+        console.log('[layout invalid]');
       },
     },
   );

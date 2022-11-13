@@ -45,7 +45,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
   const navigate = useNavigate();
   const { projectId, columnIdx } = useParams();
   const addLayout = useAddLayout().mutate;
-  const getLayout = useGetLayout(Number(projectId)).data;
+  const getLayout = useGetLayout().data;
 
   // 타입에 따른 위젯 설명
   switch (type) {

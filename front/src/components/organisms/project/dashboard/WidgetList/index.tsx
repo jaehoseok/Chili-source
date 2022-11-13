@@ -1,5 +1,5 @@
 // API & Library
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -34,7 +34,7 @@ export interface itemType {
 export const WidgetList = ({}: propsType) => {
   // Init
   const { projectId } = useParams();
-  const getLayout = useGetLayout(Number(projectId)).data;
+  const getLayout = useGetLayout().data;
   const setLayout = useSetLayout().mutate;
   const deleteLayout = useDeleteLayout().mutate;
 
@@ -323,6 +323,12 @@ export const WidgetList = ({}: propsType) => {
 
     deleteLayout({ deletedItems, updatedLayout });
   };
+
+  // LifeCycle
+  useEffect(() => {
+    console.log('[프로젝트 변경]', projectId);
+    setLayout([]);
+  }, [projectId]);
 
   return (
     <DndProvider backend={HTML5Backend}>
