@@ -13,7 +13,7 @@ const index = (props: any) => {
   const issue = {
     templateId: props.issue.templateId,
     issueId: issueId,
-    project: props.issue.project,
+    projectId: props.issue.projectId,
     type: props.issue.type,
     summary: props.issue.summary,
     description: props.issue.description,
@@ -56,7 +56,7 @@ const index = (props: any) => {
       <IssueBar
         templateId={issue.templateId}
         issueId={issue.issueId}
-        project={issue.project}
+        projectId={issue.projectId}
         type={issue.type}
         summary={issue.summary}
         description={issue.description}

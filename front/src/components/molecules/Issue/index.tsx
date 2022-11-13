@@ -15,7 +15,7 @@ import { HiPencil } from 'react-icons/hi';
 
 interface propsType extends styledType {
   templateId: number;
-  project?: string;
+  projectId?: number;
   summary?: string;
   description?: string;
   reporter?: string;
@@ -42,7 +42,7 @@ interface propsType extends styledType {
  * @param {string?} width                                       - 이슈 템플릿 넓이 [default: 400px]
  * @param {string?} height                                      - 이슈 템플릿 높이 [default: 90px]
  * @param {number} templateId                                   - 이슈 템플릿 ID
- * @param {string?} project                                     - 프로젝트 이름
+ * @param {string?} projectId                                   - 프로젝트 ID
  * @param {string} type                                         - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary                                     - 이슈 제목
  * @param {string?} description                                 - 이슈 설명
@@ -61,7 +61,7 @@ const index = ({
   width,
   height,
   templateId,
-  project,
+  projectId,
   type,
   summary,
   description,
@@ -96,7 +96,7 @@ const index = ({
 
   const issueData = {
     templateId: templateId,
-    project: project,
+    projectId: projectId,
     type: type,
     summary: summary,
     description: description,
@@ -120,7 +120,7 @@ const index = ({
           <StyledIssueTopRight>
             <ImBin
               onClick={() => {
-                issueData.project = '';
+                issueData.projectId = 0;
                 issueData.type = '';
                 issueData.summary = '';
                 issueData.description = '';

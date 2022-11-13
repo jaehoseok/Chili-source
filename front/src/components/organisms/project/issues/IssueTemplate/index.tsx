@@ -19,11 +19,12 @@ import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
+import issueAxios from 'api/rest/issue';
 
 const index = (props: any) => {
   const issue = {
     templateId: props.issue.templateId,
-    project: props.issue.project,
+    projectId: props.issue.projectId,
     type: props.issue.type,
     summary: props.issue.summary,
     description: props.issue.description,
@@ -43,6 +44,7 @@ const index = (props: any) => {
   };
   const deleteHandler = (templateId: number) => {
     setIssues(issues.filter((issue: templateType) => issue.templateId !== templateId));
+    issueAxios.deleteIssueTemplate(templateId);
   };
   const editEnableHandler = (templateId: number) => {
     setIsEdit(true);
@@ -57,7 +59,7 @@ const index = (props: any) => {
   const IssueList = issues.map((issue: templateType) => (
     <Issue
       templateId={issue.templateId}
-      project={issue.project}
+      projectId={issue.projectId}
       type={issue.type}
       summary={issue.summary}
       description={issue.description}
@@ -75,7 +77,7 @@ const index = (props: any) => {
 
   const issue1: templateType = {
     templateId: 1,
-    project: '프로젝트1',
+    projectId: 1,
     type: 'story',
     summary: '이슈1',
     description: '설명1',
@@ -88,7 +90,7 @@ const index = (props: any) => {
   };
   const issue2: templateType = {
     templateId: 2,
-    project: '프로젝트2',
+    projectId: 1,
     type: 'task',
     summary: '이슈2',
     description: '설명2',
@@ -101,7 +103,7 @@ const index = (props: any) => {
   };
   const issue3: templateType = {
     templateId: 3,
-    project: '프로젝트3',
+    projectId: 1,
     type: 'bug',
     summary: '이슈3',
     description: '설명3',
@@ -113,7 +115,7 @@ const index = (props: any) => {
     storyPoints: 2,
   };
   useEffect(() => {
-    setIssues([issue1, issue2, issue3]);
+    issueAxios.getIssueTemplateList(1);
   }, []);
 
   // IssueInfo 부분
@@ -127,7 +129,7 @@ const index = (props: any) => {
       ? '버그'
       : '';
 
-  const projectRef = useRef<HTMLInputElement>(null);
+  const projectIdRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -141,7 +143,7 @@ const index = (props: any) => {
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
     issue.templateId = templateId;
-    issue.project = projectRef.current ? projectRef.current.value : '';
+    issue.projectId = projectIdRef.current ? Number(projectIdRef.current.value) : '';
     issue.type = typeRef.current
       ? typeRef.current.value === '스토리'
         ? 'story'
@@ -160,7 +162,7 @@ const index = (props: any) => {
     issue.sprint = sprintRef.current ? sprintRef.current.value : '';
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
-    projectRef.current ? (projectRef.current.value = '') : '';
+    projectIdRef.current ? (projectIdRef.current.value = '') : '';
     // typeRef.current ? (typeRef.current.value = '') : '';
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
@@ -174,12 +176,14 @@ const index = (props: any) => {
     issues.push(issue);
     setIssues(issues);
     setIsAdd(false);
+
+    issueAxios.postCreateIssueTemplate(issue);
   };
 
   const editTemplateHandler = () => {
     issues.forEach(issue => {
       if (issue.templateId === editNo) {
-        projectRef.current ? (issue.project = projectRef.current.value) : '';
+        projectIdRef.current ? (issue.projectId = Number(projectIdRef.current.value)) : '';
         typeRef.current
           ? (issue.type =
               typeRef.current.value === '스토리'
@@ -206,7 +210,7 @@ const index = (props: any) => {
   const insertIssueHandler = () => {
     props.setIssue({
       templateId: props.issue.templateId,
-      project: projectRef.current ? projectRef.current.value : '',
+      project: projectIdRef.current ? Number(projectIdRef.current.value) : '',
       type: typeRef.current
         ? typeRef.current.value === '스토리'
           ? 'story'
@@ -280,7 +284,7 @@ const index = (props: any) => {
               isRow={false}
               labelName={'프로젝트'}
               inputValue={props.issue.project}
-              ref={projectRef}
+              ref={projectIdRef}
             />
             <SelectBox labelName={'이슈 유형'} ref={typeRef}>
               <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>

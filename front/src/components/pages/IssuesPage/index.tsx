@@ -9,7 +9,7 @@ export interface issueType extends templateType {
 }
 export interface templateType {
   templateId: number;
-  project: string;
+  projectId: number;
   type: string;
   summary: string;
   description: string;
@@ -24,7 +24,7 @@ const index = () => {
   const dummyIssue: issueType = {
     templateId: 0,
     issueId: 0,
-    project: '',
+    projectId: 0,
     type: 'story',
     summary: '',
     description: '',

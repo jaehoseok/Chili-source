@@ -1,6 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-
+import { templateType } from 'components/pages/IssuesPage';
 // Init
 const issueAxios = createAxiosApi('issue-service');
 
@@ -50,6 +50,102 @@ export default {
       const response = await issueAxios.get('/jira/project-list');
       console.log(response);
       return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  /**
+   * @description
+   * 이슈 템플릿 조회 API
+   * 자신이 작성한 이슈 템플릿 리스트를 조회한다.
+   *
+   * @author dbcs
+   */
+  getIssueTemplateList: async (projectId: number) => {
+    try {
+      const response = await issueAxios.get('/', {
+        params: {
+          projectId: projectId,
+          me: true,
+        },
+      });
+      console.log(response);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  /**
+   * @description
+   * 이슈 템플릿 생성 API
+   * 현 프로젝트 내에 자신의 이슈 템플릿을 생성한다.
+   *
+   * @author dbcs
+   */
+  postCreateIssueTemplate: async (
+    projectId: number,
+    issueType: string,
+    summary: string,
+    description: string,
+    assignee: string,
+    priority: string,
+    epicLink: string,
+    storyPoints: number,
+  ) => {
+    try {
+      interface responseType {
+        projectId: number;
+        issueType: string;
+        summary: string;
+        description: string;
+        assignee: string;
+        priority: string;
+        epicLink: string;
+        storyPoints: number;
+      }
+      const data = {
+        template,
+      };
+      const response = await issueAxios.post('/', data);
+      console.log(response);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  putEditIssueTemplate: async (
+    projectId: number,
+    issueType: string,
+    summary: string,
+    description: string,
+    assignee: string,
+    priority: string,
+    epicLink: string,
+    storyPoints: number,
+    issueTemplateId: number,
+  ) => {
+    try {
+      const data = {
+        projectId,
+        issueType,
+        summary,
+        description,
+        assignee,
+        priority,
+        epicLink,
+        storyPoints,
+      };
+      const response = issueAxios.put(`/${issueTemplateId}`, data);
+      console.log(response);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  deleteIssueTemplate: async (issueTemplateId: number) => {
+    try {
+      const response = issueAxios.delete(`/${issueTemplateId}`);
+      return response;
     } catch (e) {
       console.log(e);
     }
