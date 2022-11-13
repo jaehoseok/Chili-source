@@ -39,16 +39,20 @@ public class JiraTodoIssueFieldsResponse {
     @ApiModelProperty(value = "스프린트")
     private List<JiraTodoIssueSprintResponse> customfield_10020;
 
+    @ApiModelProperty(value = "스토리 포인트")
+    private Double customfield_10031;
+
     @Builder
-    public JiraTodoIssueFieldsResponse(JiraTodoIssueTypeResponse issuetype, JiraTodoIssueParentResponse parent, JiraTodoIssueProjectResponse project, JiraTodoIssuePriorityResponse priority, JiraTodoIssueAssigneeResponse assignee, JiraTodoIssueStatusResponse status, JiraTodoIssueSummaryResponse summary, JiraTodoIssueReporterResponse reporter, List<JiraTodoIssueSprintResponse> customfield_10020) {
-        this.project = project;
-        this.parent = parent;
-        this.summary = summary;
-        this.status = status;
+    public JiraTodoIssueFieldsResponse(JiraTodoIssueTypeResponse issuetype, JiraTodoIssueParentResponse parent, JiraTodoIssueProjectResponse project, JiraTodoIssuePriorityResponse priority, JiraTodoIssueAssigneeResponse assignee, JiraTodoIssueStatusResponse status, JiraTodoIssueSummaryResponse summary, JiraTodoIssueReporterResponse reporter, List<JiraTodoIssueSprintResponse> customfield_10020, Double customfield_10031) {
         this.issuetype = issuetype;
+        this.parent = parent;
+        this.project = project;
         this.priority = priority;
         this.assignee = assignee;
+        this.status = status;
+        this.summary = summary;
         this.reporter = reporter;
         this.customfield_10020 = customfield_10020;
+        this.customfield_10031 = customfield_10031;
     }
 }
