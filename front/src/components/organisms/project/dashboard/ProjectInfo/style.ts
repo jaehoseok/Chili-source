@@ -8,7 +8,7 @@ export const StyledProjectInfo = styled.div<styledType>`
   ${tw`w-full flex flex-col items-center`}
 `;
 StyledProjectInfo.defaultProps = {
-  height: '300px',
+  height: '480px',
 };
 
 export const StyledProjectInfoLine = styled.div<styledType>`

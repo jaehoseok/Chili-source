@@ -1,5 +1,6 @@
 // API & Library
 import { ReactNode } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // styles
 import { StyledWidget, StyledWidgetData, styledType } from './style';
@@ -9,6 +10,7 @@ import Sheet from 'components/atoms/Sheet';
 
 interface propsType extends styledType {
   type?: string;
+  path?: string;
   children?: ReactNode;
 }
 
@@ -20,27 +22,81 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Widget = ({ type, children, width, height }: propsType) => {
-  // 없는 위젯 타입 선언시, require 에러 핸들링
+export const Widget = ({ type, path, children }: propsType) => {
+  // Init
+  const navigate = useNavigate();
+  const { projectId } = useParams();
 
+  const splitPath = path ? path.split('-') : ['0'];
+
+  // Methods
   const addWidgetHandler = () => {
-    console.log('da');
+    navigate(`/project/${projectId}/widgets/${splitPath[0]}/${splitPath[1]}`);
   };
 
   const widgetData = (type: string, children: ReactNode) => {
     switch (type) {
-      case 'TEST':
-        return <StyledWidgetData>[{children}] 테스트</StyledWidgetData>;
+      case 'CALENDAR':
+        return (
+          <StyledWidgetData className="calendar" height="480px" width="480px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'GANTT':
+        return (
+          <StyledWidgetData className="gantt-chart" height="480px" width="480px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'JIRA':
+        return (
+          <StyledWidgetData className="jira" width="224px" height="224px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'SSAFYGITLAB':
+        return (
+          <StyledWidgetData className="ssafy-gitlab" width="224px" height="224px">
+            <div>
+              {children}-{type}
+            </div>
+          </StyledWidgetData>
+        );
+      case 'ADD':
+        return (
+          <StyledWidgetData
+            className="btn-add-widget"
+            onClick={addWidgetHandler}
+            width="440px"
+            height="40px"
+            backgroundColor="#d4d4d4"
+          >
+            +
+          </StyledWidgetData>
+        );
       default:
-        return <StyledWidgetData onClick={addWidgetHandler}>+</StyledWidgetData>;
+        return (
+          <StyledWidgetData
+            className="label"
+            width="400px"
+            height="4px"
+            backgroundColor="#d4d4d4"
+          ></StyledWidgetData>
+        );
     }
   };
 
   return (
     <>
-      <StyledWidget className="widget" height={height} width={width}>
+      <StyledWidget className="widget">
         <Sheet isShadow={true} height="100%" width="100%">
-          {widgetData(type || 'plus', children)}
+          {widgetData(type || '', children)}
         </Sheet>
       </StyledWidget>
     </>

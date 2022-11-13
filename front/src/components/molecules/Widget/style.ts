@@ -4,20 +4,21 @@ import tw from 'twin.macro';
 export interface styledType {
   height?: string;
   width?: string;
+  backgroundColor?: string;
 }
 
 export const StyledWidget = styled.div<styledType>`
   ${tw`flex justify-center items-center`}
-  height: ${({ height }) => height};
-  width: ${({ width }) => width};
 `;
-StyledWidget.defaultProps = {
-  height: '180px',
-  width: '400px',
-};
 
 export const StyledWidgetData = styled.div<styledType>`
   ${tw`flex justify-center items-center`}
-  height: 100%;
-  width: 100%;
+  font-size: 1.4rem;
+  height: ${({ height }) => height};
+  width: ${({ width }) => width};
+  background-color: ${({ backgroundColor }) => backgroundColor};
 `;
+StyledWidgetData.defaultProps = {
+  height: '180px',
+  width: '400px',
+};
