@@ -1,5 +1,6 @@
 package com.ssafy.controller;
 
+import brave.Response;
 import com.ssafy.config.AwsS3Service;
 import com.ssafy.config.Constant;
 import com.ssafy.config.loginuser.LoginUser;
@@ -78,5 +79,13 @@ public class UserController {
             @ApiParam(value = "유저 pk 리스트") @RequestParam List<Long> userIds
     ) {
         return ResponseEntity.ok(userService.getUserList(userIds));
+    }
+
+    @GetMapping("/users/search")
+    @ApiOperation(value = "유저 검색")
+    public ResponseEntity<?> searchUser(
+            @ApiParam(value = "유저 email") @RequestParam String email
+    ) {
+        return ResponseEntity.ok(userService.getUserList(email));
     }
 }
