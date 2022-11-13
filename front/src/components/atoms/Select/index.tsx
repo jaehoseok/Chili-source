@@ -17,7 +17,7 @@ interface propsType extends styledType {
   children: ReactNode;
   text?: any;
   setText?: any;
-  setJiraProject?: Dispatch<SetStateAction<string>>;
+  setState?: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -33,7 +33,7 @@ interface propsType extends styledType {
  */
 
 const index = forwardRef<HTMLSelectElement, propsType>(
-  ({ children, width, fontSize, setText, setJiraProject }, ref) => {
+  ({ children, width, fontSize, setText, setState }, ref) => {
     // const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     //   console.log(e);
     //   if (setJiraProject) {
@@ -66,8 +66,8 @@ const index = forwardRef<HTMLSelectElement, propsType>(
     const inputRef = useForwardRef<HTMLSelectElement>(ref);
     const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
       const idx = e.target.selectedIndex;
-      if (setJiraProject) {
-        setJiraProject(e.target.options[idx].value);
+      if (setState) {
+        setState(e.target.options[idx].value);
       } else {
         setText(e.target.value);
       }

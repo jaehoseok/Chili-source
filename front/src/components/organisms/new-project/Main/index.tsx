@@ -336,7 +336,7 @@ const index = () => {
               {jiraProjectList.data && (
                 <>
                   <StyledMarginY>
-                    <Select width="100%" setJiraProject={setJiraProject}>
+                    <Select width="100%" setState={setJiraProject}>
                       <Option messages={filteringJiraProjectHandler(jiraProjectList.data)}></Option>
                     </Select>
                   </StyledMarginY>
