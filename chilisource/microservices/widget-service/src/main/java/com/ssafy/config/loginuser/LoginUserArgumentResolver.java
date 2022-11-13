@@ -31,7 +31,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         try {
             String authorizationHeader = webRequest.getHeader("Authorization");
-            String jwt = authorizationHeader.replace("Bearer ", "");
+            String jwt = authorizationHeader.replace("Bearer%20", "").replace("Bearer ", "");
             Claims body = Jwts.parser().setSigningKey(SecretKey)
                     .parseClaimsJws(jwt).getBody();
             User user = new User(Long.valueOf(String.valueOf(body.get("id"))));

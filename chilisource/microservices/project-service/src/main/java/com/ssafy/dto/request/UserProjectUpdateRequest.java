@@ -19,14 +19,10 @@ public class UserProjectUpdateRequest {
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;
 
-    @ApiModelProperty(value = "권한 pk")
-    private Long roleId;
-
     @Builder
-    public UserProjectUpdateRequest(String userColor, Long userId, Long projectId, Long roleId) {
+    public UserProjectUpdateRequest(String userColor, Long userId, Long projectId) {
         this.userColor = userColor;
         this.userId = userId;
         this.projectId = projectId;
-        this.roleId = roleId;
     }
 }

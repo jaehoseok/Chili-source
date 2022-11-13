@@ -13,8 +13,8 @@ public class WidgetLocUpdateRequest {
     private Long id;
 
     @ApiModelProperty(value = "위젯 위치(행)")
-    private Integer row;
+    private Long widgetRow;
 
     @ApiModelProperty(value = "위젯 위치(열)")
-    private Integer col;
+    private Long widgetCol;
 }

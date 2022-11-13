@@ -3,6 +3,7 @@ package com.ssafy.service;
 import com.ssafy.config.Constant;
 import com.ssafy.dto.request.UserCreateRequest;
 import com.ssafy.dto.request.UserUpdateRequest;
+import com.ssafy.dto.response.UserListResponse;
 import com.ssafy.dto.response.UserResponse;
 import com.ssafy.entity.User;
 import com.ssafy.exception.NotFoundException;
@@ -48,7 +49,6 @@ public class UserServiceImpl implements UserService {
                         .build();
             }
             default: {
-                log.error("[User] [getUser] social login type is not found");
                 throw new IllegalArgumentException("알 수 없는 소셜 유저 형식입니다.");
             }
         }
@@ -57,10 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getUserInfo(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[User] [getUserInfo] user is not found");
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -69,45 +66,64 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserListResponse getUserList(String email) {
+        List<UserResponse> googleUsers = userRepo.findByGoogleContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        List<UserResponse> naverUsers = userRepo.findByNaverContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        List<UserResponse> kakaoUsers = userRepo.findByKakaoContains(email).stream()
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .image(user.getImage())
+                        .build())
+                .collect(Collectors.toList());
+        return UserListResponse.builder()
+                .googleUsers(googleUsers)
+                .naverUsers(naverUsers)
+                .kakaoUsers(kakaoUsers)
+                .build();
+    }
+
+    @Override
     public void updateUserInfo(UserUpdateRequest request, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[User] [updateUserInfo] user is not found");
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.updateInfo(request.getName());
     }
 
     @Override
     public void updateUserImage(String image, Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[User] [updateUserImage] user is not found");
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.updateImage(image);
     }
 
     @Override
     public void withdraw(Long userId) {
         User user = userRepo.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("[User] [withdraw] user is not found");
-                    return new NotFoundException(USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.withdraw();
     }
 
     @Override
     public List<UserResponse> getUserList(List<Long> userIds) {
         List<UserResponse> userResponses = userRepo.findByIdIn(userIds).stream()
-                .map(user -> {
-                    return UserResponse.builder()
-                            .id(user.getId())
-                            .name(user.getName())
-                            .image(user.getImage())
-                            .build();
-                })
+                .map(user -> UserResponse.builder()
+                        .id(user.getId())
+                        .name(user.getName())
+                        .image(user.getImage())
+                        .build())
                 .collect(Collectors.toList());
         return userResponses;
     }

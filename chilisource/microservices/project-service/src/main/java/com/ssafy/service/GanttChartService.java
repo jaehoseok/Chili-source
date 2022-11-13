@@ -1,5 +1,6 @@
 package com.ssafy.service;
 
+import com.ssafy.dto.request.AllGanttChartUpdateRequest;
 import com.ssafy.dto.request.GanttChartCreateRequest;
 import com.ssafy.dto.request.GanttChartUpdateRequest;
 import com.ssafy.dto.response.GanttChartResponse;
@@ -31,4 +32,7 @@ public interface GanttChartService {
 
     // 간트차트 복제 새 버전 생성 및 조회
     List<GanttChartResponse> duplicateGanttCharts(Long userId, Long projectId);
+
+    // 프로젝트 내 이슈 코드 해당하는 간트차트 내용 수정
+    void updateAllGanttChart(AllGanttChartUpdateRequest request);
 }

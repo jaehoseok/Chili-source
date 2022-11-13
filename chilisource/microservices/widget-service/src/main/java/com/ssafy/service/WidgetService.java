@@ -12,16 +12,16 @@ public interface WidgetService {
     List<WidgetResponse> getWidgetList(Long projectId);
 
     // 위젯 추가
-    WidgetResponse createWidget(WidgetCreateRequest request);
+    WidgetResponse createWidget(WidgetCreateRequest request, Long userId);
 
     // 위젯 수정
-    WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId);
+    WidgetResponse updateWidget(WidgetUpdateRequest request, Long widgetId, Long userId);
 
     // 위젯 순서 변경
-    void updateLoc(List<WidgetLocUpdateRequest> requests);
+    void updateLoc(List<WidgetLocUpdateRequest> requests, Long userId);
 
     // 위젯 삭제
-    void deleteWidget(Long widgetId);
+    void deleteWidget(Long widgetId, Long userId);
 
     // 위젯 전체 삭제
     void deleteAllWidget(Long projectId);

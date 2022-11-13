@@ -14,9 +14,8 @@ import java.util.List;
 @Entity
 public class Role extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
-    private Long id;
+    private String id;
 
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private Boolean modify;
@@ -30,19 +29,16 @@ public class Role extends BaseEntity {
     @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
     private Boolean remove;
 
-    private String name;
-
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserProject> userProjects = new ArrayList<>();
 
     @Builder
-    public Role(Long id, Boolean modify, Boolean invite, Boolean fire, Boolean remove, String name, List<UserProject> userProjects) {
+    public Role(String id, Boolean modify, Boolean invite, Boolean fire, Boolean remove, List<UserProject> userProjects) {
         this.id = id;
         this.modify = modify;
         this.invite = invite;
         this.fire = fire;
         this.remove = remove;
-        this.name = name;
         this.userProjects = userProjects;
     }
 }

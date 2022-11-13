@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "widget-service", url = "https://k7b2071.p.ssafy.io/widget-service")
 public interface WidgetServiceClient {
-    @DeleteMapping("/widgets/{projectId}")
+    @DeleteMapping("/widgets/all/{projectId}")
     Response deleteAllWidget(@PathVariable("projectId") Long projectId);
 }
