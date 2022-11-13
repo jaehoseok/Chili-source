@@ -24,6 +24,12 @@ interface propsType {
   >;
 }
 
+/**
+ * @description
+ * 프로젝트 팀원의 권한을 변경하는 컴포넌트
+ *
+ * @author bell
+ */
 const index = ({ roleId, userImage, userName, projectId, userId, updateTeamRole }: propsType) => {
   // 권한 설정용 state
   const [authorization, setAuthorization] = useState(roleId as string);

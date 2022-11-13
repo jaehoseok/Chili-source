@@ -13,9 +13,30 @@ interface propsType {
   userImage: string;
   userName: string;
   userColor: string;
+  projectId: number;
+  userId: number;
+  updateTeamColor: UseMutateFunction<
+    void,
+    unknown,
+    { projectId: number; userColor: string; userId: number },
+    unknown
+  >;
 }
 
-const index = ({ userImage, userName, userColor }: propsType) => {
+/**
+ * @description
+ * 프로젝트 팀원의 색상을 변경하는 컴포넌트
+ *
+ * @author bell
+ */
+const index = ({
+  userImage,
+  userName,
+  userColor,
+  projectId,
+  userId,
+  updateTeamColor,
+}: propsType) => {
   // 색 변경용 state
   const [color, setColor] = useState(userColor as string);
 
@@ -44,6 +65,13 @@ const index = ({ userImage, userName, userColor }: propsType) => {
           borderColor={theme.button.gray}
           backgroundColor={theme.button.green}
           isHover={true}
+          clickHandler={() => {
+            updateTeamColor({
+              projectId: projectId,
+              userColor: color,
+              userId: userId,
+            });
+          }}
         >
           변경
         </Button>

@@ -1,16 +1,23 @@
+// REACT & REACT-ROUTER
 import { useState, ChangeEvent, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+
+// RECOIL
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { updateProjectState } from 'recoil/atoms/project/updateProject';
 
+// REACT-QUERY
 import {
   useGetProject,
   useGetTeamForProject,
   useUpdateProject,
   useUpdateProjectImage,
+  useUpdateTeamColor,
   useUpdateTeamRole,
 } from 'hooks/project';
+import { useGetUserInfoHandler } from 'hooks/user';
 
+// STYLED-COMPONENT
 import {
   StyledPadding,
   StyledMarginY,
@@ -21,17 +28,20 @@ import {
   StyledLabel,
 } from './style';
 
+// COMPONENT - ATOMS
 import Sheet from 'components/atoms/Sheet';
 import Circle from 'components/atoms/Circle';
 import Button from 'components/atoms/Button';
 import Notification from 'components/atoms/Notification';
+
+// COMPONENT - MOLECULES
 import SettingAuth from 'components/molecules/SettingAuth';
 import SettingColor from 'components/molecules/SettingColor';
 import InputBox from 'components/molecules/InputBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 
+// ETC
 import { theme } from 'styles/theme';
-import { useGetUserInfoHandler } from 'hooks/user';
 
 /**
  * @description
@@ -53,6 +63,7 @@ const index = () => {
   const updateProject = useUpdateProject();
   const updateProjectImage = useUpdateProjectImage();
   const updateTeamRole = useUpdateTeamRole();
+  const updateTeamColor = useUpdateTeamColor();
 
   // update 요청시 필요한 recoil 작업
   const { projectName, projectDescription } = useRecoilValue(updateProjectState);
@@ -70,7 +81,6 @@ const index = () => {
 
   // 현재 로그인한 유저의 프로젝트 등급
   const currentAuth = myInfo()?.role.id;
-  const currentColor = myInfo()?.userColor;
 
   // project-logo용 state
   const [image, setImage] = useState();
@@ -90,6 +100,10 @@ const index = () => {
       getTeamForProject.refetch();
     }
 
+    if (updateTeamColor.isSuccess) {
+      getTeamForProject.refetch();
+    }
+
     // getProject가 refetch를 시도하는 경우
     // localStorage를 업데이트하여 탭의 값도 바꾼다!
     if (updateProject.isSuccess && getProject.isRefetching) {
@@ -103,6 +117,7 @@ const index = () => {
     getProject.isRefetching,
     updateProjectImage.isSuccess,
     updateTeamRole.isSuccess,
+    updateTeamColor.isSuccess,
   ]);
 
   return (
@@ -124,7 +139,14 @@ const index = () => {
       {updateTeamRole.isSuccess && (
         <Notification
           check={true}
-          message={'권한이 수정되었습니다.'}
+          message={'프로젝트 팀원의 권한이 수정되었습니다.'}
+          width={'300px'}
+        ></Notification>
+      )}
+      {updateTeamColor.isSuccess && (
+        <Notification
+          check={true}
+          message={'프로젝트 팀원의 색상이 수정되었습니다.'}
           width={'300px'}
         ></Notification>
       )}
@@ -290,13 +312,18 @@ const index = () => {
                   <StyledMarginY>
                     {currentAuth !== 'DEVELOPER' && <StyledLabel>팀원 색상 변경</StyledLabel>}
                     {currentAuth !== 'DEVELOPER' && getTeamForProject.data ? (
-                      getTeamForProject.data.map(({ userName, userImage, userColor }) => (
-                        <SettingColor
-                          userImage={userImage}
-                          userName={userName}
-                          userColor={userColor}
-                        />
-                      ))
+                      getTeamForProject.data.map(
+                        ({ userName, userImage, userColor, projectId, userId }) => (
+                          <SettingColor
+                            userImage={userImage}
+                            userName={userName}
+                            userColor={userColor}
+                            projectId={projectId}
+                            userId={userId}
+                            updateTeamColor={updateTeamColor.mutate}
+                          />
+                        ),
+                      )
                     ) : (
                       <Notification
                         message="팀원 정보를 수정할 권한을 가지고 있지 않습니다!"

@@ -136,3 +136,21 @@ export const useUpdateTeamRole = () => {
     project.updateTeamRole(projectId, roleId, userId),
   );
 };
+
+/**
+ * @description
+ * 프로젝트에 참여하는 유저들의 색상 변경을 요청하는 함수를 다루는 custom-hook
+ *
+ * @author bell
+ */
+export const useUpdateTeamColor = () => {
+  interface requestType {
+    projectId: number;
+    userColor: string;
+    userId: number;
+  }
+
+  return useMutation(({ projectId, userColor, userId }: requestType) =>
+    project.updateTeamColor(projectId, userColor, userId),
+  );
+};

@@ -303,12 +303,29 @@ export default {
    *
    * @author bell
    */
-
   updateTeamRole: async (projectId: number, roleId: string, userId: number) => {
     try {
       await projectAxios.put(`/team/role`, {
         projectId,
         roleId,
+        userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 참여하는 유저의 색상을 변경합니다.
+   *
+   * @author bell
+   */
+  updateTeamColor: async (projectId: number, userColor: string, userId: number) => {
+    try {
+      await projectAxios.put(`/team`, {
+        projectId,
+        userColor,
         userId,
       });
     } catch (e) {
