@@ -12,7 +12,7 @@ export const StyledSection = styled.div<styledType>`
 StyledSection.defaultProps = {};
 
 export const StyledSectionColumn = styled.div<styledType>`
-  ${tw`bg-red-200 overflow-y-scroll`}
+  ${tw`overflow-y-scroll`}
   width: 1500px;
 `;
 StyledSectionColumn.defaultProps = {};
