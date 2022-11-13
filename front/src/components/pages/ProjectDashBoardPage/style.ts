@@ -7,8 +7,8 @@ export const StyledPage = styled.div`
 StyledPage.defaultProps = {};
 
 export const StyledHeader = styled.div`
-  height: 6rem;
-  min-height: 6rem;
+  height: 1rem;
+  min-height: 1rem;
 `;
 
 export const StyledBody = styled.div`

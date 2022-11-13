@@ -185,7 +185,7 @@ export const useSetLayout = () => {
       onSuccess: () => {
         // 요청이 성공한 경우
         console.log('[set layout success]');
-        queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+        queryClient.invalidateQueries(['layout']); // queryKey 강제로 만기 시키기 -> 당장 다시 값 얻어와
         console.log('[layout invalid]');
       },
     },
