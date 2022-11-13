@@ -1,26 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 
-import {
-  StyledContainer,
-  StyledInlineBlock,
-  StyledFlex,
-  StyledFlexBetween,
-  StyledFlexItemsCenter,
-  StyledFlexColumn,
-  StyledWidth100px,
-  StyledWidth80,
-  StyledMarginY,
-} from './style';
+import { useDeleteProject, useGetProjects } from 'hooks/project';
 
-// IMAGE
-import example from 'assets/logo/ssafyLogo2.png';
-import user1 from 'assets/images/user1.png';
+import { StyledContainer, StyledFlexBetween, StyledProjectWrapper } from './style';
 
 // COMPONENTS
-import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import Text from 'components/atoms/Text';
-import Circle from 'components/atoms/Circle';
+import ProjectSummary from 'components/molecules/ProjectSummary';
+import { useEffect } from 'react';
 
 const index = () => {
   const navigate = useNavigate();
@@ -28,6 +16,13 @@ const index = () => {
   const clickToProjectCreateHandler = () => {
     navigate('/new-project');
   };
+
+  const getProjects = useGetProjects();
+  const deleteProject = useDeleteProject();
+
+  useEffect(() => {
+    getProjects.refetch();
+  }, [getProjects.data, deleteProject.isSuccess]);
 
   return (
     <StyledContainer>
@@ -48,63 +43,12 @@ const index = () => {
           <Text color="#ffffff" isFill={false} message={'프로젝트 생성'}></Text>
         </Button>
       </StyledFlexBetween>
-      <StyledFlex>
-        <Sheet width="100%" height="25vh" minHeight="300px">
-          <StyledWidth80>
-            <StyledFlexItemsCenter>
-              <Circle height={'150px'} isImage={true} url={example} />
-              <StyledFlexColumn>
-                <StyledMarginY>
-                  <StyledWidth100px>
-                    <Text
-                      message="프로젝트 명"
-                      isFill={false}
-                      fontSize={'1.5rem'}
-                      fontWeight={'700'}
-                    ></Text>
-                  </StyledWidth100px>
-                  <Text message="Project 1 " isFill={false}></Text>
-                </StyledMarginY>
-                <StyledMarginY>
-                  <StyledWidth100px>
-                    <Text
-                      message="팀장"
-                      isFill={false}
-                      fontSize={'1.5rem'}
-                      fontWeight={'700'}
-                    ></Text>
-                  </StyledWidth100px>
-                  <StyledInlineBlock>
-                    <Circle height={'25px'} isImage={true} url={user1} />
-                  </StyledInlineBlock>
-                </StyledMarginY>
-                <StyledMarginY>
-                  <StyledWidth100px>
-                    <Text
-                      message="멤버"
-                      isFill={false}
-                      fontSize={'1.5rem'}
-                      fontWeight={'700'}
-                    ></Text>
-                  </StyledWidth100px>
-                  <StyledInlineBlock>
-                    <Circle height={'25px'} isImage={true} url={user1} />
-                  </StyledInlineBlock>
-                  <StyledInlineBlock>
-                    <Circle height={'25px'} isImage={true} url={user1} />
-                  </StyledInlineBlock>
-                  <StyledInlineBlock>
-                    <Circle height={'25px'} isImage={true} url={user1} />
-                  </StyledInlineBlock>
-                  <StyledInlineBlock>
-                    <Circle height={'25px'} isImage={true} url={user1} />
-                  </StyledInlineBlock>
-                </StyledMarginY>
-              </StyledFlexColumn>
-            </StyledFlexItemsCenter>
-          </StyledWidth80>
-        </Sheet>
-      </StyledFlex>
+      <StyledProjectWrapper>
+        {getProjects.data &&
+          getProjects.data.map((item, idx) => (
+            <ProjectSummary item={item} idx={idx} deleteProject={deleteProject}></ProjectSummary>
+          ))}
+      </StyledProjectWrapper>
     </StyledContainer>
   );
 };

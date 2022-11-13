@@ -1,8 +1,9 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { StringLiteral } from 'typescript';
 
 // Init
-const authAxios = createAxiosApi('user-service');
+const userAxios = createAxiosApi('user-service');
 
 /**
  * @description
@@ -27,7 +28,7 @@ export default {
    */
   getTokenCodes: () => {
     return new Promise((resolve, reject) => {
-      authAxios
+      userAxios
         .get(`/token-codes`)
         .then(response => {
           console.log(response);
@@ -55,10 +56,44 @@ export default {
     // 그렇다면 타입을 확정하기 간편하도록 성공시의 데이터 자체를 반환하면
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
-      const response = await authAxios.get('/users/info');
+      const response = await userAxios.get('/users/info');
+      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log(e);
     }
+  },
+
+  /**
+   * @description
+   * 현재 가입한 유저의 정보를 보여줌
+   * 해당 정보를 가지고, 유저를 프로젝트에 초대하도록 쓰임
+   *
+   * @author bell
+   */
+  getUserSearch: async (email: string) => {
+    interface userType {
+      id: number;
+      name: string;
+      image: string;
+    }
+    interface responseType {
+      googleUsers: userType[];
+      kakaoUsers: userType[];
+      image: userType[];
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      userAxios
+        .get(`/users/search`, { params: { email } })
+        .then(response => {
+          console.log(response);
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
   },
 };

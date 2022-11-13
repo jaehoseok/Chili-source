@@ -1,9 +1,23 @@
-import { ReactNode } from 'react';
+import {
+  ReactNode,
+  ChangeEvent,
+  SetStateAction,
+  Dispatch,
+  useEffect,
+  useState,
+  useRef,
+  RefObject,
+  forwardRef,
+  ForwardedRef,
+} from 'react';
 
 import { StyledSelect, styledType } from './style';
 
 interface propsType extends styledType {
   children: ReactNode;
+  text?: any;
+  setText?: any;
+  setState?: Dispatch<SetStateAction<string>>;
 }
 
 /**
@@ -17,12 +31,59 @@ interface propsType extends styledType {
  *
  * @author bell
  */
-const index = ({ children, width, fontSize }: propsType) => {
-  return (
-    <StyledSelect width={width} fontSize={fontSize}>
-      {children}
-    </StyledSelect>
-  );
-};
+
+const index = forwardRef<HTMLSelectElement, propsType>(
+  ({ children, width, fontSize, setText, setState }, ref) => {
+    // const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+    //   console.log(e);
+    //   if (setJiraProject) {
+    //     const idx = e.target.selectedIndex;
+    //     setJiraProject(e.target.options[idx].value);
+    //   }
+    // };
+
+    // useEffect(() => {
+    //   if (setJiraProject) {
+    //     setJiraProject('반영은 됨');
+    //   }
+    // }, []);
+    const useForwardRef = <T,>(ref: ForwardedRef<T>, initialValue: any = null) => {
+      const targetRef = useRef<T>(initialValue);
+
+      useEffect(() => {
+        if (!ref) return;
+
+        if (typeof ref === 'function') {
+          ref(targetRef.current);
+        } else {
+          ref.current = targetRef.current;
+        }
+      }, [ref]);
+
+      return targetRef;
+    };
+
+    const inputRef = useForwardRef<HTMLSelectElement>(ref);
+    const changeJiraProjectHandler = (e: ChangeEvent<HTMLSelectElement>) => {
+      const idx = e.target.selectedIndex;
+      if (setState) {
+        setState(e.target.options[idx].value);
+      } else {
+        setText(e.target.value);
+      }
+    };
+
+    return (
+      <StyledSelect
+        ref={inputRef}
+        width={width}
+        fontSize={fontSize}
+        onChange={changeJiraProjectHandler}
+      >
+        {children}
+      </StyledSelect>
+    );
+  },
+);
 
 export default index;
