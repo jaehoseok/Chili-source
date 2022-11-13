@@ -89,4 +89,17 @@ export default {
         });
     });
   },
+
+  setWidgetList: (payload: { id: number; widgetRow: number; widgetCol: number }[]) => {
+    return new Promise((resolve, reject) => {
+      widgetAxios
+        .put(`/widgets/loc`, payload)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };

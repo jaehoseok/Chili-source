@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { widget } from 'api/rest';
-import { useGetLayout, usePostLayout } from 'hooks/widget';
+import { useGetLayout, useSetLayout, useDeleteLayout } from 'hooks/widget';
 
 // Styles
 import {
@@ -34,16 +34,17 @@ export interface itemType {
 export const WidgetList = ({}: propsType) => {
   // Init
   const { projectId } = useParams();
-  const getLayout = useGetLayout(Number(projectId));
-  const postLayout = usePostLayout();
+  const getLayout = useGetLayout(Number(projectId)).data;
+  const setLayout = useSetLayout().mutate;
+  const deleteLayout = useDeleteLayout().mutate;
 
   // Methods
   /**
    * 드롭 시, 레이아웃 순서를 바꾸는 콜백함수
    */
   const dropHandler = (dropSpace: itemType, dropItem: itemType) => {
+    const layout = getLayout || [];
     let updatedLayout: itemType[] = [];
-    const layout = getLayout.data || [];
 
     // 변화 없음
     if (dropSpace.path == dropItem.path) {
@@ -62,7 +63,6 @@ export const WidgetList = ({}: propsType) => {
         // 집어넣을 아이템 복사
         const dropIndex = Number(splitDropSpacePath[0]);
         const columnIndex = Number(splitDropItemPath[0]);
-
         // 옮길 것이 내려둘 곳보다 앞인지 뒤인지
         if (dropIndex < columnIndex) {
           updatedLayout = [
@@ -282,26 +282,23 @@ export const WidgetList = ({}: propsType) => {
         }
       }
     }
-
-    // updatedLayout = [{ id: '1' }, { id: '2' }, { id: '3' }];
-    // setLayout(updatedLayout);
+    setLayout(updatedLayout);
   };
 
   /**
    * 드롭 시, 레이아웃에서 컴포넌트를 제거하는 콜백함수
    */
   const throwHandler = async (item: itemType) => {
+    let deletedItems: itemType[] = [];
     let updatedLayout: itemType[] = [];
-    const layout = getLayout.data ? getLayout.data : [];
+    const layout = getLayout || [];
 
     // 컬럼 삭제
     if (item.type == 'COLUMN') {
       const splitItemPath = item.path ? item.path.split('-') : [''];
-
       const index = Number(splitItemPath[0]);
-      layout[index].children.map(async id => {
-        console.log('[delete widget]', await widget.deleteWidget(Number(id)));
-      });
+
+      deletedItems = layout[index].children;
       updatedLayout = [...layout.slice(0, index), ...layout.slice(index + 1)];
     }
 
@@ -313,6 +310,7 @@ export const WidgetList = ({}: propsType) => {
       const itemIndex = Number(splitItemPath[1]);
       const columnChild = [...(layout[columnIndex].children || [])];
 
+      deletedItems = [item];
       updatedLayout = [
         ...layout.slice(0, columnIndex),
         {
@@ -323,7 +321,7 @@ export const WidgetList = ({}: propsType) => {
       ];
     }
 
-    // setLayout(updatedLayout);
+    deleteLayout({ deletedItems, updatedLayout });
   };
 
   return (
@@ -331,8 +329,8 @@ export const WidgetList = ({}: propsType) => {
       <StyledWidgetListContainer className="widget-list-container">
         <WidgetTrashCan onThrow={throwHandler} />
         <StyledWidgetList className="widget-list">
-          {getLayout.data
-            ? getLayout.data.map(({ id, children }, index) => {
+          {getLayout
+            ? getLayout.map(({ id, children }, index) => {
                 return (
                   <StyledWidgetListColumnContainer key={index}>
                     <WidgetDropSpace onDrop={dropHandler} type="COLUMN" path={`${index}`} />

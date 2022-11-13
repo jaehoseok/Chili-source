@@ -1,7 +1,7 @@
 // API & Library
 import { useNavigate, useParams } from 'react-router-dom';
 import { widget } from 'api/rest';
-// import { useSetWidgetListHandler } from 'hooks/widget';
+import { useAddLayout, useGetLayout } from 'hooks/widget';
 
 // Styles
 import {
@@ -43,8 +43,9 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
   };
 
   const navigate = useNavigate();
-  const { projectId, columnIdx, itemIdx } = useParams();
-  // const setWidgetList = useSetWidgetListHandler();
+  const { projectId, columnIdx } = useParams();
+  const addLayout = useAddLayout().mutate;
+  const getLayout = useGetLayout(Number(projectId)).data;
 
   // 타입에 따른 위젯 설명
   switch (type) {
@@ -52,8 +53,13 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
       label = '간트 차트';
       text = '프로젝트에 할 일을 간편하게 생성하고 이를 간트 차트화 하여 보여줍니다.';
       clickHandler = async () => {
-        // setWidgetList.mutate({ projectId: 0, widgetCodeId: 'string', widgetCol: 0, widgetRow: 0 });
-        await widget.addWidget(Number(projectId), 'GANTT', Number(columnIdx), Number(itemIdx));
+        addLayout({
+          projectId: Number(projectId),
+          widgetCodeId: type,
+          widgetCol: Number(columnIdx),
+          widgetRow: getLayout ? getLayout[Number(columnIdx)].children.length : 0,
+        });
+
         navigate(`/project/${projectId}/dashboard`);
       };
       break;
@@ -61,7 +67,13 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
       label = '캘린더';
       text = '프로젝트의 일정을 달력으로 표현하여 한 눈에 확인 할 수 있습니다.';
       clickHandler = async () => {
-        await widget.addWidget(Number(projectId), 'CALENDAR', Number(columnIdx), Number(itemIdx));
+        addLayout({
+          projectId: Number(projectId),
+          widgetCodeId: type,
+          widgetCol: Number(columnIdx),
+          widgetRow: getLayout ? getLayout[Number(columnIdx)].children.length : 0,
+        });
+
         navigate(`/project/${projectId}/dashboard`);
       };
       break;
@@ -70,7 +82,13 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
       text =
         'Jira 에 이슈들의 규격을 저장하거나, 규격에 맞게 다 수의 이슈를 스프린트에 자동 생성해줍니다.';
       clickHandler = async () => {
-        await widget.addWidget(Number(projectId), 'JIRA', Number(columnIdx), Number(itemIdx));
+        addLayout({
+          projectId: Number(projectId),
+          widgetCodeId: type,
+          widgetCol: Number(columnIdx),
+          widgetRow: getLayout ? getLayout[Number(columnIdx)].children.length : 0,
+        });
+
         navigate(`/project/${projectId}/dashboard`);
       };
       break;
@@ -78,12 +96,13 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
       label = '깃 로그';
       text = '깃의 커밋과 지라 이슈 내역을 연결하여 그래프로 정리하여 보여줍니다.';
       clickHandler = async () => {
-        await widget.addWidget(
-          Number(projectId),
-          'SSAFYGITLAB',
-          Number(columnIdx),
-          Number(itemIdx),
-        );
+        addLayout({
+          projectId: Number(projectId),
+          widgetCodeId: type,
+          widgetCol: Number(columnIdx),
+          widgetRow: getLayout ? getLayout[Number(columnIdx)].children.length : 0,
+        });
+
         navigate(`/project/${projectId}/dashboard`);
       };
       break;

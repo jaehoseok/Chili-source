@@ -42,7 +42,13 @@ export const useGetLayout = (projectId: number) => {
   );
 };
 
-export const usePostLayout = () => {
+/**
+ * @description
+ * 위젯 추가가 있었을 경우, 재조정을 하는 함수
+ *
+ * @returns
+ */
+export const useAddLayout = () => {
   //  Init
   interface requestType {
     projectId: number;
@@ -54,12 +60,73 @@ export const usePostLayout = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
-      widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
+    async ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
+      await widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[post layout success]');
+        console.log('[add layout success]');
+        queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+      },
+    },
+  );
+};
+
+/**
+ * @description
+ * 위젯 삭제가 있었을 경우, 재조정을 하는 함수
+ *
+ * @returns
+ */
+export const useDeleteLayout = () => {
+  //  Init
+  interface itemType {
+    id: number;
+    type?: string;
+    path?: string;
+    children: itemType[];
+  }
+
+  interface paramsType {
+    deletedItems: itemType[];
+    updatedLayout: itemType[];
+  }
+
+  interface requestType {
+    id: number;
+    widgetCol: number;
+    widgetRow: number;
+  }
+
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async ({ deletedItems, updatedLayout }: paramsType) => {
+      const updatedWidgetList: requestType[] = [];
+      updatedLayout.map((item, index) => {
+        const widgetCol = index;
+        item.children.map(({ id }, index) => {
+          if (id == 0) return;
+          const widgetRow = index;
+          updatedWidgetList.push({
+            id,
+            widgetCol,
+            widgetRow,
+          });
+        });
+      });
+      console.log('[삭제할 위젯]', deletedItems);
+      console.log('[변경된 레이아웃]', updatedWidgetList);
+      // deletedItems.map(async ({ id }) => {
+      //   await widget.deleteWidget(id);
+      // });
+
+      // await widget.setWidgetList(updatedWidgetList);
+    },
+    {
+      onSuccess: () => {
+        // 요청이 성공한 경우
+        console.log('[set layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
       },
     },
@@ -74,9 +141,15 @@ export const usePostLayout = () => {
  */
 export const useSetLayout = () => {
   //  Init
+  interface itemType {
+    id: number;
+    type?: string;
+    path?: string;
+    children: itemType[];
+  }
+
   interface requestType {
-    projectId: number;
-    widgetCodeId: string;
+    id: number;
     widgetCol: number;
     widgetRow: number;
   }
@@ -84,12 +157,30 @@ export const useSetLayout = () => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
-      widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
+    async (updatedLayout: itemType[]) => {
+      const updatedWidgetList: requestType[] = [];
+
+      updatedLayout.map((item, index) => {
+        const widgetCol = index;
+        item.children.map(({ id }, index) => {
+          if (id == 0) return;
+          const widgetRow = index;
+
+          updatedWidgetList.push({
+            id,
+            widgetCol,
+            widgetRow,
+          });
+        });
+      });
+
+      console.log('[변경할 데이터]', updatedWidgetList);
+      await widget.setWidgetList(updatedWidgetList);
+    },
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[post layout success]');
+        console.log('[set layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
       },
     },
