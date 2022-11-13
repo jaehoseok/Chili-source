@@ -2,16 +2,22 @@ import { MouseEventHandler, useState } from 'react';
 import {
   StyledIssue,
   StyledIssueTop,
+  StyledIssueTopRight,
   StyledIssueBottom,
   StyledIssueBottomElement,
   styledType,
 } from './style';
 import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
+import Button from '../../atoms/Button';
+import { ImBin } from 'react-icons/im';
+import { HiPencil } from 'react-icons/hi';
 
 interface propsType extends styledType {
+  templateId: number;
   project?: string;
   summary?: string;
+  description?: string;
   reporter?: string;
   assignee?: string;
   rank?: string;
@@ -19,6 +25,8 @@ interface propsType extends styledType {
   sprint?: string;
   storyPoints?: number;
   clickHandler?: any;
+  deleteHandler?: any;
+  editEnableHandler?: any;
 }
 
 /**
@@ -33,9 +41,11 @@ interface propsType extends styledType {
  *
  * @param {string?} width                                       - 이슈 템플릿 넓이 [default: 400px]
  * @param {string?} height                                      - 이슈 템플릿 높이 [default: 90px]
- * @param {string} type                                         - 이슈 유형 ['story', 'task', 'bug']
+ * @param {number} templateId                                   - 이슈 템플릿 ID
  * @param {string?} project                                     - 프로젝트 이름
+ * @param {string} type                                         - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary                                     - 이슈 제목
+ * @param {string?} description                                 - 이슈 설명
  * @param {string?} reporter                                    - 보고자
  * @param {string?} assignee                                    - 담당자
  * @param {string?} rank                                        - 우선순위
@@ -50,9 +60,11 @@ interface propsType extends styledType {
 const index = ({
   width,
   height,
+  templateId,
   project,
   type,
   summary,
+  description,
   reporter,
   assignee,
   rank,
@@ -60,6 +72,8 @@ const index = ({
   sprint,
   storyPoints,
   clickHandler,
+  deleteHandler,
+  editEnableHandler,
 }: propsType) => {
   let issueType: string;
   switch (type) {
@@ -81,9 +95,11 @@ const index = ({
   const issueStoryPoints = storyPoints ? storyPoints : '';
 
   const issueData = {
+    templateId: templateId,
     project: project,
     type: type,
     summary: summary,
+    description: description,
     reporter: reporter,
     assignee: assignee,
     rank: rank,
@@ -101,16 +117,28 @@ const index = ({
       >
         <StyledIssueTop type={type}>
           <Text isFill={false} message={issueType} color={'white'}></Text>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-6 h-6"
-          >
-            <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
-          </svg>
+          <StyledIssueTopRight>
+            <ImBin
+              onClick={() => {
+                issueData.project = '';
+                issueData.type = '';
+                issueData.summary = '';
+                issueData.description = '';
+                issueData.reporter = '';
+                issueData.assignee = '';
+                issueData.rank = '';
+                issueData.epicLink = '';
+                issueData.sprint = '';
+                issueData.storyPoints = 0;
+                deleteHandler(templateId);
+              }}
+            />
+            <HiPencil
+              onClick={() => {
+                editEnableHandler(templateId);
+              }}
+            />
+          </StyledIssueTopRight>
         </StyledIssueTop>
         <StyledIssueBottom>
           <Text isFill={false} message={issueSummary}></Text>

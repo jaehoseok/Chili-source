@@ -27,7 +27,9 @@ export const StyledIssueBottom = styled.div`
   height: 50%;
 `;
 
-export const StyledIssueTopLeft = styled.div``;
+export const StyledIssueTopRight = styled.div`
+  ${tw`flex items-center px-2`}
+`;
 
 export const StyledIssueBottomElement = styled.div`
   ${tw`flex justify-end items-center`};

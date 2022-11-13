@@ -1,5 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { StringLiteral } from 'typescript';
 
 // Init
 const userAxios = createAxiosApi('user-service');
@@ -61,5 +62,38 @@ export default {
     } catch (e) {
       console.log(e);
     }
+  },
+
+  /**
+   * @description
+   * 현재 가입한 유저의 정보를 보여줌
+   * 해당 정보를 가지고, 유저를 프로젝트에 초대하도록 쓰임
+   *
+   * @author bell
+   */
+  getUserSearch: async (email: string) => {
+    interface userType {
+      id: number;
+      name: string;
+      image: string;
+    }
+    interface responseType {
+      googleUsers: userType[];
+      kakaoUsers: userType[];
+      image: userType[];
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      userAxios
+        .get(`/users/search`, { params: { email } })
+        .then(response => {
+          console.log(response);
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
   },
 };

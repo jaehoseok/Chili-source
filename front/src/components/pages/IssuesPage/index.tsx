@@ -1,26 +1,33 @@
 import { useState } from 'react';
 import { StyledIssuesPage, StyledHeader, StyledBody } from './style';
+import IssueTemplate from 'components/organisms/project/issues/IssueTemplate';
 import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
-import IssueInfo from 'components/organisms/project/issues/IssueInfo';
-import Issue from 'components/molecules/Issue';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
-export type issueType = {
+export interface issueType extends templateType {
+  issueId: number;
+}
+export interface templateType {
+  templateId: number;
   project: string;
   type: string;
   summary: string;
+  description: string;
   reporter: string;
   assignee: string;
   rank: string;
   epicLink: string;
   sprint: string;
   storyPoints: number;
-};
+}
 const index = () => {
-  const issue: issueType = {
+  const dummyIssue: issueType = {
+    templateId: 0,
+    issueId: 0,
     project: '',
-    type: '',
+    type: 'story',
     summary: '',
+    description: '',
     reporter: '',
     assignee: '',
     rank: '',
@@ -28,44 +35,17 @@ const index = () => {
     sprint: '',
     storyPoints: 0,
   };
-  const [info, setInfo] = useState<issueType>(issue);
+  const [issue, setIssue] = useState<issueType>(dummyIssue);
   const [isInsert, setIsInsert] = useState(false);
-  const setInfoHandler = (props: issueType) => {
-    setInfo(props);
-  };
+
   return (
     <StyledIssuesPage>
       <StyledHeader>
         <HeaderNav></HeaderNav>
       </StyledHeader>
       <StyledBody>
-        <div>
-          <Issue
-            project={'프로젝트 명'}
-            summary={'이슈 제목'}
-            epicLink={'에픽1'}
-            reporter={'팀원1'}
-            assignee={'팀원3'}
-            rank={'Low'}
-            type={'story'}
-            sprint={'스프린트1'}
-            storyPoints={8}
-            clickHandler={setInfoHandler}
-          />
-          <Issue
-            summary={'이슈 제목2'}
-            epicLink={'에픽2'}
-            reporter={'팀원2'}
-            assignee={'팀원2'}
-            rank={'High'}
-            type={'task'}
-            sprint={'스프린트2'}
-            storyPoints={4}
-            clickHandler={setInfoHandler}
-          />
-        </div>
-        <IssueInfo info={info} setInfo={setInfo} setIsInsert={setIsInsert}></IssueInfo>
-        <MiddleBucket info={info} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
+        <IssueTemplate issue={issue} setIssue={setIssue} setIsInsert={setIsInsert}></IssueTemplate>
+        <MiddleBucket issue={issue} isInsert={isInsert} setIsInsert={setIsInsert}></MiddleBucket>
       </StyledBody>
     </StyledIssuesPage>
   );

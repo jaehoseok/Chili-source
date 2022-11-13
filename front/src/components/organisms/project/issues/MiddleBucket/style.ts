@@ -12,3 +12,7 @@ export const StyledBucketHeader = styled.div`
 export const StyledBucketBody = styled.div`
   ${tw`p-4`}
 `;
+
+export const StyledIssue = styled.div`
+  ${tw`flex items-center`}
+`;
