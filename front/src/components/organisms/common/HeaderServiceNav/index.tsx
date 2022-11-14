@@ -36,7 +36,7 @@ interface tabType {
  */
 const index = memo(() => {
   // portal 용 태그
-  const el = document.getElementById('nav-root');
+  const el = document.getElementById('nav-service-root');
 
   // React-router
   const navigate = useNavigate();

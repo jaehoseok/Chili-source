@@ -1,4 +1,3 @@
-import { MouseEventHandler, useState } from 'react';
 import {
   StyledIssue,
   StyledIssueTop,
@@ -9,11 +8,12 @@ import {
 } from './style';
 import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
-import Button from '../../atoms/Button';
+
 import { ImBin } from 'react-icons/im';
 import { HiPencil } from 'react-icons/hi';
 
 interface propsType extends styledType {
+  userImage?: string;
   templateId: number;
   project?: string;
   summary?: string;
@@ -74,8 +74,10 @@ const index = ({
   clickHandler,
   deleteHandler,
   editEnableHandler,
+  userImage,
 }: propsType) => {
   let issueType: string;
+
   switch (type) {
     case 'story':
       issueType = '스토리';
@@ -85,6 +87,9 @@ const index = ({
       break;
     case 'bug':
       issueType = '버그';
+      break;
+    case '스토리':
+      issueType = '스토리';
       break;
     default:
       issueType = '에러';
@@ -142,10 +147,9 @@ const index = ({
         </StyledIssueTop>
         <StyledIssueBottom>
           <Text isFill={false} message={issueSummary}></Text>
-
           <StyledIssueBottomElement>
             <Text isFill={true} message={issueEpicLink} width={24}></Text>
-            <Circle height={'24px'}>{assignee}</Circle>
+            <Circle height={'24px'} isImage={true} url={userImage}></Circle>
             <Circle height={'24px'}>{rank}</Circle>
             <Text isFill={true} message={issueStoryPoints + ''} width={24}></Text>
           </StyledIssueBottomElement>
