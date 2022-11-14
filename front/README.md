@@ -583,3 +583,4 @@
 - dashboard 에 project 정보 띄우기
 - 위젯 변경 사항을 hooks/widget 의 커스텀 훅을 통하여 값을 받고 레이아웃 형식으로 변환한 뒤, 캐싱으로 저장한다.
 - npm install --save react-google-charts
+- 리액트 문법에 맞게 반복문, 조건문 혹은 중첩된 함수 안에 훅을 호출하지 말것 https://velog.io/@yhe228/React-Error-Rendered-fewer-hooks-than-expected-react-hooks-%EA%B7%9C%EC%B9%99, 정상 작동하는 것 처럼 보이나, 리렌더링이 벌어질 경우 모든 훅들이 올바른 순서대로 다시 호출된다는 보장이 없기에 에러를 일으킨다.

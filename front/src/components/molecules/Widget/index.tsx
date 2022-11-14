@@ -27,6 +27,27 @@ export const Widget = ({ type, path, children }: propsType) => {
   // Init
   const navigate = useNavigate();
   const { projectId } = useParams();
+  // 가데이터용
+  const [jiraData, setJiraData] = useState(0);
+  const [gitData, setGitData] = useState(0);
+  useEffect(() => {
+    const tempFunc = setInterval(() => {
+      setJiraData(Math.random() * 100);
+    }, 1200);
+
+    return () => {
+      clearInterval(tempFunc);
+    };
+  });
+  useEffect(() => {
+    const tempGitFunc = setInterval(() => {
+      setGitData(Math.random() * 100);
+    }, 1200);
+
+    return () => {
+      clearInterval(tempGitFunc);
+    };
+  });
 
   const splitPath = path ? path.split('-') : ['0'];
 
@@ -54,31 +75,35 @@ export const Widget = ({ type, path, children }: propsType) => {
             <div>
               {children}-{type}
             </div>
-            <Chart
-              chartType="Calendar"
-              data={[
-                [
-                  { type: 'date', id: 'Date' },
-                  { type: 'number', id: 'Won/Loss' },
-                ],
-                [new Date(2013, 2, 4), 10],
-                [new Date(2013, 2, 5), 3],
-                [new Date(2013, 2, 7), -1],
-                [new Date(2013, 2, 8), 2],
-                [new Date(2013, 2, 12), -1],
-                [new Date(2013, 2, 13), 1],
-                [new Date(2013, 2, 15), 1],
-                [new Date(2013, 2, 16), -4],
-                [new Date(2013, 1, 4), 10],
-                [new Date(2013, 1, 5), 3],
-                [new Date(2013, 1, 7), -1],
-                [new Date(2013, 1, 8), 2],
-                [new Date(2013, 1, 12), -1],
-                [new Date(2013, 1, 13), 1],
-                [new Date(2013, 1, 15), 1],
-                [new Date(2013, 1, 16), -4],
-              ]}
-            />
+            <div style={{ height: '80%', width: '80%' }}>
+              <Chart
+                chartType="Calendar"
+                height="100%"
+                width="100%"
+                data={[
+                  [
+                    { type: 'date', id: 'Date' },
+                    { type: 'number', id: 'Won/Loss' },
+                  ],
+                  [new Date(2013, 2, 4), 10],
+                  [new Date(2013, 2, 5), 3],
+                  [new Date(2013, 2, 7), -1],
+                  [new Date(2013, 2, 8), 2],
+                  [new Date(2013, 2, 12), -1],
+                  [new Date(2013, 2, 13), 1],
+                  [new Date(2013, 2, 15), 1],
+                  [new Date(2013, 2, 16), -4],
+                  [new Date(2013, 1, 4), 10],
+                  [new Date(2013, 1, 5), 3],
+                  [new Date(2013, 1, 7), -1],
+                  [new Date(2013, 1, 8), 2],
+                  [new Date(2013, 1, 12), -1],
+                  [new Date(2013, 1, 13), 1],
+                  [new Date(2013, 1, 15), 1],
+                  [new Date(2013, 1, 16), -4],
+                ]}
+              />
+            </div>
           </StyledWidgetData>
         );
       case 'GANTT':
@@ -98,38 +123,26 @@ export const Widget = ({ type, path, children }: propsType) => {
             <div>
               {children}-{type}
             </div>
-            <Chart
-              chartType="ScatterChart"
-              data={[
-                ['Age', 'Weight'],
-                [4, 5.5],
-                [8, 12],
-              ]}
-              width="100%"
-              height="400px"
-              legendToggle
-            />
+            <div style={{ height: '80%', width: '80%' }}>
+              <Chart
+                chartType="ScatterChart"
+                data={[
+                  ['Age', 'Weight'],
+                  [4, 5.5],
+                  [8, 12],
+                ]}
+                width="100%"
+                height="100%"
+                legendToggle
+              />
+            </div>
           </StyledWidgetData>
         );
       case 'JIRA':
-        // Init
-        const [jiraData, setJiraData] = useState(0);
-
         // Methods
         const clickJiraHandler = () => {
           navigate(`/project/${projectId}/issues`);
         };
-
-        // LifeCycle
-        useEffect(() => {
-          const tempFunc = setInterval(() => {
-            setJiraData(Math.random() * 100);
-          }, 1200);
-
-          return () => {
-            clearInterval(tempFunc);
-          };
-        });
 
         // Return
         return (
@@ -142,44 +155,31 @@ export const Widget = ({ type, path, children }: propsType) => {
             <div>
               {children}-{type}
             </div>
-            <Chart
-              chartType="Gauge"
-              width="180px"
-              data={[
-                ['Label', 'Value'],
-                ['의미없음ㅋ', jiraData],
-              ]}
-              options={{
-                width: 180,
-                height: 180,
-                yellowFrom: 50,
-                yellowTo: 75,
-                redFrom: 75,
-                redTo: 100,
-                minorTicks: 5,
-              }}
-            />
+            <div style={{ height: '80%', width: '80%' }}>
+              <Chart
+                chartType="Gauge"
+                width="100%"
+                height="100%"
+                data={[
+                  ['Label', 'Value'],
+                  ['의미없음ㅋ', jiraData],
+                ]}
+                options={{
+                  yellowFrom: 50,
+                  yellowTo: 75,
+                  redFrom: 75,
+                  redTo: 100,
+                  minorTicks: 5,
+                }}
+              />
+            </div>
           </StyledWidgetData>
         );
       case 'SSAFYGITLAB':
-        // Init
-        const [gitData, setGitData] = useState(0);
-
         // Methods
         const clickGitHandler = () => {
-          alert('해당 주소로 이동하시겠습니까?');
+          alert('깃 주소로 이동할까요?');
         };
-
-        // LifeCycle
-        useEffect(() => {
-          const tempGitFunc = setInterval(() => {
-            setGitData(Math.random() * 100);
-          }, 1200);
-
-          return () => {
-            clearInterval(tempGitFunc);
-          };
-        });
         return (
           <StyledWidgetData
             className="widget-ssafy-gitlab"
@@ -190,23 +190,24 @@ export const Widget = ({ type, path, children }: propsType) => {
             <div>
               {children}-{type}
             </div>
-            <Chart
-              chartType="Gauge"
-              width="180px"
-              data={[
-                ['Label', 'Value'],
-                ['의미없음ㅋ', gitData],
-              ]}
-              options={{
-                width: 180,
-                height: 180,
-                redFrom: 90,
-                redTo: 100,
-                yellowFrom: 75,
-                yellowTo: 90,
-                minorTicks: 5,
-              }}
-            />
+            <div style={{ height: '80%', width: '80%' }}>
+              <Chart
+                chartType="Gauge"
+                height="100%"
+                width="100%"
+                data={[
+                  ['Label', 'Value'],
+                  ['의미없음ㅋ', gitData],
+                ]}
+                options={{
+                  redFrom: 90,
+                  redTo: 100,
+                  yellowFrom: 75,
+                  yellowTo: 90,
+                  minorTicks: 5,
+                }}
+              />
+            </div>
           </StyledWidgetData>
         );
       case 'ADD':
@@ -221,7 +222,7 @@ export const Widget = ({ type, path, children }: propsType) => {
             +
           </StyledWidgetData>
         );
-      default:
+      case 'label':
         return (
           <StyledWidgetData
             className="label"
@@ -236,9 +237,7 @@ export const Widget = ({ type, path, children }: propsType) => {
   return (
     <>
       <StyledWidget className="widget">
-        <Sheet isShadow={true} height="100%" width="100%">
-          {widgetData(type || '', children)}
-        </Sheet>
+        <Sheet isShadow={true}>{widgetData(type || '', children)}</Sheet>
       </StyledWidget>
     </>
   );
