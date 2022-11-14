@@ -19,7 +19,7 @@ export const StyledIssue = styled.div<styledType>`
 
 export const StyledIssueTop = styled.div<styledIssueType>`
   ${tw`flex justify-between items-center text-white px-4 py-2 rounded-t-2xl`};
-  ${({ type }) => `background-color: ${theme.issue[type]}`};
+  ${({ type }) => `background-color: ${theme.issue[type.toLowerCase()]}`};
   height: 50%};
 `;
 export const StyledIssueBottom = styled.div`

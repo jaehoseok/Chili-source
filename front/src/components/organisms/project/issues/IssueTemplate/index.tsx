@@ -21,17 +21,52 @@ import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
 import issueAxios from 'api/rest/issue';
-import { useGetProject } from 'hooks/project';
+import projectAxios from 'api/rest/project';
+import { useGetProject, useGetTeamForProject } from 'hooks/project';
 
 const index = (props: any) => {
   const { projectId } = useParams();
+  const pjtId = Number(projectId);
+  const getProject = useGetProject(pjtId);
+  const getEpicList = issueAxios.getEpicList();
+  const [epicList, setEpicList] = useState<string[]>();
+  const eList: string[] = [];
+  const pushEpicList = async () => {
+    for (let i = 0; i < (await getEpicList).issues.length; i++) {
+      if (eList) {
+        eList.push((await getEpicList).issues[i].fields.summary);
+      }
+    }
+    setEpicList(eList);
+  };
+  const getSprintList = issueAxios.getSprintList(pjtId);
+  const [sprintList, setSprintList] = useState<string[]>();
+  const sList: string[] = [];
+  const pushSprintList = async () => {
+    for (let i = 0; i < (await getSprintList).values.length; i++) {
+      sList.push((await getSprintList).values[i].name);
+    }
+    setSprintList(sList);
+  };
+  const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
+  const [memberList, setMemberList] = useState<string[]>();
+  const mList: string[] = [];
 
-  const getProject = useGetProject(Number(projectId));
+  const pushTeamMemberList = async () => {
+    for (let i = 0; i < (await getTeamMemberList).length; i++) {
+      mList.push((await getTeamMemberList)[i].userName);
+    }
+    setMemberList(mList);
+  };
   useEffect(() => {
-    issueAxios.getIssueTemplateList(1);
+    issueAxios.getIssueTemplateList(pjtId);
     console.log(projectId);
     console.log(getProject.data ? getProject.data.name : '');
+    pushEpicList();
+    pushSprintList();
+    pushTeamMemberList();
   }, []);
+
   const issue = {
     templateId: props.issue.templateId,
     projectId: props.issue.projectId,
@@ -128,11 +163,11 @@ const index = (props: any) => {
   // IssueInfo 부분
 
   const iType =
-    props.issue.type === 'story'
+    props.issue.type === 'Story'
       ? '스토리'
-      : props.issue.type === 'task'
+      : props.issue.type === 'Task'
       ? '태스크'
-      : props.issue.type === 'bug'
+      : props.issue.type === 'Bug'
       ? '버그'
       : '';
 
@@ -153,12 +188,12 @@ const index = (props: any) => {
     issue.projectId = projectId;
     issue.type = typeRef.current
       ? typeRef.current.value === '스토리'
-        ? 'story'
+        ? 'Story'
         : typeRef.current.value === '태스크'
-        ? 'task'
+        ? 'Task'
         : typeRef.current.value === '버그'
-        ? 'bug'
-        : 'error'
+        ? 'Bug'
+        : 'Error'
       : '';
     issue.summary = summaryRef.current ? summaryRef.current.value : '';
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
@@ -204,12 +239,12 @@ const index = (props: any) => {
         typeRef.current
           ? (issue.type =
               typeRef.current.value === '스토리'
-                ? 'story'
+                ? 'Story'
                 : typeRef.current.value === '태스크'
-                ? 'task'
+                ? 'Task'
                 : typeRef.current.value === '버그'
-                ? 'bug'
-                : 'error')
+                ? 'Bug'
+                : 'Error')
           : '';
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
@@ -230,12 +265,12 @@ const index = (props: any) => {
       projectId: projectId,
       type: typeRef.current
         ? typeRef.current.value === '스토리'
-          ? 'story'
+          ? 'Story'
           : typeRef.current.value === '태스크'
-          ? 'task'
+          ? 'Task'
           : typeRef.current.value === '버그'
-          ? 'bug'
-          : 'error'
+          ? 'Bug'
+          : 'Error'
         : '',
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
@@ -330,7 +365,8 @@ const index = (props: any) => {
             </SelectBox>
             <SelectBox labelName={'담당자'} ref={assigneeRef}>
               <Option
-                messages={['팀원1', '팀원2', '팀원3']}
+                // messages={['팀원1', '팀원2', '팀원3']}
+                messages={memberList ? memberList : ['']}
                 selected={props.issue.assignee}
               ></Option>
             </SelectBox>
@@ -343,13 +379,13 @@ const index = (props: any) => {
             </SelectBox>
             <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
               <Option
-                messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
+                messages={epicList ? epicList : ['']}
                 selected={props.issue.epicLink}
               ></Option>
             </SelectBox>
             <SelectBox labelName={'Sprint'} ref={sprintRef}>
               <Option
-                messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
+                messages={sprintList ? sprintList : ['']}
                 selected={props.issue.sprint}
               ></Option>
             </SelectBox>

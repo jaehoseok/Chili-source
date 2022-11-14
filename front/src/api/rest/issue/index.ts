@@ -144,7 +144,7 @@ export default {
         epicLink,
         storyPoints,
       };
-      const response = issueAxios.put(`/${issueTemplateId}`, data);
+      const response = await issueAxios.put(`/${issueTemplateId}`, data);
       console.log(response);
       return response;
     } catch (e) {
@@ -153,22 +153,47 @@ export default {
   },
   deleteIssueTemplate: async (issueTemplateId: number) => {
     try {
-      const response = issueAxios.delete(`/${issueTemplateId}`);
+      const response = await issueAxios.delete(`/${issueTemplateId}`);
       return response;
     } catch (e) {
       console.log(e);
     }
   },
   getEpicList: async () => {
-    try {
-    } catch (e) {
-      console.log(e);
+    interface responseType {
+      issues: any;
     }
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .get(`/jira/epic-list`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   },
   getSprintList: async (projectId: number) => {
-    try {
-    } catch (e) {
-      console.log(e);
+    interface responseType {
+      values: any;
     }
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .get(`/jira/sprint/${projectId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+    // try {
+    //   const response = await issueAxios.get(`/jira/sprint/${projectId}`);
+    //   console.log(response);
+    //   return response.data;
+    // } catch (e) {
+    //   console.log(e);
+    // }
   },
 };

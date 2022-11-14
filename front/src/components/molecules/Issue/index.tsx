@@ -77,13 +77,13 @@ const index = ({
 }: propsType) => {
   let issueType: string;
   switch (type) {
-    case 'story':
+    case 'Story':
       issueType = '스토리';
       break;
-    case 'task':
+    case 'Task':
       issueType = '태스크';
       break;
-    case 'bug':
+    case 'Bug':
       issueType = '버그';
       break;
     default:
