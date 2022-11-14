@@ -476,4 +476,17 @@ export default {
       console.log(e);
     }
   },
+
+  /**
+   * @description
+   * db에 저장된 해당 프로젝트의 이슈를 삭제합니다.
+   *
+   */
+  deleteGantt: async (ganttChartId: number) => {
+    try {
+      await projectAxios.delete(`/gantt/${ganttChartId}`);
+    } catch (e) {
+      console.log(e);
+    }
+  },
 };

@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { StyledCalendar } from './style';
 import {
+  useDeleteGantt,
   useGetGanttChart,
   useGetTeamForProject,
   usePostCreateGantt,
@@ -41,6 +42,7 @@ const index = () => {
   const getGanttChart = useGetGanttChart(1, projectId);
   const postCreateGantt = usePostCreateGantt();
   const updateGantt = useUpdateGantt();
+  const deleteGantt = useDeleteGantt();
 
   const getTeamForProject = useGetTeamForProject(projectId);
 
@@ -80,7 +82,10 @@ const index = () => {
     if (updateGantt.isSuccess) {
       getGanttChart.refetch();
     }
-  }, [postCreateGantt.isSuccess, updateGantt.isSuccess]);
+    if (deleteGantt.isSuccess) {
+      getGanttChart.refetch();
+    }
+  }, [postCreateGantt.isSuccess, updateGantt.isSuccess, deleteGantt.isSuccess]);
 
   return (
     <StyledCalendar>
@@ -92,7 +97,6 @@ const index = () => {
         droppable={true}
         editable={true}
         events={renderingDBIssuesHandler()}
-        eventClick={e => console.log(e)}
         eventResize={({ event, el }) => {
           // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -129,6 +133,48 @@ const index = () => {
           });
           event.remove();
         }}
+        eventDrop={({ event, el }) => {
+          // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const props = el.fcSeg.eventRange.def.extendedProps;
+
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const startDateFormat = new Date(event.start).toISOString() as string;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const endDateFormat = new Date(event.end).toISOString() as string;
+          console.log(startDateFormat, endDateFormat);
+          updateGantt.mutate({
+            id: props.ganttChartId,
+            issueCode: props.issueCode,
+            issueSummary: props.issueSummary,
+            userId: props.userId,
+            startTime: startDateFormat,
+            endTime: endDateFormat,
+          });
+        }}
+        eventContent={({ event }) => {
+          return (
+            <div
+              style={{
+                padding: '2px 4px',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }}
+              onDoubleClick={() => deleteGantt.mutate(event._def.extendedProps.ganttChartId)}
+            >
+              {event.title}
+            </div>
+          );
+        }}
+        eventMouseEnter={e => {
+          e.el.style.transform = 'scale(1.05)';
+          e.el.style.transition = 'transform 0.1s linear';
+        }}
+        eventMouseLeave={e => (e.el.style.transform = 'scale(1)')}
       />
     </StyledCalendar>
   );

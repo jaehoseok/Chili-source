@@ -269,3 +269,13 @@ export const useUpdateGantt = () => {
       project.updateGantt(id, issueCode, issueSummary, userId, startTime, endTime, progress),
   );
 };
+
+/**
+ * @description
+ * 현재 간트차트를 삭제하는 API 요청을 다루는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useDeleteGantt = () => {
+  return useMutation((ganttChartId: number) => project.deleteGantt(ganttChartId));
+};
