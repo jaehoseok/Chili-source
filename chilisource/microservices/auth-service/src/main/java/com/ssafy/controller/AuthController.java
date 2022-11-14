@@ -69,12 +69,12 @@ public class AuthController {
     @GetMapping("/refresh")
     @ApiOperation(value = "액세스 토큰 재발급")
     public ResponseEntity<?> refresh(
-            @CookieValue(value = "refresh-token", required = false) Cookie cookie,
-            @LoginUser User user,
-            HttpServletResponse response
+            @CookieValue("refresh-token") String refreshToken,
+            @LoginUser User user
     ) {
+        System.out.println(refreshToken);
         try {
-            return ResponseEntity.ok(authService.refresh(cookie.getValue(), user.getId()));
+            return ResponseEntity.ok(authService.refresh(refreshToken, user.getId()));
         } catch (RuntimeException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("로그인 만료");
