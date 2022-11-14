@@ -22,7 +22,6 @@ interface propsType extends styledType {
   assignee?: string;
   rank?: string;
   epicLink?: string;
-  sprint?: string;
   storyPoints?: number;
   clickHandler?: any;
   deleteHandler?: any;
@@ -50,7 +49,6 @@ interface propsType extends styledType {
  * @param {string?} assignee                                    - 담당자
  * @param {string?} rank                                        - 우선순위
  * @param {string?} epicLink                                    - 에픽 링크
- * @param {string?} sprint                                      - 스프린트
  * @param {number?} storyPoints                                 - 스토리 포인트
  * @param {MouseEventHandler<HTMLDivElement>?} clickHandler     - 클릭 이벤트
  *
@@ -69,7 +67,6 @@ const index = ({
   assignee,
   rank,
   epicLink,
-  sprint,
   storyPoints,
   clickHandler,
   deleteHandler,
@@ -104,7 +101,6 @@ const index = ({
     assignee: assignee,
     rank: rank,
     epicLink: epicLink,
-    sprint: sprint,
     storyPoints: storyPoints,
   };
   return (
@@ -128,7 +124,6 @@ const index = ({
                 issueData.assignee = '';
                 issueData.rank = '';
                 issueData.epicLink = '';
-                issueData.sprint = '';
                 issueData.storyPoints = 0;
                 deleteHandler(templateId);
               }}

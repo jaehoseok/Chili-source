@@ -1,14 +1,18 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { MiddleBucket, StyledBucketHeader, StyledBucketBody, StyledIssue } from './style';
+import SelectBox from 'components/molecules/SelectBox';
+import IssueBar from 'components/molecules/IssueBar';
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
-import IssueBar from 'components/molecules/IssueBar';
-
+import Option from 'components/atoms/Option';
 import { issueType } from 'components/pages/IssuesPage';
 
+import issueAxios from 'api/rest/issue';
 const index = (props: any) => {
+  const { projectId } = useParams();
+  const pjtId = Number(projectId);
   const [issueId, setIssueId] = useState(0);
   const issue = {
     templateId: props.issue.templateId,
@@ -26,7 +30,19 @@ const index = (props: any) => {
   };
 
   const [bucket, setBucket] = useState<issueType[]>([]);
-
+  const sprintRef = useRef<HTMLSelectElement>(null);
+  const getSprintList = issueAxios.getSprintList(pjtId);
+  const [sprintList, setSprintList] = useState<string[]>();
+  const sList: string[] = [];
+  const pushSprintList = async () => {
+    for (let i = 0; i < (await getSprintList).values.length; i++) {
+      sList.push((await getSprintList).values[i].name);
+    }
+    setSprintList(sList);
+  };
+  useEffect(() => {
+    pushSprintList();
+  }, []);
   useEffect(() => {
     if (props.isInsert) {
       bucket.push(issue);
@@ -72,6 +88,10 @@ const index = (props: any) => {
   return (
     <MiddleBucket>
       <StyledBucketHeader>
+        <SelectBox labelName={'Sprint'} ref={sprintRef}>
+          <Option messages={sprintList ? sprintList : ['']} selected={props.issue.sprint}></Option>
+        </SelectBox>
+
         <Button
           borderColor={'#1973ee'}
           isHover

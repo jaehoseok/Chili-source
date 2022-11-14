@@ -39,15 +39,15 @@ const index = (props: any) => {
     }
     setEpicList(eList);
   };
-  const getSprintList = issueAxios.getSprintList(pjtId);
-  const [sprintList, setSprintList] = useState<string[]>();
-  const sList: string[] = [];
-  const pushSprintList = async () => {
-    for (let i = 0; i < (await getSprintList).values.length; i++) {
-      sList.push((await getSprintList).values[i].name);
-    }
-    setSprintList(sList);
-  };
+  // const getSprintList = issueAxios.getSprintList(pjtId);
+  // const [sprintList, setSprintList] = useState<string[]>();
+  // const sList: string[] = [];
+  // const pushSprintList = async () => {
+  //   for (let i = 0; i < (await getSprintList).values.length; i++) {
+  //     sList.push((await getSprintList).values[i].name);
+  //   }
+  //   setSprintList(sList);
+  // };
   const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
   const [memberList, setMemberList] = useState<string[]>();
   const mList: string[] = [];
@@ -63,7 +63,7 @@ const index = (props: any) => {
     console.log(projectId);
     console.log(getProject.data ? getProject.data.name : '');
     pushEpicList();
-    pushSprintList();
+    // pushSprintList();
     pushTeamMemberList();
   }, []);
 
@@ -112,7 +112,6 @@ const index = (props: any) => {
       assignee={issue.assignee}
       rank={issue.rank}
       epicLink={issue.epicLink}
-      sprint={issue.sprint}
       storyPoints={issue.storyPoints}
       clickHandler={setInfoHandler}
       deleteHandler={deleteHandler}
@@ -171,15 +170,15 @@ const index = (props: any) => {
       ? '버그'
       : '';
 
-  const projectIdRef = useRef<HTMLInputElement>(null);
+  const projectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const reporterRef = useRef<HTMLSelectElement>(null);
+  // const reporterRef = useRef<HTMLSelectElement>(null);
   const assigneeRef = useRef<HTMLSelectElement>(null);
   const rankRef = useRef<HTMLSelectElement>(null);
   const epicLinkRef = useRef<HTMLSelectElement>(null);
-  const sprintRef = useRef<HTMLSelectElement>(null);
+  // const sprintRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
   const [templateId, setTemplateId] = useState<number>(0);
@@ -198,13 +197,13 @@ const index = (props: any) => {
     issue.summary = summaryRef.current ? summaryRef.current.value : '';
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
     issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
-    issue.reporter = reporterRef.current ? reporterRef.current.value : '';
+    // issue.reporter = reporterRef.current ? reporterRef.current.value : '';
     issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
     issue.rank = rankRef.current ? rankRef.current.value : '';
-    issue.sprint = sprintRef.current ? sprintRef.current.value : '';
+    // issue.sprint = sprintRef.current ? sprintRef.current.value : '';
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
-    projectIdRef.current ? (projectIdRef.current.value = '') : '';
+    // projectRef.current ? (projectRef.current.value = '') : '';
     // typeRef.current ? (typeRef.current.value = '') : '';
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
@@ -235,7 +234,6 @@ const index = (props: any) => {
   const editTemplateHandler = () => {
     issues.forEach(issue => {
       if (issue.templateId === editNo) {
-        projectIdRef.current ? (issue.projectId = Number(projectIdRef.current.value)) : ''; // projectId에 맞게 이름 매핑
         typeRef.current
           ? (issue.type =
               typeRef.current.value === '스토리'
@@ -248,11 +246,11 @@ const index = (props: any) => {
           : '';
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
-        reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
+        // reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
         assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
         rankRef.current ? (issue.rank = rankRef.current.value) : '';
         epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
-        sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
+        // sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
         storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
       }
     });
@@ -275,10 +273,10 @@ const index = (props: any) => {
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
       epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      reporter: reporterRef.current ? reporterRef.current.value : '',
+      // reporter: reporterRef.current ? reporterRef.current.value : '',
       assignee: assigneeRef.current ? assigneeRef.current.value : '',
       rank: rankRef.current ? rankRef.current.value : '',
-      sprint: sprintRef.current ? sprintRef.current.value : '',
+      // sprint: sprintRef.current ? sprintRef.current.value : '',
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
@@ -339,8 +337,9 @@ const index = (props: any) => {
             <InputBox
               isRow={false}
               labelName={'프로젝트'}
-              inputValue={props.issue.project}
-              ref={projectIdRef}
+              inputValue={getProject.data ? getProject.data.name : ''}
+              ref={projectRef}
+              disabled
             />
             <SelectBox labelName={'이슈 유형'} ref={typeRef}>
               <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
@@ -357,15 +356,8 @@ const index = (props: any) => {
               textAreaValue={props.issue.description}
               ref={descriptionRef}
             />
-            <SelectBox labelName={'보고자'} ref={reporterRef}>
-              <Option
-                messages={['팀원1', '팀원2', '팀원3']}
-                selected={props.issue.reporter}
-              ></Option>
-            </SelectBox>
             <SelectBox labelName={'담당자'} ref={assigneeRef}>
               <Option
-                // messages={['팀원1', '팀원2', '팀원3']}
                 messages={memberList ? memberList : ['']}
                 selected={props.issue.assignee}
               ></Option>
@@ -381,12 +373,6 @@ const index = (props: any) => {
               <Option
                 messages={epicList ? epicList : ['']}
                 selected={props.issue.epicLink}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'Sprint'} ref={sprintRef}>
-              <Option
-                messages={sprintList ? sprintList : ['']}
-                selected={props.issue.sprint}
               ></Option>
             </SelectBox>
             <InputBox
