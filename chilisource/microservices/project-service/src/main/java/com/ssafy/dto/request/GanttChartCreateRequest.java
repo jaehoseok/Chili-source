@@ -28,7 +28,7 @@ public class GanttChartCreateRequest {
     private String issueCode;
 
     @ApiModelProperty(value = "진행도")
-    private Float progress;
+    private Float progress = 0F;
 
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;
