@@ -104,7 +104,17 @@ export default {
         epicLink: string;
         storyPoints: number;
       }
-      const data = {};
+      const data = {
+        projectId,
+        issueType,
+        summary,
+        description,
+        assignee,
+        priority,
+        epicLink,
+        sprint,
+        storyPoints,
+      };
       const response = await issueAxios.post('/', data);
       console.log(response);
       return response;
@@ -145,6 +155,18 @@ export default {
     try {
       const response = issueAxios.delete(`/${issueTemplateId}`);
       return response;
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  getEpicList: async () => {
+    try {
+    } catch (e) {
+      console.log(e);
+    }
+  },
+  getSprintList: async (projectId: number) => {
+    try {
     } catch (e) {
       console.log(e);
     }

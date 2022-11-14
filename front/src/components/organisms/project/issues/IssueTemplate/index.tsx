@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   StyledIssueTemplate,
   StyledIssueTemplateHeader,
@@ -20,8 +21,17 @@ import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
 import issueAxios from 'api/rest/issue';
+import { useGetProject } from 'hooks/project';
 
 const index = (props: any) => {
+  const { projectId } = useParams();
+
+  const getProject = useGetProject(Number(projectId));
+  useEffect(() => {
+    issueAxios.getIssueTemplateList(1);
+    console.log(projectId);
+    console.log(getProject.data ? getProject.data.name : '');
+  }, []);
   const issue = {
     templateId: props.issue.templateId,
     projectId: props.issue.projectId,
@@ -114,9 +124,6 @@ const index = (props: any) => {
     sprint: '스프린트3',
     storyPoints: 2,
   };
-  useEffect(() => {
-    issueAxios.getIssueTemplateList(1);
-  }, []);
 
   // IssueInfo 부분
 
@@ -143,7 +150,7 @@ const index = (props: any) => {
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
     issue.templateId = templateId;
-    issue.projectId = projectIdRef.current ? Number(projectIdRef.current.value) : '';
+    issue.projectId = projectId;
     issue.type = typeRef.current
       ? typeRef.current.value === '스토리'
         ? 'story'
@@ -172,18 +179,28 @@ const index = (props: any) => {
     // epicLinkRef.current ? (epicLinkRef.current.value = '') : '';
     // sprintRef.current ? (sprintRef.current.value = '') : '';
     storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';
+    console.log(issue);
     setTemplateId(templateId + 1);
     issues.push(issue);
     setIssues(issues);
     setIsAdd(false);
-
-    issueAxios.postCreateIssueTemplate(issue);
+    issueAxios.postCreateIssueTemplate(
+      issue.projectId,
+      issue.type,
+      issue.summary,
+      issue.description,
+      issue.assignee,
+      issue.rank,
+      issue.epicLink,
+      issue.sprint,
+      issue.storyPoints,
+    );
   };
 
   const editTemplateHandler = () => {
     issues.forEach(issue => {
       if (issue.templateId === editNo) {
-        projectIdRef.current ? (issue.projectId = Number(projectIdRef.current.value)) : '';
+        projectIdRef.current ? (issue.projectId = Number(projectIdRef.current.value)) : ''; // projectId에 맞게 이름 매핑
         typeRef.current
           ? (issue.type =
               typeRef.current.value === '스토리'
@@ -210,7 +227,7 @@ const index = (props: any) => {
   const insertIssueHandler = () => {
     props.setIssue({
       templateId: props.issue.templateId,
-      project: projectIdRef.current ? Number(projectIdRef.current.value) : '',
+      projectId: projectId,
       type: typeRef.current
         ? typeRef.current.value === '스토리'
           ? 'story'
@@ -239,7 +256,11 @@ const index = (props: any) => {
           <Circle height={'5rem'} margin={'1rem'}>
             로고
           </Circle>
-          <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
+          <Text
+            isFill={false}
+            message={getProject.data ? getProject.data.name : ''}
+            fontSize={'2.5rem'}
+          />
         </StyledIssueTemplateHeader>
         <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
 
