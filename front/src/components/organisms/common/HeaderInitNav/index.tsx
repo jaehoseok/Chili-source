@@ -9,7 +9,7 @@ import NavInit from 'components/molecules/NavInit';
  * @author bell
  */
 const index = () => {
-  const el = document.getElementById('nav-root');
+  const el = document.getElementById('nav-init-root');
   return createPortal(<NavInit></NavInit>, el as HTMLElement);
 };
 
