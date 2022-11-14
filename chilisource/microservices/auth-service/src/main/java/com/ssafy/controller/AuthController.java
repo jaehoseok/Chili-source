@@ -72,7 +72,6 @@ public class AuthController {
             @CookieValue("refresh-token") String refreshToken,
             @LoginUser User user
     ) {
-        System.out.println(refreshToken);
         try {
             return ResponseEntity.ok(authService.refresh(refreshToken, user.getId()));
         } catch (RuntimeException e) {
