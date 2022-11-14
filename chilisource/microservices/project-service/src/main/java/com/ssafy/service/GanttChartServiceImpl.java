@@ -67,6 +67,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -92,6 +93,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -124,6 +126,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                     .progress(request.getProgress())
                     .project(project)
                     .userId(request.getUserId())
+                    .parentId(request.getParentId())
                     .build();
             ganttChartRepo.save(ganttChart);
         } else {
@@ -149,7 +152,8 @@ public class GanttChartServiceImpl implements GanttChartService {
                     null,
                     request.getIssueCode(),
                     request.getProgress(),
-                    request.getUserId()
+                    request.getUserId(),
+                    request.getParentId()
             );
         } else {
             throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
@@ -201,6 +205,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .progress(oldGanttChart.getProgress())
                         .project(oldGanttChart.getProject())
                         .userId(oldGanttChart.getUserId())
+                        .parentId(oldGanttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
 
@@ -216,6 +221,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }

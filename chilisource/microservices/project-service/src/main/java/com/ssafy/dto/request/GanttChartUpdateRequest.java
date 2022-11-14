@@ -33,8 +33,11 @@ public class GanttChartUpdateRequest {
     @ApiModelProperty(value = "담당자 유저 pk")
     private Long userId;
 
+    @ApiModelProperty(value = "연결된 부모 간트 pk")
+    private Long parentId;
+
     @Builder
-    public GanttChartUpdateRequest(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, String issueCode, Float progress, Long userId) {
+    public GanttChartUpdateRequest(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, String issueCode, Float progress, Long userId, Long parentId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -42,5 +45,6 @@ public class GanttChartUpdateRequest {
         this.issueCode = issueCode;
         this.progress = progress;
         this.userId = userId;
+        this.parentId = parentId;
     }
 }
