@@ -1,7 +1,6 @@
 // API & Library
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useGetUserInfoHandler } from 'hooks/user';
 
 // Styles
 import { StyledMain } from './style';

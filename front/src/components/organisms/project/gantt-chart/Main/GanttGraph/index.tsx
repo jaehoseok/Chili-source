@@ -1,7 +1,10 @@
 // API & Library
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Task, ViewMode, Gantt } from 'gantt-task-react';
 import { ViewSwitcher } from './ViewSwitcher';
+import { useGetGanttChart, useGetGanttTasks } from 'hooks/project';
+import { useGetUserInfoHandler } from 'hooks/user';
 
 // Styles
 import { StyledGanttGraph } from './style';
@@ -13,22 +16,11 @@ export const GanttGraph = () => {
   const initialTasks: Task[] = [
     {
       start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 15),
-      name: 'Some Project',
-      id: 'ProjectSample',
-      progress: 25,
-      type: 'project',
-      hideChildren: false,
-      displayOrder: 1,
-    },
-    {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
       end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2, 12, 28),
       name: 'Idea',
       id: 'Task 0',
       progress: 45,
       type: 'task',
-      project: 'ProjectSample',
       displayOrder: 2,
     },
     {
@@ -100,7 +92,11 @@ export const GanttGraph = () => {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [isChecked, setIsChecked] = useState(true);
 
-  // 뷰 모드 전환
+  const { projectId } = useParams();
+  const getUserInfo = useGetUserInfoHandler().data;
+  const getGanttChart = useGetGanttChart(1, Number(projectId));
+  const getGanttTasks = useGetGanttTasks(1, Number(projectId)).data;
+
   let columnWidth = 65;
   if (view === ViewMode.Year) {
     columnWidth = 350;
@@ -111,31 +107,6 @@ export const GanttGraph = () => {
   }
 
   // Methods
-  /**
-   * @description
-   * 프로젝트 시작일과 끝일 지정
-   *
-   * @param tasks
-   * @param projectId
-   * @returns
-   */
-  const getStartEndDateForProject = (tasks: Task[], projectId: string) => {
-    const projectTasks = tasks.filter(t => t.project === projectId);
-    let start = projectTasks[0].start;
-    let end = projectTasks[0].end;
-
-    for (let i = 0; i < projectTasks.length; i++) {
-      const task = projectTasks[i];
-      if (start.getTime() > task.start.getTime()) {
-        start = task.start;
-      }
-      if (end.getTime() < task.end.getTime()) {
-        end = task.end;
-      }
-    }
-    return [start, end];
-  };
-
   const handleTaskChange = () => {
     console.log('[change]');
   };
@@ -163,6 +134,7 @@ export const GanttGraph = () => {
     console.log('[expander click]');
   };
 
+  // Return
   return (
     <>
       <StyledGanttGraph>
@@ -171,10 +143,8 @@ export const GanttGraph = () => {
           onViewListChange={setIsChecked}
           isChecked={isChecked}
         />
-
-        <div>테스트 코드</div>
         <Gantt
-          tasks={tasks}
+          tasks={getGanttTasks ? getGanttTasks : tasks}
           viewMode={view}
           onDateChange={handleTaskChange}
           onDelete={handleTaskDelete}
@@ -187,6 +157,21 @@ export const GanttGraph = () => {
           ganttHeight={300}
           columnWidth={columnWidth}
         />
+        <div>=====DB 간트 이슈=====</div>
+        {getGanttChart.data?.map((item, index) => {
+          return (
+            <div key={index}>
+              <div>[id]: {item.id}</div>
+              <div>[name]: {item.issueSummary}</div>
+              <div>[start]: {item.startTime}</div>
+              <div>[prog]: {item.progress}</div>
+              <div>[end]: {item.endTime}</div>
+              <div>[end]: {item.issueCode}</div>
+              <div>&nbsp;</div>
+            </div>
+          );
+        })}
+        <div>======================</div>
       </StyledGanttGraph>
     </>
   );

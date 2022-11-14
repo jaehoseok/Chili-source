@@ -207,6 +207,60 @@ export const useGetGanttChart = (
 
 /**
  * @description
+ * 이미 db에 있는 간트 데이터를 API에 적합하게 변형하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useGetGanttTasks = (
+  op: number,
+  projectId: number,
+  userId?: number,
+  start?: string,
+  end?: string,
+) => {
+  interface task {
+    id: string;
+    type: 'task' | 'milestone' | 'project';
+    name: string;
+    start: Date;
+    end: Date;
+    progress: number;
+    styles?: {
+      backgroundColor?: string;
+      backgroundSelectedColor?: string;
+      progressColor?: string;
+      progressSelectedColor?: string;
+    };
+    isDisabled?: boolean;
+    project?: string;
+    dependencies?: string[];
+    hideChildren?: boolean;
+    displayOrder?: number;
+  }
+
+  return useQuery(['gantt-tasks'], async () => {
+    const resp = await project.getGanttChart(op, projectId, userId, start, end);
+    const tasks: task[] = [];
+    resp.map(item => {
+      const tempTask: task = {
+        start: new Date(item.startTime),
+        end: new Date(item.endTime),
+        name: item.issueSummary,
+        id: String(item.id),
+        progress: 25,
+        type: 'task',
+      };
+
+      tasks.push(tempTask);
+    });
+
+    console.log('[tasks]: v', tasks);
+    return tasks;
+  });
+};
+
+/**
+ * @description
  * 새로운 간트차트를 생성하기 위해 요청하는 API 함수를 다루는 커스텀 훅
  *
  * @author bell

@@ -7,5 +7,5 @@ export interface styledType {
 }
 
 export const StyledGanttGraph = styled.div<styledType>`
-  ${tw`w-full bg-gray-200`}
+  ${tw`w-full overflow-hidden`}
 `;

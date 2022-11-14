@@ -1,7 +1,6 @@
 // API & Library
 import { useState } from 'react';
 import { useGetUserInfoHandler } from 'hooks/user';
-import {} from 'hooks/project';
 
 // Styles
 import { StyledGanttList } from './style';
