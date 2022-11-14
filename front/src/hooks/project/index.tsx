@@ -189,6 +189,7 @@ export const useDeleteFireTeam = () => {
 
 /**
  * @description
+ * 이미 db에 있는 이슈들을 캘린더와 간트차트에 렌더링하기 위해 요청하는 API 함수를 다루는 커스텀 훅
  *
  * @author bell
  */
@@ -201,5 +202,70 @@ export const useGetGanttChart = (
 ) => {
   return useQuery(['get-gantt-chart'], () =>
     project.getGanttChart(op, projectId, userId, start, end),
+  );
+};
+
+/**
+ * @description
+ * 새로운 간트차트를 생성하기 위해 요청하는 API 함수를 다루는 커스텀 훅
+ *
+ * @author bell
+ */
+export const usePostCreateGantt = () => {
+  interface requestBodyType {
+    issueCode: string;
+    issueSummary: string;
+    projectId: number;
+    userId: number;
+    startTime: string;
+    endTime: string;
+    // 캘린더에서는 version과 progress가 없다.
+    progress?: number;
+    version?: number;
+  }
+  return useMutation(
+    ({
+      issueCode,
+      issueSummary,
+      projectId,
+      userId,
+      startTime,
+      endTime,
+      progress,
+      version,
+    }: requestBodyType) =>
+      project.postCreateGantt(
+        issueCode,
+        issueSummary,
+        projectId,
+        userId,
+        startTime,
+        endTime,
+        progress,
+        version,
+      ),
+  );
+};
+
+/**
+ * @description
+ * 현재 간트차트를 수정하는 API 요청을 다루는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useUpdateGantt = () => {
+  interface requestBodyType {
+    id: number;
+    issueCode?: string;
+    issueSummary?: string;
+    userId?: number;
+    startTime?: string;
+    endTime?: string;
+    progress?: number;
+  }
+
+  return useMutation(
+    ({ id, issueCode, issueSummary, userId, startTime, endTime, progress }: requestBodyType) =>
+      project.updateGantt(id, issueCode, issueSummary, userId, startTime, endTime, progress),
   );
 };

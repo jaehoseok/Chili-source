@@ -1,6 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { stringify } from 'querystring';
+
 import { ChangeEvent } from 'react';
 
 // Init
@@ -371,6 +371,12 @@ export default {
     }
   },
 
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 가져옵니다
+   *
+   * @author bell
+   */
   getGanttChart: async (
     op: number,
     projectId: number,
@@ -407,5 +413,67 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 생성합니다.
+   *
+   * @author bell
+   */
+  postCreateGantt: async (
+    issueCode: string,
+    issueSummary: string,
+    projectId: number,
+    userId: number,
+    startTime: string,
+    endTime: string,
+    progress?: number,
+    version?: number,
+  ) => {
+    try {
+      await projectAxios.post('/gantt', {
+        issueCode,
+        issueSummary,
+        projectId,
+        userId,
+        startTime,
+        endTime,
+        progress,
+        version,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더의 이슈 내용을 수정합니다
+   *
+   * @author bell
+   */
+  updateGantt: async (
+    id: number,
+    issueCode?: string,
+    issueSummary?: string,
+    userId?: number,
+    startTime?: string,
+    endTime?: string,
+    progress?: number,
+  ) => {
+    try {
+      await projectAxios.put('/gantt', {
+        id,
+        issueCode,
+        issueSummary,
+        userId,
+        startTime,
+        endTime,
+        progress,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

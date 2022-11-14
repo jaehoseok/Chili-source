@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { useGetIssuesNotDone } from 'hooks/issue';
 import { useGetUserInfoHandler } from 'hooks/user';
-import { useGetTeamForProject } from 'hooks/project';
+import { useGetTeamForProject, useGetGanttChart } from 'hooks/project';
 
 import { StyledJiraIssues } from './style';
 
@@ -25,6 +25,7 @@ const index = () => {
   const getIssuesNotDone = useGetIssuesNotDone(projectId);
   const getUserInfo = useGetUserInfoHandler();
   const getTeamForProject = useGetTeamForProject(projectId);
+  const getGanttChart = useGetGanttChart(1, projectId);
 
   const myInfo = () => {
     if (getTeamForProject.data && getUserInfo.data) {
@@ -38,60 +39,28 @@ const index = () => {
   const currentColor = myInfo()?.userColor;
   const currentImage = myInfo()?.userImage;
 
-  console.log(getIssuesNotDone.data);
+  // console.log(getIssuesNotDone.data);
 
-  // const [externalEvents, setExternalEvents] = useState([
-  //   {
-  //     title: '구글 로그인 구현',
-  //     type: 'story',
-  //     reporter: '박준혁',
-  //     assignee: '박준혁',
-  //     epicLink: '개발',
-  //     storyPoints: 2,
-  //     color: '#63BA3C',
-  //     id: 34432,
-  //   },
-  //   {
-  //     title: '티 타임',
-  //     type: 'task',
-  //     reporter: '박성현',
-  //     assignee: '박성현',
-  //     epicLink: '기타',
-  //     storyPoints: 4,
-  //     color: '#4BADE8',
-  //     id: 323232,
-  //   },
-  //   {
-  //     title: '네비게이션 바 제작',
-  //     type: 'story',
-  //     reporter: '석재호',
-  //     assignee: '석재호',
-  //     epicLink: '개발',
-  //     storyPoints: 4,
-  //     color: '#63BA3C',
-  //     id: 1111,
-  //   },
-  //   {
-  //     title: '미들 버킷',
-  //     type: 'bug',
-  //     reporter: '박태이',
-  //     assignee: '박태이',
-  //     epicLink: '개발',
-  //     storyPoints: 2,
-  //     color: '#E5493A',
-  //     id: 432432,
-  //   },
-  //   {
-  //     title: '간트 차트',
-  //     type: 'story',
-  //     reporter: '최진호',
-  //     assignee: '최진호',
-  //     epicLink: '개발',
-  //     storyPoints: 1,
-  //     color: '#63BA3C',
-  //     id: 432123,
-  //   },
-  // ]);
+  const filteringIssuesByDBGanttHandler = () => {
+    const arr = [];
+    if (getGanttChart.data && getIssuesNotDone.data) {
+      for (const issues of getIssuesNotDone.data) {
+        let check = true;
+        for (const event of getGanttChart.data) {
+          if (issues.key === event.issueCode) {
+            check = false;
+            break;
+          }
+        }
+        if (check) {
+          arr.push(issues);
+        }
+      }
+    }
+    return arr;
+  };
+
+  filteringIssuesByDBGanttHandler();
 
   useEffect(() => {
     const draggableEl = document.getElementById('external-events');
@@ -102,12 +71,18 @@ const index = () => {
           const id = eventEl.dataset.id;
           const title = eventEl.getAttribute('title');
           const color = eventEl.dataset.color;
-
+          const issueCode = eventEl.dataset.issue_code;
+          const issueSummary = eventEl.dataset.issue_summary;
+          const projectId = eventEl.dataset.project_id;
+          const userId = eventEl.dataset.user_id;
           return {
-            id: id,
-            title: title,
-            color: color,
-            create: true,
+            id,
+            title,
+            color,
+            issueCode,
+            issueSummary,
+            projectId,
+            userId,
           };
         },
       });
@@ -118,13 +93,18 @@ const index = () => {
     <StyledJiraIssues>
       <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '700px' }}>
         {getIssuesNotDone.data &&
-          getIssuesNotDone.data.map(({ id, fields, key }) => (
+          getGanttChart.data &&
+          filteringIssuesByDBGanttHandler().map(({ id, fields, key }, idx) => (
             <div
               className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2"
               title={fields.summary.summary}
               data-id={id}
               data-color={currentColor}
-              key={key}
+              data-issue_code={key}
+              data-issue_summary={fields.summary.summary}
+              data-project_id={projectId}
+              data-user_id={getUserInfo.data?.id}
+              key={idx}
             >
               <Issue
                 userImage={currentImage as string}
