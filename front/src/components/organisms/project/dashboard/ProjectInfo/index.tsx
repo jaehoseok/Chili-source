@@ -28,8 +28,8 @@ export const ProjectInfo = ({ children }: propsType) => {
     <>
       <StyledProjectInfo>
         <Circle height={'150px'} isImage={true} url={getProject ? getProject.image : ''} />
-        <div>{getProject ? getProject.name : ''}</div>
-        <div>{getProject ? getProject.description : ''}</div>
+        <div>{getProject && getProject.name ? getProject.name : '[빈 프로젝트 명]'}</div>
+        <div>{getProject && getProject.description ? getProject.description : '[빈 프로젝트]'}</div>
         <div>{children}</div>
         <StyledProjectInfoLine />
       </StyledProjectInfo>
