@@ -58,8 +58,15 @@ const index = (props: any) => {
     }
     setMemberList(mList);
   };
+
+  const [isAdd, setIsAdd] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [editNo, setEditNo] = useState(0);
+  const [issues, setIssues] = useState<templateType[]>([]);
+
+  const issueTemplateList = issueAxios.getIssueTemplateList(pjtId);
+  console.log(issueTemplateList);
   useEffect(() => {
-    issueAxios.getIssueTemplateList(pjtId);
     console.log(projectId);
     console.log(getProject.data ? getProject.data.name : '');
     pushEpicList();
@@ -80,10 +87,7 @@ const index = (props: any) => {
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
   };
-  const [isAdd, setIsAdd] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [editNo, setEditNo] = useState(0);
-  const [issues, setIssues] = useState<templateType[]>([]);
+
   const setInfoHandler = (issue: templateType) => {
     props.setIssue(issue);
   };

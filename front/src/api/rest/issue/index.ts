@@ -62,18 +62,36 @@ export default {
    * @author dbcs
    */
   getIssueTemplateList: async (projectId: number) => {
-    try {
-      const response = await issueAxios.get('/', {
-        params: {
-          projectId: projectId,
-          me: true,
-        },
-      });
-      console.log(response);
-      return response.data;
-    } catch (e) {
-      console.log(e);
+    interface responseType {
+      data: any;
     }
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .get('/', {
+          params: {
+            projectId: projectId,
+            me: true,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+    // try {
+    //   const response = await issueAxios.get('/', {
+    //     params: {
+    //       projectId: projectId,
+    //       me: true,
+    //     },
+    //   });
+    //   console.log(response);
+    //   return response.data;
+    // } catch (e) {
+    //   console.log(e);
+    // }
   },
   /**
    * @description
@@ -117,7 +135,7 @@ export default {
       };
       const response = await issueAxios.post('/', data);
       console.log(response);
-      return response;
+      return response.data;
     } catch (e) {
       console.log(e);
     }
