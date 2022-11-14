@@ -7,12 +7,16 @@ export interface styledType {
 }
 
 export const StyledWidgetBlockContainer = styled.div<styledType>`
-  ${tw`flex h-screen w-full overflow-x-scroll`}
+  ${tw`flex w-full overflow-x-scroll`}
+  transform:rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
 `;
 
-export const StyledSectionColumn = styled.div<styledType>`
+export const StyledWidgetBlockBox = styled.div<styledType>`
   ${tw`overflow-y-scroll`}
-  width: 1500px;
   direction: rtl;
+  transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -webkit-transform: rotateX(180deg);
 `;
-StyledSectionColumn.defaultProps = {};

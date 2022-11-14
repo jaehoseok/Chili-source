@@ -9,11 +9,9 @@ import { StyledMain } from './style';
 // Components
 import { GanttGraph } from './GanttGraph';
 import { GanttList } from './GanttList';
-// import { Calendar } from './Calendar';
 
 export const Main = () => {
   // Init
-  const getUserInfo = useGetUserInfoHandler().data;
   return (
     <DndProvider backend={HTML5Backend}>
       <StyledMain className="main">

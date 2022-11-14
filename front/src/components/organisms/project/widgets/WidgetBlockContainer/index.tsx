@@ -1,28 +1,29 @@
 // Styles
-import { StyledWidgetBlockContainer, StyledSectionColumn } from './style';
+import { StyledWidgetBlockContainer, StyledWidgetBlockBox } from './style';
 
 // Components
 import { WidgetBlock } from 'components/molecules/WidgetBlock';
 
 export const WidgetBlockContainer = () => {
   // Init
-  const widgetBlockData = [{}];
+  const widgetBlockData = [[], []];
 
   return (
     <>
       <StyledWidgetBlockContainer>
-        <StyledSectionColumn>
+        <StyledWidgetBlockBox>
+          <div>뭔데ㄴ</div>
+          <div>뭔데</div>
+          <div>뭔데</div>
+        </StyledWidgetBlockBox>
+        {/* <StyledSectionColumn>
           <div>sd</div>
           <WidgetBlock type="GANTT"></WidgetBlock>
           <WidgetBlock type="CALENDAR"></WidgetBlock>
           <WidgetBlock type="JIRA"></WidgetBlock>
           <WidgetBlock type="SSAFYGITLAB"></WidgetBlock>
           <WidgetBlock type=""></WidgetBlock>
-        </StyledSectionColumn>
-
-        <StyledSectionColumn>
-          <WidgetBlock type="GANTT"></WidgetBlock>
-        </StyledSectionColumn>
+        </StyledSectionColumn> */}
       </StyledWidgetBlockContainer>
     </>
   );
