@@ -8,6 +8,7 @@ export interface styledType {
 
 export const StyledGanttIssue = styled.div<styledType>`
   ${tw`flex flex-col items-center rounded-2xl overflow-hidden`};
+  background-color: white;
   height: 140px;
   min-height: 140px;
   width: 280px;
@@ -49,7 +50,6 @@ export const StyledGanttIssueStartLabel = styled.div<styledType>`
 `;
 export const StyledGanttIssueProgress = styled.div<styledType>`
   ${tw`flex flex-col justify-center`};
-  backgrouncolor: gray;
 `;
 export const StyledGanttIssueEnd = styled.div<styledType>`
   ${tw`flex flex-col items-end`};

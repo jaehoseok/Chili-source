@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledPage = styled.div`
-  ${tw`h-screen w-screen flex flex-col`}
+  ${tw`w-full flex flex-col`}
+  height: calc(100vh - 100px);
 `;
 
 export const StyledHeader = styled.div`
@@ -11,9 +12,9 @@ export const StyledHeader = styled.div`
 `;
 
 export const StyledBody = styled.div`
-  ${tw`flex-grow-[1] flex overflow-hidden`}
+  ${tw`flex-grow-[1] flex justify-center overflow-hidden`}
 `;
 
 export const StyledLetterBox = styled.div`
-  ${tw`w-1/5`}
+  ${tw`w-1/12`}
 `;

@@ -7,5 +7,5 @@ export interface styledType {
 }
 
 export const StyledMain = styled.div<styledType>`
-  ${tw`w-full bg-red-200`}
+  ${tw`w-full flex justify-start overflow-hidden`}
 `;

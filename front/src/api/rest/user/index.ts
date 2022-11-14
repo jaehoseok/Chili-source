@@ -1,6 +1,5 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { StringLiteral } from 'typescript';
 
 // Init
 const userAxios = createAxiosApi('user-service');
@@ -22,26 +21,6 @@ const userAxios = createAxiosApi('user-service');
  */
 export default {
   /**
-   * @description user 서버의 token code 들을 받아옴
-   *
-   * @author inte
-   */
-  getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
-      userAxios
-        .get(`/token-codes`)
-        .then(response => {
-          console.log(response);
-          resolve(response);
-        })
-        .catch(error => {
-          console.log(error);
-          reject(error);
-        });
-    });
-  },
-
-  /**
    * @description
    * user-service의 로그인 한 유저의 데이터를 가져옴
    *
@@ -57,7 +36,6 @@ export default {
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
       const response = await userAxios.get('/users/info');
-      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log(e);
@@ -87,11 +65,9 @@ export default {
       userAxios
         .get(`/users/search`, { params: { email } })
         .then(response => {
-          console.log(response);
           resolve(response.data);
         })
         .catch(error => {
-          console.log(error);
           reject(error);
         });
     });
