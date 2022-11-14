@@ -9,8 +9,7 @@ const WidgetSelectPage = () => {
   return (
     <>
       <StyledPage>
-        <StyledHeader className="header" />
-        <HeaderNav />
+        <StyledHeader className="header">{/* <HeaderNav /> */}</StyledHeader>
         <StyledBody>
           <Section />
         </StyledBody>

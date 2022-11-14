@@ -11,10 +11,7 @@ export const StyledPage = styled.div<styledType>`
 `;
 StyledPage.defaultProps = {};
 
-export const StyledHeader = styled.div<styledType>`
-  height: 6rem;
-  min-height: 6rem;
-`;
+export const StyledHeader = styled.div<styledType>``;
 
 export const StyledBody = styled.div<styledType>`
   ${tw`flex overflow-hidden`}

@@ -1,17 +1,16 @@
 // Styles
-import { StyledSection, StyledSectionColumn } from './style';
+import { StyledWidgetBlockContainer, StyledSectionColumn } from './style';
 
 // Components
 import { WidgetBlock } from 'components/molecules/WidgetBlock';
 
-interface propTypes {
-  data?: string;
-}
+export const WidgetBlockContainer = () => {
+  // Init
+  const widgetBlockData = [{}];
 
-function Section({}: propTypes) {
   return (
     <>
-      <StyledSection>
+      <StyledWidgetBlockContainer>
         <StyledSectionColumn>
           <div>sd</div>
           <WidgetBlock type="GANTT"></WidgetBlock>
@@ -24,9 +23,7 @@ function Section({}: propTypes) {
         <StyledSectionColumn>
           <WidgetBlock type="GANTT"></WidgetBlock>
         </StyledSectionColumn>
-      </StyledSection>
+      </StyledWidgetBlockContainer>
     </>
   );
-}
-
-export default Section;
+};

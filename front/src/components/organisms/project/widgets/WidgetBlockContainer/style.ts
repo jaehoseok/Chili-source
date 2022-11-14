@@ -6,10 +6,9 @@ export interface styledType {
   width?: string;
 }
 
-export const StyledSection = styled.div<styledType>`
+export const StyledWidgetBlockContainer = styled.div<styledType>`
   ${tw`flex h-screen w-full overflow-x-scroll`}
 `;
-StyledSection.defaultProps = {};
 
 export const StyledSectionColumn = styled.div<styledType>`
   ${tw`overflow-y-scroll`}
