@@ -51,6 +51,10 @@ const index = ({ idx, item, deleteProject }: propsType) => {
     navigate(`/project/${projectId}/dashboard`);
   };
 
+  const linkToSettingHandler = (projectId: number) => {
+    navigate(`/project/${projectId}/setting`);
+  };
+
   // 가져온 팀원 목록에서 MASTER를 찾아, 마스터의 이미지를 반환
   const findProjectMasterHandler = (data: typeof getTeamForProject.data) => {
     if (data) {
@@ -145,7 +149,7 @@ const index = ({ idx, item, deleteProject }: propsType) => {
         <Button
           backgroundColor={theme.color.secondary}
           isHover={true}
-          clickHandler={() => linkToDashBoardHandler(item.id)}
+          clickHandler={() => linkToSettingHandler(item.id)}
           borderColor={theme.button.gray}
         >
           수정

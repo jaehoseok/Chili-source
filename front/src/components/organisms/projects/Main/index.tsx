@@ -21,8 +21,10 @@ const index = () => {
   const deleteProject = useDeleteProject();
 
   useEffect(() => {
-    getProjects.refetch();
-  }, [getProjects.data, deleteProject.isSuccess]);
+    if (deleteProject.isSuccess) {
+      getProjects.refetch();
+    }
+  }, [deleteProject.isSuccess]);
 
   return (
     <StyledContainer>

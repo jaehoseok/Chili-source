@@ -1,6 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { stringify } from 'querystring';
+
 import { ChangeEvent } from 'react';
 
 // Init
@@ -366,6 +366,125 @@ export default {
           projectId,
         },
       });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 가져옵니다
+   *
+   * @author bell
+   */
+  getGanttChart: async (
+    op: number,
+    projectId: number,
+    userId?: number,
+    start?: string,
+    end?: string,
+  ) => {
+    interface responseType {
+      startTime: string;
+      endTime: string;
+      id: number;
+      issueCode: string;
+      issueSummary: string;
+      progress: number;
+      userId: string;
+      version: number;
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get(`/gantt`, {
+          params: {
+            start,
+            end,
+            op,
+            projectId,
+            userId,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 생성합니다.
+   *
+   * @author bell
+   */
+  postCreateGantt: async (
+    issueCode: string,
+    issueSummary: string,
+    projectId: number,
+    userId: number,
+    startTime: string,
+    endTime: string,
+    progress?: number,
+    version?: number,
+  ) => {
+    try {
+      await projectAxios.post('/gantt', {
+        issueCode,
+        issueSummary,
+        projectId,
+        userId,
+        startTime,
+        endTime,
+        progress,
+        version,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더의 이슈 내용을 수정합니다
+   *
+   * @author bell
+   */
+  updateGantt: async (
+    id: number,
+    issueCode?: string,
+    issueSummary?: string,
+    userId?: number,
+    startTime?: string,
+    endTime?: string,
+    progress?: number,
+  ) => {
+    try {
+      await projectAxios.put('/gantt', {
+        id,
+        issueCode,
+        issueSummary,
+        userId,
+        startTime,
+        endTime,
+        progress,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * db에 저장된 해당 프로젝트의 이슈를 삭제합니다.
+   *
+   */
+  deleteGantt: async (ganttChartId: number) => {
+    try {
+      await projectAxios.delete(`/gantt/${ganttChartId}`);
     } catch (e) {
       console.log(e);
     }
