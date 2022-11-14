@@ -107,11 +107,19 @@ public class GanttChartServiceImpl implements GanttChartService {
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (userProjectManager.getRole().getModify() || userId.equals(request.getUserId())) {
+            Long latestVersion = project.getLatestGanttVersion();
+            Long requestVersion = request.getVersion();
+            Long version = latestVersion;
+
+            if (requestVersion != null && requestVersion <= latestVersion && requestVersion >= 1L) {
+                version = requestVersion;
+            }    
+
             GanttChart ganttChart = GanttChart.builder()
                     .startTime(request.getStartTime())
                     .endTime(request.getEndTime())
                     .issueSummary(request.getIssueSummary())
-                    .version(request.getVersion())
+                    .version(version)
                     .issueCode(request.getIssueCode())
                     .progress(request.getProgress())
                     .project(project)
