@@ -1,9 +1,6 @@
-// import { useState } from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import { StyledCalendar } from './style';
 import {
   useDeleteGantt,
   useGetGanttChart,
@@ -12,9 +9,13 @@ import {
   useUpdateGantt,
 } from 'hooks/project';
 
-import { useLocation } from 'react-router-dom';
+import { StyledCalendar } from './style';
 
-import { useEffect } from 'react';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
+
+import Notification from 'components/atoms/Notification';
 
 interface issueType {
   ganttChartId: number;
@@ -89,6 +90,27 @@ const index = () => {
 
   return (
     <StyledCalendar>
+      {postCreateGantt.isSuccess && (
+        <Notification
+          check={true}
+          message={'이슈가 해당 날짜에 성공적으로 저장되었습니다'}
+          width={'300px'}
+        ></Notification>
+      )}
+      {updateGantt.isSuccess && (
+        <Notification
+          check={true}
+          message={'해당 이슈의 날짜가 수정되었습니다'}
+          width={'300px'}
+        ></Notification>
+      )}
+      {deleteGantt.isSuccess && (
+        <Notification
+          check={true}
+          message={'해당 이슈의 날짜가 삭제되었습니다'}
+          width={'300px'}
+        ></Notification>
+      )}
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         timeZone={'UTC'}
