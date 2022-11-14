@@ -8,11 +8,11 @@
 
 ## **Code convention**
 
-Java와 TypeScript는 아래 Style Guide를 준수합니다
+Java와 TypeScript는 아래 Code Convention을 준수합니다
 
-- [Java Style Guide](https://naver.github.io/hackday-conventions-java/)
+- [Back Code Convention](./Back Code Convention.md)
 
-- [TypeScript Code Convention](./Front Code Convention.md)
+- [Front Code Convention](./Front Code Convention.md)
 
   
 
@@ -48,26 +48,4 @@ Data naming**은 공통 + 7가지 객체로 나누어 각각 정의한다
   - 이름을 구성하는 각각의 단어를 underscore 로 연결하는 snake case 를 사용한다.
   - foreign key 컬럼은 부모 테이블의 primary key 컬럼 이름을 그대로 사용한다.
     - 달라질 경우 참조하는 컬럼을 헷갈릴 수 있다.
-  - boolean 필드인 경우 'is_deleted', 'is_valid'와 같은 형태로 명시할 수 있다.
-    - 컬럼명만으로 데이터 타입을 알기 위함
-  - date, datetime 유형의 컬럼이면 "_date" 접미어를 사용한다.
-    - 컬럼명만으로 데이터 타입을 알기 위함
-- Index
-  - 이름을 구성하는 각각의 단어를 hyphen 으로 연결하는 snake case 를 사용한다
-  - "접두어"-"테이블 이름"-"컬럼 이름"-"컬럼 이름"
-  - 예시)uix-account-login_email
-- Constaraints
-  - 이름을 구성하는 각각의 단어를 hyphen 으로 연결하는 snake case 를 사용한다.
-  - "fk"-"부모 테이블 이름"-"자식 테이블 이름”
-  - 예시) fk-admin-notice-1
-- VIEW
-  - 접두어 "v"를 사용한다.
-  - 기타 규칙은 TABLE과 동일
-- stored procedure
-  - 이름을 구성하는 각각의 단어를 underscore 로 연결하는 snake case 를 사용한다.
-  - 예시 ) usf_random_key
-- TRIGGER
-  - 이름을 구성하는 각각의 단어를 underscore 로 연결하는 snake case 를 사용한다.
-  - 접두어tra : AFTER 트리거trb : BEFORE 트리거
-  - "접두어"*"테이블 이름"*"트리거 이벤트"
-  - 예시) tga_movie_ins : AFTER INSERT 트리거
+    
