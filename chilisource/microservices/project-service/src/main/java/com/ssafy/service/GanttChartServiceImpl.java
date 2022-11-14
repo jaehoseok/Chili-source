@@ -146,7 +146,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                     request.getStartTime(),
                     request.getEndTime(),
                     request.getIssueSummary(),
-                    request.getVersion(),
+                    null,
                     request.getIssueCode(),
                     request.getProgress(),
                     request.getUserId()
