@@ -14,9 +14,9 @@ public class Widget extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "widget_id")
     private Long id;
-
     private String name;
 
+    private String url;
     private Long widgetRow;
 
     private Long widgetCol;
@@ -28,19 +28,21 @@ public class Widget extends BaseEntity {
     private WidgetCode widgetCode;
 
     @Builder
-    public Widget(String name, Long widgetRow, Long widgetCol, Long projectId, WidgetCode widgetCode) {
+    public Widget(String name, String url, Long widgetRow, Long widgetCol, Long projectId, WidgetCode widgetCode) {
         this.name = name;
+        this.url = url;
         this.widgetRow = widgetRow;
         this.widgetCol = widgetCol;
         this.projectId = projectId;
         this.widgetCode = widgetCode;
     }
 
-    public void update(String name) {
+    public void update(String name, String url) {
         this.name = name;
+        this.url = url;
     }
 
-    public void locUpdate(Long widgetRow, Long widgetCol){
+    public void locUpdate(Long widgetRow, Long widgetCol) {
         this.widgetRow = widgetRow;
         this.widgetCol = widgetCol;
     }

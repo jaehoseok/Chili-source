@@ -6,6 +6,7 @@ import com.ssafy.dto.request.WidgetLocUpdateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
 import com.ssafy.dto.response.UserProjectResponse;
 import com.ssafy.dto.response.WidgetResponse;
+import com.ssafy.dto.response.WidgetUrlResponse;
 import com.ssafy.entity.Widget;
 import com.ssafy.entity.WidgetCode;
 import com.ssafy.exception.DuplicateException;
@@ -38,7 +39,6 @@ public class WidgetServiceImpl implements WidgetService {
     private final ProjectServiceClient projectServiceClient;
 
     @Override
-    @Transactional
     public List<WidgetResponse> getWidgetList(Long projectId) {
         // TODO : 권한 체크 feign 요청 후 해야함
         List<WidgetResponse> responses = widgetRepo.findByProjectId(projectId).stream()
@@ -53,6 +53,18 @@ public class WidgetServiceImpl implements WidgetService {
                         .build())
                 .collect(Collectors.toList());
         return responses;
+    }
+
+    @Override
+    public WidgetUrlResponse getWidgetUrl(Long projectId, String widgetCodeId) {
+        WidgetCode widgetCode = widgetCodeRepo.findById(widgetCodeId)
+                .orElseThrow(() -> new NotFoundException(WIDGET_CODE_NOT_FOUND));
+        Widget widget = widgetRepo.findByProjectIdAndWidgetCode(projectId, widgetCode)
+                .orElseThrow(() -> new NotFoundException(WIDGET_NOT_FOUND));
+        return WidgetUrlResponse.builder()
+                .name(widget.getName())
+                .url(widget.getUrl())
+                .build();
     }
 
     @Override
@@ -107,7 +119,7 @@ public class WidgetServiceImpl implements WidgetService {
         } catch (Exception e) {
             throw new InternalServerErrorException(PROJECT_COMMUNICATION_ERROR);
         }
-        widget.update(request.getName());
+        widget.update(request.getName(), request.getUrl());
         return WidgetResponse.builder()
                 .id(widget.getId())
                 .name(widget.getName())

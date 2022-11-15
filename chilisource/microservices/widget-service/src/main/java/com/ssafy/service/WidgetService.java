@@ -4,12 +4,16 @@ import com.ssafy.dto.request.WidgetCreateRequest;
 import com.ssafy.dto.request.WidgetLocUpdateRequest;
 import com.ssafy.dto.request.WidgetUpdateRequest;
 import com.ssafy.dto.response.WidgetResponse;
+import com.ssafy.dto.response.WidgetUrlResponse;
 
 import java.util.List;
 
 public interface WidgetService {
     // 위젯 리스트 조회
     List<WidgetResponse> getWidgetList(Long projectId);
+
+    // 위젯 주소 조회
+    WidgetUrlResponse getWidgetUrl(Long projectId, String widgetCodeId);
 
     // 위젯 추가
     WidgetResponse createWidget(WidgetCreateRequest request, Long userId);
