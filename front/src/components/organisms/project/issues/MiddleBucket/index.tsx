@@ -15,15 +15,15 @@ const index = (props: any) => {
   const pjtId = Number(projectId);
   const [issueId, setIssueId] = useState(0);
   const issue = {
-    templateId: props.issue.templateId,
+    issueTemplateId: props.issue.issueTemplateId,
     issueId: issueId,
     projectId: props.issue.projectId,
-    type: props.issue.type,
+    issueType: props.issue.issueType,
     summary: props.issue.summary,
     description: props.issue.description,
     reporter: props.issue.reporter,
     assignee: props.issue.assignee,
-    rank: props.issue.rank,
+    priority: props.issue.priority,
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
@@ -70,16 +70,16 @@ const index = (props: any) => {
         -
       </Circle>
       <IssueBar
-        templateId={issue.templateId}
+        issueTemplateId={issue.issueTemplateId}
         issueId={issue.issueId}
         projectId={issue.projectId}
-        type={issue.type}
+        issueType={issue.issueType}
         summary={issue.summary}
         description={issue.description}
         epicLink={issue.epicLink}
         reporter={issue.reporter}
         assignee={issue.assignee}
-        rank={issue.rank}
+        priority={issue.priority}
         sprint={issue.sprint}
         storyPoints={issue.storyPoints}
       />

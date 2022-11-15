@@ -62,10 +62,10 @@ export default {
    * @author dbcs
    */
   getIssueTemplateList: async (projectId: number) => {
-    interface responseType {
-      data: any;
-    }
-    return new Promise<responseType>((resolve, reject) => {
+    // interface responseType {
+    //   data: any;
+    // }
+    return new Promise<templateType[]>((resolve, reject) => {
       issueAxios
         .get('/', {
           params: {
@@ -80,18 +80,6 @@ export default {
           reject(error);
         });
     });
-    // try {
-    //   const response = await issueAxios.get('/', {
-    //     params: {
-    //       projectId: projectId,
-    //       me: true,
-    //     },
-    //   });
-    //   console.log(response);
-    //   return response.data;
-    // } catch (e) {
-    //   console.log(e);
-    // }
   },
   /**
    * @description
@@ -112,16 +100,6 @@ export default {
     storyPoints: number,
   ) => {
     try {
-      interface responseType {
-        projectId: number;
-        issueType: string;
-        summary: string;
-        description: string;
-        assignee: string;
-        priority: string;
-        epicLink: string;
-        storyPoints: number;
-      }
       const data = {
         projectId,
         issueType,
@@ -164,7 +142,7 @@ export default {
       };
       const response = await issueAxios.put(`/${issueTemplateId}`, data);
       console.log(response);
-      return response;
+      return response.data;
     } catch (e) {
       console.log(e);
     }
@@ -172,7 +150,7 @@ export default {
   deleteIssueTemplate: async (issueTemplateId: number) => {
     try {
       const response = await issueAxios.delete(`/${issueTemplateId}`);
-      return response;
+      return response.data;
     } catch (e) {
       console.log(e);
     }

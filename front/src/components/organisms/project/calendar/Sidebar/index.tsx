@@ -105,9 +105,9 @@ const index = memo(() => {
               </div>
             </div> */}
               <Issue
-                templateId={id}
+                issueTemplateId={id}
                 summary={title}
-                type={type}
+                issueType={type}
                 assignee={assignee}
                 reporter={reporter}
                 storyPoints={storyPoints}

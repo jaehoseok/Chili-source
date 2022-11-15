@@ -5,7 +5,7 @@ import { theme } from '../../../styles/theme';
 export interface styledType {
   width?: string;
   height?: string;
-  type: string;
+  issueType: string;
 }
 
 export const StyledIssueBar = styled.div<styledType>`
@@ -18,7 +18,7 @@ export const StyledIssueBar = styled.div<styledType>`
 export const StyledIssueBarType = styled.div<styledType>`
   ${tw`flex rounded-l-md`};
   width: 3%;
-  ${({ type }) => `background-color: ${theme.issue[type.toLowerCase()]}`};
+  ${({ issueType }) => `background-color: ${theme.issue[issueType]}`};
 `;
 
 export const StyledIssueBarContent = styled.div`
@@ -33,5 +33,5 @@ export const StyledIssueBarElement = styled.div`
 StyledIssueBar.defaultProps = {
   width: '600px',
   height: '40px',
-  type: '',
+  issueType: '',
 };
