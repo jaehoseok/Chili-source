@@ -56,12 +56,31 @@ export const Widget = ({ type, path, children }: propsType) => {
     navigate(`/project/${projectId}/widgets/${splitPath[0]}/${splitPath[1]}`);
   };
 
+  const updateWidgetTabHandler = (widgetName: string) => {
+    const projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+
+    const newProjectList = [...projectTabList];
+    const idx = newProjectList.findIndex(project => project.id == projectId);
+
+    newProjectList[idx].widgetList = {
+      dashboard: false,
+      'gantt-chart': false,
+      calendar: false,
+      setting: false,
+      issues: false,
+    };
+
+    newProjectList[idx].widgetList[widgetName] = true;
+    localStorage.setItem('project-tab-list', JSON.stringify(newProjectList));
+    navigate(`/project/${projectId}/${widgetName}`);
+  };
+
   const widgetData = (type: string, children: ReactNode) => {
     switch (type) {
       case 'CALENDAR':
         // Methods
         const clickCalendarHandler = () => {
-          navigate(`/project/${projectId}/calendar`);
+          updateWidgetTabHandler('calendar');
         };
 
         // Return
@@ -109,7 +128,7 @@ export const Widget = ({ type, path, children }: propsType) => {
       case 'GANTT':
         // Methods
         const clickGanttHandler = () => {
-          navigate(`/project/${projectId}/gantt-chart`);
+          updateWidgetTabHandler('gantt-chart');
         };
 
         // Return
@@ -141,7 +160,7 @@ export const Widget = ({ type, path, children }: propsType) => {
       case 'JIRA':
         // Methods
         const clickJiraHandler = () => {
-          navigate(`/project/${projectId}/issues`);
+          updateWidgetTabHandler('issues');
         };
 
         // Return
