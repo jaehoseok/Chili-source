@@ -29,13 +29,12 @@ import CalendarPage from 'components/pages/CalendarPage';
 // Router navigation guard
 /**
  * @description
- * JSX element 를 받고 상황 체크 후
+ * JSX element 를 받고 Authorization 토큰이 없을 경우 로그인 대기 페이지로 이동시킨다.
  *
  * @param el
  * @author inte
  */
 const guardedElement = (el: JSX.Element) => {
-  console.log('[Auth token]: ', localStorage.getItem('Authorization'));
   // Pass
   if (localStorage.getItem('Authorization')) return el;
   // Guard
@@ -61,11 +60,11 @@ const RouterWrapper = () => {
 
         <Route path="/project/:projectId/*">
           <Route path="dashboard" element={guardedElement(<ProjectDashBoardPage />)} />
-          <Route path="setting" element={<ProjectSettingPage />} />
-          <Route path="widgets/:columnIdx" element={<WidgetSelectPage />} />
-          <Route path="gantt-chart" element={<GanttChartPage />} />
-          <Route path="calendar" element={<CalendarPage />} />
-          <Route path="issues" element={<IssuesPage />} />
+          <Route path="setting" element={guardedElement(<ProjectSettingPage />)} />
+          <Route path="widgets/:columnIdx" element={guardedElement(<WidgetSelectPage />)} />
+          <Route path="gantt-chart" element={guardedElement(<GanttChartPage />)} />
+          <Route path="calendar" element={guardedElement(<CalendarPage />)} />
+          <Route path="issues" element={guardedElement(<IssuesPage />)} />
         </Route>
         <Route path="/*" element={<ErrorPage />} />
       </Routes>
