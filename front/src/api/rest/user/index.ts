@@ -21,26 +21,6 @@ const userAxios = createAxiosApi('user-service');
  */
 export default {
   /**
-   * @description user 서버의 token code 들을 받아옴
-   *
-   * @author inte
-   */
-  getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
-      userAxios
-        .get(`/token-codes`)
-        .then(response => {
-          console.log(response);
-          resolve(response);
-        })
-        .catch(error => {
-          console.log(error);
-          reject(error);
-        });
-    });
-  },
-
-  /**
    * @description
    * user-service의 로그인 한 유저의 데이터를 가져옴
    *
@@ -56,10 +36,40 @@ export default {
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
       const response = await userAxios.get('/users/info');
-      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log(e);
     }
+  },
+
+  /**
+   * @description
+   * 현재 가입한 유저의 정보를 보여줌
+   * 해당 정보를 가지고, 유저를 프로젝트에 초대하도록 쓰임
+   *
+   * @author bell
+   */
+  getUserSearch: async (email: string) => {
+    interface userType {
+      id: number;
+      name: string;
+      image: string;
+    }
+    interface responseType {
+      googleUsers: userType[];
+      kakaoUsers: userType[];
+      image: userType[];
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      userAxios
+        .get(`/users/search`, { params: { email } })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
   },
 };

@@ -1,6 +1,7 @@
 // API & Library
 import { useDrop } from 'react-dnd';
 import { BsTrash } from 'react-icons/bs';
+import { itemType } from '../';
 
 // Styles
 import { StyledWidgetTrashCan } from './style';
@@ -16,8 +17,8 @@ interface propsType {
 export const WidgetTrashCan = ({ onThrow }: propsType) => {
   // Init
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: ['ITEM', 'COLUMN'],
-    drop: item => {
+    accept: ['ITEM', 'COLUMN', 'CALENDAR', 'GANTT', 'JIRA', 'SSAFYGITLAB'],
+    drop: (item: itemType) => {
       onThrow(item);
     },
     collect: monitor => ({

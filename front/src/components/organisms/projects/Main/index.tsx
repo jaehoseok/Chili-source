@@ -4,10 +4,6 @@ import { useDeleteProject, useGetProjects } from 'hooks/project';
 
 import { StyledContainer, StyledFlexBetween, StyledProjectWrapper } from './style';
 
-// IMAGE
-// import example from 'assets/logo/ssafyLogo2.png';
-// import user1 from 'assets/images/user1.png';
-
 // COMPONENTS
 import Button from 'components/atoms/Button';
 import Text from 'components/atoms/Text';
@@ -25,8 +21,10 @@ const index = () => {
   const deleteProject = useDeleteProject();
 
   useEffect(() => {
-    getProjects.refetch();
-  }, [getProjects.data, deleteProject.isSuccess]);
+    if (deleteProject.isSuccess) {
+      getProjects.refetch();
+    }
+  }, [deleteProject.isSuccess]);
 
   return (
     <StyledContainer>

@@ -1,6 +1,7 @@
 import { memo, useEffect, MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useGetLayout } from 'hooks/widget';
 
 // import { useRecoilState } from 'recoil';
 // import { tabListState, tabType, widgetType } from '../../../../recoil/atoms/projectList';
@@ -35,7 +36,7 @@ interface tabType {
  */
 const index = memo(() => {
   // portal 용 태그
-  const el = document.getElementById('nav-root');
+  const el = document.getElementById('nav-service-root');
 
   // React-router
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ const index = memo(() => {
 
     newProjectTabList[currProjectIdx].isActivated = true;
     localStorage.setItem('project-tab-list', JSON.stringify(newProjectTabList));
+
     navigate(`/project/${id}/dashboard`, { state: 'toggleTabEvent' });
   };
 

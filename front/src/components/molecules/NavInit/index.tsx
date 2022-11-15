@@ -58,7 +58,12 @@ const index = () => {
       <StyledContainer>
         <StyledFlexWrapper>
           <StyledTap>
-            <img src={logo} width={'32px'} style={{ transform: 'translateY(10%)' }}></img>
+            <img
+              src={logo}
+              width={'32px'}
+              style={{ transform: 'translateY(10%)' }}
+              onClick={() => navigate('/')}
+            ></img>
           </StyledTap>
           <StyledText>
             <Text

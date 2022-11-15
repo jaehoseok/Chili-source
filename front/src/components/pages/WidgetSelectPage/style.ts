@@ -6,7 +6,13 @@ export interface styledType {
   width?: string;
 }
 
-export const StyledWidgetSelectPage = styled.div<styledType>`
-  ${tw`flex h-screen w-full overflow-hidden`}
+export const StyledPage = styled.div<styledType>`
+  ${tw`flex flex-col h-screen w-full overflow-hidden`}
 `;
-StyledWidgetSelectPage.defaultProps = {};
+StyledPage.defaultProps = {};
+
+export const StyledHeader = styled.div<styledType>``;
+
+export const StyledBody = styled.div<styledType>`
+  ${tw`flex overflow-hidden`}
+`;

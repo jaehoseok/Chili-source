@@ -1,15 +1,19 @@
 // Styles
-import { StyledWidgetSelectPage } from './style';
+import { StyledPage, StyledHeader, StyledBody } from './style';
+import HeaderNav from 'components/organisms/common/HeaderServiceNav';
 
 // Components
-import Section from 'components/organisms/project/widgets/Section';
+import { WidgetBlockContainer } from 'components/organisms/project/widgets/WidgetBlockContainer';
 
 const WidgetSelectPage = () => {
   return (
     <>
-      <StyledWidgetSelectPage>
-        <Section />
-      </StyledWidgetSelectPage>
+      <StyledPage>
+        <StyledHeader className="header">{/* <HeaderNav /> */}</StyledHeader>
+        <StyledBody>
+          <WidgetBlockContainer></WidgetBlockContainer>
+        </StyledBody>
+      </StyledPage>
     </>
   );
 };

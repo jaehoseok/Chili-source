@@ -21,15 +21,9 @@ code {
   src: url('assets/font/PretendardVariable.ttf');
 }
 
-#nav-root {
-  position: fixed;
-  width: 100vw;
-  background-color: #ffffff;
-}
 
 #root {
-  height: 100vh;
   display: flex;
-  flex-direction: column;
+  height: calc(100vh - 100px);
   justify-content: center;
 }

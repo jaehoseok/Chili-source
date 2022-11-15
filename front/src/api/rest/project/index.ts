@@ -1,5 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+
 import { ChangeEvent } from 'react';
 
 // Init
@@ -106,6 +107,7 @@ export default {
       projectAxios
         .get(`/project/${projectId}`)
         .then(response => {
+          console.log(response.data);
           resolve(response.data);
         })
         .catch(error => {
@@ -253,5 +255,238 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @descripton
+   * 프로젝트의 제목과 설명 글을 수정합니다.
+   *
+   * @author bell
+   */
+  updateProject: async (id: number, name: string, description: string) => {
+    try {
+      await projectAxios.put(`/project`, {
+        id,
+        name,
+        description,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @descripton
+   * 프로젝트의 로고를 수정합니다.
+   *
+   * @author bell
+   */
+  updateProjectImage: async (id: number, image: ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    formData.append('image', image.target.files[0]);
+    try {
+      const response = await projectAxios.put(`/project/image/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @descripton
+   * 프로젝트에 참여하는 유저의 권한을 수정합니다
+   *
+   * @author bell
+   */
+  updateTeamRole: async (projectId: number, roleId: string, userId: number) => {
+    try {
+      await projectAxios.put(`/team/role`, {
+        projectId,
+        roleId,
+        userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 참여하는 유저의 색상을 변경합니다.
+   *
+   * @author bell
+   */
+  updateTeamColor: async (projectId: number, userColor: string, userId: number) => {
+    try {
+      await projectAxios.put(`/team`, {
+        projectId,
+        userColor,
+        userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 팀원을 초대합니다
+   *
+   * @author bell
+   */
+  postInviteTeam: async (projectId: number, userId: number) => {
+    try {
+      await projectAxios.post('/team', {
+        projectId,
+        userId,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 프로젝트에 팀원을 강퇴합니다
+   *
+   * @author bell
+   */
+  deleteTeamFire: async (fireUserId: number, projectId: number) => {
+    try {
+      await projectAxios.delete('/team/fire', {
+        params: {
+          fireUserId,
+          projectId,
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 가져옵니다
+   *
+   * @author bell
+   */
+  getGanttChart: async (
+    op: number,
+    projectId: number,
+    userId?: number,
+    start?: string,
+    end?: string,
+  ) => {
+    interface responseType {
+      startTime: string;
+      endTime: string;
+      id: number;
+      issueCode: string;
+      issueSummary: string;
+      progress: number;
+      userId: string;
+      version: number;
+    }
+
+    return new Promise<responseType[]>((resolve, reject) => {
+      projectAxios
+        .get(`/gantt`, {
+          params: {
+            start,
+            end,
+            op,
+            projectId,
+            userId,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더와 매핑한 이슈를 생성합니다.
+   *
+   * @author bell
+   */
+  postCreateGantt: async (
+    issueCode: string,
+    issueSummary: string,
+    projectId: number,
+    userId: number,
+    startTime: string,
+    endTime: string,
+    progress?: number,
+    version?: number,
+  ) => {
+    try {
+      await projectAxios.post('/gantt', {
+        issueCode,
+        issueSummary,
+        projectId,
+        userId,
+        startTime,
+        endTime,
+        progress,
+        version,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 해당 프로젝트에 간트/캘린더의 이슈 내용을 수정합니다
+   *
+   * @author bell
+   */
+  updateGantt: async (
+    id: number,
+    issueCode?: string,
+    issueSummary?: string,
+    userId?: number,
+    startTime?: string,
+    endTime?: string,
+    progress?: number,
+  ) => {
+    try {
+      await projectAxios.put('/gantt', {
+        id,
+        issueCode,
+        issueSummary,
+        userId,
+        startTime,
+        endTime,
+        progress,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * db에 저장된 해당 프로젝트의 이슈를 삭제합니다.
+   *
+   */
+  deleteGantt: async (ganttChartId: number) => {
+    try {
+      await projectAxios.delete(`/gantt/${ganttChartId}`);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

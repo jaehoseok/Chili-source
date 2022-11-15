@@ -24,8 +24,8 @@ export const StyledCircle = styled.span.attrs({
 
   ${({ height }) => height && `width: ${height}`};
   ${({ height }) => height && `height: ${height}`};
-  ${({ fontColor }) => fontColor && `color: ${fontColor}`};
-  ${({ fontWeight }) => fontWeight && `font-weight: ${fontWeight}`};
+  ${({ height }) => height && `min-width: ${height}`};
+  ${({ height }) => height && `min-height: ${height}`};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ margin }) => margin && `margin: ${margin}`}
   ${({ isInnerShadow }) =>
