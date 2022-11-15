@@ -198,6 +198,13 @@ const index = () => {
       item.isActivated = false;
     });
     newProjectTabList[idx].isActivated = true;
+    newProjectTabList[idx].widgetList = {
+      dashboard: true,
+      'gantt-chart': false,
+      calendar: false,
+      setting: false,
+      issues: false,
+    };
     localStorage.setItem('project-tab-list', JSON.stringify(newProjectTabList));
   }
   projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
