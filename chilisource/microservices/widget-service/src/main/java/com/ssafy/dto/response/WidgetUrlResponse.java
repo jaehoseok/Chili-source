@@ -1,4 +1,4 @@
-package com.ssafy.dto.request;
+package com.ssafy.dto.response;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class WidgetUpdateRequest {
+public class WidgetUrlResponse {
     @ApiModelProperty(value = "위젯 이름")
     private String name;
 
@@ -15,7 +15,7 @@ public class WidgetUpdateRequest {
     private String url;
 
     @Builder
-    public WidgetUpdateRequest(String name){
+    public WidgetUrlResponse(String name, String url) {
         this.name = name;
         this.url = url;
     }
