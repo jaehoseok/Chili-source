@@ -14,7 +14,7 @@ export const Main = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <StyledMain className="main">
-        <GanttList />
+        {/* <GanttList /> */}
         <GanttGraph />
       </StyledMain>
     </DndProvider>
