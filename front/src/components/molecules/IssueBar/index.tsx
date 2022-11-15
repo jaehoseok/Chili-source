@@ -10,16 +10,16 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 interface propsType extends styledType {
-  templateId?: number;
+  issueTemplateId?: number;
   issueId?: number;
-  project?: string;
+  projectId?: number;
   summary?: string;
   description?: string;
   reporter?: string;
   assignee?: string;
-  rank?: string;
+  priority?: string;
   epicLink?: string;
-  sprint?: string;
+  sprint?: number;
   storyPoints?: number;
 }
 
@@ -36,15 +36,15 @@ interface propsType extends styledType {
  *
  * @param {string?} width           - 이슈 바 넓이 [default: 400px]
  * @param {string?} height          - 이슈 바 높이 [default: 90px]
- * @param {string?} templateId      - 이슈 템플릿 ID
+ * @param {string?} issueTemplateId - 이슈 템플릿 ID
  * @param {string?} issueId         - 이슈 ID
- * @param {string?} project         - 프로젝트 이름
- * @param {string} type             - 이슈 유형 ['story', 'task', 'bug']
+ * @param {string?} projectId       - 프로젝트 ID
+ * @param {string} issueType        - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary         - 이슈 제목
  * @param {string?} description     - 이슈 설명
  * @param {string?} reporter        - 보고자
  * @param {string?} assignee        - 담당자
- * @param {string?} rank            - 우선순위
+ * @param {string?} priority        - 우선순위
  * @param {string?} epicLink        - 에픽 링크
  * @param {string?} sprint          - 스프린트
  * @param {number?} storyPoints     - 스토리 포인트
@@ -55,15 +55,15 @@ interface propsType extends styledType {
 const index = ({
   width,
   height,
-  templateId,
+  issueTemplateId,
   issueId,
-  project,
-  type,
+  projectId,
+  issueType,
   summary,
   description,
   reporter,
   assignee,
-  rank,
+  priority,
   epicLink,
   sprint,
   storyPoints,
@@ -73,14 +73,14 @@ const index = ({
   const issueStoryPoints = storyPoints ? storyPoints : '';
   return (
     <>
-      <StyledIssueBar width={width} height={height} type={type}>
-        <StyledIssueBarType width={width} type={type}></StyledIssueBarType>
+      <StyledIssueBar width={width} height={height} issueType={issueType}>
+        <StyledIssueBarType width={width} issueType={issueType}></StyledIssueBarType>
         <StyledIssueBarContent>
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBarElement>
             <Text width={24} isFill={issueEpicLink !== ''} message={issueEpicLink}></Text>
             <Circle height={'24px'}>{assignee}</Circle>
-            <Circle height={'24px'}>{rank}</Circle>
+            <Circle height={'24px'}>{priority}</Circle>
             <Text width={24} isFill={true} message={issueStoryPoints + ''}></Text>
           </StyledIssueBarElement>
         </StyledIssueBarContent>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   StyledIssueTemplate,
   StyledIssueTemplateHeader,
@@ -19,35 +20,91 @@ import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
-
+import issueAxios from 'api/rest/issue';
+import projectAxios from 'api/rest/project';
+import { useGetProject } from 'hooks/project';
+import { useGetUserInfoHandler } from 'hooks/user';
 const index = (props: any) => {
-  const issue = {
-    templateId: props.issue.templateId,
-    project: props.issue.project,
-    type: props.issue.type,
-    summary: props.issue.summary,
-    description: props.issue.description,
-    reporter: props.issue.reporter,
-    assignee: props.issue.assignee,
-    rank: props.issue.rank,
-    epicLink: props.issue.epicLink,
-    sprint: props.issue.sprint,
-    storyPoints: props.issue.storyPoints,
+  const { projectId } = useParams();
+  const pjtId = Number(projectId);
+  const getProject = useGetProject(pjtId);
+  const getUser = useGetUserInfoHandler();
+  const getEpicList = issueAxios.getEpicList();
+  const [epicList, setEpicList] = useState<string[]>();
+  const eList: string[] = [];
+  const pushEpicList = async () => {
+    for (let i = 0; i < (await getEpicList).issues.length; i++) {
+      if (eList) {
+        eList.push((await getEpicList).issues[i].fields.summary);
+      }
+    }
+    setEpicList(eList);
   };
+  // const getSprintList = issueAxios.getSprintList(pjtId);
+  // const [sprintList, setSprintList] = useState<string[]>();
+  // const sList: string[] = [];
+  // const pushSprintList = async () => {
+  //   for (let i = 0; i < (await getSprintList).values.length; i++) {
+  //     sList.push((await getSprintList).values[i].name);
+  //   }
+  //   setSprintList(sList);
+  // };
+  const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
+  const [memberList, setMemberList] = useState<string[]>();
+  const mList: string[] = [];
+
+  const pushTeamMemberList = async () => {
+    for (let i = 0; i < (await getTeamMemberList).length; i++) {
+      mList.push((await getTeamMemberList)[i].userName);
+    }
+    setMemberList(mList);
+  };
+
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editNo, setEditNo] = useState(0);
   const [issues, setIssues] = useState<templateType[]>([]);
+
+  const getIssueTemplateList = issueAxios.getIssueTemplateList(pjtId);
+  const iList: templateType[] = [];
+  const pushIssueTemplateList = async () => {
+    for (let i = 0; i < (await getIssueTemplateList).length; i++) {
+      iList.push((await getIssueTemplateList)[i]);
+    }
+    setIssues(iList);
+  };
+
+  useEffect(() => {
+    pushEpicList();
+    pushIssueTemplateList();
+    pushTeamMemberList();
+  }, []);
+
+  const issue = {
+    issueTemplateId: props.issue.issueTemplateId,
+    projectId: props.issue.projectId,
+    issueType: props.issue.issueType,
+    summary: props.issue.summary,
+    description: props.issue.description,
+    reporter: props.issue.reporter,
+    assignee: props.issue.assignee,
+    priority: props.issue.priority,
+    epicLink: props.issue.epicLink,
+    sprint: props.issue.sprint,
+    storyPoints: props.issue.storyPoints,
+  };
+
   const setInfoHandler = (issue: templateType) => {
     props.setIssue(issue);
   };
-  const deleteHandler = (templateId: number) => {
-    setIssues(issues.filter((issue: templateType) => issue.templateId !== templateId));
+  const deleteHandler = (issueTemplateId: number) => {
+    issueAxios.deleteIssueTemplate(issueTemplateId);
+    setIssues(issues.filter((issue: templateType) => issue.issueTemplateId !== issueTemplateId));
   };
-  const editEnableHandler = (templateId: number) => {
+  const editEnableHandler = (issueTemplateId: number) => {
     setIsEdit(true);
     setIsAdd(false);
-    setEditNo(templateId);
+    setEditNo(issueTemplateId);
   };
   const addEnableHandler = () => {
     setIsAdd(true);
@@ -56,16 +113,15 @@ const index = (props: any) => {
 
   const IssueList = issues.map((issue: templateType) => (
     <Issue
-      templateId={issue.templateId}
-      project={issue.project}
-      type={issue.type}
+      issueTemplateId={issue.issueTemplateId}
+      projectId={pjtId}
+      issueType={issue.issueType}
       summary={issue.summary}
       description={issue.description}
-      reporter={issue.reporter}
+      reporter={getUser.data ? getUser.data.name : ''}
       assignee={issue.assignee}
-      rank={issue.rank}
+      priority={issue.priority}
       epicLink={issue.epicLink}
-      sprint={issue.sprint}
       storyPoints={issue.storyPoints}
       clickHandler={setInfoHandler}
       deleteHandler={deleteHandler}
@@ -73,57 +129,14 @@ const index = (props: any) => {
     />
   ));
 
-  const issue1: templateType = {
-    templateId: 1,
-    project: '프로젝트1',
-    type: 'story',
-    summary: '이슈1',
-    description: '설명1',
-    reporter: '팀원1',
-    assignee: '팀원3',
-    rank: 'Low',
-    epicLink: '에픽1',
-    sprint: '스프린트1',
-    storyPoints: 8,
-  };
-  const issue2: templateType = {
-    templateId: 2,
-    project: '프로젝트2',
-    type: 'task',
-    summary: '이슈2',
-    description: '설명2',
-    reporter: '팀원2',
-    assignee: '팀원2',
-    rank: 'Medium',
-    epicLink: '에픽2',
-    sprint: '스프린트2',
-    storyPoints: 4,
-  };
-  const issue3: templateType = {
-    templateId: 3,
-    project: '프로젝트3',
-    type: 'bug',
-    summary: '이슈3',
-    description: '설명3',
-    reporter: '팀원3',
-    assignee: '팀원1',
-    rank: 'Highest',
-    epicLink: '에픽3',
-    sprint: '스프린트3',
-    storyPoints: 2,
-  };
-  useEffect(() => {
-    setIssues([issue1, issue2, issue3]);
-  }, []);
-
   // IssueInfo 부분
 
   const iType =
-    props.issue.type === 'story'
+    props.issue.type === 'Story'
       ? '스토리'
-      : props.issue.type === 'task'
+      : props.issue.type === 'Task'
       ? '태스크'
-      : props.issue.type === 'bug'
+      : props.issue.type === 'Bug'
       ? '버그'
       : '';
 
@@ -131,36 +144,32 @@ const index = (props: any) => {
   const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const reporterRef = useRef<HTMLSelectElement>(null);
   const assigneeRef = useRef<HTMLSelectElement>(null);
   const rankRef = useRef<HTMLSelectElement>(null);
   const epicLinkRef = useRef<HTMLSelectElement>(null);
-  const sprintRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
-    issue.templateId = templateId;
-    issue.project = projectRef.current ? projectRef.current.value : '';
-    issue.type = typeRef.current
+    issue.issueTemplateId = templateId;
+    issue.projectId = projectId;
+    issue.issueType = typeRef.current
       ? typeRef.current.value === '스토리'
-        ? 'story'
+        ? 'Story'
         : typeRef.current.value === '태스크'
-        ? 'task'
+        ? 'Task'
         : typeRef.current.value === '버그'
-        ? 'bug'
-        : 'error'
+        ? 'Bug'
+        : 'Error'
       : '';
     issue.summary = summaryRef.current ? summaryRef.current.value : '';
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
     issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
-    issue.reporter = reporterRef.current ? reporterRef.current.value : '';
     issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
-    issue.rank = rankRef.current ? rankRef.current.value : '';
-    issue.sprint = sprintRef.current ? sprintRef.current.value : '';
+    issue.priority = rankRef.current ? rankRef.current.value : '';
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
-    projectRef.current ? (projectRef.current.value = '') : '';
+    // projectRef.current ? (projectRef.current.value = '') : '';
     // typeRef.current ? (typeRef.current.value = '') : '';
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
@@ -170,35 +179,57 @@ const index = (props: any) => {
     // epicLinkRef.current ? (epicLinkRef.current.value = '') : '';
     // sprintRef.current ? (sprintRef.current.value = '') : '';
     storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';
+    console.log(issue);
     setTemplateId(templateId + 1);
     issues.push(issue);
     setIssues(issues);
     setIsAdd(false);
+    issueAxios.postCreateIssueTemplate(
+      issue.projectId,
+      issue.issueType,
+      issue.summary,
+      issue.description,
+      issue.assignee,
+      issue.priority,
+      issue.epicLink,
+      issue.sprint,
+      issue.storyPoints,
+    );
   };
 
   const editTemplateHandler = () => {
     issues.forEach(issue => {
-      if (issue.templateId === editNo) {
-        projectRef.current ? (issue.project = projectRef.current.value) : '';
+      if (issue.issueTemplateId === editNo) {
         typeRef.current
-          ? (issue.type =
+          ? (issue.issueType =
               typeRef.current.value === '스토리'
-                ? 'story'
+                ? 'Story'
                 : typeRef.current.value === '태스크'
-                ? 'task'
+                ? 'Task'
                 : typeRef.current.value === '버그'
-                ? 'bug'
-                : 'error')
+                ? 'Bug'
+                : 'Error')
           : '';
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
-        reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
+        // reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
         assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
-        rankRef.current ? (issue.rank = rankRef.current.value) : '';
+        rankRef.current ? (issue.priority = rankRef.current.value) : '';
         epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
-        sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
+        // sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
         storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
       }
+      issueAxios.putEditIssueTemplate(
+        issue.projectId,
+        issue.issueType,
+        issue.summary,
+        issue.description,
+        issue.assignee,
+        issue.priority,
+        issue.epicLink,
+        issue.storyPoints,
+        issue.issueTemplateId,
+      );
     });
     setIsEdit(false);
   };
@@ -206,23 +237,23 @@ const index = (props: any) => {
   const insertIssueHandler = () => {
     props.setIssue({
       templateId: props.issue.templateId,
-      project: projectRef.current ? projectRef.current.value : '',
+      projectId: projectId,
       type: typeRef.current
         ? typeRef.current.value === '스토리'
-          ? 'story'
+          ? 'Story'
           : typeRef.current.value === '태스크'
-          ? 'task'
+          ? 'Task'
           : typeRef.current.value === '버그'
-          ? 'bug'
-          : 'error'
+          ? 'Bug'
+          : 'Error'
         : '',
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
       epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      reporter: reporterRef.current ? reporterRef.current.value : '',
+      // reporter: reporterRef.current ? reporterRef.current.value : '',
       assignee: assigneeRef.current ? assigneeRef.current.value : '',
       rank: rankRef.current ? rankRef.current.value : '',
-      sprint: sprintRef.current ? sprintRef.current.value : '',
+      // sprint: sprintRef.current ? sprintRef.current.value : '',
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
@@ -235,22 +266,25 @@ const index = (props: any) => {
           <Circle height={'5rem'} margin={'1rem'}>
             로고
           </Circle>
-          <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
+          <Text
+            isFill={false}
+            message={getProject.data ? getProject.data.name : ''}
+            fontSize={'2.5rem'}
+          />
         </StyledIssueTemplateHeader>
         <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
-
-        <StyledIssueTemplateBody>
-          <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
-          {IssueList}
-          <Button
-            width={'400px'}
-            height={'90px'}
-            borderColor={'#d9d9d9'}
-            clickHandler={addEnableHandler}
-          >
-            +
-          </Button>
-        </StyledIssueTemplateBody>
+        <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
+        <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
+          <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
+        </Sheet>
+        <Button
+          width={'400px'}
+          height={'90px'}
+          borderColor={'#d9d9d9'}
+          clickHandler={addEnableHandler}
+        >
+          +
+        </Button>
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
@@ -279,8 +313,9 @@ const index = (props: any) => {
             <InputBox
               isRow={false}
               labelName={'프로젝트'}
-              inputValue={props.issue.project}
+              inputValue={getProject.data ? getProject.data.name : ''}
               ref={projectRef}
+              disabled
             />
             <SelectBox labelName={'이슈 유형'} ref={typeRef}>
               <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
@@ -297,15 +332,9 @@ const index = (props: any) => {
               textAreaValue={props.issue.description}
               ref={descriptionRef}
             />
-            <SelectBox labelName={'보고자'} ref={reporterRef}>
-              <Option
-                messages={['팀원1', '팀원2', '팀원3']}
-                selected={props.issue.reporter}
-              ></Option>
-            </SelectBox>
             <SelectBox labelName={'담당자'} ref={assigneeRef}>
               <Option
-                messages={['팀원1', '팀원2', '팀원3']}
+                messages={memberList ? memberList : ['']}
                 selected={props.issue.assignee}
               ></Option>
             </SelectBox>
@@ -318,14 +347,8 @@ const index = (props: any) => {
             </SelectBox>
             <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
               <Option
-                messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
+                messages={epicList ? epicList : ['']}
                 selected={props.issue.epicLink}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'Sprint'} ref={sprintRef}>
-              <Option
-                messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
-                selected={props.issue.sprint}
               ></Option>
             </SelectBox>
             <InputBox

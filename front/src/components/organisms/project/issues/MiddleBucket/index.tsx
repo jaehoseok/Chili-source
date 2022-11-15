@@ -1,32 +1,48 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { MiddleBucket, StyledBucketHeader, StyledBucketBody, StyledIssue } from './style';
+import SelectBox from 'components/molecules/SelectBox';
+import IssueBar from 'components/molecules/IssueBar';
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
-import IssueBar from 'components/molecules/IssueBar';
-
+import Option from 'components/atoms/Option';
 import { issueType } from 'components/pages/IssuesPage';
 
+import issueAxios from 'api/rest/issue';
 const index = (props: any) => {
+  const { projectId } = useParams();
+  const pjtId = Number(projectId);
   const [issueId, setIssueId] = useState(0);
   const issue = {
-    templateId: props.issue.templateId,
+    issueTemplateId: props.issue.issueTemplateId,
     issueId: issueId,
-    project: props.issue.project,
-    type: props.issue.type,
+    projectId: props.issue.projectId,
+    issueType: props.issue.issueType,
     summary: props.issue.summary,
     description: props.issue.description,
     reporter: props.issue.reporter,
     assignee: props.issue.assignee,
-    rank: props.issue.rank,
+    priority: props.issue.priority,
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
   };
 
   const [bucket, setBucket] = useState<issueType[]>([]);
-
+  const sprintRef = useRef<HTMLSelectElement>(null);
+  const getSprintList = issueAxios.getSprintList(pjtId);
+  const [sprintList, setSprintList] = useState<string[]>();
+  const sList: string[] = [];
+  const pushSprintList = async () => {
+    for (let i = 0; i < (await getSprintList).values.length; i++) {
+      sList.push((await getSprintList).values[i].name);
+    }
+    setSprintList(sList);
+  };
+  useEffect(() => {
+    pushSprintList();
+  }, []);
   useEffect(() => {
     if (props.isInsert) {
       bucket.push(issue);
@@ -54,16 +70,16 @@ const index = (props: any) => {
         -
       </Circle>
       <IssueBar
-        templateId={issue.templateId}
+        issueTemplateId={issue.issueTemplateId}
         issueId={issue.issueId}
-        project={issue.project}
-        type={issue.type}
+        projectId={issue.projectId}
+        issueType={issue.issueType}
         summary={issue.summary}
         description={issue.description}
         epicLink={issue.epicLink}
         reporter={issue.reporter}
         assignee={issue.assignee}
-        rank={issue.rank}
+        priority={issue.priority}
         sprint={issue.sprint}
         storyPoints={issue.storyPoints}
       />
@@ -72,6 +88,10 @@ const index = (props: any) => {
   return (
     <MiddleBucket>
       <StyledBucketHeader>
+        <SelectBox labelName={'Sprint'} ref={sprintRef}>
+          <Option messages={sprintList ? sprintList : ['']} selected={props.issue.sprint}></Option>
+        </SelectBox>
+
         <Button
           borderColor={'#1973ee'}
           isHover

@@ -108,9 +108,9 @@ const index = () => {
             >
               <Issue
                 userImage={currentImage as string}
-                templateId={+id}
+                issueTemplateId={+id}
                 summary={fields.summary.summary}
-                type={
+                issueType={
                   fields.issuetype.name == '스토리'
                     ? 'story'
                     : fields.issuetype.name == '작업'
