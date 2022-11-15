@@ -13,16 +13,15 @@ import { ImBin } from 'react-icons/im';
 import { HiPencil } from 'react-icons/hi';
 
 interface propsType extends styledType {
+  issueTemplateId: number;
+  projectId?: number;
   userImage?: string;
-  templateId: number;
-  project?: string;
   summary?: string;
   description?: string;
   reporter?: string;
   assignee?: string;
-  rank?: string;
+  priority?: string;
   epicLink?: string;
-  sprint?: string;
   storyPoints?: number;
   clickHandler?: any;
   deleteHandler?: any;
@@ -41,16 +40,15 @@ interface propsType extends styledType {
  *
  * @param {string?} width                                       - 이슈 템플릿 넓이 [default: 400px]
  * @param {string?} height                                      - 이슈 템플릿 높이 [default: 90px]
- * @param {number} templateId                                   - 이슈 템플릿 ID
- * @param {string?} project                                     - 프로젝트 이름
- * @param {string} type                                         - 이슈 유형 ['story', 'task', 'bug']
+ * @param {number} issueTemplateId                              - 이슈 템플릿 ID
+ * @param {string?} projectId                                   - 프로젝트 ID
+ * @param {string} issueType                                    - 이슈 유형 ['story', 'task', 'bug']
  * @param {string?} summary                                     - 이슈 제목
  * @param {string?} description                                 - 이슈 설명
  * @param {string?} reporter                                    - 보고자
  * @param {string?} assignee                                    - 담당자
- * @param {string?} rank                                        - 우선순위
+ * @param {string?} priority                                    - 우선순위
  * @param {string?} epicLink                                    - 에픽 링크
- * @param {string?} sprint                                      - 스프린트
  * @param {number?} storyPoints                                 - 스토리 포인트
  * @param {MouseEventHandler<HTMLDivElement>?} clickHandler     - 클릭 이벤트
  *
@@ -60,39 +58,34 @@ interface propsType extends styledType {
 const index = ({
   width,
   height,
-  templateId,
-  project,
-  type,
+  issueTemplateId,
+  projectId,
+  issueType,
   summary,
   description,
   reporter,
   assignee,
-  rank,
+  priority,
   epicLink,
-  sprint,
   storyPoints,
   clickHandler,
   deleteHandler,
   editEnableHandler,
   userImage,
 }: propsType) => {
-  let issueType: string;
-
-  switch (type) {
-    case 'story':
-      issueType = '스토리';
+  let iType: string;
+  switch (issueType) {
+    case 'Story':
+      iType = '스토리';
       break;
-    case 'task':
-      issueType = '태스크';
+    case 'Task':
+      iType = '태스크';
       break;
-    case 'bug':
-      issueType = '버그';
-      break;
-    case '스토리':
-      issueType = '스토리';
+    case 'Bug':
+      iType = '버그';
       break;
     default:
-      issueType = '에러';
+      iType = '에러';
       break;
   }
   const issueSummary = summary ? summary : '';
@@ -100,16 +93,15 @@ const index = ({
   const issueStoryPoints = storyPoints ? storyPoints : '';
 
   const issueData = {
-    templateId: templateId,
-    project: project,
-    type: type,
+    issueTemplateId: issueTemplateId,
+    projectId: projectId,
+    issueType: issueType,
     summary: summary,
     description: description,
     reporter: reporter,
     assignee: assignee,
-    rank: rank,
+    priority: priority,
     epicLink: epicLink,
-    sprint: sprint,
     storyPoints: storyPoints,
   };
   return (
@@ -117,30 +109,29 @@ const index = ({
       <StyledIssue
         width={width}
         height={height}
-        type={type}
+        issueType={issueType}
         onClick={() => clickHandler(issueData)}
       >
-        <StyledIssueTop type={type}>
-          <Text isFill={false} message={issueType} color={'white'}></Text>
+        <StyledIssueTop issueType={issueType}>
+          <Text isFill={false} message={iType} color={'white'}></Text>
           <StyledIssueTopRight>
             <ImBin
               onClick={() => {
-                issueData.project = '';
-                issueData.type = '';
+                issueData.projectId = 0;
+                issueData.issueType = '';
                 issueData.summary = '';
                 issueData.description = '';
                 issueData.reporter = '';
                 issueData.assignee = '';
-                issueData.rank = '';
+                issueData.priority = '';
                 issueData.epicLink = '';
-                issueData.sprint = '';
                 issueData.storyPoints = 0;
-                deleteHandler(templateId);
+                deleteHandler(issueTemplateId);
               }}
             />
             <HiPencil
               onClick={() => {
-                editEnableHandler(templateId);
+                editEnableHandler(issueTemplateId);
               }}
             />
           </StyledIssueTopRight>
@@ -149,8 +140,8 @@ const index = ({
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBottomElement>
             <Text isFill={true} message={issueEpicLink} width={24}></Text>
+            <Circle height={'24px'}>{priority}</Circle>
             <Circle height={'24px'} isImage={true} url={userImage}></Circle>
-            <Circle height={'24px'}>{rank}</Circle>
             <Text isFill={true} message={issueStoryPoints + ''} width={24}></Text>
           </StyledIssueBottomElement>
         </StyledIssueBottom>
