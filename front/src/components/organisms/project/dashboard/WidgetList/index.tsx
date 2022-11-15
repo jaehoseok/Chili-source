@@ -3,7 +3,6 @@ import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { widget } from 'api/rest';
 import { useGetLayout, useSetLayout, useDeleteLayout } from 'hooks/widget';
 
 // Styles
@@ -304,7 +303,6 @@ export const WidgetList = ({}: propsType) => {
 
     // 아이템 삭제
     else {
-      console.log('[delete widget]', await widget.deleteWidget(item.id));
       const splitItemPath = item.path ? item.path.split('-') : [''];
       const columnIndex = Number(splitItemPath[0]);
       const itemIndex = Number(splitItemPath[1]);
