@@ -1,5 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
+import { ChangeEvent } from 'react';
 
 // Init
 const userAxios = createAxiosApi('user-service');
@@ -71,5 +72,44 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * 유저의 이미지를 수정하는 API
+   *
+   * @author bell
+   */
+  updateUserImage: async (image: ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    formData.append('image', image.target.files[0]);
+
+    try {
+      await userAxios.put(`/users/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 유저의 이름을 수정하는 API
+   *
+   * @author bell
+   */
+  updateUserName: async (name: string) => {
+    try {
+      const response = await userAxios.put(`/users/name`, { name });
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

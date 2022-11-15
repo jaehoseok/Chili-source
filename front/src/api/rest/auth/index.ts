@@ -162,4 +162,14 @@ export default {
       value,
     });
   },
+
+  /**
+   * @description
+   * 사용자의 연동한 토큰을 삭제
+   *
+   * @author bell
+   */
+  deleteLinkageToken: async (tokenCodeId: string) => {
+    await authAxios.delete(`/tokens/${tokenCodeId}`);
+  },
 };
