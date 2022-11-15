@@ -8,19 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@ApiModel(value = "담당자")
-public class JiraTodoIssueAssigneeResponse {
-    @ApiModelProperty(value = "담당자 JIRA id")
+@ApiModel(value = "보고자")
+public class JiraIssueReporterResponse {
+    @ApiModelProperty(value = "보고자 JIRA id")
     private String accountId;
 
-    @ApiModelProperty(value = "담당자 JIRA email")
+    @ApiModelProperty(value = "보고자 JIRA email")
     private String emailAddress;
 
-    @ApiModelProperty(value = "담당자 JIRA 이름")
+    @ApiModelProperty(value = "보고자 JIRA 이름")
     private String displayName;
 
     @Builder
-    public JiraTodoIssueAssigneeResponse(String accountId, String emailAddress, String displayName) {
+    public JiraIssueReporterResponse(String accountId, String emailAddress, String displayName) {
         this.accountId = accountId;
         this.emailAddress = emailAddress;
         this.displayName = displayName;

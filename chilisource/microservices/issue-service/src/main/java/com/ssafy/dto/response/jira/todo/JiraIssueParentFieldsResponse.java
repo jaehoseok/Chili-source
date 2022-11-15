@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@ApiModel(value = "이슈에 대한 간략한 설명")
-public class JiraTodoIssueSummaryResponse {
-    @ApiModelProperty(value = "이슈에 대한 간략한 설명")
+@ApiModel(value = "에픽 링크 이름")
+public class JiraIssueParentFieldsResponse {
+    @ApiModelProperty(value = "에픽 링크 이름")
     private String summary;
 
     @Builder
-    public JiraTodoIssueSummaryResponse(String summary) {
+    public JiraIssueParentFieldsResponse(String summary) {
         this.summary = summary;
     }
 }

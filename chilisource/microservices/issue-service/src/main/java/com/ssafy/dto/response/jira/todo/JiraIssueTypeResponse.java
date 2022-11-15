@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@ApiModel(value = "우선순위")
-public class JiraTodoIssuePriorityResponse {
-    @ApiModelProperty(value = "우선순위 이름")
-    private String name;
-
-    @ApiModelProperty(value = "우선순위 id")
+@ApiModel(value = "이슈 타입")
+public class JiraIssueTypeResponse {
+    @ApiModelProperty(value = "이슈 타입 id")
     private String id;
 
+    @ApiModelProperty(value = "이슈 타입 이름")
+    private String name;
+
     @Builder
-    public JiraTodoIssuePriorityResponse(String name, String id) {
-        this.name = name;
+    public JiraIssueTypeResponse(String id, String name) {
         this.id = id;
+        this.name = name;
     }
 }
