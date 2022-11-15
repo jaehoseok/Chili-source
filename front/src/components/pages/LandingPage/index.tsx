@@ -6,15 +6,103 @@ import HeaderInit from 'components/organisms/common/HeaderInitNav';
 const LandingPage = () => {
   return (
     <>
-      <StyledPage>
-        <StyledHeader>
+      <StyledPage className="page">
+        <StyledHeader className="header">
           <HeaderInit></HeaderInit>
         </StyledHeader>
-        <StyledBody>
-          <img src={require(`assets/images/LandingBanner.png`)} alt="" />
-          <div>설명1</div>
-          <div>설명2</div>
-          <div>설명3</div>
+        <StyledBody className="body">
+          <img src={require(`assets/images/LandingBanner.png`)} alt="" style={{ width: '100%' }} />
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
+          <div>테스트</div>
         </StyledBody>
       </StyledPage>
     </>
