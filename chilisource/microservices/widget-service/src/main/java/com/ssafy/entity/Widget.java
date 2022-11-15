@@ -14,11 +14,17 @@ public class Widget extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "widget_id")
     private Long id;
+
     private String name;
+
     private String url;
+
     private Long widgetRow;
+
     private Long widgetCol;
+
     private Long projectId;
+    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "widget_code_id")
     private WidgetCode widgetCode;
