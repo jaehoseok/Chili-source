@@ -111,11 +111,11 @@ const index = () => {
                 issueTemplateId={+id}
                 summary={fields.summary.summary}
                 issueType={
-                  fields.issuetype.name == '스토리'
-                    ? 'story'
-                    : fields.issuetype.name == '작업'
-                    ? 'task'
-                    : 'bug'
+                  fields.issuetype.id == '10001'
+                    ? 'Story'
+                    : fields.issuetype.id == '10002'
+                    ? 'Task'
+                    : 'Bug'
                 }
                 assignee={fields.assignee.displayName}
                 reporter={fields.assignee.displayName}

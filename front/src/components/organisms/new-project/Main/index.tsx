@@ -163,6 +163,15 @@ const index = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     createProjectData.mutate({ projectName, projectDescription, image });
+    nameSetRecoilState(prevData => {
+      return { ...prevData, projectName: '' };
+    });
+    descriptionSetRecoilState(prevData => {
+      return { ...prevData, projectDescription: '' };
+    });
+    imageSetRecoilState(prevData => {
+      return { ...prevData, projectImage: '' };
+    });
   };
 
   // 지라 연동이 성공한 경우에만 jiraProject를 가져와라
@@ -247,6 +256,13 @@ const index = () => {
           message={'프로젝트가 성공적으로 생성되었습니다!'}
         ></Notification>
       )}
+      {connectTokenToProject.isSuccess && (
+        <Notification
+          width="300px"
+          check={true}
+          message={'프로젝트끼리 서로 연동되었습니다'}
+        ></Notification>
+      )}
 
       <Text
         isFill={false}
@@ -268,6 +284,7 @@ const index = () => {
                 labelSize={'1.3rem'}
                 useSetRecoilState={nameSetRecoilState}
                 recoilParam={'projectName'}
+                disabled={createProjectData.isSuccess}
               ></InputBox>
             </StyledMarginY>
             <StyledMarginY>
@@ -280,6 +297,7 @@ const index = () => {
                 labelSize={'1.3rem'}
                 useSetRecoilState={descriptionSetRecoilState}
                 recoilParam={'projectDescription'}
+                disabled={createProjectData.isSuccess}
               ></TextAreaBox>
             </StyledMarginY>
             <StyledMarginY>
@@ -376,8 +394,6 @@ const index = () => {
                   </Button>
                 </StyledFlexRowEnd>
               </StyledMarginY>
-              {/* {isLoading && <div>Loading...</div>} */}
-              {/* {jiraProjectList.isLoading && <div>isLoading...</div>} */}
               {jiraProjectList.data && (
                 <>
                   <StyledMarginY>

@@ -84,6 +84,15 @@ const index = ({
     case 'Bug':
       iType = '버그';
       break;
+    case '10001':
+      iType = '스토리';
+      break;
+    case '10002':
+      iType = '태스크';
+      break;
+    case '10004':
+      iType = '버그';
+      break;
     default:
       iType = '에러';
       break;
