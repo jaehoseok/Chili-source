@@ -12,6 +12,6 @@ export const linkageTokenState = atom({
   default: {
     jiraToken: '',
     jiraEmail: '',
-    gitToken: '',
+    gitLabToken: '',
   },
 });

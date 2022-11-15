@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useDeleteProject, useGetProjects } from 'hooks/project';
 
@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 
 const index = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const clickToProjectCreateHandler = () => {
     navigate('/new-project');
@@ -24,7 +25,10 @@ const index = () => {
     if (deleteProject.isSuccess) {
       getProjects.refetch();
     }
-  }, [deleteProject.isSuccess]);
+    if (location.state === 'created') {
+      getProjects.refetch();
+    }
+  }, [deleteProject.isSuccess, location.state]);
 
   return (
     <StyledContainer>

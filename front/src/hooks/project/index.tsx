@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { project } from 'api/rest';
 
@@ -22,9 +22,7 @@ export const useGetProject = (projectId: number) => {
  * @author bell
  */
 export const useGetProjects = () => {
-  return useQuery(['get-projects'], () => project.getProjects(), {
-    staleTime: Infinity,
-  });
+  return useQuery(['get-projects'], () => project.getProjects());
 };
 
 /**
