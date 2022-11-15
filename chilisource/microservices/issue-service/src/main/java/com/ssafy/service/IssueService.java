@@ -9,8 +9,8 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
-import com.ssafy.dto.response.jira.todo.JiraIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraIssueResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 
 import java.io.IOException;
 import java.util.List;
