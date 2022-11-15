@@ -5,9 +5,9 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
-import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
+import com.ssafy.dto.response.jira.issue.JiraSearchIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 import feign.Response;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +34,7 @@ public interface JiraFeignClient {
 
     // 해당 프로젝트에서 done이 아닌 나의 이슈 조회
     @GetMapping("/api/3/search?jql={query}")
-    JiraTodoIssueListResponse getTodoIssues(
+    JiraIssueListResponse getTodoIssues(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable("query") String query
     );
@@ -56,7 +56,7 @@ public interface JiraFeignClient {
     );
 
     @GetMapping("/api/3/issue/{issueKey}")
-    JiraTodoIssueResponse getIssue(
+    JiraIssueResponse getIssue(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable(name = "issueKey") String issueKey
     );

@@ -10,8 +10,8 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 import com.ssafy.service.IssueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -278,12 +278,12 @@ public class IssueController {
     // 나의 할 일 + 진행 중 이슈만 조회
     @GetMapping("/jira/issues/todo/{projectId}")
     @ApiOperation(value = "아직 DONE하지 않은 JIRA의 이슈 가져오기")
-    public ResponseEntity<JiraTodoIssueListResponse> getTodoIssues(
+    public ResponseEntity<JiraIssueListResponse> getTodoIssues(
             @LoginUser User user,
             @RequestHeader HttpHeaders headers,
             @ApiParam(value = "JIRA와 연동된 프로젝트 id") @PathVariable Long projectId
     ) throws Exception {
-        JiraTodoIssueListResponse response = issueService.getTodoIssues(
+        JiraIssueListResponse response = issueService.getTodoIssues(
                 user,
                 headers.get(HttpHeaders.AUTHORIZATION),
                 projectId);
@@ -294,12 +294,12 @@ public class IssueController {
     // 지라의 이슈 조회
     @GetMapping("/jira/issues/{issueKey}")
     @ApiOperation(value = "issueKey로 jira의 이슈를 조회")
-    public ResponseEntity<JiraTodoIssueResponse> getIssue(
+    public ResponseEntity<JiraIssueResponse> getIssue(
             @LoginUser User user,
             @RequestHeader HttpHeaders headers,
             @ApiParam(value = "JIRA issue key") @PathVariable String issueKey
     ) {
-        JiraTodoIssueResponse response = issueService.getIssue(
+        JiraIssueResponse response = issueService.getIssue(
                 user,
                 headers.get(HttpHeaders.AUTHORIZATION),
                 issueKey

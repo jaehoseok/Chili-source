@@ -1,4 +1,4 @@
-package com.ssafy.dto.response.jira.todo;
+package com.ssafy.dto.response.jira.issue;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @ApiModel(value = "JIRA 이슈가 속해있는 스프린트")
-public class JiraTodoIssueSprintResponse {
+public class JiraIssueSprintResponse {
     @ApiModelProperty(value = "스프린트 id")
     private Long id;
 
@@ -23,7 +23,7 @@ public class JiraTodoIssueSprintResponse {
     private String goal;
 
     @Builder
-    public JiraTodoIssueSprintResponse(Long id, String name, String state, String goal) {
+    public JiraIssueSprintResponse(Long id, String name, String state, String goal) {
         this.id = id;
         this.name = name;
         this.state = state;

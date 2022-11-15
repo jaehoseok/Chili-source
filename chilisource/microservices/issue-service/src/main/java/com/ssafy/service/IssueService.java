@@ -9,8 +9,8 @@ import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,7 +62,7 @@ public interface IssueService {
     void deleteAll(User user, Long projectId);
 
     // 아직 done 하지 않은 이슈들 조회
-    JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception;
+    JiraIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception;
 
     // 프로젝트 목록 조회
     List<JiraProjectResponse> getProjectList(User user, List<String> auths);
@@ -71,7 +71,7 @@ public interface IssueService {
     JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId);
 
     // jira의 이슈 단일 조회
-    JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey);
+    JiraIssueResponse getIssue(User user, List<String> auths, String issueKey);
 
     void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request);
 

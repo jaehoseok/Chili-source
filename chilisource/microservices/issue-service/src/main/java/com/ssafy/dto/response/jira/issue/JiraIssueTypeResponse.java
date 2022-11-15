@@ -1,4 +1,4 @@
-package com.ssafy.dto.response.jira.todo;
+package com.ssafy.dto.response.jira.issue;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @ApiModel(value = "이슈 타입")
-public class JiraTodoIssueTypeResponse {
+public class JiraIssueTypeResponse {
     @ApiModelProperty(value = "이슈 타입 id")
     private String id;
 
@@ -17,7 +17,7 @@ public class JiraTodoIssueTypeResponse {
     private String name;
 
     @Builder
-    public JiraTodoIssueTypeResponse(String id, String name) {
+    public JiraIssueTypeResponse(String id, String name) {
         this.id = id;
         this.name = name;
     }

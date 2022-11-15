@@ -1,4 +1,4 @@
-package com.ssafy.dto.response.jira.todo;
+package com.ssafy.dto.response.jira.issue;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,10 +16,10 @@ public class JiraSearchIssueListResponse {
     private Integer total;
 
     @ApiModelProperty(value = "이슈 리스트를 가지고 있는 객체")
-    private List<JiraTodoIssueResponse> issues;
+    private List<JiraIssueResponse> issues;
 
     @Builder
-    public JiraSearchIssueListResponse(Integer total, List<JiraTodoIssueResponse> issues) {
+    public JiraSearchIssueListResponse(Integer total, List<JiraIssueResponse> issues) {
         this.total = total;
         this.issues = issues;
     }

@@ -14,9 +14,9 @@ import com.ssafy.dto.response.jira.sprint.JiraProjectBoardListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintResponse;
-import com.ssafy.dto.response.jira.todo.JiraSearchIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueListResponse;
-import com.ssafy.dto.response.jira.todo.JiraTodoIssueResponse;
+import com.ssafy.dto.response.jira.issue.JiraSearchIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 import com.ssafy.entity.IssueTemplate;
 import com.ssafy.entity.IssueType;
 import com.ssafy.entity.MiddleBucket;
@@ -385,7 +385,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public JiraTodoIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
+    public JiraIssueListResponse getTodoIssues(User user, List<String> auths, Long projectId) throws Exception {
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
             throw new NotFoundException(PROJECT_NOT_FOUND);
@@ -405,7 +405,7 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public JiraTodoIssueResponse getIssue(User user, List<String> auths, String issueKey) {
+    public JiraIssueResponse getIssue(User user, List<String> auths, String issueKey) {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 

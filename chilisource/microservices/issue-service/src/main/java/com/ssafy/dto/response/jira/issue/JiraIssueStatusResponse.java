@@ -1,4 +1,4 @@
-package com.ssafy.dto.response.jira.todo;
+package com.ssafy.dto.response.jira.issue;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class JiraTodoIssueStatusResponse {
+public class JiraIssueStatusResponse {
     @ApiModelProperty(value = "이슈 처리 상태 이름", notes = "'해야 할 일/진행 중/완료됨'의 형태로 나타납니다.")
     private String name;
 
@@ -15,7 +15,7 @@ public class JiraTodoIssueStatusResponse {
     private String id;
 
     @Builder
-    public JiraTodoIssueStatusResponse(String name, String id) {
+    public JiraIssueStatusResponse(String name, String id) {
         this.name = name;
         this.id = id;
     }
