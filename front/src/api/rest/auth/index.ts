@@ -155,7 +155,7 @@ export default {
    *
    * @author bell
    */
-  postLinkageToken: async (email: string, tokenCodeId: string, value: string) => {
+  postLinkageToken: async (tokenCodeId: string, value: string, email?: string) => {
     await authAxios.post('/tokens', {
       email,
       tokenCodeId,

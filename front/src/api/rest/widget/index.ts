@@ -102,4 +102,29 @@ export default {
         });
     });
   },
+
+  getGitlabRepositories: (tokenCodeId: string) => {
+    interface returnType {
+      id: number;
+      description: string;
+      name: string;
+      name_with_namespace: string;
+      path: string;
+      path_with_namespace: string;
+      default_branch: string;
+      ssh_rul_to_repo: string | null;
+      http_url_to_repo: string;
+      web_url: string;
+    }
+    return new Promise<returnType[]>((resolve, reject) => {
+      widgetAxios
+        .get(`/git/repositories`, { params: { tokenCodeId } })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };

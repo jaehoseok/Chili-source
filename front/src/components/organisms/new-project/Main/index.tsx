@@ -44,10 +44,24 @@ import Notification from 'components/atoms/Notification';
 import { usePostCreateProjectHandler } from 'hooks/project';
 import { useNavigate } from 'react-router-dom';
 import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetGitlabRepositories } from 'hooks/widget';
 
 interface jiraProjectType {
   key: string;
   name: string;
+}
+
+interface gitLabRepositoryType {
+  id: number;
+  description: string;
+  name: string;
+  name_with_namespace: string;
+  path: string;
+  path_with_namespace: string;
+  default_branch: string;
+  ssh_rul_to_repo: string | null;
+  http_url_to_repo: string;
+  web_url: string;
 }
 
 /**
@@ -77,17 +91,18 @@ const index = () => {
 
   // 유저가 프로젝트를 바꿀 때 마다 Option값 저장
   const [getJiraProject, setJiraProject] = useState('');
+  const [getGitLabRepository, setGitLabRepository] = useState('');
 
   const navigate = useNavigate();
 
   // 토큰 연동시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
   const { jiraToken } = useRecoilValue(linkageTokenState);
   const { jiraEmail } = useRecoilValue(linkageTokenState);
-  // const { gitLabToken } = useRecoilValue(linkageTokenState);
+  const { gitLabToken } = useRecoilValue(linkageTokenState);
 
   const jiraSetRecoilState = useSetRecoilState(linkageTokenState);
   const jiraEmailSetRecoilState = useSetRecoilState(linkageTokenState);
-  const gitSetRecoilState = useSetRecoilState(linkageTokenState);
+  const gitLabSetRecoilState = useSetRecoilState(linkageTokenState);
 
   // 프로젝트 생성 시 필요한 데이터를 업데이트 및 불러오기 위한 리코일 작업
   const { projectName } = useRecoilValue(createProjectState);
@@ -119,15 +134,16 @@ const index = () => {
 
   // query 처리
   // 토큰 연동
-  const linkageJiraToken = usePostLinkageTokenHandler();
+  const linkageToken = usePostLinkageTokenHandler();
   const getUserInfo = useGetUserInfoHandler();
   // 지라 프로젝트 모두 가져오기
   const jiraProjectList = useGetJiraProjectList();
+  // 깃 리포지토리 모두 가져오기
+  const getGitLabRepositories = useGetGitlabRepositories('ssafygitlab');
+
   // 프로젝트 생성
   const createProjectData = usePostCreateProjectHandler();
   const connectTokenToProject = usePostConnectTokenToProject();
-
-  // 이미 유저가 토큰 값을 가지고 있다면
 
   // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
   const filteringJiraProjectHandler = (datas: jiraProjectType[]) => {
@@ -136,6 +152,12 @@ const index = () => {
     return temp;
   };
 
+  // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
+  const filteringGitRepositoryHandler = (datas: gitLabRepositoryType[]) => {
+    const temp: string[] = [];
+    for (const data of datas) temp.push(`${data.id}-${data.name}`);
+    return temp;
+  };
   // 생성 버튼 클릭시 프로젝트 생성 (POST) 요청 실행
   const creaetProjectHandler = () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -145,20 +167,24 @@ const index = () => {
 
   // 지라 연동이 성공한 경우에만 jiraProject를 가져와라
   useEffect(() => {
-    if (linkageJiraToken.isSuccess || (isJiraToken && jiraTokenValue)) {
+    if (linkageToken.isSuccess || (isJiraToken && jiraTokenValue)) {
       jiraProjectList.refetch();
     }
+    if (linkageToken.isSuccess || (isGitLabToken && gitLabTokenValue)) {
+      getGitLabRepositories.refetch();
+    }
+
     if (createProjectData.isSuccess) {
       setProjectId(createProjectData.data);
     }
     if (jiraProjectList.data) {
       setJiraProject(jiraProjectList.data[0].name);
     }
-    if (connectTokenToProject.isSuccess) {
-      navigate('/projects');
+    if (getGitLabRepositories.data) {
+      setGitLabRepository(getGitLabRepositories.data[0].name);
     }
   }, [
-    linkageJiraToken.isSuccess,
+    linkageToken.isSuccess,
     isJiraToken,
     jiraTokenValue,
     createProjectData.isSuccess,
@@ -172,11 +198,23 @@ const index = () => {
       jiraProjectList.refetch();
     } else {
       if (getUserInfo.data) {
-        console.log(jiraEmail, jiraToken);
-        linkageJiraToken.mutate({
+        linkageToken.mutate({
           email: jiraEmail,
           tokenCodeId: 'JIRA',
           value: jiraToken,
+        });
+      }
+    }
+  };
+
+  const linkageGitLabTokenHandler = () => {
+    if (isGitLabToken) {
+      getGitLabRepositories.refetch();
+    } else {
+      if (getUserInfo.data) {
+        linkageToken.mutate({
+          tokenCodeId: 'SSAFYGITLAB',
+          value: gitLabToken,
         });
       }
     }
@@ -188,6 +226,13 @@ const index = () => {
       connectTokenToProject.mutate({
         detail: getJiraProject,
         name: 'JIRA',
+        projectId: getProjectId,
+      });
+    }
+    if (getProjectId && gitLabToken) {
+      connectTokenToProject.mutate({
+        detail: getGitLabRepository.split('-')[0],
+        name: 'SSAFYGITLAB',
         projectId: getProjectId,
       });
     }
@@ -367,18 +412,9 @@ const index = () => {
                 labelSize="1.3rem"
                 labelMarginBottom="20px"
                 isRow={false}
-                useSetRecoilState={gitSetRecoilState}
+                useSetRecoilState={gitLabSetRecoilState}
                 recoilParam={'gitLabToken'}
                 inputValue={isGitLabToken ? gitLabTokenValue : ''}
-              ></InputBox>
-              <InputBox
-                labelName="Git 이메일"
-                labelSize="1.3rem"
-                labelMarginBottom="20px"
-                isRow={false}
-                containerWidth="100%"
-                useSetRecoilState={jiraEmailSetRecoilState}
-                recoilParam={'gitLabEmail'}
               ></InputBox>
               <StyledMarginY>
                 <StyledFlexRowEnd>
@@ -387,17 +423,50 @@ const index = () => {
                     borderColor={theme.button.gray}
                     backgroundColor={theme.button.green}
                     isHover={true}
+                    clickHandler={linkageGitLabTokenHandler}
                   >
                     입력
                   </Button>
                 </StyledFlexRowEnd>
               </StyledMarginY>
-              {/* <Select width="100%">
-                <Option messages={['프로젝트 1', '프로젝트 2', '프로젝트 3']}></Option>
-              </Select> */}
+              {getGitLabRepositories.data && (
+                <>
+                  <StyledMarginY>
+                    <Select width="100%" setState={setGitLabRepository}>
+                      <Option
+                        messages={filteringGitRepositoryHandler(getGitLabRepositories.data)}
+                      ></Option>
+                    </Select>
+                  </StyledMarginY>
+                  <StyledFlexRowEnd>
+                    <Button
+                      width="150px"
+                      borderColor={theme.button.gray}
+                      backgroundColor={theme.button.green}
+                      isHover={true}
+                      clickHandler={connectTokenToProjectHandler}
+                    >
+                      프로젝트와 연동
+                    </Button>
+                  </StyledFlexRowEnd>
+                </>
+              )}
             </StyledMarginY>
           </StyledFlexAround>
         </Sheet>
+        <StyledMarginY>
+          <StyledFlexRowEnd>
+            <Button
+              width="250px"
+              borderColor={theme.button.gray}
+              backgroundColor={theme.button.green}
+              isHover={true}
+              clickHandler={() => navigate('/projects', { state: 'created' })}
+            >
+              프로젝트 선택 페이지로 이동
+            </Button>
+          </StyledFlexRowEnd>
+        </StyledMarginY>
       </StyledFlex>
     </StyledContainer>
   );
