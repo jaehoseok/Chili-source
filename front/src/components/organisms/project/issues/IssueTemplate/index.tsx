@@ -273,19 +273,18 @@ const index = (props: any) => {
           />
         </StyledIssueTemplateHeader>
         <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
-
-        <StyledIssueTemplateBody>
-          <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
-          {IssueList}
-          <Button
-            width={'400px'}
-            height={'90px'}
-            borderColor={'#d9d9d9'}
-            clickHandler={addEnableHandler}
-          >
-            +
-          </Button>
-        </StyledIssueTemplateBody>
+        <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
+        <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
+          <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
+        </Sheet>
+        <Button
+          width={'400px'}
+          height={'90px'}
+          borderColor={'#d9d9d9'}
+          clickHandler={addEnableHandler}
+        >
+          +
+        </Button>
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
