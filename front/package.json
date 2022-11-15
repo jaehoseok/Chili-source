@@ -21,6 +21,7 @@
     "react-dom": "^18.2.0",
     "react-google-charts": "^4.0.0",
     "react-icons": "^4.6.0",
+    "react-modal": "^3.16.1",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
     "react-slick": "^0.29.0",
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-modal": "^3.13.1",
     "@types/react-slick": "^0.23.10",
     "@types/shortid": "0.0.29",
     "@types/styled-components": "^5.1.26",

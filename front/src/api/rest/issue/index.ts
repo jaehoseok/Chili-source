@@ -62,9 +62,6 @@ export default {
    * @author dbcs
    */
   getIssueTemplateList: async (projectId: number) => {
-    // interface responseType {
-    //   data: any;
-    // }
     return new Promise<templateType[]>((resolve, reject) => {
       issueAxios
         .get('/', {
@@ -247,6 +244,46 @@ export default {
     return new Promise<responseType>((resolve, reject) => {
       issueAxios
         .get(`/jira/sprint/${projectId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getMiddleBucketList: async (projectId: number) => {
+    interface responseType {
+      middleBucketId: number;
+      name: string;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .get('/middle-buckets', {
+          params: {
+            me: true,
+            projectId: projectId,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  postCreateMiddleBucket: async (name: string, projectId: number) => {
+    interface responseType {
+      data: any;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      const data = {
+        name: name,
+        projectId: projectId,
+      };
+      issueAxios
+        .post('/middle-buckets', data)
         .then(response => {
           resolve(response.data);
         })

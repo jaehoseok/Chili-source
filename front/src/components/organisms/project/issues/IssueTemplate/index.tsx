@@ -20,6 +20,7 @@ import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
 import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
+import { HiPlus } from 'react-icons/hi';
 import issueAxios from 'api/rest/issue';
 import projectAxios from 'api/rest/project';
 import { useGetProject } from 'hooks/project';
@@ -282,8 +283,9 @@ const index = (props: any) => {
           height={'90px'}
           borderColor={'#d9d9d9'}
           clickHandler={addEnableHandler}
+          isHover
         >
-          +
+          <HiPlus size={'1.5rem'} />
         </Button>
       </StyledIssueTemplate>
       <StyledIssueInfo>
