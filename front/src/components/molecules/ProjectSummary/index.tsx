@@ -45,6 +45,16 @@ const index = ({ idx, item, deleteProject }: propsType) => {
 
   const deleteProjectHandler = (projectId: number) => {
     deleteProject.mutate({ projectId });
+
+    // 프로젝트 삭제시 localStorage의 데이터 역시 함께 삭제해주어야 함
+    if (localStorage.getItem('project-tab-list')) {
+      const projectTabList = JSON.parse(localStorage.getItem('project-tab-list') as string);
+      const newTabs = [...projectTabList];
+      localStorage.setItem(
+        'project-tab-list',
+        JSON.stringify(newTabs.filter(tab => tab.id !== projectId)),
+      );
+    }
   };
 
   const linkToDashBoardHandler = (projectId: number) => {
