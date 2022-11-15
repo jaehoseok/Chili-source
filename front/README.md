@@ -590,7 +590,9 @@
 - vitual DOM 의 재 렌더링 특성상 태그 내용이 변하지 않았다고 판단한 경우, 실제로는 width, height 값이 변하였더라도 변화를 반영시키지 않게된다. 따라서 변화, 순서 이동이 잦은 컴포넌트는 크기를 % 로 맞추고 상대적인 크기로 적용시키는 것이 적합하다.
 
 ## 221114
+
 ### 종현
+
 - 캘린더
   > - 캘린더에 간트 데이터 렌더링 완료
   > - 캘린더 리사이즈 이벤트를 통한 간트 startTime, endTime 시간 수정
@@ -621,7 +623,9 @@
   > - 간트 삭제 성공 시 알림 메시지 렌더링
 
 ## 221115
+
 ### 종현
+
 - ProjectSelectPage
   > - gitlab 연결 및 리포지토리를 가져오는 API 연결 빼먹음
   > - 작업 완료
@@ -630,6 +634,7 @@
 - 커스텀 훅
   > - 깃 리포지토리 커스텀 훅 생성 완료
 - API 연결
+
   > - 깃 리포지토리 통신 연결 완료
 - 에러 1: 위젯 클릭시 경로는 이동하나 위젯 탭 활성화가 이루어지지 않는 문제
   > - 경로 이동 전 localStorage 위젯 탭을 최신으로 업데이트 한 후 이동하도록 적용
@@ -648,7 +653,21 @@
   > - 프로젝트 성공적으로 생성 시 input 창 disabled
   > - 프로젝트 깃랩 혹은 지라와 연결시 알림 메시지 나옴
 
+### 준혁
+
+- Router navigation guard 구현
+  > ````typescript
+  > const guardedElement = (el: JSX.Element) => {
+  > console.log('[Auth token]: ', localStorage.getItem('Authorization'));
+  > // Pass
+  > if (localStorage.getItem('Authorization')) return el;
+  > // Guard
+  > return <UserLoginPage></UserLoginPage>;
+  > };```
+  > ````
+
 ### 성현
+
 - API 연결
   > - Epic Link 목록 조회 API 연결
   > - 스프린트 목록 조회 API 연결
@@ -657,4 +676,3 @@
   > - Epic Link
   > - 스프린트
   > - 담당자
-
