@@ -39,22 +39,26 @@ public interface JiraFeignClient {
             @PathVariable("query") String query
     );
 
+    // 프로젝트 리스트 조회
     @GetMapping("/api/3/project/recent")
     List<JiraProjectResponse> getProjectList(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken
     );
 
+    // 프로젝트의 보드 조회
     @GetMapping("/agile/1.0/board")
     JiraProjectBoardListResponse getProjectBoard(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken
     );
 
+    // 프로젝트의 스프린트 조회
     @GetMapping("/agile/1.0/board/{boardId}/sprint")
     JiraSprintListResponse getSprints(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
             @PathVariable(name = "boardId") Long boardId
     );
 
+    // 개별 이슈 조회
     @GetMapping("/api/3/issue/{issueKey}")
     JiraIssueResponse getIssue(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
@@ -68,6 +72,7 @@ public interface JiraFeignClient {
             @PathVariable("query") String query
     );
 
+    // 이슈 수정
     @PutMapping("/api/3/issue/{issueKey}")
     Response updateIssue(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
@@ -75,6 +80,7 @@ public interface JiraFeignClient {
             @RequestBody Map<String, Object> request
     );
 
+    // 이슈 상태 수정
     @PostMapping("/api/3/issue/{issueKey}/transitions")
     Response updateIssueStatus(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String jiraToken,
