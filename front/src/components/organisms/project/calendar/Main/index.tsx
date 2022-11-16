@@ -9,6 +9,8 @@ import {
   useUpdateGantt,
 } from 'hooks/project';
 
+import { useGetIssuesNotDone } from 'hooks/issue';
+
 import { StyledCalendar } from './style';
 
 import FullCalendar from '@fullcalendar/react';
@@ -16,6 +18,9 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import Notification from 'components/atoms/Notification';
+
+import CalendarGantt from 'components/molecules/CalendarGantt';
+import { useUpdateIssueByIssueKey } from 'hooks/issue';
 
 interface issueType {
   ganttChartId: number;
@@ -40,12 +45,19 @@ const index = () => {
 
   const projectId = +location.pathname.split('/')[2];
 
+  // react-query
   const getGanttChart = useGetGanttChart(1, projectId);
   const postCreateGantt = usePostCreateGantt();
   const updateGantt = useUpdateGantt();
   const deleteGantt = useDeleteGantt();
-
   const getTeamForProject = useGetTeamForProject(projectId);
+  const updateIssueByIssueKey = useUpdateIssueByIssueKey();
+  const getIssuesNotDone = useGetIssuesNotDone(projectId);
+
+  // pop-up용 state
+  // const [open, setOpen] = useState(false);
+  // const handleOpen = () => setOpen(true);
+  // const handleClose = () => setOpen(false);
 
   const matchColorHandler = (userId: string) => {
     if (getTeamForProject.data) {
@@ -85,8 +97,17 @@ const index = () => {
     }
     if (deleteGantt.isSuccess) {
       getGanttChart.refetch();
+      getIssuesNotDone.refetch();
     }
-  }, [postCreateGantt.isSuccess, updateGantt.isSuccess, deleteGantt.isSuccess]);
+    if (updateIssueByIssueKey.isSuccess) {
+      getGanttChart.refetch();
+    }
+  }, [
+    postCreateGantt.isSuccess,
+    updateGantt.isSuccess,
+    deleteGantt.isSuccess,
+    updateIssueByIssueKey.isSuccess,
+  ]);
 
   return (
     <StyledCalendar>
@@ -119,8 +140,8 @@ const index = () => {
         droppable={true}
         editable={true}
         events={renderingDBIssuesHandler()}
+        // eventClick={handleOpen}
         eventResize={({ event, el }) => {
-          // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
@@ -131,7 +152,7 @@ const index = () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const endDateFormat = new Date(event.end).toISOString() as string;
-          console.log(startDateFormat, endDateFormat);
+
           updateGantt.mutate({
             id: props.ganttChartId,
             issueCode: props.issueCode,
@@ -156,7 +177,6 @@ const index = () => {
           event.remove();
         }}
         eventDrop={({ event, el }) => {
-          // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
@@ -179,17 +199,15 @@ const index = () => {
         }}
         eventContent={({ event }) => {
           return (
-            <div
-              style={{
-                padding: '2px 4px',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-              }}
-              onDoubleClick={() => deleteGantt.mutate(event._def.extendedProps.ganttChartId)}
-            >
-              {event.title}
-            </div>
+            <CalendarGantt
+              issueSummary={event.title}
+              issueCode={event._def.extendedProps.issueCode}
+              ganttChartId={event._def.extendedProps.ganttChartId}
+              deleteGantt={deleteGantt}
+              // updateIssueByIssueKey={updateIssueByIssueKey}
+
+              projectId={projectId}
+            ></CalendarGantt>
           );
         }}
         eventMouseEnter={e => {

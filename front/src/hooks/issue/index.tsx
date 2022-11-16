@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { issue } from 'api/rest';
+import { issue, project } from 'api/rest';
 
 import { AxiosError } from 'axios';
 
@@ -25,4 +25,35 @@ export const useGetJiraProjectList = () => {
  */
 export const useGetIssuesNotDone = (projectId: number) => {
   return useQuery(['get-jira-issues-not-done'], () => issue.getIssuesNotDone(projectId));
+};
+
+/**
+ * @description
+ * issueKey를 통해 지라 이슈의 상세정보를 가져오는 API 요청 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useGetIssueByIssueKey = (issuekey: string) => {
+  return useQuery(['get-jira-issue-by-issue-key', issuekey], () =>
+    issue.getIssueByIssueKey(issuekey),
+  );
+};
+
+/**
+ * @description
+ * issueKey를 통해 해당 Jira issue의 스토리 포인트와 summary를 업데이트 API 요청 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useUpdateIssueByIssueKey = () => {
+  interface requestBodyType {
+    issueKey: string;
+    projectId: number;
+    statusId: number;
+    storyPoints: number;
+    summary: string;
+  }
+  return useMutation(({ issueKey, projectId, statusId, storyPoints, summary }: requestBodyType) =>
+    issue.updateIssueByIssueKey(issueKey, projectId, statusId, storyPoints, summary),
+  );
 };

@@ -19,7 +19,7 @@ export const StyledTap = styled.span`
 
 export const StyledFlexMaxWidth = styled.div`
   ${tw`flex items-center justify-between w-full`}
-  max-width: 1000px;
+  max-width: 1200px;
 `;
 
 export const StyledFlexEvenly = styled.div`

@@ -173,8 +173,9 @@ export default {
   /**
    * @description
    * 지라 이슈 가운데 아직 done 하지 않은 이슈 모두 가져오기
+   *
+   * @author bell
    */
-
   getIssuesNotDone: async (projectId: number) => {
     interface responseType {
       fields: {
@@ -254,5 +255,102 @@ export default {
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * issueKey를 통해 해당 issue 데이터 가져오기
+   *
+   * @author bell
+   */
+  getIssueByIssueKey: async (issueKey: string) => {
+    interface responseType {
+      fields: {
+        assignee: {
+          accountId: string;
+          displayName: string;
+          emailAddress: string;
+        };
+        customfield_10020: [
+          {
+            goal: string;
+            id: number;
+            name: string;
+            state: string;
+          },
+        ];
+        customfield_10031: number;
+        issuetype: {
+          id: string;
+          name: string;
+        };
+        parent: {
+          fields: {
+            summary: string;
+          };
+          id: string;
+          key: string;
+        };
+        priority: {
+          id: string;
+          name: string;
+        };
+        project: {
+          id: string;
+          key: string;
+          name: string;
+        };
+        reporter: {
+          accountId: string;
+          displayName: string;
+          emailAddress: string;
+        };
+        status: {
+          id: string;
+          name: string;
+        };
+        summary: {
+          summary: string;
+        };
+      };
+      id: string;
+      key: string;
+    }
+
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .get(`/jira/issues/${issueKey}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * issueKey를 통해 해당 Jira issue의 스토리 포인트와 summary를 업데이트 하는 API
+   *
+   * @author bell
+   */
+  updateIssueByIssueKey: async (
+    issueKey: string,
+    projectId: number,
+    statusId: number,
+    storyPoints: number,
+    summary: string,
+  ) => {
+    try {
+      await issueAxios.put(`/jira/issues/${issueKey}`, {
+        projectId,
+        statusId,
+        storyPoints,
+        summary,
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 };
