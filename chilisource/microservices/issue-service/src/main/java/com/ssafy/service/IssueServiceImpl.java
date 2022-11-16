@@ -366,7 +366,6 @@ public class IssueServiceImpl implements IssueService {
     public JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId) {
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [getSprints] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
