@@ -43,7 +43,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   const getTeamForProject = useGetTeamForProject(item.id);
   const getUserInfo = useGetUserInfoHandler();
 
-  // 현재 내가 해당 팀의 마스터인지 확인하는 함수
 
   const deleteProjectHandler = (projectId: number) => {
     deleteProject.mutate({ projectId });
