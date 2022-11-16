@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
 
 import { useGetTokens } from 'hooks/auth';
 import { useGetUserInfoHandler } from 'hooks/user';
 
-import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './style';
+import { StyledContainer, StyledTap, StyledFlexMaxWidth } from './style';
 
 import logo from 'assets/logo/logo.png';
 import Text from 'components/atoms/Text';
@@ -25,7 +24,6 @@ const index = () => {
 
   // 쿼리 데이터 가져오기
   const getUserInfo = useGetUserInfoHandler();
-  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -39,16 +37,6 @@ const index = () => {
     await auth.login('google');
   };
 
-  const clickTestHandler = async () => {
-    await auth.getTokens();
-  };
-
-  const clickLogoutHandler = async () => {
-    await auth.logout();
-    // 로그아웃 시 저장했던 쿼리데이터 삭제
-    await queryClient.invalidateQueries(['userInfo']);
-  };
-
   const clickToProjectSelectHandler = () => {
     navigate('/projects');
   };
@@ -56,7 +44,7 @@ const index = () => {
   return (
     <>
       <StyledContainer>
-        <StyledFlexWrapper>
+        <StyledFlexMaxWidth>
           <StyledTap>
             <img
               src={logo}
@@ -65,37 +53,29 @@ const index = () => {
               onClick={() => navigate('/')}
             ></img>
           </StyledTap>
-          <StyledText>
-            <Text
-              isFill={false}
-              message="+"
-              fontSize="25px"
-              color="#a9a9a9"
-              fontWeight="100"
-              clickHandler={clickToProjectSelectHandler}
-            ></Text>
-          </StyledText>
-        </StyledFlexWrapper>
-        {isLogin && getUserInfo.data ? (
-          <StyledFlexWrapper>
+
+          <Text
+            isFill={false}
+            message="프로젝트"
+            fontSize="1rem"
+            fontWeight="300"
+            color="#a9a9a9"
+            clickHandler={clickToProjectSelectHandler}
+          ></Text>
+
+          {isLogin && getUserInfo.data ? (
             <Circle
               url={getUserInfo.data.image}
               isImage={true}
               height={'40px'}
               clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
             ></Circle>
-            <Button clickHandler={clickTestHandler} borderColor="red">
-              테스트버튼
+          ) : (
+            <Button clickHandler={clickLoginHandler} borderColor="red">
+              로그인버튼
             </Button>
-            <Button clickHandler={clickLogoutHandler} borderColor="red">
-              로그아웃버튼
-            </Button>
-          </StyledFlexWrapper>
-        ) : (
-          <Button clickHandler={clickLoginHandler} borderColor="red">
-            로그인버튼
-          </Button>
-        )}
+          )}
+        </StyledFlexMaxWidth>
       </StyledContainer>
     </>
   );

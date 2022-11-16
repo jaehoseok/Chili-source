@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
-  ${tw`flex h-full justify-between items-center px-2 py-3`}
+  ${tw`flex h-full justify-center items-center px-2 py-3`}
   border-bottom: 2px solid ${({ theme }) => `${theme.color.primary}`};
 `;
 
@@ -12,14 +12,7 @@ export const StyledTap = styled.span`
   background-color: ${({ theme }) => `${theme.color.primary}`};
 `;
 
-export const StyledFlexWrapper = styled.div`
-  ${tw`flex items-center`}
-`;
-
-export const StyledText = styled.div`
-  ${tw`ml-3 cursor-pointer`}
-  &:hover {
-    color: ${({ theme }) => `${theme.color.primary}`};
-    transition: all 1s;
-  }
+export const StyledFlexMaxWidth = styled.div`
+  ${tw`flex items-center justify-around w-full`}
+  max-width: 1200px;
 `;
