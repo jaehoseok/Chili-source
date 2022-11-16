@@ -562,7 +562,7 @@ public class IssueServiceImpl implements IssueService {
                 .build();
 
         /*
-        리퀘스트dto -> string 형식으로 출력
+        // request DTO를 string 형식으로 출력해서 확인해보기
         ObjectMapper om = new ObjectMapper();
         String requestJson = om.writeValueAsString(bulk);
 
