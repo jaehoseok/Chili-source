@@ -43,7 +43,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   const getTeamForProject = useGetTeamForProject(item.id);
   const getUserInfo = useGetUserInfoHandler();
 
-
   const deleteProjectHandler = (projectId: number) => {
     deleteProject.mutate({ projectId });
 
@@ -60,10 +59,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
 
   const linkToDashBoardHandler = (projectId: number) => {
     navigate(`/project/${projectId}/dashboard`);
-  };
-
-  const linkToSettingHandler = (projectId: number) => {
-    navigate(`/project/${projectId}/setting`);
   };
 
   // 가져온 팀원 목록에서 MASTER를 찾아, 마스터의 이미지를 반환
