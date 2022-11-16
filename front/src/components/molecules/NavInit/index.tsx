@@ -80,7 +80,7 @@ const index = () => {
               fontSize="1rem"
               fontWeight="300"
               color="#a9a9a9"
-              clickHandler={() => navigate(`/setting/${getUserInfo.data && getUserInfo.data.id}`)}
+              clickHandler={() => navigate(`/new-project`)}
             ></Text>
             <Text
               isFill={false}
