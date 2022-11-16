@@ -20,6 +20,7 @@ const color = {
 const button = {
   green: '#34A853',
   darkgreen: '#00875A',
+  red: '#E5493A',
   lightgray: '#F8F8F8',
   gray: '#D9D9D9',
   white: '#FFFFFF',
