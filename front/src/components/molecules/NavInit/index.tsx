@@ -111,15 +111,6 @@ const index = () => {
                 clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
               ></Circle>
               <StyledPosition>
-                {/* <StyledCursor>
-                  <Circle
-                    height="40px"
-                    clickHandler={clickLogoutHandler}
-                    backgroundColor={'#ededed'}
-                  >
-                    <BiPowerOff color={theme.color.bug} fontSize={'1.5rem'}></BiPowerOff>
-                  </Circle>
-                </StyledCursor> */}
                 <StyledPaddingL>
                   <FillButton
                     width="80px"
@@ -127,6 +118,7 @@ const index = () => {
                     height={'30px'}
                     isHover={true}
                     hoverColor={theme.button.red}
+                    clickHandler={clickLogoutHandler}
                   >
                     로그아웃
                   </FillButton>
