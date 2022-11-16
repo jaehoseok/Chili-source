@@ -36,7 +36,7 @@ public class IssueController {
     @ApiOperation(value = "이슈 템플릿 리스트 조회")
     public ResponseEntity<List<IssueTemplateResponse>> getIssueTemplates(
             @LoginUser User user,
-            @ApiParam(value = "특정 프로젝트 내의 이슈 템플릿을 조회하고 싶다면, 프로젝트 id", required = false)
+            @ApiParam(value = "특정 프로젝트 내의 이슈 템플릿을 조회하고 싶다면, 프로젝트 id")
             @RequestParam(required = false) Long projectId,
             @ApiParam(value = "내 이슈 템플릿만 조회하고 싶다면 true를, 프로젝트 전체 이슈 템플릿을 조회하고 싶다면 false를 부여합니다", example = "true/false")
             @RequestParam Boolean me,
@@ -98,7 +98,7 @@ public class IssueController {
     @ApiOperation(value = "미들 버킷 리스트 조회")
     public ResponseEntity<List<MiddleBucketResponse>> getMiddleBuckets(
             @LoginUser User user,
-            @ApiParam(value = "특정 프로젝트 내의 미들버킷을 조회하고 싶다면, 프로젝트 id", required = false)
+            @ApiParam(value = "특정 프로젝트 내의 미들버킷을 조회하고 싶다면, 프로젝트 id")
             @RequestParam(required = false) Long projectId,
             @ApiParam(value = "내 미들버킷만 조회하고 싶다면 true를, 프로젝트 전체 이슈 템플릿을 조회하고 싶다면 false를 부여합니다", example = "true/false")
             @RequestParam Boolean me,
@@ -225,7 +225,8 @@ public class IssueController {
             @ApiParam(value = "삭제하려는 프로젝트 id") @PathVariable("projectId") Long projectId
     ) {
         issueService.deleteAll(user, projectId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .build();
     }
 
     // =========================================== JIRA API ==================================================
@@ -336,7 +337,8 @@ public class IssueController {
                 projectId,
                 middleBucketId,
                 headers.get(HttpHeaders.AUTHORIZATION));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .build();
     }
 
     // 지라 위젯 - 스프린트 목록 및 선택된 스프린트의 달성도 조회
@@ -348,6 +350,7 @@ public class IssueController {
             @ApiParam(value = "조회하고싶은 스프린트 id") @RequestParam(required = false) Long sprintId
     ) {
         JiraSprintProgressResponse response = issueService.getSprintProgress(user, headers.get(HttpHeaders.AUTHORIZATION), projectId, sprintId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .body(response);
     }
 }

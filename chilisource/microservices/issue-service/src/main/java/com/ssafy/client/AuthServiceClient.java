@@ -11,6 +11,7 @@ import java.util.List;
 
 @FeignClient(name = "auth-service", url = "https://k7b2071.p.ssafy.io/auth-service")
 public interface AuthServiceClient {
+    // 토큰 정보 조회
     @GetMapping("/tokens/{tokenCodeId}")
     TokenResponse getToken(
             @RequestHeader(HttpHeaders.AUTHORIZATION) List<String> auths,

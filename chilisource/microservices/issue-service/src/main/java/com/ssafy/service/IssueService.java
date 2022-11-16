@@ -73,7 +73,9 @@ public interface IssueService {
     // jira의 이슈 단일 조회
     JiraIssueResponse getIssue(User user, List<String> auths, String issueKey);
 
+    // jira 이슈 상태 수정
     void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request);
 
+    // 해당 스프린트의 본인 달성도 조회
     JiraSprintProgressResponse getSprintProgress(User user, List<String> auths, Long projectId, Long sprintId);
 }

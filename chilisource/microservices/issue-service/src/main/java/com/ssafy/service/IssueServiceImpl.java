@@ -364,21 +364,17 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId) {
-        // 프로젝트를 가져온다
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
-            log.error("[Issue] [getSprints] PROJECT_NOT_FOUND");
             throw new NotFoundException(PROJECT_NOT_FOUND);
         }
 
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
-        // 프로젝트의 보드 id를 가져온다
         JiraProjectBoardListResponse projectBoardList = jiraFeignClient.getProjectBoard(jiraBase64);
         Long boardId = projectBoardList.getValues().get(0).getId();
 
-        // 보드 id로 스프린트 목록을 가져온다
         JiraSprintListResponse sprints = jiraFeignClient.getSprints(jiraBase64, boardId);
 
         return sprints;
@@ -445,7 +441,6 @@ public class IssueServiceImpl implements IssueService {
                             .summary(request.getSummary())
                             .build());
         }
-
     }
 
     @Transactional
@@ -472,7 +467,6 @@ public class IssueServiceImpl implements IssueService {
 
             JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
                     .key(jiraProjectCode)
-//                    .id(jiraProjectId)
                     .build();
 
             // 이슈 타입 : 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
@@ -550,7 +544,7 @@ public class IssueServiceImpl implements IssueService {
                     .priority(priority)
                     .project(project)
                     .customfield_10031(issue.getStoryPoints()) // 스토리포인트
-                    .customfield_10020(issue.getSprint())
+                    .customfield_10020(issue.getSprint()) // 스프린트
                     .build();
 
             JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()
@@ -564,7 +558,7 @@ public class IssueServiceImpl implements IssueService {
                 .build();
 
         /*
-        리퀘스트dto -> string 형식으로 출력
+        // request DTO를 string 형식으로 출력해서 확인해보기
         ObjectMapper om = new ObjectMapper();
         String requestJson = om.writeValueAsString(bulk);
 
@@ -573,7 +567,7 @@ public class IssueServiceImpl implements IssueService {
         System.out.println("===============");
         */
 
-        // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
+        // jira의 Bulk Create Issue API 요청한 후 response 확인
         Response response1 = jiraFeignClient.addIssuesToJira(jiraBase64, bulk);
         if (HttpStatus.Series.valueOf(response1.status()) != HttpStatus.Series.SUCCESSFUL) {
             String errorDetail;
