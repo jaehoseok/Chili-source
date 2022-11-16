@@ -36,7 +36,7 @@ public class IssueController {
     @ApiOperation(value = "이슈 템플릿 리스트 조회")
     public ResponseEntity<List<IssueTemplateResponse>> getIssueTemplates(
             @LoginUser User user,
-            @ApiParam(value = "특정 프로젝트 내의 이슈 템플릿을 조회하고 싶다면, 프로젝트 id", required = false)
+            @ApiParam(value = "특정 프로젝트 내의 이슈 템플릿을 조회하고 싶다면, 프로젝트 id")
             @RequestParam(required = false) Long projectId,
             @ApiParam(value = "내 이슈 템플릿만 조회하고 싶다면 true를, 프로젝트 전체 이슈 템플릿을 조회하고 싶다면 false를 부여합니다", example = "true/false")
             @RequestParam Boolean me,
@@ -98,7 +98,7 @@ public class IssueController {
     @ApiOperation(value = "미들 버킷 리스트 조회")
     public ResponseEntity<List<MiddleBucketResponse>> getMiddleBuckets(
             @LoginUser User user,
-            @ApiParam(value = "특정 프로젝트 내의 미들버킷을 조회하고 싶다면, 프로젝트 id", required = false)
+            @ApiParam(value = "특정 프로젝트 내의 미들버킷을 조회하고 싶다면, 프로젝트 id")
             @RequestParam(required = false) Long projectId,
             @ApiParam(value = "내 미들버킷만 조회하고 싶다면 true를, 프로젝트 전체 이슈 템플릿을 조회하고 싶다면 false를 부여합니다", example = "true/false")
             @RequestParam Boolean me,
