@@ -81,5 +81,4 @@ public interface JiraFeignClient {
             @PathVariable("issueKey") String issueKey,
             @RequestBody Map<String, Object> request
             );
-
 }
