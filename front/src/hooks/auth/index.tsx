@@ -41,3 +41,13 @@ export const useGetTokens = () => {
     staleTime: Infinity,
   });
 };
+
+/**
+ * @description
+ * 연동한 토큰을 제거하는 API 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useDeleteLinkageToken = () => {
+  return useMutation((tokenCodeId: string) => auth.deleteLinkageToken(tokenCodeId));
+};

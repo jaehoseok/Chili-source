@@ -24,8 +24,9 @@ interface propsType extends styledType {
  * @param {string?}                    fontSize         - 폰트 크기 변경, default 시 Text - 1rem, Fill - 0.85rem
  * @param {string?}                    backgroundColor  - 배경색 변경,  default 시 Text - 반영안됨,  Fill - #d6d6d6
  * @param {number}                     width            - Fill만 적용, Fill의 전체적인 크기를 자동 설정 (border-radius, padding)\
- * @param {MouseEventHandler<T>?}      clickEvent       - 클릭이벤트 반영
- * @param {display}                    display          - display 설정 변경
+ * @param {MouseEventHandler<T>?}      clickEHandler    - 클릭이벤트 반영
+ * @param {string}                     display          - display 설정 변경
+ * @param {boolean}                    isHover          - hover 기능 쓸지 안쓸지 default시 false
  *
  * @author bell
  */
@@ -40,6 +41,7 @@ const index = ({
   width,
   display,
   clickHandler,
+  isHover,
 }: propsType) => {
   return !isFill ? (
     <StyledText
@@ -49,6 +51,7 @@ const index = ({
       fontSize={fontSize}
       display={display}
       onClick={clickHandler}
+      isHover={isHover}
     >
       {message}
     </StyledText>
