@@ -548,7 +548,7 @@ public class IssueServiceImpl implements IssueService {
                     .priority(priority)
                     .project(project)
                     .customfield_10031(issue.getStoryPoints()) // 스토리포인트
-                    .customfield_10020(issue.getSprint())
+                    .customfield_10020(issue.getSprint()) // 스프린트
                     .build();
 
             JiraIssueCreateRequest build = JiraIssueCreateRequest.builder()
@@ -571,7 +571,7 @@ public class IssueServiceImpl implements IssueService {
         System.out.println("===============");
         */
 
-        // 그걸 다시 list 형식으로 dto를 만든다 그걸 지라에 보낸다
+        // jira의 Bulk Create Issue API 요청한 후 response 확인
         Response response1 = jiraFeignClient.addIssuesToJira(jiraBase64, bulk);
         if (HttpStatus.Series.valueOf(response1.status()) != HttpStatus.Series.SUCCESSFUL) {
             String errorDetail;
