@@ -445,7 +445,6 @@ public class IssueServiceImpl implements IssueService {
                             .summary(request.getSummary())
                             .build());
         }
-
     }
 
     @Transactional
@@ -472,7 +471,6 @@ public class IssueServiceImpl implements IssueService {
 
             JiraIssueProjectCreateRequest project = JiraIssueProjectCreateRequest.builder()
                     .key(jiraProjectCode)
-//                    .id(jiraProjectId)
                     .build();
 
             // 이슈 타입 : 에픽은 지라에서 직접 생성하고 여기서는 스토리, 태스크, 버그만 생성 가능
