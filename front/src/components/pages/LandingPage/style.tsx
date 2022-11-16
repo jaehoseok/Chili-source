@@ -27,8 +27,7 @@ export const StyledBody = styled.div`
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   background-blend-mode: overlay;
-  box-shadow: inset 4px 4px 10px -1px rgba(0, 0, 0, 0.25),
-    inset -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
+  box-shadow: 4px 4px 10px -1px rgba(0, 0, 0, 0.25), -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
 `;
 
 export const StyledSpacer = styled.div<{ value?: string }>`
