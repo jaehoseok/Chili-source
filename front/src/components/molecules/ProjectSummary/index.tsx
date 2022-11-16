@@ -43,6 +43,8 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   const getTeamForProject = useGetTeamForProject(item.id);
   const getUserInfo = useGetUserInfoHandler();
 
+  // 현재 내가 해당 팀의 마스터인지 확인하는 함수
+
   const deleteProjectHandler = (projectId: number) => {
     deleteProject.mutate({ projectId });
 
@@ -77,6 +79,7 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   };
 
   // 현재 렌더링한 프로젝트 중, 내가 MASTER인지 아닌지 확인하는 함수
+  // 마스터의 경우에만 프로젝트 삭제 버튼이 보인다.
   const isMasterHandler = () => {
     const users = getTeamForProject.data;
     if (users) {
@@ -155,14 +158,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
           borderColor={theme.button.gray}
         >
           이동
-        </Button>
-        <Button
-          backgroundColor={theme.color.secondary}
-          isHover={true}
-          clickHandler={() => linkToSettingHandler(item.id)}
-          borderColor={theme.button.gray}
-        >
-          수정
         </Button>
         {isMasterHandler() && (
           <Button

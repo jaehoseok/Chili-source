@@ -11,6 +11,7 @@ import {
   StyledInputLogo,
   StyledMarginY,
   StyledFlexRowEnd,
+  StyledOverFlowY,
 } from './style';
 
 import Sheet from 'components/atoms/Sheet';
@@ -59,7 +60,7 @@ const index = () => {
   const findValueForTokenCodeIdHandler = (tokenCodeId: string) => {
     if (getTokens.data) {
       for (const item of getTokens.data) {
-        if (tokenCodeId === 'JIRAEMAIL') return item.email;
+        if (item.tokenCodeId === 'JIRA' && tokenCodeId === 'JIRAEMAIL') return item.email;
         else if (tokenCodeId === item.tokenCodeId) {
           return item.value;
         }
@@ -102,176 +103,183 @@ const index = () => {
         {/* 유저 설정 컴포넌트의 Container */}
         {getUserInfo.data && (
           <Sheet isShadow={true} width={'40vw'} maxWidth={'700px'} height={'1000px'}>
-            <StyledPadding>
-              <StyledFlexColItemsCenter>
-                {/* 유저 프로필 이미지 자리 */}
-                <Circle
-                  height="120px"
-                  isImage={true}
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  url={image ? URL.createObjectURL(image.target.files[0]) : getUserInfo.data.image}
-                ></Circle>
+            <StyledOverFlowY>
+              <StyledPadding>
+                <StyledFlexColItemsCenter>
+                  {/* 유저 프로필 이미지 자리 */}
+                  <Circle
+                    height="120px"
+                    isImage={true}
+                    url={
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      image ? URL.createObjectURL(image.target.files[0]) : getUserInfo.data.image
+                    }
+                  ></Circle>
+                  <StyledMarginY>
+                    <StyledInputLogo>
+                      <input
+                        type="file"
+                        id="user_image"
+                        onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          setImage(e);
+                        }}
+                      />
+                    </StyledInputLogo>
+                  </StyledMarginY>
+                </StyledFlexColItemsCenter>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="100px"
+                    borderColor={theme.button.green}
+                    isHover={true}
+                    clickHandler={() => {
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
+                      updateUserImage.mutate(image);
+                    }}
+                  >
+                    이미지 수정
+                  </Button>
+                </StyledFlexRowEnd>
                 <StyledMarginY>
-                  <StyledInputLogo>
-                    <input
-                      type="file"
-                      id="user_image"
-                      onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
-                        setImage(e);
+                  <InputBox
+                    labelName="사용자 이름"
+                    isRow={false}
+                    labelMarginBottom="10px"
+                    containerWidth={'100%'}
+                    inputWidth={'100%'}
+                    inputHeight={'40px'}
+                    labelSize={'1.1rem'}
+                    inputValue={getUserInfo.data.name}
+                    useSetRecoilState={userNameSetRecoilState}
+                    recoilParam={'userName'}
+                  ></InputBox>
+                </StyledMarginY>
+                <StyledFlexRowEnd>
+                  <Button
+                    width="150px"
+                    borderColor={theme.button.green}
+                    isHover={true}
+                    clickHandler={() => {
+                      updateUserName.mutate(userName);
+                    }}
+                  >
+                    사용자 이름 수정
+                  </Button>
+                </StyledFlexRowEnd>
+                <>
+                  <StyledMarginY>
+                    <InputBox
+                      labelName="지라 토큰"
+                      isRow={false}
+                      labelMarginBottom="10px"
+                      containerWidth={'100%'}
+                      inputWidth={'100%'}
+                      inputHeight={'40px'}
+                      labelSize={'1.1rem'}
+                      inputValue={getTokens.data ? findValueForTokenCodeIdHandler('JIRA') : ''}
+                      useSetRecoilState={myJiraTokenSetRecoilState}
+                      recoilParam={'myJiraToken'}
+                    ></InputBox>
+                    <InputBox
+                      labelName="지라 이메일"
+                      isRow={false}
+                      labelMarginBottom="10px"
+                      containerWidth={'100%'}
+                      inputWidth={'100%'}
+                      inputHeight={'40px'}
+                      labelSize={'1.1rem'}
+                      inputValue={getTokens.data ? findValueForTokenCodeIdHandler('JIRAEMAIL') : ''}
+                      useSetRecoilState={myJiraEmailSetRecoilState}
+                      recoilParam={'myJiraEmail'}
+                    ></InputBox>
+                  </StyledMarginY>
+                  <StyledFlexRowEnd>
+                    {getTokens.data &&
+                      getTokens.data?.findIndex(item => item.tokenCodeId === 'JIRA') >= 0 && (
+                        <Button
+                          width="150px"
+                          borderColor={theme.color.bug}
+                          isHover={true}
+                          clickHandler={() => {
+                            deleteLinkageToken.mutate('JIRA');
+                          }}
+                        >
+                          지라 토큰 연동 해제
+                        </Button>
+                      )}
+                    <Button
+                      width="150px"
+                      borderColor={theme.button.green}
+                      isHover={true}
+                      clickHandler={() => {
+                        postLinkageToken.mutate({
+                          tokenCodeId: 'JIRA',
+                          value: myJiraToken,
+                          email: myJiraEmail,
+                        });
                       }}
-                    />
-                  </StyledInputLogo>
-                </StyledMarginY>
-              </StyledFlexColItemsCenter>
-              <StyledFlexRowEnd>
-                <Button
-                  width="100px"
-                  borderColor={theme.button.green}
-                  isHover={true}
-                  clickHandler={() => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    updateUserImage.mutate(image);
-                  }}
-                >
-                  이미지 수정
-                </Button>
-              </StyledFlexRowEnd>
-              <StyledMarginY>
-                <InputBox
-                  labelName="사용자 이름"
-                  isRow={false}
-                  labelMarginBottom="10px"
-                  containerWidth={'100%'}
-                  inputWidth={'100%'}
-                  inputHeight={'40px'}
-                  labelSize={'1.1rem'}
-                  inputValue={getUserInfo.data.name}
-                  useSetRecoilState={userNameSetRecoilState}
-                  recoilParam={'userName'}
-                ></InputBox>
-              </StyledMarginY>
-              <StyledFlexRowEnd>
-                <Button
-                  width="150px"
-                  borderColor={theme.button.green}
-                  isHover={true}
-                  clickHandler={() => {
-                    updateUserName.mutate(userName);
-                  }}
-                >
-                  사용자 이름 수정
-                </Button>
-              </StyledFlexRowEnd>
-              <>
-                <StyledMarginY>
-                  <InputBox
-                    labelName="지라 토큰"
-                    isRow={false}
-                    labelMarginBottom="10px"
-                    containerWidth={'100%'}
-                    inputWidth={'100%'}
-                    inputHeight={'40px'}
-                    labelSize={'1.1rem'}
-                    inputValue={getTokens.data ? findValueForTokenCodeIdHandler('JIRA') : ''}
-                    useSetRecoilState={myJiraTokenSetRecoilState}
-                    recoilParam={'myJiraToken'}
-                  ></InputBox>
-                  <InputBox
-                    labelName="지라 이메일"
-                    isRow={false}
-                    labelMarginBottom="10px"
-                    containerWidth={'100%'}
-                    inputWidth={'100%'}
-                    inputHeight={'40px'}
-                    labelSize={'1.1rem'}
-                    inputValue={getTokens.data ? findValueForTokenCodeIdHandler('JIRAEMAIL') : ''}
-                    useSetRecoilState={myJiraEmailSetRecoilState}
-                    recoilParam={'myJiraEmail'}
-                  ></InputBox>
-                </StyledMarginY>
-                <StyledFlexRowEnd>
-                  {getTokens.data &&
-                    getTokens.data?.findIndex(item => item.tokenCodeId === 'JIRA') >= 0 && (
-                      <Button
-                        width="150px"
-                        borderColor={theme.color.bug}
-                        isHover={true}
-                        clickHandler={() => {
-                          deleteLinkageToken.mutate('JIRA');
-                        }}
-                      >
-                        지라 토큰 연동 해제
-                      </Button>
-                    )}
-                  <Button
-                    width="150px"
-                    borderColor={theme.button.green}
-                    isHover={true}
-                    clickHandler={() => {
-                      postLinkageToken.mutate({
-                        tokenCodeId: 'JIRA',
-                        value: myJiraToken,
-                        email: myJiraEmail,
-                      });
-                    }}
-                  >
+                    >
+                      {getTokens.data &&
+                      getTokens.data?.findIndex(item => item.tokenCodeId === 'JIRA') >= 0
+                        ? '지라 토큰 변경'
+                        : '지라 토큰 연동'}
+                    </Button>
+                  </StyledFlexRowEnd>
+                  <StyledMarginY>
+                    <InputBox
+                      labelName="깃랩 토큰"
+                      isRow={false}
+                      labelMarginBottom="10px"
+                      containerWidth={'100%'}
+                      inputWidth={'100%'}
+                      inputHeight={'40px'}
+                      labelSize={'1.1rem'}
+                      inputValue={
+                        getTokens.data ? findValueForTokenCodeIdHandler('SSAFYGITLAB') : ''
+                      }
+                      useSetRecoilState={myGitLabTokenSetRecoilState}
+                      recoilParam={'myGitLabToken'}
+                    ></InputBox>
+                  </StyledMarginY>
+                  <StyledFlexRowEnd>
                     {getTokens.data &&
-                    getTokens.data?.findIndex(item => item.tokenCodeId === 'JIRA') >= 0
-                      ? '지라 토큰 변경'
-                      : '지라 토큰 연동'}
-                  </Button>
-                </StyledFlexRowEnd>
-                <StyledMarginY>
-                  <InputBox
-                    labelName="깃랩 토큰"
-                    isRow={false}
-                    labelMarginBottom="10px"
-                    containerWidth={'100%'}
-                    inputWidth={'100%'}
-                    inputHeight={'40px'}
-                    labelSize={'1.1rem'}
-                    inputValue={getTokens.data ? findValueForTokenCodeIdHandler('SSAFYGITLAB') : ''}
-                    useSetRecoilState={myGitLabTokenSetRecoilState}
-                    recoilParam={'myGitLabToken'}
-                  ></InputBox>
-                </StyledMarginY>
-                <StyledFlexRowEnd>
-                  {getTokens.data &&
-                    getTokens.data?.findIndex(item => item.tokenCodeId === 'SSAFYGITLAB') >= 0 && (
-                      <Button
-                        width="150px"
-                        borderColor={theme.color.bug}
-                        isHover={true}
-                        clickHandler={() => {
-                          deleteLinkageToken.mutate('SSAFYGITLAB');
-                        }}
-                      >
-                        깃랩 토큰 연동 해제
-                      </Button>
-                    )}
-                  <Button
-                    width="150px"
-                    borderColor={theme.button.green}
-                    isHover={true}
-                    clickHandler={() => {
-                      postLinkageToken.mutate({
-                        tokenCodeId: 'SSAFYGITLAB',
-                        value: myGitLabToken,
-                      });
-                    }}
-                  >
-                    {getTokens.data &&
-                    getTokens.data?.findIndex(item => item.tokenCodeId === 'SSAFYGITLAB') >= 0
-                      ? '깃랩 토큰 변경'
-                      : '깃랩 토큰 연동'}
-                  </Button>
-                </StyledFlexRowEnd>
-              </>
-            </StyledPadding>
+                      getTokens.data?.findIndex(item => item.tokenCodeId === 'SSAFYGITLAB') >=
+                        0 && (
+                        <Button
+                          width="150px"
+                          borderColor={theme.color.bug}
+                          isHover={true}
+                          clickHandler={() => {
+                            deleteLinkageToken.mutate('SSAFYGITLAB');
+                          }}
+                        >
+                          깃랩 토큰 연동 해제
+                        </Button>
+                      )}
+                    <Button
+                      width="150px"
+                      borderColor={theme.button.green}
+                      isHover={true}
+                      clickHandler={() => {
+                        postLinkageToken.mutate({
+                          tokenCodeId: 'SSAFYGITLAB',
+                          value: myGitLabToken,
+                        });
+                      }}
+                    >
+                      {getTokens.data &&
+                      getTokens.data?.findIndex(item => item.tokenCodeId === 'SSAFYGITLAB') >= 0
+                        ? '깃랩 토큰 변경'
+                        : '깃랩 토큰 연동'}
+                    </Button>
+                  </StyledFlexRowEnd>
+                </>
+              </StyledPadding>
+            </StyledOverFlowY>
           </Sheet>
         )}
       </StyledFlexColItemsCenter>

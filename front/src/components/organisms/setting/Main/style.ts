@@ -30,3 +30,7 @@ export const StyledInputLogo = styled.div`
 export const StyledFlexRowEnd = styled.div`
   ${tw`flex justify-end`}
 `;
+
+export const StyledOverFlowY = styled.div`
+  ${tw`overflow-y-scroll w-full`}
+`;
