@@ -41,4 +41,11 @@ public class Role extends BaseEntity {
         this.remove = remove;
         this.userProjects = userProjects;
     }
+
+    public void update (Boolean modify, Boolean invite, Boolean fire, Boolean remove) {
+        if (modify != null) this.modify = modify;
+        if (invite != null) this.invite = invite;
+        if (fire != null) this.fire = fire;
+        if (remove != null) this.remove = remove;
+    }
 }
