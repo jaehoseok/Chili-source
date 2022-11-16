@@ -225,7 +225,8 @@ public class IssueController {
             @ApiParam(value = "삭제하려는 프로젝트 id") @PathVariable("projectId") Long projectId
     ) {
         issueService.deleteAll(user, projectId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .build();
     }
 
     // =========================================== JIRA API ==================================================
@@ -336,7 +337,8 @@ public class IssueController {
                 projectId,
                 middleBucketId,
                 headers.get(HttpHeaders.AUTHORIZATION));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .build();
     }
 
     // 지라 위젯 - 스프린트 목록 및 선택된 스프린트의 달성도 조회
@@ -348,6 +350,7 @@ public class IssueController {
             @ApiParam(value = "조회하고싶은 스프린트 id") @RequestParam(required = false) Long sprintId
     ) {
         JiraSprintProgressResponse response = issueService.getSprintProgress(user, headers.get(HttpHeaders.AUTHORIZATION), projectId, sprintId);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok()
+                .body(response);
     }
 }
