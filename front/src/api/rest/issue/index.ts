@@ -322,9 +322,22 @@ export default {
   },
   getIssueList: async (middleBucketId: number) => {
     interface responseType {
-      data: any;
+      issueList: issueType;
+      middleBucketId: number;
+      middleBucketName: string;
     }
-    return new Promise<responseType[]>((resolve, reject) => {
+    interface issueType {
+      assignee: string;
+      description: string;
+      epicLink: string;
+      issueId: number;
+      issueType: string;
+      priority: string;
+      sprint: number;
+      storyPoints: number;
+      summary: string;
+    }
+    return new Promise<responseType>((resolve, reject) => {
       issueAxios
         .get(`/middle-buckets/${middleBucketId}`)
         .then(response => {
@@ -335,21 +348,21 @@ export default {
         });
     });
   },
-  postAddIssue: async (middleBucketId: number, issue: issueType) => {
+  postAddIssue: async (middleBucketId: number, request: any) => {
     interface responseType {
       data: any;
     }
     const data = {
-      assignee: issue.assignee,
-      description: issue.description,
-      epicLink: issue.epicLink,
-      issueType: issue.issueType,
-      priority: issue.priority,
-      sprint: issue.sprint,
-      storyPoints: issue.storyPoints,
-      summary: issue.summary,
+      assignee: request.assignee,
+      description: request.description,
+      epicLink: request.epicLink,
+      issueType: request.issueType,
+      priority: request.priority,
+      sprint: request.sprint,
+      storyPoints: request.storyPoints,
+      summary: request.summary,
     };
-    return new Promise<responseType[]>((resolve, reject) => {
+    return new Promise<responseType>((resolve, reject) => {
       issueAxios
         .post(`/middle-buckets/${middleBucketId}`, data)
         .then(response => {

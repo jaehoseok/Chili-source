@@ -139,7 +139,7 @@ const index = (props: any) => {
       ? '태스크'
       : props.issue.type === 'Bug'
       ? '버그'
-      : '스토리';
+      : '';
 
   const projectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);

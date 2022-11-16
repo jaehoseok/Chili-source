@@ -28,46 +28,45 @@ const index = (props: any) => {
     middleBucketId: number;
     name: string;
   }
-  // interface issueType {
-  //   assignee: string;
-  //   description: string;
-  //   epicLink: string;
-  //   issueType: string;
-  //   priority: string;
-  //   sprint: number;
-  //   storyPoints: number;
-  //   summary: string;
-  // }
+  interface requestType {
+    assignee: string;
+    description: string;
+    epicLink: string;
+    issueType: string;
+    priority: string;
+    sprint: number;
+    storyPoints: number;
+    summary: string;
+  }
   const { projectId } = useParams();
   const pjtId = Number(projectId);
+  interface bucketType extends requestType {
+    issueId: number;
+  }
   const issue = {
-    issueTemplateId: props.issue.issueTemplateId,
     issueId: issueId,
-    projectId: props.issue.projectId,
     issueType: props.issue.issueType,
     summary: props.issue.summary,
     description: props.issue.description,
-    reporter: props.issue.reporter,
     assignee: props.issue.assignee,
     priority: props.issue.priority,
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
   };
-  const [bucket, setBucket] = useState<issueType[]>([]);
+
+  const [bucket, setBucket] = useState<bucketType[]>([]);
   const sprintRef = useRef<HTMLSelectElement>(null);
   const middleBucketRef = useRef<HTMLSelectElement>(null);
   const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
-  const [sprint, setSprint] = useState<string>('');
-  const [sprintList, setSprintList] = useState<sprintType[]>();
-  const [sprintId, setSprintId] = useState<number>();
+
+  const [sprintName, setSprintName] = useState<string>('');
   const [sprintNameList, setSprintNameList] = useState<string[]>([]);
-  const sList: sprintType[] = [];
-  const sListName: string[] = [];
+  const [sprintList, setSprintList] = useState<sprintType[]>([]);
   const pushSprintList = async () => {
-    sList.splice(0, sList.length);
-    sListName.splice(0, sList.length);
+    const sList: sprintType[] = [];
+    const sListName: string[] = [];
     for (let i = 0; i < (await getSprintList).values.length; i++) {
       sList.push((await getSprintList).values[i]);
       sListName.push((await getSprintList).values[i].name);
@@ -75,53 +74,58 @@ const index = (props: any) => {
     console.log(sListName);
     setSprintList(sList);
     setSprintNameList(sListName);
-    console.log(sprintList);
-    console.log(sprintNameList);
   };
-  const [middleBucket, setMiddleBucket] = useState<string>('');
-  const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
   const [middleBucketId, setMiddleBucketId] = useState<number>(-1);
+  const [middleBucketName, setMiddleBucketName] = useState<string>('');
   const [middleBucketNameList, setMiddleBucketNameList] = useState<string[]>([]);
-  const mList: middleBucketType[] = [];
-  const mListName: string[] = [];
+  const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
   const pushMiddleBucketList = async () => {
-    mList.splice(0, mList.length);
-    mListName.splice(0, mList.length);
+    const mList: middleBucketType[] = [];
+    const mListName: string[] = [];
     for (let i = 0; i < (await getMiddleBucketList).length; i++) {
       mList.push((await getMiddleBucketList)[i]);
       mListName.push((await getMiddleBucketList)[i].name);
     }
-    console.log(mList);
     setMiddleBucketList(mList);
     setMiddleBucketNameList(mListName);
   };
   useEffect(() => {
     pushSprintList();
     pushMiddleBucketList();
-    // console.log(issueAxios.getIssueList(9));
-    // setMiddleBucket(middleBucketRef.current ? middleBucketRef.current.value : '');
   }, []);
   useEffect(() => {
     if (props.isInsert) {
       bucket.push(issue);
       setBucket(bucket);
       setIssueId(issueId + 1);
-      // issueAxios.postAddIssue(9, issue);
+      console.log(bucket);
+      console.log(issue);
+      // issueAxios.postAddIssue(10, props.issue);
       props.setIsInsert(false);
     }
   }, [props.isInsert]);
 
+  const [issueList, setIssueList] = useState<issueType[]>([]);
   useEffect(() => {
-    setMiddleBucketId(middleBucketList[middleBucketNameList.indexOf(middleBucket)].middleBucketId);
-    // middleBucketList
-    //   ? middleBucketList[middleBucketNameList.indexOf(middleBucket)].middleBucketId
-    //   : -1,
-    // console.log(middleBucketId ? issueAxios.getIssueList(middleBucketId) : '');
-    pushIssueList(middleBucketId);
-  }, [middleBucket]);
+    const getBucketId = async () => {
+      const index = middleBucketNameList.indexOf(middleBucketName);
+      const bucketId = await middleBucketList[index].middleBucketId;
+      console.log(bucketId);
+      setMiddleBucketId(bucketId);
+      const getIssueList = issueAxios.getIssueList(bucketId);
+      console.log((await getIssueList).issueList);
+
+      console.log(issue);
+    };
+    getBucketId();
+  }, [middleBucketName]);
   useEffect(() => {
-    setSprintId(sprintList ? sprintList[sprintNameList.indexOf(sprint)].id : -1);
-  }, [sprint]);
+    const getSprintId = async () => {
+      const sprintId = await sprintList[sprintNameList.indexOf(sprintName)].id;
+      console.log(sprintId);
+    };
+    getSprintId();
+  }, [sprintName]);
   const deleteHandler = (issueId: number) => {
     setBucket(bucket.filter(issue => issue.issueId !== issueId));
   };
@@ -146,7 +150,7 @@ const index = (props: any) => {
     alert('이슈 삭제');
   };
   const [modalOpen, setModalOpen] = useState(false);
-  const [middleBucketName, setMiddleBucketName] = useState<string>('');
+  const [newMiddleBucketName, setNewMiddleBucketName] = useState<string>('');
   const showModalHandler = () => {
     setModalOpen(true);
   };
@@ -155,10 +159,10 @@ const index = (props: any) => {
   };
   const inputBoxRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (!modalOpen && middleBucketName) {
-      console.log(middleBucketName);
+    if (!modalOpen && newMiddleBucketName) {
+      console.log(newMiddleBucketName);
       addMiddleBucketHandler();
-      setMiddleBucketName('');
+      setNewMiddleBucketName('');
     }
   }, [modalOpen]);
   const BarList = bucket.map(issue => (
@@ -175,14 +179,11 @@ const index = (props: any) => {
         -
       </Circle>
       <IssueBar
-        issueTemplateId={issue.issueTemplateId}
         issueId={issue.issueId}
-        projectId={issue.projectId}
         issueType={issue.issueType}
         summary={issue.summary}
         description={issue.description}
         epicLink={issue.epicLink}
-        reporter={issue.reporter}
         assignee={issue.assignee}
         priority={issue.priority}
         sprint={issue.sprint}
@@ -198,7 +199,7 @@ const index = (props: any) => {
             labelName={'MiddleBucket'}
             ref={middleBucketRef}
             selectWidth={'160px'}
-            setState={setMiddleBucket}
+            setState={setMiddleBucketName}
           >
             <Option
               messages={middleBucketNameList ? middleBucketNameList : ['']}
@@ -257,7 +258,12 @@ const index = (props: any) => {
             <ImBin size={'1rem'} />
           </Button>
         </div>
-        <SelectBox labelName={'Sprint'} ref={sprintRef} selectWidth={'160px'} setState={setSprint}>
+        <SelectBox
+          labelName={'Sprint'}
+          ref={sprintRef}
+          selectWidth={'160px'}
+          setState={setSprintName}
+        >
           <Option
             messages={sprintNameList ? sprintNameList : ['']}
             selected={props.issue.sprint}
