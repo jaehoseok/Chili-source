@@ -5,11 +5,21 @@ import { auth } from 'api/rest';
 import { useGetTokens } from 'hooks/auth';
 import { useGetUserInfoHandler } from 'hooks/user';
 
-import { StyledContainer, StyledTap, StyledFlexMaxWidth } from './style';
+import { BiPowerOff } from 'react-icons/bi';
+
+import {
+  StyledContainer,
+  StyledTap,
+  StyledFlexMaxWidth,
+  StyledFlexEvenly,
+  StyledPosition,
+  StyledCursor,
+} from './style';
+import { theme } from 'styles/theme';
 
 import logo from 'assets/logo/logo.png';
 import Text from 'components/atoms/Text';
-import Button from 'components/atoms/Button';
+import FillButton from 'components/atoms/FillButton';
 import Circle from 'components/atoms/Circle';
 
 /**
@@ -37,8 +47,8 @@ const index = () => {
     await auth.login('google');
   };
 
-  const clickToProjectSelectHandler = () => {
-    navigate('/projects');
+  const clickLogoutHandler = async () => {
+    await auth.logout();
   };
 
   return (
@@ -49,31 +59,79 @@ const index = () => {
             <img
               src={logo}
               width={'32px'}
-              style={{ transform: 'translateY(10%)' }}
+              style={{ transform: 'translateY(7%)' }}
               onClick={() => navigate('/')}
             ></img>
           </StyledTap>
-
-          <Text
-            isFill={false}
-            message="프로젝트"
-            fontSize="1rem"
-            fontWeight="300"
-            color="#a9a9a9"
-            clickHandler={clickToProjectSelectHandler}
-          ></Text>
+          <StyledFlexEvenly>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="프로젝트 들어가기"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate('/projects')}
+            ></Text>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="프로젝트 생성"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate(`/setting/${getUserInfo.data && getUserInfo.data.id}`)}
+            ></Text>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="가이드"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              // clickHandler={clickToProjectSelectHandler}
+            ></Text>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="유저 설정"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate(`/setting/${getUserInfo.data && getUserInfo.data.id}`)}
+            ></Text>
+          </StyledFlexEvenly>
 
           {isLogin && getUserInfo.data ? (
-            <Circle
-              url={getUserInfo.data.image}
-              isImage={true}
-              height={'40px'}
-              clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
-            ></Circle>
+            <>
+              <Circle
+                url={getUserInfo.data.image}
+                isImage={true}
+                height={'40px'}
+                clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
+              ></Circle>
+              <StyledPosition>
+                <StyledCursor>
+                  <Circle
+                    height="15px"
+                    clickHandler={clickLogoutHandler}
+                    backgroundColor={'#ededed'}
+                  >
+                    <BiPowerOff color={theme.color.bug}></BiPowerOff>
+                  </Circle>
+                </StyledCursor>
+              </StyledPosition>
+            </>
           ) : (
-            <Button clickHandler={clickLoginHandler} borderColor="red">
-              로그인버튼
-            </Button>
+            <FillButton
+              clickHandler={clickLoginHandler}
+              isHover={true}
+              hoverColor={theme.button.darkgreen}
+              width={'80px'}
+              height={'30px'}
+            >
+              로그인
+            </FillButton>
           )}
         </StyledFlexMaxWidth>
       </StyledContainer>
