@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Task, ViewMode, Gantt } from 'gantt-task-react';
 import { ViewSwitcher } from './ViewSwitcher';
-import { useGetGanttChart, useGetGanttTasks } from 'hooks/project';
-import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetGanttTasks } from 'hooks/project';
 
 // Styles
 import { StyledGanttGraph } from './style';
@@ -12,25 +11,11 @@ import 'gantt-task-react/dist/index.css';
 
 export const GanttGraph = () => {
   // Init
-  const currentDate = new Date();
-  const initialTasks: Task[] = [
-    {
-      start: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      end: new Date(currentDate.getFullYear(), currentDate.getMonth(), 2, 12, 28),
-      name: 'Idea',
-      id: 'Task 0',
-      progress: 45,
-      type: 'task',
-      displayOrder: 2,
-    },
-  ];
   const [view, setView] = useState<ViewMode>(ViewMode.Day);
-  const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [isChecked, setIsChecked] = useState(true);
 
   const { projectId } = useParams();
-  const getUserInfo = useGetUserInfoHandler().data;
-  const getGanttChart = useGetGanttChart(1, Number(projectId));
+
   const getGanttTasks = useGetGanttTasks(1, Number(projectId)).data;
 
   let columnWidth = 65;
@@ -70,6 +55,35 @@ export const GanttGraph = () => {
     console.log('[expander click]');
   };
 
+  const renderGantt = () => {
+    if (getGanttTasks && getGanttTasks.length != 0) {
+      return (
+        <>
+          <Gantt
+            tasks={getGanttTasks}
+            viewMode={view}
+            onDateChange={handleTaskChange}
+            onDelete={handleTaskDelete}
+            onProgressChange={handleProgressChange}
+            onDoubleClick={handleDblClick}
+            onClick={handleClick}
+            onSelect={handleSelect}
+            onExpanderClick={handleExpanderClick}
+            listCellWidth={isChecked ? '155px' : ''}
+            ganttHeight={300}
+            columnWidth={columnWidth}
+          />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <div>현재 데이터가 없습니다.</div>
+        </>
+      );
+    }
+  };
+
   // Return
   return (
     <>
@@ -79,7 +93,10 @@ export const GanttGraph = () => {
           onViewListChange={setIsChecked}
           isChecked={isChecked}
         />
-        <Gantt
+
+        {renderGantt()}
+
+        {/* <Gantt
           tasks={getGanttTasks && getGanttTasks.length != 0 ? getGanttTasks : tasks}
           viewMode={view}
           onDateChange={handleTaskChange}
@@ -92,8 +109,9 @@ export const GanttGraph = () => {
           listCellWidth={isChecked ? '155px' : ''}
           ganttHeight={300}
           columnWidth={columnWidth}
-        />
-        <div>=====DB 간트 이슈=====</div>
+        /> */}
+
+        {/* <div>=====DB 간트 이슈=====</div>
         {getGanttChart.data?.map((item, index) => {
           return (
             <div key={index}>
@@ -107,7 +125,7 @@ export const GanttGraph = () => {
             </div>
           );
         })}
-        <div>======================</div>
+        <div>======================</div> */}
       </StyledGanttGraph>
     </>
   );

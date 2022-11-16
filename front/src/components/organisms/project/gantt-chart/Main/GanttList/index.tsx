@@ -1,11 +1,13 @@
 // API & Library
 import { useState } from 'react';
 import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetGanttChart, useGetGanttTasks } from 'hooks/project';
 
 // Styles
 import { StyledGanttList } from './style';
 
 // Components
+import { useParams } from 'react-router-dom';
 import { GanttListItem } from '../GanttListItem';
 import Button from 'components/atoms/Button';
 
@@ -16,8 +18,9 @@ export interface ganttType {
 
 export const GanttList = () => {
   // Init
+  const { projectId } = useParams();
   const [ganttList, setGanttList] = useState([{}, {}]);
-  const getUserInfo = useGetUserInfoHandler().data;
+  const getGanttTasks = useGetGanttTasks(1, Number(projectId)).data;
 
   return (
     <>
@@ -30,17 +33,19 @@ export const GanttList = () => {
           );
         })}
         <Button borderColor="#000000">버튼</Button>
-        <div>===간트 데이터===</div>
-        <div>id: {getUserInfo?.id}</div>
-        <div>name: {getUserInfo?.name}</div>
-        <div>image: {getUserInfo?.image}</div>
-        <div>================</div>
-
-        <div>===유저 데이터===</div>
-        <div>id: {getUserInfo?.id}</div>
-        <div>name: {getUserInfo?.name}</div>
-        <div>image: {getUserInfo?.image}</div>
-        <div>================</div>
+        {getGanttTasks?.map((item, index) => {
+          return (
+            <div key={index}>
+              <div>[id]: {item.id}</div>
+              <div>[name]: {item.name}</div>
+              <div>[start]: {item.start.toDateString()}</div>
+              <div>[prog]: {item.progress}</div>
+              <div>[end]: {item.end.toDateString()}</div>
+              <div>&nbsp;</div>
+            </div>
+          );
+        })}
+        <div>======================</div>
       </StyledGanttList>
     </>
   );
