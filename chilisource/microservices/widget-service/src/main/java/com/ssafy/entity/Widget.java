@@ -24,7 +24,7 @@ public class Widget extends BaseEntity {
     private Long widgetCol;
 
     private Long projectId;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "widget_code_id")
     private WidgetCode widgetCode;
