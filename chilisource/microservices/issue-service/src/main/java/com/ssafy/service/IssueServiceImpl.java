@@ -364,7 +364,6 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public JiraSprintListResponse getSprints(User user, List<String> auths, Long projectId) {
-        // 프로젝트를 가져온다
         ProjectResponse response = projectServiceClient.getProject(auths, projectId);
         if (response == null) {
             log.error("[Issue] [getSprints] PROJECT_NOT_FOUND");
@@ -374,11 +373,9 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
-        // 프로젝트의 보드 id를 가져온다
         JiraProjectBoardListResponse projectBoardList = jiraFeignClient.getProjectBoard(jiraBase64);
         Long boardId = projectBoardList.getValues().get(0).getId();
 
-        // 보드 id로 스프린트 목록을 가져온다
         JiraSprintListResponse sprints = jiraFeignClient.getSprints(jiraBase64, boardId);
 
         return sprints;
