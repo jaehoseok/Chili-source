@@ -1,14 +1,10 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
-export interface styledType {
-  height?: string;
-  width?: string;
-}
-
-export const StyledPage = styled.div<styledType>`
+export const StyledPage = styled.div`
   ${tw`w-full flex flex-col items-center overflow-y-scroll`}
   height: calc(100vh - 66px);
+  background-image: url(${require('assets/logo/logoRepeat.png')});
   &::-webkit-scrollbar {
     width: 10px; /*스크롤바의 너비*/
   }
@@ -22,21 +18,25 @@ export const StyledPage = styled.div<styledType>`
   }
 `;
 
-export const StyledHeader = styled.div<styledType>``;
+export const StyledHeader = styled.div``;
 
-export const StyledBody = styled.div<styledType>`
+export const StyledBody = styled.div`
   ${tw`flex-grow-[1] flex flex-col items-center w-11/12`}
   max-width: 1200px;
-  background-color: #fafafa;
+  background-color: rgba(0, 0, 0, 0.02);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background-blend-mode: overlay;
   box-shadow: inset 4px 4px 10px -1px rgba(0, 0, 0, 0.25),
     inset -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
 `;
 
-export const StyledSpacer = styled.div<styledType>`
+export const StyledSpacer = styled.div<{ value?: string }>`
   ${tw`w-8 h-8`}
+  ${({ value }) => `width: ${value}; height: ${value};`}
 `;
 
-export const StyledButton = styled.button<styledType>`
+export const StyledButton = styled.button<{ color1?: string; color2?: string }>`
   ${tw`w-16 h-8 cursor-pointer`}
   font-size: 1rem;
   height: 40px;
@@ -45,15 +45,10 @@ export const StyledButton = styled.button<styledType>`
   border-radius: 20px;
   color: white;
   border: none;
-  background: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(9, 9, 121, 1) 35%,
-    rgba(0, 212, 255, 1) 100%
-  );
+  background: linear-gradient(90deg, #7579ff 0%, #b224ef 100%);
 `;
 
-export const StyledSection = styled.div<styledType>`
+export const StyledSection = styled.div`
   ${tw`w-full flex justify-center`}
 `;
 
@@ -73,12 +68,22 @@ export const StyledContainer = styled.div<{ backgroundColor?: string; background
       `;
   }}
 
-  ${({ backgroundImage }) => {
-    return `background-image: url(${backgroundImage});`;
-  }}
+  ${({ backgroundImage }) =>
+    backgroundImage
+      ? `
+        background: linear-gradient(
+          to right,
+          rgba(255, 255, 255, 1) 50%,
+          rgba(255, 255, 255, 0) 100%
+        ),
+        url(${backgroundImage});
+        background-repeat: no-repeat;
+        background-size: cover;
+      `
+      : ``}
 `;
 
-export const StyledDrop = styled.div<styledType>`
+export const StyledDrop = styled.div<{ backgroundRGBA?: string }>`
   ${tw``}
   width: 300px;
   height: 300px;
@@ -90,6 +95,7 @@ export const StyledDrop = styled.div<styledType>`
   align-items: center;
   justify-content: center;
   transition: 0.2s ease-in-out;
+  ${({ backgroundRGBA }) => `background-color: rgba(${backgroundRGBA});`}
 
   box-shadow: inset 20px 20px 20px rgba(0, 0, 0, 0.05), 25px 35px 20px rgba(0, 0, 0, 0.05),
     25px 30px 30px rgba(0, 0, 0, 0.05), inset -20px -20px 25px rgba(255, 255, 255, 0.9);
@@ -127,7 +133,7 @@ export const StyledDrop = styled.div<styledType>`
     height: 35px;
     background: #fff;
     border-radius: 50%;
-    opacity: 0.8;
+    opacity: 0.9;
   }
 
   &::after {
@@ -139,6 +145,6 @@ export const StyledDrop = styled.div<styledType>`
     height: 15px;
     background: #fff;
     border-radius: 50%;
-    opacity: 0.6;
+    opacity: 0.9;
   }
 `;
