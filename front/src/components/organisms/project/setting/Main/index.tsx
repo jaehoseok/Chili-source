@@ -190,7 +190,7 @@ const index = () => {
         ></Notification>
       )}
       <StyledPadding>
-        {currentAuth !== 'DEVELOPER' && getProject.data ? (
+        {currentAuth !== 'DEVELOPER' && getProject.data && (
           <Sheet width={'70vw'} maxWidth={'900px'} isShadow={true}>
             <StyledFlex>
               <StyledPadding>
@@ -286,48 +286,41 @@ const index = () => {
               </StyledPadding>
             </StyledFlex>
           </Sheet>
-        ) : (
-          <Notification
-            message="프로젝트를 수정할 권한을 가지고 있지 않습니다!"
-            check={false}
-            width="300px"
-          ></Notification>
         )}
         {getTeamForProject.data && (
           <StyledMarginY>
             <Sheet width={'70vw'} maxWidth={'900px'} isShadow={true}>
               <StyledFlex>
                 <StyledPadding>
-                  {currentAuth !== 'DEVELOPER' && (
-                    <>
-                      <StyledMarginY>
-                        <InputBox
-                          labelName="팀원 초대"
-                          isRow={true}
-                          containerWidth={'100%'}
-                          inputWidth={'70%'}
-                          inputHeight={'40px'}
-                          labelSize={'1.3rem'}
-                          inputPlaceHolder={'초대하고 싶은 팀원의 이메일을 적어주세요!'}
-                          useSetRecoilState={projectInviteUserSerRecoilState}
-                          recoilParam={'projectInviteUser'}
-                        ></InputBox>
-                      </StyledMarginY>
-                      {getUserSearch.data &&
-                        getUserSearch.data.googleUsers.map(({ id, image, name }) => (
-                          <InviteUser
-                            userImage={image}
-                            userName={name}
-                            userId={id}
-                            projectId={projectId}
-                            postInviteTeam={postInviteTeam.mutate}
-                          />
-                        ))}
-                    </>
-                  )}
+                  <>
+                    <StyledMarginY>
+                      <InputBox
+                        labelName="팀원 초대"
+                        isRow={true}
+                        containerWidth={'100%'}
+                        inputWidth={'70%'}
+                        inputHeight={'40px'}
+                        labelSize={'1.3rem'}
+                        inputPlaceHolder={'초대하고 싶은 팀원의 이메일을 적어주세요!'}
+                        useSetRecoilState={projectInviteUserSerRecoilState}
+                        recoilParam={'projectInviteUser'}
+                      ></InputBox>
+                    </StyledMarginY>
+                    {getUserSearch.data &&
+                      getUserSearch.data.googleUsers.map(({ id, image, name }) => (
+                        <InviteUser
+                          userImage={image}
+                          userName={name}
+                          userId={id}
+                          projectId={projectId}
+                          postInviteTeam={postInviteTeam.mutate}
+                        />
+                      ))}
+                  </>
                   <StyledMarginY>
                     {currentAuth === 'MASTER' && <StyledLabel>팀원 권한 변경</StyledLabel>}
-                    {currentAuth === 'MASTER' && getTeamForProject.data ? (
+                    {currentAuth === 'MASTER' &&
+                      getTeamForProject.data &&
                       getTeamForProject.data.map(
                         ({ role, userImage, userName, projectId, userId }) => (
                           <SettingAuth
@@ -340,18 +333,12 @@ const index = () => {
                             deleteFireTeam={deleteFireTeam.mutate}
                           ></SettingAuth>
                         ),
-                      )
-                    ) : (
-                      <Notification
-                        message="팀원 정보를 수정할 권한을 가지고 있지 않습니다!"
-                        check={false}
-                        width="300px"
-                      ></Notification>
-                    )}
+                      )}
                   </StyledMarginY>
                   <StyledMarginY>
                     {currentAuth !== 'DEVELOPER' && <StyledLabel>팀원 색상 변경</StyledLabel>}
-                    {currentAuth !== 'DEVELOPER' && getTeamForProject.data ? (
+                    {currentAuth !== 'DEVELOPER' &&
+                      getTeamForProject.data &&
                       getTeamForProject.data.map(
                         ({ userName, userImage, userColor, projectId, userId }) => (
                           <SettingColor
@@ -363,14 +350,7 @@ const index = () => {
                             updateTeamColor={updateTeamColor.mutate}
                           />
                         ),
-                      )
-                    ) : (
-                      <Notification
-                        message="팀원 정보를 수정할 권한을 가지고 있지 않습니다!"
-                        check={false}
-                        width="300px"
-                      ></Notification>
-                    )}
+                      )}
                   </StyledMarginY>
                 </StyledPadding>
               </StyledFlex>

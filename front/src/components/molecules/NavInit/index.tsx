@@ -24,7 +24,7 @@ const index = () => {
   const isLogin = localStorage.getItem('Authorization');
 
   // 쿼리 데이터 가져오기
-  const { data } = useGetUserInfoHandler();
+  const getUserInfo = useGetUserInfoHandler();
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -76,9 +76,14 @@ const index = () => {
             ></Text>
           </StyledText>
         </StyledFlexWrapper>
-        {isLogin ? (
+        {isLogin && getUserInfo.data ? (
           <StyledFlexWrapper>
-            <Circle url={data?.image} isImage={true} height={'40px'}></Circle>
+            <Circle
+              url={getUserInfo.data.image}
+              isImage={true}
+              height={'40px'}
+              clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
+            ></Circle>
             <Button clickHandler={clickTestHandler} borderColor="red">
               테스트버튼
             </Button>
