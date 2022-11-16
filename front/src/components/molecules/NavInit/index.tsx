@@ -13,7 +13,7 @@ import {
   StyledFlexMaxWidth,
   StyledFlexEvenly,
   StyledPosition,
-  StyledCursor,
+  StyledPaddingL,
 } from './style';
 import { theme } from 'styles/theme';
 
@@ -111,15 +111,26 @@ const index = () => {
                 clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
               ></Circle>
               <StyledPosition>
-                <StyledCursor>
+                {/* <StyledCursor>
                   <Circle
-                    height="15px"
+                    height="40px"
                     clickHandler={clickLogoutHandler}
                     backgroundColor={'#ededed'}
                   >
-                    <BiPowerOff color={theme.color.bug}></BiPowerOff>
+                    <BiPowerOff color={theme.color.bug} fontSize={'1.5rem'}></BiPowerOff>
                   </Circle>
-                </StyledCursor>
+                </StyledCursor> */}
+                <StyledPaddingL>
+                  <FillButton
+                    width="80px"
+                    backgroundColor={theme.button.green}
+                    height={'30px'}
+                    isHover={true}
+                    hoverColor={theme.button.red}
+                  >
+                    로그아웃
+                  </FillButton>
+                </StyledPaddingL>
               </StyledPosition>
             </>
           ) : (

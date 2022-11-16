@@ -27,9 +27,8 @@ export const StyledFlexEvenly = styled.div`
 `;
 
 export const StyledPosition = styled.div`
-  ${tw`relative`}
-  top: 20px;
-  left: -10px;
+  // ${tw`relative`}
+  // top: 20px;
 `;
 
 export const StyledCursor = styled.div`
@@ -40,4 +39,8 @@ export const StyledHover = styled.div`
   &:hover {
     color: ${({ theme }) => theme.color.bug};
   }
+`;
+
+export const StyledPaddingL = styled.div`
+  ${tw`pl-3`}
 `;
