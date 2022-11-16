@@ -139,7 +139,7 @@ const index = (props: any) => {
       ? '태스크'
       : props.issue.type === 'Bug'
       ? '버그'
-      : '';
+      : '스토리';
 
   const projectRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<HTMLSelectElement>(null);
@@ -344,7 +344,7 @@ const index = (props: any) => {
             <SelectBox labelName={'우선순위'} ref={rankRef}>
               <Option
                 messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
-                selected={props.issue.rank}
+                selected={props.issue.priority}
               ></Option>
             </SelectBox>
             <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>

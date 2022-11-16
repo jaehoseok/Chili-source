@@ -1,6 +1,7 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { templateType } from 'components/pages/IssuesPage';
+import { templateType, issueType } from 'components/pages/IssuesPage';
+
 // Init
 const issueAxios = createAxiosApi('issue-service');
 
@@ -284,6 +285,85 @@ export default {
       };
       issueAxios
         .post('/middle-buckets', data)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  putEditMiddleBucket: async (middleBucketId: number, middleBucketName: string) => {
+    interface responseType {
+      name: string;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .put(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  deleteMiddleBucket: async (middleBucketId: number) => {
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .delete(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getIssueList: async (middleBucketId: number) => {
+    interface responseType {
+      data: any;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .get(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  postAddIssue: async (middleBucketId: number, issue: issueType) => {
+    interface responseType {
+      data: any;
+    }
+    const data = {
+      assignee: issue.assignee,
+      description: issue.description,
+      epicLink: issue.epicLink,
+      issueType: issue.issueType,
+      priority: issue.priority,
+      sprint: issue.sprint,
+      storyPoints: issue.storyPoints,
+      summary: issue.summary,
+    };
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .post(`/middle-buckets/${middleBucketId}`, data)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  deleteIssue: async (middleBucketId: number, middleBucketIssueId: number) => {
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .delete(`/middle-buckets/${middleBucketId}/${middleBucketIssueId}`)
         .then(response => {
           resolve(response.data);
         })

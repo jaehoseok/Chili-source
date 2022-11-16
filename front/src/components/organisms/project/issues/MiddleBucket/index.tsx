@@ -16,9 +16,30 @@ import { RiSave3Fill } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 import { theme } from 'styles/theme';
 const index = (props: any) => {
+  const [issueId, setIssueId] = useState(0);
+  interface sprintType {
+    goal: string;
+    id: number;
+    name: string;
+    originBoardId: number;
+    state: string;
+  }
+  interface middleBucketType {
+    middleBucketId: number;
+    name: string;
+  }
+  // interface issueType {
+  //   assignee: string;
+  //   description: string;
+  //   epicLink: string;
+  //   issueType: string;
+  //   priority: string;
+  //   sprint: number;
+  //   storyPoints: number;
+  //   summary: string;
+  // }
   const { projectId } = useParams();
   const pjtId = Number(projectId);
-  const [issueId, setIssueId] = useState(0);
   const issue = {
     issueTemplateId: props.issue.issueTemplateId,
     issueId: issueId,
@@ -33,41 +54,74 @@ const index = (props: any) => {
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
   };
-
   const [bucket, setBucket] = useState<issueType[]>([]);
   const sprintRef = useRef<HTMLSelectElement>(null);
-  const MiddleBucketRef = useRef<HTMLSelectElement>(null);
+  const middleBucketRef = useRef<HTMLSelectElement>(null);
   const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
-  const [sprintList, setSprintList] = useState<string[]>();
-  const sList: string[] = [];
+  const [sprint, setSprint] = useState<string>('');
+  const [sprintList, setSprintList] = useState<sprintType[]>();
+  const [sprintId, setSprintId] = useState<number>();
+  const [sprintNameList, setSprintNameList] = useState<string[]>([]);
+  const sList: sprintType[] = [];
+  const sListName: string[] = [];
   const pushSprintList = async () => {
+    sList.splice(0, sList.length);
+    sListName.splice(0, sList.length);
     for (let i = 0; i < (await getSprintList).values.length; i++) {
-      sList.push((await getSprintList).values[i].name);
+      sList.push((await getSprintList).values[i]);
+      sListName.push((await getSprintList).values[i].name);
     }
+    console.log(sListName);
     setSprintList(sList);
+    setSprintNameList(sListName);
+    console.log(sprintList);
+    console.log(sprintNameList);
   };
-  const [middleBucketList, setMiddleBucketList] = useState<string[]>();
-  const mList: string[] = [];
+  const [middleBucket, setMiddleBucket] = useState<string>('');
+  const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
+  const [middleBucketId, setMiddleBucketId] = useState<number>(-1);
+  const [middleBucketNameList, setMiddleBucketNameList] = useState<string[]>([]);
+  const mList: middleBucketType[] = [];
+  const mListName: string[] = [];
   const pushMiddleBucketList = async () => {
+    mList.splice(0, mList.length);
+    mListName.splice(0, mList.length);
     for (let i = 0; i < (await getMiddleBucketList).length; i++) {
-      mList.push((await getMiddleBucketList)[i].name);
+      mList.push((await getMiddleBucketList)[i]);
+      mListName.push((await getMiddleBucketList)[i].name);
     }
+    console.log(mList);
     setMiddleBucketList(mList);
+    setMiddleBucketNameList(mListName);
   };
   useEffect(() => {
     pushSprintList();
     pushMiddleBucketList();
+    // console.log(issueAxios.getIssueList(9));
+    // setMiddleBucket(middleBucketRef.current ? middleBucketRef.current.value : '');
   }, []);
   useEffect(() => {
     if (props.isInsert) {
       bucket.push(issue);
       setBucket(bucket);
       setIssueId(issueId + 1);
+      // issueAxios.postAddIssue(9, issue);
       props.setIsInsert(false);
     }
   }, [props.isInsert]);
 
+  useEffect(() => {
+    setMiddleBucketId(middleBucketList[middleBucketNameList.indexOf(middleBucket)].middleBucketId);
+    // middleBucketList
+    //   ? middleBucketList[middleBucketNameList.indexOf(middleBucket)].middleBucketId
+    //   : -1,
+    // console.log(middleBucketId ? issueAxios.getIssueList(middleBucketId) : '');
+    pushIssueList(middleBucketId);
+  }, [middleBucket]);
+  useEffect(() => {
+    setSprintId(sprintList ? sprintList[sprintNameList.indexOf(sprint)].id : -1);
+  }, [sprint]);
   const deleteHandler = (issueId: number) => {
     setBucket(bucket.filter(issue => issue.issueId !== issueId));
   };
@@ -76,12 +130,21 @@ const index = (props: any) => {
     issueAxios.postCreateMiddleBucket(middleBucketName, pjtId);
   };
   const editMiddleBucketHandler = () => {
-    alert('미들버킷 저장');
+    // issueAxios.putEditMiddleBucket();
+    alert('');
   };
   const deleteMiddleBucketHandler = () => {
     alert('미들버킷 삭제');
   };
-
+  const pushIssueList = (middleBucketId: number) => {
+    console.log(issueAxios.getIssueList(middleBucketId));
+  };
+  const addIssueHandler = () => {
+    alert('이슈 추가');
+  };
+  const deleteIssueHandler = () => {
+    alert('이슈 삭제');
+  };
   const [modalOpen, setModalOpen] = useState(false);
   const [middleBucketName, setMiddleBucketName] = useState<string>('');
   const showModalHandler = () => {
@@ -131,10 +194,15 @@ const index = (props: any) => {
     <MiddleBucket>
       <StyledBucketHeader>
         <div style={{ display: 'flex', alignItems: 'end' }}>
-          <SelectBox labelName={'MiddleBucket'} ref={MiddleBucketRef} selectWidth={'160px'}>
+          <SelectBox
+            labelName={'MiddleBucket'}
+            ref={middleBucketRef}
+            selectWidth={'160px'}
+            setState={setMiddleBucket}
+          >
             <Option
-              messages={middleBucketList ? middleBucketList : ['']}
-              selected={props.issue.sprint}
+              messages={middleBucketNameList ? middleBucketNameList : ['']}
+              selected={middleBucketRef.current?.value}
             ></Option>
           </SelectBox>
           <Button
@@ -189,8 +257,11 @@ const index = (props: any) => {
             <ImBin size={'1rem'} />
           </Button>
         </div>
-        <SelectBox labelName={'Sprint'} ref={sprintRef} selectWidth={'160px'}>
-          <Option messages={sprintList ? sprintList : ['']} selected={props.issue.sprint}></Option>
+        <SelectBox labelName={'Sprint'} ref={sprintRef} selectWidth={'160px'} setState={setSprint}>
+          <Option
+            messages={sprintNameList ? sprintNameList : ['']}
+            selected={props.issue.sprint}
+          ></Option>
         </SelectBox>
         <Button
           borderColor={'#1973ee'}
