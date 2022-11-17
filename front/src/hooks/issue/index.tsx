@@ -24,7 +24,7 @@ export const useGetJiraProjectList = () => {
  * @author bell
  */
 export const useGetIssuesNotDone = (projectId: number) => {
-  return useQuery(['get-jira-issues-not-done'], () => issue.getIssuesNotDone(projectId));
+  return useQuery(['get-jira-issues-not-done', projectId], () => issue.getIssuesNotDone(projectId));
 };
 
 /**
