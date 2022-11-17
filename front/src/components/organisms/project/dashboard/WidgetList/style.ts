@@ -12,13 +12,29 @@ export const StyledWidgetListContainer = styled.div<styledType>`
 
 export const StyledWidgetList = styled.div<styledType>`
   ${tw`flex-shrink-[1] flex justify-start overflow-x-auto`}
-  max-width: 96%;
+
+  max-width: 1200px;
   padding-top: 16px;
   padding-bottom: 16px;
   border-radius: 32px;
-  background-color: #fafafa;
-  box-shadow: inset 4px 4px 10px -1px rgba(0, 0, 0, 0.25),
-    inset -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
+
+  background-color: rgba(0, 0, 0, 0.02);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background-blend-mode: overlay;
+  box-shadow: 4px 4px 10px -1px rgba(0, 0, 0, 0.25), -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
+
+  &::-webkit-scrollbar {
+    height: 10px; /*스크롤바의 너비*/
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    background-clip: padding-box;
+    border-radius: 100px;
+
+    border: 2px solid transparent;
+  }
 `;
 
 export const StyledWidgetListColumnContainer = styled.div<styledType>`

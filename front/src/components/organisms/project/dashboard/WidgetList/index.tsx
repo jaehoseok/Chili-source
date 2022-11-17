@@ -27,6 +27,7 @@ export interface itemType {
   id: number;
   type?: string;
   path?: string;
+  url?: string | null;
   children: itemType[];
 }
 

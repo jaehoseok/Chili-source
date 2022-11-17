@@ -14,6 +14,7 @@ export const useGetLayout = () => {
     id: number;
     type?: string;
     path?: string;
+    url?: string | null;
     children: itemType[];
   }
 
@@ -26,7 +27,7 @@ export const useGetLayout = () => {
 
       const response = await widget.getWidgetList(Number(projectId));
 
-      response.map(({ id, widgetCode, widgetRow, widgetCol }) => {
+      response.map(({ id, widgetCode, widgetRow, widgetCol, requestUrl }) => {
         while (updatedLayout.length <= widgetCol) {
           updatedLayout.push({ id: 0, children: [] });
         }
@@ -34,7 +35,12 @@ export const useGetLayout = () => {
           updatedLayout[widgetCol].children.push({ id: 0, children: [] });
         }
         if (updatedLayout[widgetCol].children) {
-          updatedLayout[widgetCol].children[widgetRow] = { id, type: widgetCode, children: [] };
+          updatedLayout[widgetCol].children[widgetRow] = {
+            id,
+            type: widgetCode,
+            children: [],
+            url: requestUrl,
+          };
         }
       });
 

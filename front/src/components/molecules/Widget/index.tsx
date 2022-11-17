@@ -1,20 +1,17 @@
 // API & Library
-import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Chart } from 'react-google-charts';
 
 // styles
 import { StyledWidget, StyledWidgetData, styledType } from './style';
 
 // components
-import { CALENDAR, GANTT, JIRA, SSAFYGITLAB } from './WidgetData';
+import widgetData from './WidgetData';
 import Sheet from 'components/atoms/Sheet';
 
 interface propsType extends styledType {
   type?: string;
   path?: string;
-  children?: ReactNode;
-  requestURL?: string;
+  url?: string | null;
 }
 
 /**
@@ -25,7 +22,7 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Widget = ({ type, path, children }: propsType) => {
+export const Widget = ({ type, path, url }: propsType) => {
   // Init
   const navigate = useNavigate();
   const { projectId } = useParams();
@@ -56,38 +53,43 @@ export const Widget = ({ type, path, children }: propsType) => {
     navigate(`/project/${projectId}/${widgetName}`);
   };
 
-  const renderWidgetData = (type: string, children: ReactNode) => {
+  const renderWidgetData = (type: string, url: string) => {
     switch (type) {
       case 'CALENDAR':
-        return (
-          <CALENDAR
-            onClick={() => {
-              updateWidgetTabHandler('calendar');
-            }}
-          ></CALENDAR>
-        );
+        return widgetData[type]({
+          url,
+          onClick: () => {
+            updateWidgetTabHandler('gantt-chart');
+          },
+        });
       case 'GANTT':
         return (
-          <GANTT
-            onClick={() => {
-              updateWidgetTabHandler('gantt-chart');
-            }}
-          ></GANTT>
+          <div></div>
+          // <GANTT
+          //   url={url}
+          //   onClick={() => {
+          //     updateWidgetTabHandler('gantt-chart');
+          //   }}
+          // ></GANTT>
         );
       case 'JIRA':
         return (
-          <JIRA
-            onClick={() => {
-              updateWidgetTabHandler('issues');
-            }}
-          ></JIRA>
+          <div></div>
+          // <JIRA
+          //   onClick={() => {
+          //     updateWidgetTabHandler('issues');
+          //   }}
+          // >
+          //   {url}
+          // </JIRA>
         );
       case 'SSAFYGITLAB':
         // Methods
         const clickGitHandler = () => {
           alert('깃 주소로 이동할까요?');
         };
-        return <SSAFYGITLAB onClick={clickGitHandler}></SSAFYGITLAB>;
+        return <div></div>;
+      // return <SSAFYGITLAB onClick={clickGitHandler}></SSAFYGITLAB>;
       case 'ADD':
         return (
           <StyledWidgetData
@@ -115,7 +117,7 @@ export const Widget = ({ type, path, children }: propsType) => {
   return (
     <>
       <StyledWidget className="widget">
-        <Sheet isShadow={true}>{renderWidgetData(type || '', children)}</Sheet>
+        <Sheet isShadow={true}>{widgetData['GANTT']({ url, onClick: addWidgetHandler })}</Sheet>
       </StyledWidget>
     </>
   );

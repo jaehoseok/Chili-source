@@ -5,11 +5,11 @@ import { ReactNode, MouseEventHandler } from 'react';
 import { StyledWidgetData, styledType } from '../style';
 
 interface propsType extends styledType {
+  url?: string | null;
   onClick?: MouseEventHandler<HTMLDivElement>;
-  children?: ReactNode;
 }
 
-export const JIRA = ({ onClick }: propsType) => {
+export const JIRA = ({ url, onClick }: propsType) => {
   return (
     <>
       <StyledWidgetData onClick={onClick}>
