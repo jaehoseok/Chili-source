@@ -436,7 +436,6 @@ public class IssueServiceImpl implements IssueService {
         if (summaryChanged) {
             projectServiceClient.updateAllGanttChart(
                     AllGanttChartUpdateRequest.builder()
-                            .projectId(request.getProjectId())
                             .issueCode(issueKey)
                             .summary(request.getSummary())
                             .build());
