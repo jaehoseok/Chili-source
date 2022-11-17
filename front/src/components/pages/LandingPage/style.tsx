@@ -4,7 +4,6 @@ import tw from 'twin.macro';
 export const StyledPage = styled.div`
   ${tw`w-full flex flex-col items-center overflow-y-scroll`}
   height: calc(100vh - 66px);
-  background-image: url(${require('assets/logo/logoRepeat.png')});
   &::-webkit-scrollbar {
     width: 10px; /*스크롤바의 너비*/
   }
