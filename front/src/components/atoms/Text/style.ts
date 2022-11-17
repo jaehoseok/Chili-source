@@ -31,7 +31,6 @@ export const StyledText = styled.div<styledType>`
 `;
 
 StyledText.defaultProps = {
-  color: '#000000',
   fontWeight: '400',
   fontSize: '1rem',
   fontFamily: 'pretendard',

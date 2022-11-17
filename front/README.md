@@ -726,3 +726,8 @@
 - API 통신
   > - issueKey를 통한 상세정보 가져오는 API 통신 완료
   > - 지라 이슈를 수정하는 API 통신완료
+- ProjectDashBoard
+> - 프로젝트 대시보드 페이지 상단
+  > - ProjectInfo 재디자인
+  > - 프로젝트 설명 sheet 영역
+  > - 가이드 sheet 영역

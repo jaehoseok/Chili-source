@@ -89,7 +89,7 @@ const index = () => {
 
   return (
     <StyledJiraIssues>
-      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '700px' }}>
+      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '600px' }}>
         {getIssuesNotDone.data &&
           getGanttChart.data &&
           filteringIssuesByDBGanttHandler().map(({ id, fields, key }, idx) => (
