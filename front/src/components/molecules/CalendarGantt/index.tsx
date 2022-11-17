@@ -38,7 +38,6 @@ const index = ({
   ganttChartId,
   deleteGantt,
   projectId,
-  getGanttChart,
 }: // updateIssueByIssueKey,
 propsType) => {
   const [open, setOpen] = useState(false);
