@@ -1,61 +1,62 @@
-import React, { useEffect, useState } from 'react';
+// REACT
+import { useEffect, useState } from 'react';
 
+// API HOOKS
+import { useGetIssueByIssueKey, useUpdateIssueByIssueKey } from 'hooks/issue';
+
+// STYLE
+import { StyledFlex, StyledIconCloseBtn, StyledFlexEnd } from './style';
+import { theme } from 'styles/theme';
+
+// MUI
+import FillButton from 'components/atoms/Button';
+import Notification from 'components/atoms/Notification';
+import Input from '@mui/material/Input';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { StyledFlex, StyledIconCloseBtn, StyledFlexEnd } from './style';
-
+// ETC
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
-
-import Notification from 'components/atoms/Notification';
-
-import Input from '@mui/material/Input';
-import { theme } from 'styles/theme';
-import { useGetIssueByIssueKey, useUpdateIssueByIssueKey } from 'hooks/issue';
-import FillButton from 'components/atoms/Button';
-
 interface propsType {
-  // issueSummary: string;
   issueCode: string;
   ganttChartId: number;
   projectId: number;
   deleteGantt: UseMutationResult<void, unknown, number, unknown>;
   getGanttChart: UseQueryResult;
-  // updateIssueByIssueKey: UseMutationResult<
-  //   void,
-  //   unknown,
-  //   { issueKey: string; projectId: number; statusId: number; storyPoints: number; summary: string },
-  //   unknown
-  // >;
 }
 
-const index = ({
-  // issueSummary,
-  issueCode,
-  ganttChartId,
-  deleteGantt,
-  projectId,
-}: // updateIssueByIssueKey,
-propsType) => {
+/**
+ * @description
+ * 서버 db에 저장된 지라 이슈를 가져오는 캘린더 전용 간트
+ * 수정할 수 있는 모달을 가지고 있다.
+ *
+ * @author bell
+ */
+const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) => {
+  // MUI 모달 관리용 state
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  // react-query
   const getIssueByIssueKey = useGetIssueByIssueKey(issueCode);
   const updateIssueByIssueKey = useUpdateIssueByIssueKey();
 
+  // 참조용 값 (state 값을 input에 그대로 적용시키면, 수정하고 반영안해도 프론트 단에서는 변경되어있다.)
   const [ref_issueSummary, ref_storyPoint] = [
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.summary.summary : '',
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
   ];
 
+  // 실제 요청시 보낼 issueSummary state
   const [getIssueSummary, setIssueSummary] = useState(
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.summary.summary : '',
   );
 
+  // 실제 요청시 보낼 storyPoint state
   const [getStoryPoint, setStoryPoint] = useState<number>(
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
   );
@@ -181,10 +182,7 @@ propsType) => {
         onClick={e => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          if (!e.target.path) {
-            console.log('걸림??');
-            handleOpen();
-          }
+          if (!e.target.path) handleOpen();
         }}
       >
         <div
