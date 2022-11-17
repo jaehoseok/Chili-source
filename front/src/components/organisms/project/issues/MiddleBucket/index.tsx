@@ -77,7 +77,9 @@ const index = (props: any) => {
     setSprintNameList(sListName);
   };
   const [middleBucketId, setMiddleBucketId] = useState<number>(-1);
-  const [middleBucketName, setMiddleBucketName] = useState<string>('');
+  const [middleBucketName, setMiddleBucketName] = useState<string>(
+    middleBucketRef.current ? middleBucketRef.current.value : '',
+  );
   const [middleBucketNameList, setMiddleBucketNameList] = useState<string[]>([]);
   const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
   const pushMiddleBucketList = async () => {
@@ -122,7 +124,6 @@ const index = (props: any) => {
         const bucket = issueAxios.getIssueList(middleBucketId);
         for (let i = 0; i < (await bucket).issueList.length; i++) {
           bList.push((await bucket).issueList[i]);
-          console.log((await bucket).issueList[i]);
         }
         setBucketList(bList);
       };
@@ -152,7 +153,7 @@ const index = (props: any) => {
   }, [middleBucketName]);
   useEffect(() => {
     const getSprintId = async () => {
-      const sprintId = await sprintList[sprintNameList.indexOf(sprintName)].id;
+      const sprintId = sprintList[sprintNameList.indexOf(sprintName)].id;
       setSprintId(sprintId);
       console.log(sprintId);
     };
@@ -160,40 +161,41 @@ const index = (props: any) => {
   }, [sprintName]);
   const deleteHandler = (issueId: number) => {
     setBucketList(bucketList.filter(issue => issue.issueId !== issueId));
+    issueAxios.deleteIssue(middleBucketId, issueId);
   };
 
   const addMiddleBucketHandler = () => {
-    issueAxios.postCreateMiddleBucket(middleBucketName, pjtId);
+    console.log(pjtId);
+    console.log(newMiddleBucketName);
+    issueAxios.postCreateMiddleBucket(newMiddleBucketName, pjtId);
+    window.location.reload();
   };
   const editMiddleBucketHandler = () => {
-    // issueAxios.putEditMiddleBucket();
-    alert('');
+    console.log(middleBucketId);
+    issueAxios.putEditMiddleBucket(newMiddleBucketName, middleBucketId);
+    window.location.reload();
   };
   const deleteMiddleBucketHandler = () => {
-    alert('미들버킷 삭제');
-  };
-  const pushIssueList = (middleBucketId: number) => {
-    console.log(issueAxios.getIssueList(middleBucketId));
-  };
-  const addIssueHandler = () => {
-    alert('이슈 추가');
-  };
-  const deleteIssueHandler = () => {
-    alert('이슈 삭제');
+    issueAxios.deleteMiddleBucket(middleBucketId);
+    window.location.reload();
   };
   const [modalOpen, setModalOpen] = useState(false);
+  const [addButtonOpen, setAddButtonOpen] = useState(false);
+  const [editButtonOpen, setEditButtonOpen] = useState(false);
   const [newMiddleBucketName, setNewMiddleBucketName] = useState<string>('');
   const showModalHandler = () => {
     setModalOpen(true);
   };
   const closeModalHandler = () => {
     setModalOpen(false);
+    setAddButtonOpen(false);
+    setEditButtonOpen(false);
   };
   const inputBoxRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!modalOpen && newMiddleBucketName) {
-      console.log(newMiddleBucketName);
-      addMiddleBucketHandler();
+      if (addButtonOpen) addMiddleBucketHandler();
+      else if (editButtonOpen) editMiddleBucketHandler();
       setNewMiddleBucketName('');
     }
   }, [modalOpen]);
@@ -243,7 +245,10 @@ const index = (props: any) => {
             width={'40px'}
             height={'40px'}
             margin={'5px'}
-            clickHandler={showModalHandler}
+            clickHandler={() => {
+              showModalHandler();
+              setAddButtonOpen(true);
+            }}
             isHover
           >
             <HiPlus size={'1.2rem'} />
@@ -258,23 +263,42 @@ const index = (props: any) => {
               isRow={true}
               inputPlaceHolder={'이름을 입력하세요'}
             />
-            <Button
-              borderColor={theme.issue.task}
-              clickHandler={() => {
-                setMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
-                closeModalHandler();
-              }}
-              isHover
-            >
-              Add Bucket
-            </Button>
+            {addButtonOpen && (
+              <Button
+                borderColor={theme.issue.task}
+                clickHandler={() => {
+                  setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                  // setAddButtonOpen(false);
+                  closeModalHandler();
+                }}
+                isHover
+              >
+                Add Bucket
+              </Button>
+            )}
+            {editButtonOpen && (
+              <Button
+                borderColor={theme.issue.task}
+                clickHandler={() => {
+                  setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                  // setEditButtonOpen(false);
+                  closeModalHandler();
+                }}
+                isHover
+              >
+                Edit Bucket
+              </Button>
+            )}
           </Modal>
           <Button
             borderColor={theme.issue.story}
             width={'40px'}
             height={'40px'}
             margin={'5px'}
-            clickHandler={editMiddleBucketHandler}
+            clickHandler={() => {
+              showModalHandler();
+              setEditButtonOpen(true);
+            }}
             isHover
           >
             <RiSave3Fill size={'1.2rem'} />
