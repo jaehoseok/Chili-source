@@ -67,7 +67,9 @@ const index = forwardRef<HTMLInputElement, propsType>(
 
     const inputRef = useForwardRef<HTMLInputElement>(ref);
     useEffect(() => {
-      setText(defaultValue);
+      if (setText) {
+        setText(defaultValue);
+      }
       changeHandler();
     }, [defaultValue]);
     useEffect(() => {

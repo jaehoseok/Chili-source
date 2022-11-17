@@ -39,8 +39,6 @@ const index = () => {
   const currentColor = myInfo()?.userColor;
   const currentImage = myInfo()?.userImage;
 
-  // console.log(getIssuesNotDone.data);
-
   const filteringIssuesByDBGanttHandler = () => {
     const arr = [];
     if (getGanttChart.data && getIssuesNotDone.data) {
@@ -60,8 +58,6 @@ const index = () => {
     return arr;
   };
 
-  filteringIssuesByDBGanttHandler();
-
   useEffect(() => {
     const draggableEl = document.getElementById('external-events');
     if (draggableEl) {
@@ -75,6 +71,7 @@ const index = () => {
           const issueSummary = eventEl.dataset.issue_summary;
           const projectId = eventEl.dataset.project_id;
           const userId = eventEl.dataset.user_id;
+          const storyPoint = eventEl.dataset.story_point;
           return {
             id,
             title,
@@ -83,6 +80,7 @@ const index = () => {
             issueSummary,
             projectId,
             userId,
+            storyPoint,
           };
         },
       });
@@ -98,6 +96,7 @@ const index = () => {
             <div
               className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2"
               title={fields.summary.summary}
+              data-story_point={fields.customfield_10031}
               data-id={id}
               data-color={currentColor}
               data-issue_code={key}
@@ -120,7 +119,7 @@ const index = () => {
                 assignee={fields.assignee.displayName}
                 reporter={fields.assignee.displayName}
                 storyPoints={fields.customfield_10031}
-                epicLink={fields.parent.fields.summary}
+                epicLink={fields.parent ? fields.parent.fields.summary : '에픽 없음'}
               ></Issue>
             </div>
           ))}
