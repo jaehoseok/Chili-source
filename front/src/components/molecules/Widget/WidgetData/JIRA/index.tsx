@@ -1,7 +1,20 @@
-export const JIRA = () => {
+// API & Library
+import { ReactNode, MouseEventHandler } from 'react';
+
+// Styles
+import { StyledWidgetData, styledType } from '../style';
+
+interface propsType extends styledType {
+  onClick?: MouseEventHandler<HTMLDivElement>;
+  children?: ReactNode;
+}
+
+export const JIRA = ({ onClick }: propsType) => {
   return (
     <>
-      <div>JIRA</div>
+      <StyledWidgetData onClick={onClick}>
+        <div>* JIRA *</div>
+      </StyledWidgetData>
     </>
   );
 };

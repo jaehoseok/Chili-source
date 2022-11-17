@@ -2,17 +2,19 @@
 import { ReactNode, MouseEventHandler } from 'react';
 
 // Styles
-import { styledType } from './style';
+import { StyledWidgetData, styledType } from '../style';
 
 interface propsType extends styledType {
-  onClick?: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
 }
 
-export const CALENDAR = () => {
+export const CALENDAR = ({ onClick }: propsType) => {
   return (
     <>
-      <div>* CALENDAR *</div>
+      <StyledWidgetData col={2} onClick={onClick}>
+        <div>* CALENDAR *</div>
+      </StyledWidgetData>
     </>
   );
 };

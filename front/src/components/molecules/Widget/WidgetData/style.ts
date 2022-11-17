@@ -9,5 +9,7 @@ export interface styledType {
 
 export const StyledWidgetData = styled.div<styledType>`
   ${tw``}
-  width: ${({ col }) => `${(col ? col : 1) * 120}`}px;
+  width: ${({ col }) => `${(480 - ((col ? col : 1) - 1) * 32) / (col ? col : 1)}px`};
+  height: ${({ height }) => `${height ? height : '120px'}`};
+  background-color: ${({ backgroundColor }) => `${backgroundColor}`};
 `;
