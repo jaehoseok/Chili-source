@@ -25,6 +25,7 @@ const button = {
   gray: '#D9D9D9',
   white: '#FFFFFF',
   black: '#000000',
+  darkgray: '#a9a9a9',
 };
 
 const issue: issueType = {

@@ -1,4 +1,3 @@
-import { style } from '@mui/system';
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
@@ -14,7 +13,7 @@ export const StyledProjectInfoLine = styled.div`
 `;
 
 export const StyledFlex = styled.div`
-  ${tw`w-full flex gap-10`}
+  ${tw`w-full flex gap-10 justify-center`}
   max-width: 1200px;
 `;
 
@@ -28,12 +27,20 @@ export const StyledFlexCol = styled.div`
   max-width: 1200px;
 `;
 
+export const StyledFlexColCenter = styled.div`
+  ${tw`w-full h-full flex flex-col justify-center`}
+`;
+
 export const StyledSheetPadding = styled.div`
   ${tw`px-10 py-8`}
 `;
 
 export const StyledH2 = styled.div`
   ${tw`font-bold text-2xl`}
+`;
+
+export const StyledH4 = styled.div`
+  ${tw`font-bold text-xl`}
 `;
 
 export const StyledDescription = styled.div`
@@ -56,7 +63,7 @@ export const StyledBar = styled.div`
 export const StyledLinkageToken = styled.div`
   p {
     margin-bottom: 2px;
-    color: ${({ theme }) => theme.button.gray};
+    color: ${({ theme }) => theme.button.darkgray};
     font-size: 0.5rem;
   }
 `;
@@ -70,13 +77,9 @@ export const StyledUserName = styled.div`
   font-weight: bolder;
 `;
 
-export const StyledTextCenter = styled.div`
-  text-align: center;
-`;
-
 export const StyledRoleId = styled.div`
   font-size: 0.6rem;
-  color: ${({ theme }) => theme.button.gray};
+  color: ${({ theme }) => theme.button.darkgray};
 `;
 
 export const StyledOverFlowX = styled.div`
@@ -85,4 +88,13 @@ export const StyledOverFlowX = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+`;
+
+export const StyledUnderLine = styled.div`
+  ${tw`h-1 w-10 mt-4`}
+  background-color: ${({ color }) => color};
+`;
+
+export const StyledMarginBottom = styled.div`
+  ${tw`mb-5`}
 `;

@@ -15,6 +15,7 @@ export interface styledType {
   isOverflowYScroll?: boolean;
   isHover?: boolean;
   minWidth?: string;
+  maxHeight?: string;
 }
 
 export const StyledSheet = styled.div<styledType>`
@@ -31,6 +32,7 @@ export const StyledSheet = styled.div<styledType>`
   max-width: ${({ maxWidth }) => maxWidth};
   min-height: ${({ minHeight }) => minHeight};
   min-width: ${({ minWidth }) => minWidth};
+  max-height: ${({ maxHeight }) => maxHeight};
   ${({ isOverflowXScroll }) =>
     isOverflowXScroll
       ? css`

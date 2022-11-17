@@ -1,5 +1,4 @@
 // Library
-
 import { useParams } from 'react-router-dom';
 import { useGetProject, useGetTeamForProject } from 'hooks/project';
 
@@ -12,6 +11,7 @@ import {
   StyledFlexCol,
   StyledSheetPadding,
   StyledH2,
+  StyledH4,
   StyledWidth,
   StyledHeight,
   StyledDescription,
@@ -20,15 +20,78 @@ import {
   StyledProjectUser,
   StyledUserName,
   StyledRoleId,
-  StyledTextCenter,
   StyledOverFlowX,
+  StyledUnderLine,
+  StyledMarginBottom,
+  StyledFlexColCenter,
 } from './style';
 import { theme } from 'styles/theme';
+import { FaLightbulb } from 'react-icons/fa';
 
 // Components
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
+import { useGetUserInfoHandler } from 'hooks/user';
 
+// 가이드 팁
+const guideList: JSX.Element[] = [
+  <StyledFlexColCenter>
+    <StyledH4 className="hover-text">
+      미들 버킷
+      <span className="hover-text">
+        <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+      </span>
+    </StyledH4>
+    <StyledMarginBottom />
+    <StyledDescription className="hover-text">
+      칠리소스에서는 이슈를 생성하기 전, 한곳에 모아두는 것이 가능합니다. 자주 사용하는 이슈들을
+      모아서, 대량의 이슈를 클릭 한번에 생성해보세요!!
+    </StyledDescription>
+  </StyledFlexColCenter>,
+  <StyledFlexColCenter>
+    <StyledH4 className="hover-text">
+      이슈 템플릿
+      <span className="hover-text">
+        <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+      </span>
+    </StyledH4>
+    <StyledMarginBottom />
+    <StyledDescription className="hover-text">
+      스크럼, 회의 등 자주 사용하는 이슈들이 있지 않나요?, 칠리소스의 이슈 템플릿이라면 매번
+      번거롭게 이슈를 생성하지 않으셔도 됩니다. 자주 사용하는 이슈들을 이슈 템플릿으로 저장하면
+      이슈를 쉽게 불러올 수 있어요.
+    </StyledDescription>
+  </StyledFlexColCenter>,
+  <StyledFlexColCenter>
+    <StyledH4 className="hover-text">
+      캘린더
+      <span className="hover-text">
+        <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+      </span>
+    </StyledH4>
+    <StyledMarginBottom />
+    <StyledDescription className="hover-text">
+      일정에 맞게 이슈를 처리해보세요. 캘린더에서는 아직 처리하지 않는 이슈를 확인하여 날짜별로
+      등록하는 것이 가능합니다. 캘린더에서 반영된 이슈 사항은 간트 차트에서도 동일하게 적용됩니다.
+    </StyledDescription>
+  </StyledFlexColCenter>,
+  <StyledFlexColCenter>
+    <StyledH4 className="hover-text">
+      간트 차트
+      <span className="hover-text">
+        <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+      </span>
+    </StyledH4>
+    <StyledMarginBottom />
+    <StyledDescription className="hover-text">
+      칠리 소스의 간트차트애서는 이슈를 시간 단위로 표현하는 것이 가능합니다. 등록한 이슈를
+      세분화하여 달성도를 나타내 보세요. 다른 팀원의 일정도 함께 확인이 가능하니, 일정에 맞게 이슈를
+      등록해보세요.
+    </StyledDescription>
+  </StyledFlexColCenter>,
+];
+
+const idx = Math.floor(Math.random() * guideList.length);
 /**
  * @description
  * 만드는 중 입니다.
@@ -40,14 +103,23 @@ export const ProjectInfo = () => {
   const { projectId } = useParams();
   const getProject = useGetProject(Number(projectId)).data;
   const getTeamForProject = useGetTeamForProject(Number(projectId));
+  const getUserInfo = useGetUserInfoHandler();
 
   console.log(getProject);
   console.log(getTeamForProject);
+  console.log(getUserInfo);
 
   return (
     <>
       <StyledFlex>
-        <Sheet width="700px" height="300px" isShadow={true} isHover={true}>
+        <Sheet
+          minWidth="700px"
+          maxWidth="1200px"
+          minHeight="300px"
+          maxHeight="500px"
+          isShadow={true}
+          isHover={true}
+        >
           <StyledWidth>
             <StyledHeight>
               <StyledSheetPadding>
@@ -95,10 +167,11 @@ export const ProjectInfo = () => {
                               url={userImage}
                               isDropShadow={true}
                             />
-                            <StyledTextCenter>
+                            <StyledFlexCol>
                               <StyledUserName>{userName}</StyledUserName>
                               <StyledRoleId>{role.id}</StyledRoleId>
-                            </StyledTextCenter>
+                              <StyledUnderLine color={userColor}></StyledUnderLine>
+                            </StyledFlexCol>
                           </StyledFlexCol>
                         </Sheet>
                       ))}
@@ -108,7 +181,21 @@ export const ProjectInfo = () => {
             </StyledHeight>
           </StyledWidth>
         </Sheet>
-        <Sheet width="500px" height="300px" isShadow={true}></Sheet>
+        <Sheet minWidth="500px" maxWidth="800px" isShadow={true}>
+          <StyledSheetPadding>
+            <StyledH2 className="hover-text">가이드</StyledH2>
+            <StyledMarginBottom />
+            <Sheet
+              width="400px"
+              height="200px"
+              isShadow={true}
+              backgroundColor={'#f7f7f7'}
+              isHover={true}
+            >
+              <StyledSheetPadding>{guideList[idx]}</StyledSheetPadding>
+            </Sheet>
+          </StyledSheetPadding>
+        </Sheet>
       </StyledFlex>
       {/* <StyledProjectInfo>
         <Circle height={'150px'} isImage={true} url={getProject ? getProject.image : ''} />

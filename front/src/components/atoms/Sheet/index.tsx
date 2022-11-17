@@ -46,6 +46,7 @@ const index = ({
   maxWidth,
   minHeight,
   minWidth,
+  maxHeight,
   isOverflowXScroll,
   isOverflowYScroll,
   isHover,
@@ -65,6 +66,7 @@ const index = ({
         isOverflowYScroll={isOverflowYScroll}
         isHover={isHover}
         minWidth={minWidth}
+        maxHeight={maxHeight}
       >
         {children}
       </StyledSheet>
