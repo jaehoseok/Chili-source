@@ -385,4 +385,22 @@ export default {
         });
     });
   },
+  postSendToJira: async (middleBucketId: number, projectId: number) => {
+    const data = {
+      middleBucketId: middleBucketId,
+      projectId: projectId,
+    };
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .post(`/jira/middle-bucket`, data)
+        .then(response => {
+          console.log(response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.log('ㅈ됨');
+          reject(error);
+        });
+    });
+  },
 };

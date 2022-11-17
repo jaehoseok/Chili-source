@@ -179,6 +179,9 @@ const index = (props: any) => {
     issueAxios.deleteMiddleBucket(middleBucketId);
     window.location.reload();
   };
+  const sendToJiraHandler = () => {
+    issueAxios.postSendToJira(middleBucketId, pjtId);
+  };
   const [modalOpen, setModalOpen] = useState(false);
   const [addButtonOpen, setAddButtonOpen] = useState(false);
   const [editButtonOpen, setEditButtonOpen] = useState(false);
@@ -268,7 +271,6 @@ const index = (props: any) => {
                 borderColor={theme.issue.task}
                 clickHandler={() => {
                   setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
-                  // setAddButtonOpen(false);
                   closeModalHandler();
                 }}
                 isHover
@@ -281,7 +283,6 @@ const index = (props: any) => {
                 borderColor={theme.issue.task}
                 clickHandler={() => {
                   setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
-                  // setEditButtonOpen(false);
                   closeModalHandler();
                 }}
                 isHover
@@ -330,9 +331,10 @@ const index = (props: any) => {
           isHover
           margin={'5px'}
           clickHandler={() => {
-            alert('미들버킷 이슈 지라로 전송');
-            console.log(props.issue);
-            console.log(bucketList);
+            // alert('미들버킷 이슈 지라로 전송');
+            // console.log(props.issue);
+            // console.log(bucketList);
+            sendToJiraHandler();
           }}
         >
           Send To Jira
