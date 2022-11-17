@@ -7,11 +7,11 @@ import com.ssafy.dto.response.IssueListResponse;
 import com.ssafy.dto.response.IssueTemplateResponse;
 import com.ssafy.dto.response.MiddleBucketResponse;
 import com.ssafy.dto.response.jira.epic.JiraEpicListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
+import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 import com.ssafy.dto.response.jira.project.JiraProjectResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintListResponse;
 import com.ssafy.dto.response.jira.sprint.JiraSprintProgressResponse;
-import com.ssafy.dto.response.jira.issue.JiraIssueListResponse;
-import com.ssafy.dto.response.jira.issue.JiraIssueResponse;
 import com.ssafy.service.IssueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -316,7 +315,7 @@ public class IssueController {
             @LoginUser User user,
             @RequestHeader HttpHeaders headers,
             @ApiParam(value = "JIRA issue key") @PathVariable String issueKey,
-            @Valid @RequestBody IssueUpdateRequest request
+            @RequestBody IssueUpdateRequest request
     ) {
         issueService.updateIssueStatus(user, headers.get(HttpHeaders.AUTHORIZATION), issueKey, request);
         return ResponseEntity.ok()

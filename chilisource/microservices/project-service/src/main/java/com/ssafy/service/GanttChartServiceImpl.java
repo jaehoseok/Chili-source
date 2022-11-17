@@ -229,10 +229,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     @Transactional
     public void updateAllGanttChart(AllGanttChartUpdateRequest request) {
-        Project project = projectRepo.findById(request.getProjectId())
-                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-
-        List<GanttChart> ganttCharts = ganttChartRepo.findByProjectAndIssueCode(project, request.getIssueCode());
+        List<GanttChart> ganttCharts = ganttChartRepo.findByIssueCode(request.getIssueCode());
 
         for (GanttChart ganttChart : ganttCharts) {
             ganttChart.updateIssueSummary(request.getSummary());
