@@ -18,7 +18,7 @@ export const StyledIssueBar = styled.div<styledType>`
 export const StyledIssueBarType = styled.div<styledType>`
   ${tw`flex rounded-l-md`};
   width: 3%;
-  ${({ issueType }) => `background-color: ${theme.issue[issueType]}`};
+  ${({ issueType }) => `background-color: ${theme.issue[issueType.toLowerCase()]}`};
 `;
 
 export const StyledIssueBarContent = styled.div`

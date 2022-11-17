@@ -24,7 +24,7 @@ const index = () => {
     issueTemplateId: 0,
     issueId: 0,
     projectId: 0,
-    issueType: 'story',
+    issueType: '',
     summary: '',
     description: '',
     assignee: '',

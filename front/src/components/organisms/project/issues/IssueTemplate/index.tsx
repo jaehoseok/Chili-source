@@ -41,15 +41,6 @@ const index = (props: any) => {
     }
     setEpicList(eList);
   };
-  // const getSprintList = issueAxios.getSprintList(pjtId);
-  // const [sprintList, setSprintList] = useState<string[]>();
-  // const sList: string[] = [];
-  // const pushSprintList = async () => {
-  //   for (let i = 0; i < (await getSprintList).values.length; i++) {
-  //     sList.push((await getSprintList).values[i].name);
-  //   }
-  //   setSprintList(sList);
-  // };
   const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
   const [memberList, setMemberList] = useState<string[]>();
   const mList: string[] = [];
@@ -96,6 +87,7 @@ const index = (props: any) => {
   };
 
   const setInfoHandler = (issue: templateType) => {
+    console.log(issue);
     props.setIssue(issue);
   };
   const deleteHandler = (issueTemplateId: number) => {
@@ -133,20 +125,20 @@ const index = (props: any) => {
   // IssueInfo 부분
 
   const iType =
-    props.issue.type === 'Story'
+    props.issue.issueType === 'Story'
       ? '스토리'
-      : props.issue.type === 'Task'
+      : props.issue.issueType === 'Task'
       ? '태스크'
-      : props.issue.type === 'Bug'
+      : props.issue.issueType === 'Bug'
       ? '버그'
       : '';
 
   const projectRef = useRef<HTMLInputElement>(null);
-  const typeRef = useRef<HTMLSelectElement>(null);
+  const issueTypeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
   const assigneeRef = useRef<HTMLSelectElement>(null);
-  const rankRef = useRef<HTMLSelectElement>(null);
+  const priorityRef = useRef<HTMLSelectElement>(null);
   const epicLinkRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
@@ -154,12 +146,12 @@ const index = (props: any) => {
   const addTemplateHandler = () => {
     issue.issueTemplateId = templateId;
     issue.projectId = projectId;
-    issue.issueType = typeRef.current
-      ? typeRef.current.value === '스토리'
+    issue.issueType = issueTypeRef.current
+      ? issueTypeRef.current.value === '스토리'
         ? 'Story'
-        : typeRef.current.value === '태스크'
+        : issueTypeRef.current.value === '태스크'
         ? 'Task'
-        : typeRef.current.value === '버그'
+        : issueTypeRef.current.value === '버그'
         ? 'Bug'
         : 'Error'
       : '';
@@ -167,7 +159,7 @@ const index = (props: any) => {
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
     issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
     issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
-    issue.priority = rankRef.current ? rankRef.current.value : '';
+    issue.priority = priorityRef.current ? priorityRef.current.value : '';
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
     // projectRef.current ? (projectRef.current.value = '') : '';
@@ -201,23 +193,21 @@ const index = (props: any) => {
   const editTemplateHandler = () => {
     issues.forEach(issue => {
       if (issue.issueTemplateId === editNo) {
-        typeRef.current
+        issueTypeRef.current
           ? (issue.issueType =
-              typeRef.current.value === '스토리'
+              issueTypeRef.current.value === '스토리'
                 ? 'Story'
-                : typeRef.current.value === '태스크'
+                : issueTypeRef.current.value === '태스크'
                 ? 'Task'
-                : typeRef.current.value === '버그'
+                : issueTypeRef.current.value === '버그'
                 ? 'Bug'
                 : 'Error')
           : '';
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
-        // reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
         assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
-        rankRef.current ? (issue.priority = rankRef.current.value) : '';
+        priorityRef.current ? (issue.priority = priorityRef.current.value) : '';
         epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
-        // sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
         storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
       }
       issueAxios.putEditIssueTemplate(
@@ -239,22 +229,20 @@ const index = (props: any) => {
     props.setIssue({
       templateId: props.issue.templateId,
       projectId: projectId,
-      type: typeRef.current
-        ? typeRef.current.value === '스토리'
+      issueType: issueTypeRef.current
+        ? issueTypeRef.current.value === '스토리'
           ? 'Story'
-          : typeRef.current.value === '태스크'
+          : issueTypeRef.current.value === '태스크'
           ? 'Task'
-          : typeRef.current.value === '버그'
+          : issueTypeRef.current.value === '버그'
           ? 'Bug'
           : 'Error'
         : '',
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
       epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      // reporter: reporterRef.current ? reporterRef.current.value : '',
       assignee: assigneeRef.current ? assigneeRef.current.value : '',
-      rank: rankRef.current ? rankRef.current.value : '',
-      // sprint: sprintRef.current ? sprintRef.current.value : '',
+      priority: priorityRef.current ? priorityRef.current.value : '',
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
@@ -319,7 +307,7 @@ const index = (props: any) => {
               ref={projectRef}
               disabled
             />
-            <SelectBox labelName={'이슈 유형'} ref={typeRef}>
+            <SelectBox labelName={'이슈 유형'} ref={issueTypeRef}>
               <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
             </SelectBox>
             <InputBox
@@ -341,7 +329,7 @@ const index = (props: any) => {
               ></Option>
             </SelectBox>
             <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-            <SelectBox labelName={'우선순위'} ref={rankRef}>
+            <SelectBox labelName={'우선순위'} ref={priorityRef}>
               <Option
                 messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
                 selected={props.issue.priority}

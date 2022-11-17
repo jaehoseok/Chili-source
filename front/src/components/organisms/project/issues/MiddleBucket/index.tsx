@@ -55,12 +55,13 @@ const index = (props: any) => {
     storyPoints: props.issue.storyPoints,
   };
 
-  const [bucket, setBucket] = useState<bucketType[]>([]);
+  // const [bucket, setBucket] = useState<bucketType[]>([]);
   const sprintRef = useRef<HTMLSelectElement>(null);
   const middleBucketRef = useRef<HTMLSelectElement>(null);
   const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
 
+  const [sprintId, setSprintId] = useState<number>(-1);
   const [sprintName, setSprintName] = useState<string>('');
   const [sprintNameList, setSprintNameList] = useState<string[]>([]);
   const [sprintList, setSprintList] = useState<sprintType[]>([]);
@@ -93,28 +94,58 @@ const index = (props: any) => {
     pushSprintList();
     pushMiddleBucketList();
   }, []);
+
+  const iList: requestType[] = [];
+  const [issueList, setIssueList] = useState<requestType[]>([]);
+  const [bucketList, setBucketList] = useState<bucketType[]>([]);
   useEffect(() => {
     if (props.isInsert) {
-      bucket.push(issue);
-      setBucket(bucket);
+      const bList: bucketType[] = [];
+      issue.sprint = sprintId;
+      const request: requestType = {
+        assignee: issue.assignee,
+        description: issue.description,
+        epicLink: issue.epicLink,
+        issueType: issue.issueType,
+        priority: issue.priority,
+        sprint: issue.sprint,
+        storyPoints: issue.storyPoints,
+        summary: issue.summary,
+      };
+
       setIssueId(issueId + 1);
-      console.log(bucket);
+      console.log(bucketList);
       console.log(issue);
-      // issueAxios.postAddIssue(10, props.issue);
+      issueAxios.postAddIssue(middleBucketId, request);
+
+      const getIssueList = async () => {
+        const bucket = issueAxios.getIssueList(middleBucketId);
+        for (let i = 0; i < (await bucket).issueList.length; i++) {
+          bList.push((await bucket).issueList[i]);
+          console.log((await bucket).issueList[i]);
+        }
+        setBucketList(bList);
+      };
+      getIssueList();
       props.setIsInsert(false);
     }
   }, [props.isInsert]);
-
-  const [issueList, setIssueList] = useState<issueType[]>([]);
   useEffect(() => {
     const getBucketId = async () => {
       const index = middleBucketNameList.indexOf(middleBucketName);
       const bucketId = await middleBucketList[index].middleBucketId;
       console.log(bucketId);
       setMiddleBucketId(bucketId);
-      const getIssueList = issueAxios.getIssueList(bucketId);
-      console.log((await getIssueList).issueList);
-
+      const bucket = issueAxios.getIssueList(bucketId);
+      const getIssueList = async () => {
+        const bList: bucketType[] = [];
+        for (let i = 0; i < (await bucket).issueList.length; i++) {
+          bList.push((await bucket).issueList[i]);
+          console.log((await bucket).issueList[i]);
+        }
+        setBucketList(bList);
+      };
+      getIssueList();
       console.log(issue);
     };
     getBucketId();
@@ -122,12 +153,13 @@ const index = (props: any) => {
   useEffect(() => {
     const getSprintId = async () => {
       const sprintId = await sprintList[sprintNameList.indexOf(sprintName)].id;
+      setSprintId(sprintId);
       console.log(sprintId);
     };
     getSprintId();
   }, [sprintName]);
   const deleteHandler = (issueId: number) => {
-    setBucket(bucket.filter(issue => issue.issueId !== issueId));
+    setBucketList(bucketList.filter(issue => issue.issueId !== issueId));
   };
 
   const addMiddleBucketHandler = () => {
@@ -165,7 +197,7 @@ const index = (props: any) => {
       setNewMiddleBucketName('');
     }
   }, [modalOpen]);
-  const BarList = bucket.map(issue => (
+  const BarList = bucketList.map(issue => (
     <StyledIssue>
       <Circle
         height={'20px'}
@@ -276,7 +308,7 @@ const index = (props: any) => {
           clickHandler={() => {
             alert('미들버킷 이슈 지라로 전송');
             console.log(props.issue);
-            console.log(bucket);
+            console.log(bucketList);
           }}
         >
           Send To Jira

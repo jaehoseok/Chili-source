@@ -322,7 +322,7 @@ export default {
   },
   getIssueList: async (middleBucketId: number) => {
     interface responseType {
-      issueList: issueType;
+      issueList: issueType[];
       middleBucketId: number;
       middleBucketName: string;
     }

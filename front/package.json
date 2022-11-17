@@ -58,6 +58,7 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.13.1",
+    "@types/react-router-dom": "^5.3.3",
     "@types/react-slick": "^0.23.10",
     "@types/shortid": "0.0.29",
     "@types/styled-components": "^5.1.26",
