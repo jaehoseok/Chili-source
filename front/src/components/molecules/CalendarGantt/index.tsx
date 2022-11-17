@@ -8,7 +8,9 @@ import { StyledFlex, StyledIconCloseBtn, StyledFlexEnd } from './style';
 
 import { AiFillCloseCircle } from 'react-icons/ai';
 
-import { UseMutationResult } from '@tanstack/react-query';
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+
+import Notification from 'components/atoms/Notification';
 
 import Input from '@mui/material/Input';
 import { theme } from 'styles/theme';
@@ -16,11 +18,12 @@ import { useGetIssueByIssueKey, useUpdateIssueByIssueKey } from 'hooks/issue';
 import FillButton from 'components/atoms/Button';
 
 interface propsType {
-  issueSummary: string;
+  // issueSummary: string;
   issueCode: string;
   ganttChartId: number;
   projectId: number;
   deleteGantt: UseMutationResult<void, unknown, number, unknown>;
+  getGanttChart: UseQueryResult;
   // updateIssueByIssueKey: UseMutationResult<
   //   void,
   //   unknown,
@@ -30,34 +33,63 @@ interface propsType {
 }
 
 const index = ({
-  issueSummary,
+  // issueSummary,
   issueCode,
   ganttChartId,
   deleteGantt,
   projectId,
+  getGanttChart,
 }: // updateIssueByIssueKey,
 propsType) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [getIssueSummary, setIssueSummary] = useState(issueSummary);
-  const [getStoryPoint, setStoryPoint] = useState<number>();
-
   const getIssueByIssueKey = useGetIssueByIssueKey(issueCode);
   const updateIssueByIssueKey = useUpdateIssueByIssueKey();
 
+  const [ref_issueSummary, ref_storyPoint] = [
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.summary.summary : '',
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
+  ];
+
+  const [getIssueSummary, setIssueSummary] = useState(
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.summary.summary : '',
+  );
+
+  const [getStoryPoint, setStoryPoint] = useState<number>(
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
+  );
+
   useEffect(() => {
-    if (getIssueByIssueKey.isSuccess) {
-      setStoryPoint(getIssueByIssueKey.data.fields.customfield_10031);
+    if (
+      getIssueByIssueKey.data?.fields.summary.summary &&
+      getIssueByIssueKey.data?.fields.customfield_10031
+    ) {
+      setIssueSummary(getIssueByIssueKey.data.fields.summary.summary);
+      setStoryPoint(getIssueByIssueKey.data?.fields.customfield_10031);
     }
     if (updateIssueByIssueKey.isSuccess) {
       getIssueByIssueKey.refetch();
+      // getGanttChart.refetch();
     }
-  }, [getIssueByIssueKey.isSuccess, updateIssueByIssueKey.isSuccess]);
+  }, [
+    getIssueByIssueKey.isSuccess,
+    getIssueByIssueKey.isFetched,
+    updateIssueByIssueKey.isSuccess,
+    getIssueByIssueKey.data?.fields.summary.summary,
+    getIssueByIssueKey.data?.fields.customfield_10031,
+  ]);
 
   return (
     <>
+      {updateIssueByIssueKey.isSuccess && (
+        <Notification
+          check={true}
+          message={'지라 이슈가 수정되었습니다'}
+          width={'300px'}
+        ></Notification>
+      )}
       {getIssueByIssueKey.data && (
         <Modal
           open={open as boolean}
@@ -107,7 +139,7 @@ propsType) => {
             <Input
               type="number"
               id="modal-moal-description"
-              defaultValue={getStoryPoint}
+              defaultValue={ref_storyPoint}
               onChange={e => setStoryPoint(+e.currentTarget.value)}
               fullWidth
             ></Input>
@@ -133,7 +165,11 @@ propsType) => {
                 width="80px"
                 height="30px"
                 backgroundColor={theme.button.red}
-                clickHandler={handleClose}
+                clickHandler={() => {
+                  setIssueSummary(ref_issueSummary);
+                  setStoryPoint(ref_storyPoint);
+                  handleClose();
+                }}
               >
                 닫기
               </FillButton>
@@ -147,6 +183,7 @@ propsType) => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           if (!e.target.path) {
+            console.log('걸림??');
             handleOpen();
           }
         }}
@@ -159,7 +196,7 @@ propsType) => {
             textOverflow: 'ellipsis',
           }}
         >
-          {issueSummary}
+          {ref_issueSummary}
         </div>
         <StyledIconCloseBtn>
           <AiFillCloseCircle onClick={() => deleteGantt.mutate(ganttChartId)}></AiFillCloseCircle>

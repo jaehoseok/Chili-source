@@ -34,7 +34,7 @@ export const useGetIssuesNotDone = (projectId: number) => {
  * @author bell
  */
 export const useGetIssueByIssueKey = (issuekey: string) => {
-  return useQuery(['get-jira-issue-by-issue-key', issuekey], () =>
+  return useQuery([`get-jira-issue-by-issue-key-${issuekey}`], () =>
     issue.getIssueByIssueKey(issuekey),
   );
 };

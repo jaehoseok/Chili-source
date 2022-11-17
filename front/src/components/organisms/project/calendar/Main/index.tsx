@@ -99,14 +99,14 @@ const index = () => {
       getGanttChart.refetch();
       getIssuesNotDone.refetch();
     }
-    if (updateIssueByIssueKey.isSuccess) {
-      getGanttChart.refetch();
-    }
+    // if (updateIssueByIssueKey.isSuccess) {
+    //   getGanttChart.refetch();
+    // }
   }, [
     postCreateGantt.isSuccess,
     updateGantt.isSuccess,
     deleteGantt.isSuccess,
-    updateIssueByIssueKey.isSuccess,
+    // updateIssueByIssueKey.isSuccess,
   ]);
 
   return (
@@ -132,6 +132,7 @@ const index = () => {
           width={'300px'}
         ></Notification>
       )}
+
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         timeZone={'UTC'}
@@ -200,10 +201,11 @@ const index = () => {
         eventContent={({ event }) => {
           return (
             <CalendarGantt
-              issueSummary={event.title}
+              // issueSummary={event.title}
               issueCode={event._def.extendedProps.issueCode}
               ganttChartId={event._def.extendedProps.ganttChartId}
               deleteGantt={deleteGantt}
+              getGanttChart={getGanttChart}
               // updateIssueByIssueKey={updateIssueByIssueKey}
 
               projectId={projectId}
