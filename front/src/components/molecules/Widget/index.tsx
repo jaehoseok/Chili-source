@@ -7,6 +7,7 @@ import { Chart } from 'react-google-charts';
 import { StyledWidget, StyledWidgetData, styledType } from './style';
 
 // components
+import { CALENDAR, GANTT, JIRA, SSAFYGITLAB } from './WidgetData';
 import Sheet from 'components/atoms/Sheet';
 
 interface propsType extends styledType {
