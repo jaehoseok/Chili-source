@@ -84,13 +84,16 @@ export default {
       authAxios
         .get('/refresh')
         .then(response => {
-          const ACCESS_TOKEN = response.headers['authorization'];
-          console.log('[받아온 토큰] : ', response.headers['authorization']);
-          setAccessToken(ACCESS_TOKEN);
-          localStorage.setItem('Authorization', ACCESS_TOKEN || '');
-          resolve(ACCESS_TOKEN);
+          console.log('몰랑');
+          resolve(response);
+          // const ACCESS_TOKEN = response.headers['authorization'];
+          // console.log('[받아온 토큰] : ', response.headers['authorization']);
+          // setAccessToken(ACCESS_TOKEN);
+          // localStorage.setItem('Authorization', ACCESS_TOKEN || '');
+          // resolve(ACCESS_TOKEN);
         })
         .catch(error => {
+          console.log('진짜안되는건 선넘었지');
           reject(error);
         });
     });

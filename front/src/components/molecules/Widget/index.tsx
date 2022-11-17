@@ -54,7 +54,7 @@ export const Widget = ({ type, path, children }: propsType) => {
 
   // Methods
   const addWidgetHandler = () => {
-    navigate(`/project/${projectId}/widgets/${splitPath[0]}/${splitPath[1]}`);
+    navigate(`/project/${projectId}/widgets/${splitPath[0]}`);
   };
 
   const updateWidgetTabHandler = (widgetName: string) => {
