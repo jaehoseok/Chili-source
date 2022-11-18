@@ -10,7 +10,8 @@ import { theme } from 'styles/theme';
 // MOLECULES
 // import InputBox from 'components/molecules/InputBox';
 import ProjectCreate from 'components/molecules/ProjectCreate';
-import LinkageTokens from 'components/molecules/LinkageTokens';
+import JiraLinkageToken from 'components/molecules/JiraLinkageToken';
+import GitLabLinkageToken from 'components/molecules/GitLabLinkageToken';
 import Button from 'components/atoms/Button';
 
 /**
@@ -38,7 +39,8 @@ const index = () => {
         {/* 슬라이더 기능 */}
         <Slider {...settings}>
           <ProjectCreate setProjectId={setProjectId} />
-          <LinkageTokens projectId={projectId}></LinkageTokens>
+          <JiraLinkageToken projectId={projectId}></JiraLinkageToken>
+          <GitLabLinkageToken projectId={projectId}></GitLabLinkageToken>
         </Slider>
         <StyledMarginY>
           <StyledFlexRowEnd>
