@@ -8,13 +8,17 @@ import { useGetIssueByIssueKey, useUpdateIssueByIssueKey } from 'hooks/issue';
 import { StyledFlex, StyledIconCloseBtn, StyledFlexEnd } from './style';
 import { theme } from 'styles/theme';
 
-// MUI
+// ATOMS
 import FillButton from 'components/atoms/Button';
 import Notification from 'components/atoms/Notification';
+
+// MUI
 import Input from '@mui/material/Input';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 // ETC
 import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
@@ -45,10 +49,13 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
   const getIssueByIssueKey = useGetIssueByIssueKey(issueCode);
   const updateIssueByIssueKey = useUpdateIssueByIssueKey();
 
+  console.log(getIssueByIssueKey.data);
+
   // 참조용 값 (state 값을 input에 그대로 적용시키면, 수정하고 반영안해도 프론트 단에서는 변경되어있다.)
-  const [ref_issueSummary, ref_storyPoint] = [
+  const [ref_issueSummary, ref_storyPoint, ref_status] = [
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.summary.summary : '',
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.status.id : '',
   ];
 
   // 실제 요청시 보낼 issueSummary state
@@ -61,6 +68,11 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
     getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.customfield_10031 : 0,
   );
 
+  // 실제 요청시 보낼 진행상황 state
+  const [getStatus, setStatus] = useState<string>(
+    getIssueByIssueKey.data ? getIssueByIssueKey.data.fields.status.id : '10000',
+  );
+
   useEffect(() => {
     if (
       getIssueByIssueKey.data?.fields.summary.summary &&
@@ -71,7 +83,6 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
     }
     if (updateIssueByIssueKey.isSuccess) {
       getIssueByIssueKey.refetch();
-      // getGanttChart.refetch();
     }
   }, [
     getIssueByIssueKey.isSuccess,
@@ -142,7 +153,49 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
               defaultValue={ref_storyPoint}
               onChange={e => setStoryPoint(+e.currentTarget.value)}
               fullWidth
+              sx={{ marginBottom: '20px' }}
             ></Input>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ color: theme.button.green, fontWeight: 700 }}
+            >
+              진행 상황
+            </Typography>
+            {/* <Input
+              type="text"
+              id="modal-moal-description"
+              defaultValue={getIssueSummary}
+              onChange={e => setIssueSummary(e.currentTarget.value)}
+              fullWidth
+              sx={{ marginBottom: '20px' }}
+            ></Input> */}
+            {/* <Select setState={setStatus}>
+              <Option
+                messages={['해야할 일', '진행 중', '완료']}
+                selected={
+                  getStatus === '10000' ? '해야할 일' : getStatus === '10001' ? '진행 중' : '완료'
+                }
+              ></Option>
+            </Select> */}
+            <Select
+              value={getStatus}
+              autoWidth={true}
+              sx={{ width: '100%', height: '30px' }}
+              onChange={e => setStatus(e.target.value)}
+            >
+              <MenuItem value={'10000'} sx={{ width: '300px' }}>
+                해야 할 일
+              </MenuItem>
+              <MenuItem value={'3'}>진행 중</MenuItem>
+              <MenuItem value={'10002'}>완료 됨</MenuItem>
+            </Select>
+            {/* <select defaultValue={getStatus}>
+              <option value="10000">해야 할 일</option>
+              <option value="10001">진행 중</option>
+              <option value="10002">완료 됨</option>
+            </select> */}
             <StyledFlexEnd>
               <FillButton
                 width="80px"
@@ -152,7 +205,7 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
                   updateIssueByIssueKey.mutate({
                     issueKey: issueCode,
                     projectId,
-                    statusId: +getIssueByIssueKey.data.fields.status.id,
+                    statusId: +getStatus,
                     storyPoints: getStoryPoint as number,
                     summary: getIssueSummary,
                   });
@@ -168,6 +221,7 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
                 clickHandler={() => {
                   setIssueSummary(ref_issueSummary);
                   setStoryPoint(ref_storyPoint);
+                  setStatus(ref_status);
                   handleClose();
                 }}
               >

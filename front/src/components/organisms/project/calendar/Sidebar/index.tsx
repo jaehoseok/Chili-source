@@ -5,9 +5,20 @@ import { useGetIssuesNotDone } from 'hooks/issue';
 import { useGetUserInfoHandler } from 'hooks/user';
 import { useGetTeamForProject, useGetGanttChart } from 'hooks/project';
 
-import { StyledJiraIssues } from './style';
+import {
+  StyledJiraIssues,
+  StyledPadding,
+  StyledH4,
+  StyledDescription,
+  StyledMarginBottom,
+  StyledFlexColCenter,
+  StyledMarginTop,
+} from './style';
+
+import { FaLightbulb } from 'react-icons/fa';
 
 import Issue from 'components/molecules/Issue';
+import Sheet from 'components/atoms/Sheet';
 
 import { Draggable } from '@fullcalendar/interaction';
 
@@ -89,7 +100,7 @@ const index = () => {
 
   return (
     <StyledJiraIssues>
-      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '600px' }}>
+      <div id="external-events">
         {getIssuesNotDone.data &&
           getGanttChart.data &&
           filteringIssuesByDBGanttHandler().map(({ id, fields, key }, idx) => (
@@ -116,6 +127,7 @@ const index = () => {
                     ? 'Task'
                     : 'Bug'
                 }
+                priority={fields.priority.name}
                 assignee={fields.assignee.displayName}
                 reporter={fields.assignee.displayName}
                 storyPoints={fields.customfield_10031}
@@ -124,6 +136,33 @@ const index = () => {
             </div>
           ))}
       </div>
+      <StyledMarginTop>
+        <Sheet
+          width="400px"
+          height="180px"
+          isShadow={true}
+          backgroundColor={'#fcfcfc'}
+          isHover={true}
+        >
+          <StyledPadding>
+            <StyledFlexColCenter>
+              <StyledH4 className="hover-text">
+                캘린더
+                <span className="hover-text">
+                  <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+                </span>
+              </StyledH4>
+              <StyledMarginBottom />
+              <StyledDescription className="hover-text">
+                <li>오른쪽에 나타나는 이슈들을 원하는 날짜에 드래그 해보세요</li>
+                <li>등록된 날짜의 이슈를 양 끝을 당겨 날짜를 조정해보세요</li>
+                <li>등록된 날짜의 이슈를 클릭하시면, 이슈를 수정할 수 있어요</li>
+                <li>DONE이 된 이슈는 더이상 나타나지 않습니다</li>
+              </StyledDescription>
+            </StyledFlexColCenter>
+          </StyledPadding>
+        </Sheet>
+      </StyledMarginTop>
     </StyledJiraIssues>
   );
 };
