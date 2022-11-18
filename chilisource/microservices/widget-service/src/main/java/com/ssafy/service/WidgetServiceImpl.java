@@ -87,6 +87,7 @@ public class WidgetServiceImpl implements WidgetService {
         }
         Widget widget = Widget.builder()
                 .name(request.getName())
+                .url(request.getUrl())
                 .widgetRow(request.getWidgetRow())
                 .widgetCol(request.getWidgetCol())
                 .projectId(request.getProjectId())
