@@ -115,6 +115,7 @@ const index = ({ setProjectId, setIsCreated }: propsType) => {
                 useSetRecoilState={descriptionSetRecoilState}
                 recoilParam={'projectDescription'}
                 disabled={createProjectData.isSuccess}
+                nonResize={true}
               ></TextAreaBox>
             </StyledMarginY>
             <StyledMarginY>
