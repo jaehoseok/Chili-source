@@ -344,9 +344,6 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
-        // TODO 테스트용
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
         return jiraFeignClient.getProjectList(jiraBase64);
     }
 
@@ -355,8 +352,6 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
 
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
-        // TODO 테스트용
-//        String jiraBase64 = "Basic" + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
 
         return jiraFeignClient.getJiraEpics(jiraBase64);
     }
@@ -391,10 +386,6 @@ public class IssueServiceImpl implements IssueService {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
         String jiraBase64 = "Basic " + Base64Utils.encodeToString((jira.getEmail() + ":" + jira.getValue()).getBytes());
 
-        // TODO 테스트용
-//        String projectKey = "S07P31B207";
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-
         String query = "project = " + projectKey + " AND assignee = currentUser() AND status IN (\"To Do\", \"In Progress\") ORDER BY created DESC";
 
         return jiraFeignClient.getTodoIssues(jiraBase64, query);
@@ -408,6 +399,7 @@ public class IssueServiceImpl implements IssueService {
         return jiraFeignClient.getIssue(jiraBase64, issueKey);
     }
 
+    @Transactional
     @Override
     public void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request) {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
@@ -450,12 +442,6 @@ public class IssueServiceImpl implements IssueService {
         String userJiraId = jira.getJiraAccountId();
         String jiraProjectCode = projectServiceClient.getProject(auths, projectId)
                 .getJiraProject();
-
-        // TODO 테스트용
-//        String jiraBase64 = "Basic " + Base64Utils.encodeToString("ehoi.loveyourself@gmail.com:DAgKZgAJGc8SZGDmwHf993C1".getBytes());
-//        String userJiraId = "62beec7c268cac6e31c5e160";
-//        String jiraProjectCode = "CHIL";
-//        String jiraProjectId = "10000";
 
         MiddleBucket middleBucket = middleBucketRepo.findById(middleBucketId)
                 .orElseThrow(() -> new NotFoundException(MIDDLE_BUCKET_NOT_FOUND));
