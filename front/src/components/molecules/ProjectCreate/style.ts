@@ -6,9 +6,9 @@ export const StyledContainer = styled.div`
   max-width: 1200px;
 `;
 
-// export const StyledFlex = styled.div`
-//   ${tw`w-full`}
-// `;
+export const StyledFlex = styled.div`
+  ${tw`w-full mt-12`}
+`;
 
 export const StyledInputBox = styled.div`
   ${tw`w-full flex flex-col justify-center`}
@@ -54,16 +54,5 @@ export const StyledLi = styled.li`
   &:hover {
     background-color: ${({ theme }) => theme.color.primary};
     color: #ffffff;
-  }
-`;
-
-export const StyledSliderContainer = styled.div`
-  .slick-prev:before,
-  .slick-next:before {
-    font-size: 2rem;
-    color: ${({ theme }) => theme.color.primary};
-  }
-
-  .slick-prev {
   }
 `;
