@@ -392,7 +392,12 @@ export default {
     };
     return new Promise((resolve, reject) => {
       issueAxios
-        .post(`/jira/middle-bucket`, data)
+        .post(`/jira/middle-bucket`, null, {
+          params: {
+            middleBucketId: middleBucketId,
+            projectId: projectId,
+          },
+        })
         .then(response => {
           console.log(response.data);
           resolve(response.data);
