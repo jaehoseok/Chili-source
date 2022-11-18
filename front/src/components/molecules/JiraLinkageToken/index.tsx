@@ -1,5 +1,5 @@
 // LIBRARY
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { linkageTokenState } from 'recoil/atoms/auth/linkageToken';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -11,7 +11,7 @@ import { usePostConnectTokenToProject } from 'hooks/project';
 import { useGetUserInfoHandler } from 'hooks/user';
 
 // STYLE
-import { StyledMarginY, StyledFlexRowEnd, StyledPadding } from './style';
+import { StyledMarginY, StyledFlexRowEnd, StyledPadding, StyledFlexCenter } from './style';
 import { theme } from 'styles/theme';
 
 // MOLECULES
@@ -19,13 +19,15 @@ import InputBox from 'components/molecules/InputBox';
 
 // ATOMS
 import Sheet from 'components/atoms/Sheet';
-import Button from 'components/atoms/Button';
 import Select from 'components/atoms/Select';
 import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
+import Text from 'components/atoms/Text';
+import FillButton from 'components/atoms/FillButton';
 
 interface propsType {
   projectId: number | undefined;
+  setIsLinkedJira: Dispatch<SetStateAction<boolean>>;
 }
 
 interface jiraProjectType {
@@ -33,7 +35,13 @@ interface jiraProjectType {
   name: string;
 }
 
-const index = ({ projectId }: propsType) => {
+/**
+ *
+ * @description
+ *
+ * @author bell
+ */
+const index = ({ projectId, setIsLinkedJira }: propsType) => {
   // 현재 유저에게 연동된 토큰이 있는가 조회
   const [isJiraToken, setJiraToken] = useState(false);
   // 연동된 토큰이 있는 경우, 유저의 토큰 값을 저장
@@ -78,6 +86,10 @@ const index = ({ projectId }: propsType) => {
       jiraProjectList.refetch();
     }
 
+    if (connectTokenToProject.isSuccess) {
+      setIsLinkedJira(true);
+    }
+
     if (jiraProjectList.data) {
       setJiraProject(jiraProjectList.data[0].name);
     }
@@ -87,6 +99,7 @@ const index = ({ projectId }: propsType) => {
     jiraTokenValue,
     jiraProjectList.data,
     getTokens.isSuccess,
+    connectTokenToProject.isSuccess,
   ]);
 
   // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
@@ -123,72 +136,93 @@ const index = ({ projectId }: propsType) => {
   };
 
   return (
-    <StyledPadding>
-      <Sheet width="100%" height="25vh" minHeight="400px" maxWidth="2000px">
-        <StyledMarginY>
-          <InputBox
-            labelName="Jira 토큰"
-            labelSize="1.3rem"
-            labelMarginBottom="20px"
-            isRow={false}
-            containerWidth="100%"
-            useSetRecoilState={jiraSetRecoilState}
-            recoilParam={'jiraToken'}
-            inputValue={isJiraToken ? jiraTokenValue : ''}
-          ></InputBox>
-          <InputBox
-            labelName="Jira 이메일"
-            labelSize="1.3rem"
-            labelMarginBottom="20px"
-            isRow={false}
-            containerWidth="100%"
-            useSetRecoilState={jiraEmailSetRecoilState}
-            recoilParam={'jiraEmail'}
-            inputValue={isJiraToken ? getJiraEmail : ''}
-          ></InputBox>
-          <StyledMarginY>
+    <>
+      {connectTokenToProject.isSuccess && (
+        <Notification
+          width="300px"
+          check={true}
+          message={'서비스와 지라 프로젝트가 서로 연동되었습니다'}
+        ></Notification>
+      )}
+      <StyledPadding>
+        <Sheet width="100%" height="65vh" isShadow={true}>
+          <StyledFlexCenter>
+            <InputBox
+              labelName="Jira 토큰"
+              labelSize="1.3rem"
+              labelMarginBottom="10px"
+              isRow={false}
+              containerWidth="100%"
+              useSetRecoilState={jiraSetRecoilState}
+              recoilParam={'jiraToken'}
+              inputValue={isJiraToken ? jiraTokenValue : ''}
+              inputWidth="100%"
+            ></InputBox>
+            <StyledMarginY>
+              <InputBox
+                labelName="Jira 이메일"
+                labelSize="1.3rem"
+                labelMarginBottom="10px"
+                isRow={false}
+                containerWidth="100%"
+                useSetRecoilState={jiraEmailSetRecoilState}
+                recoilParam={'jiraEmail'}
+                inputValue={isJiraToken ? getJiraEmail : ''}
+                inputWidth="100%"
+              ></InputBox>
+            </StyledMarginY>
             <StyledFlexRowEnd>
-              <Button
-                width="100px"
-                borderColor={theme.button.gray}
-                backgroundColor={theme.button.green}
-                isHover={true}
-                clickHandler={linkageJiraTokenHandler}
-              >
-                입력
-              </Button>
-            </StyledFlexRowEnd>
-          </StyledMarginY>
-          {jiraProjectList.data && (
-            <>
               <StyledMarginY>
-                <Select width="100%" setState={setJiraProject}>
-                  <Option messages={filteringJiraProjectHandler(jiraProjectList.data)}></Option>
-                </Select>
-              </StyledMarginY>
-              <StyledFlexRowEnd>
-                <Button
-                  width="150px"
-                  borderColor={theme.button.gray}
-                  backgroundColor={theme.button.green}
+                <FillButton
+                  width="100px"
+                  backgroundColor={theme.color.primary}
                   isHover={true}
-                  clickHandler={connectTokenToProjectHandler}
+                  clickHandler={linkageJiraTokenHandler}
+                  hoverColor={theme.color.secondary}
                 >
-                  프로젝트와 연동
-                </Button>
-              </StyledFlexRowEnd>
-            </>
-          )}
-          {jiraProjectList.isError && (
-            <Notification
-              width="200px"
-              check={false}
-              message={jiraProjectList.error.message}
-            ></Notification>
-          )}
-        </StyledMarginY>
-      </Sheet>
-    </StyledPadding>
+                  입력
+                </FillButton>
+              </StyledMarginY>
+            </StyledFlexRowEnd>
+
+            {jiraProjectList.data && (
+              <>
+                <Text
+                  isFill={false}
+                  message={'서비스와 연결할 지라 프로젝트 선택'}
+                  color={theme.color.primary}
+                  fontSize={'1.5rem'}
+                  fontWeight={'700'}
+                ></Text>
+                <StyledMarginY>
+                  <Select width="100%" setState={setJiraProject}>
+                    <Option messages={filteringJiraProjectHandler(jiraProjectList.data)}></Option>
+                  </Select>
+                </StyledMarginY>
+                <StyledFlexRowEnd>
+                  <FillButton
+                    width="150px"
+                    backgroundColor={theme.color.primary}
+                    isHover={true}
+                    clickHandler={connectTokenToProjectHandler}
+                    hoverColor={theme.color.secondary}
+                  >
+                    프로젝트와 연동
+                  </FillButton>
+                </StyledFlexRowEnd>
+              </>
+            )}
+            {jiraProjectList.isError && (
+              <Notification
+                width="200px"
+                check={false}
+                message={jiraProjectList.error.message}
+              ></Notification>
+            )}
+          </StyledFlexCenter>
+        </Sheet>
+      </StyledPadding>
+    </>
   );
 };
 

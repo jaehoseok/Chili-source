@@ -1,18 +1,29 @@
 // LIBRARY
 import { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 
+// HOOKS
+import { useDeleteProject, useGetProjects } from 'hooks/project';
+
 // STYLE
-import { StyledContainer, StyledMarginY, StyledFlexRowEnd, StyledSliderContainer } from './style';
+import {
+  StyledContainer,
+  StyledSliderContainer,
+  StyledPadding,
+  StyledFlexColCenter,
+  StyledMarginY,
+} from './style';
 import { theme } from 'styles/theme';
 
 // MOLECULES
-// import InputBox from 'components/molecules/InputBox';
 import ProjectCreate from 'components/molecules/ProjectCreate';
 import JiraLinkageToken from 'components/molecules/JiraLinkageToken';
 import GitLabLinkageToken from 'components/molecules/GitLabLinkageToken';
-import Button from 'components/atoms/Button';
+
+// ATOMS
+import FillButton from 'components/atoms/FillButton';
+import Sheet from 'components/atoms/Sheet';
 
 /**
  * @description
@@ -22,12 +33,22 @@ import Button from 'components/atoms/Button';
  * @author bell
  */
 const index = () => {
+  const navigate = useNavigate();
+
   // project 생성시 받을 프로젝트 id 값
   const [projectId, setProjectId] = useState<number>();
+  // 프로젝트가 정상적으로 생성되었는지 체크
+  const [isCreated, setIsCreated] = useState<boolean>(false);
+  // 지라 프로젝트가 정상적으로 연동되었는지 체크
+  const [isLinkedJira, setIsLinkedJira] = useState<boolean>(false);
+  // 깃 리포지토리가 정상적으로 연동되었는지 체크
+  const [isLinkedGitLab, setIsLinkedGitLab] = useState<boolean>(false);
+
+  const deleteProject = useDeleteProject();
+  const getProjects = useGetProjects();
 
   const settings = {
     dots: true,
-    infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -38,30 +59,73 @@ const index = () => {
       <StyledSliderContainer>
         {/* 슬라이더 기능 */}
         <Slider {...settings}>
-          <ProjectCreate setProjectId={setProjectId} />
-          <JiraLinkageToken projectId={projectId}></JiraLinkageToken>
-          <GitLabLinkageToken projectId={projectId}></GitLabLinkageToken>
+          <ProjectCreate setIsCreated={setIsCreated} setProjectId={setProjectId} />
+          <JiraLinkageToken
+            setIsLinkedJira={setIsLinkedJira}
+            projectId={projectId}
+          ></JiraLinkageToken>
+          <GitLabLinkageToken
+            setIsLinkedGitLab={setIsLinkedGitLab}
+            projectId={projectId}
+          ></GitLabLinkageToken>
+          <StyledPadding>
+            <Sheet width="100%" height={'50vh'} isShadow={true}>
+              <StyledPadding>
+                <StyledFlexColCenter>
+                  {isCreated && isLinkedJira && isLinkedGitLab ? (
+                    <>
+                      <h2>
+                        프로젝트 생성 및 지라 프로젝트,
+                        <br />깃 리포지토리 연동이 모두 성공적으로 완료되었습니다!
+                      </h2>
+                      <StyledMarginY />
+                      <StyledMarginY />
+                      <FillButton
+                        width="200px"
+                        backgroundColor={theme.color.primary}
+                        hoverColor={theme.color.secondary}
+                        clickHandler={() => {
+                          getProjects.refetch();
+                          setIsCreated(false);
+                          setIsLinkedGitLab(false);
+                          setIsLinkedJira(false);
+                          navigate('/projects');
+                        }}
+                      >
+                        프로젝트 선택 페이지로 이동
+                      </FillButton>
+                    </>
+                  ) : (
+                    <>
+                      <h2>
+                        프로젝트 생성 혹은 지라 프로젝트, 깃 리포지토리 연동 도중 문제가
+                        발생하였습니다.
+                      </h2>
+                      <StyledMarginY />
+                      <StyledMarginY />
+                      <FillButton
+                        width="200px"
+                        backgroundColor={theme.color.bug}
+                        hoverColor={theme.color.primary}
+                        clickHandler={() => {
+                          deleteProject.mutateAsync({ projectId: projectId as number }).then(() => {
+                            getProjects.refetch();
+                          });
+                          setIsCreated(false);
+                          setIsLinkedGitLab(false);
+                          setIsLinkedJira(false);
+                          navigate('/projects');
+                        }}
+                      >
+                        나가기
+                      </FillButton>
+                    </>
+                  )}
+                </StyledFlexColCenter>
+              </StyledPadding>
+            </Sheet>
+          </StyledPadding>
         </Slider>
-        <StyledMarginY>
-          <StyledFlexRowEnd>
-            <Button
-              width="100px"
-              borderColor={theme.button.gray}
-              backgroundColor={theme.button.green}
-              isHover={true}
-            >
-              이전
-            </Button>
-            <Button
-              width="100px"
-              borderColor={theme.button.gray}
-              backgroundColor={theme.button.green}
-              isHover={true}
-            >
-              다음
-            </Button>
-          </StyledFlexRowEnd>
-        </StyledMarginY>
       </StyledSliderContainer>
     </StyledContainer>
   );

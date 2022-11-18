@@ -1,5 +1,5 @@
 // LIBRARY
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { linkageTokenState } from 'recoil/atoms/auth/linkageToken';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -11,7 +11,7 @@ import { usePostConnectTokenToProject } from 'hooks/project';
 import { useGetUserInfoHandler } from 'hooks/user';
 
 // STYLE
-import { StyledMarginY, StyledFlexRowEnd, StyledPadding } from './style';
+import { StyledMarginY, StyledFlexRowEnd, StyledPadding, StyledFlexCenter } from './style';
 import { theme } from 'styles/theme';
 
 // MOLECULES
@@ -19,13 +19,15 @@ import InputBox from 'components/molecules/InputBox';
 
 // ATOMS
 import Sheet from 'components/atoms/Sheet';
-import Button from 'components/atoms/Button';
+import FillButton from 'components/atoms/FillButton';
 import Select from 'components/atoms/Select';
 import Option from 'components/atoms/Option';
 import Notification from 'components/atoms/Notification';
+import Text from 'components/atoms/Text';
 
 interface propsType {
   projectId: number | undefined;
+  setIsLinkedGitLab: Dispatch<SetStateAction<boolean>>;
 }
 
 interface gitLabRepositoryType {
@@ -41,7 +43,7 @@ interface gitLabRepositoryType {
   web_url: string;
 }
 
-const index = ({ projectId }: propsType) => {
+const index = ({ projectId, setIsLinkedGitLab }: propsType) => {
   // 현재 유저에게 연동된 토큰이 있는가 조회
   const [isGitLabToken, setGitLabToken] = useState(false);
   // 연동된 토큰이 있는 경우, 유저의 토큰 값을 저장
@@ -67,7 +69,7 @@ const index = ({ projectId }: propsType) => {
 
   useEffect(() => {
     // 토큰이 있다면 연동하기로
-    if (getTokens.isSuccess && getTokens.data && getTokens.data.length > 0) {
+    if (getTokens.isSuccess && getTokens.data.length > 0) {
       for (const item of getTokens.data) {
         if (item.tokenCodeId === 'SSAFYGITLAB') {
           setGitLabToken(true);
@@ -76,23 +78,22 @@ const index = ({ projectId }: propsType) => {
       }
     }
     // 이미 지라에서 한번 불렀기 때문에 .data가 있는지만 확인하면 된다.
-    if (
-      gitLabTokenValue ||
-      linkageToken.isSuccess ||
-      linkageToken.data ||
-      (isGitLabToken && gitLabTokenValue)
-    ) {
+    if (linkageToken.isSuccess || (isGitLabToken && gitLabTokenValue)) {
       getGitLabRepositories.refetch();
     }
     if (getGitLabRepositories.data) {
       setGitLabRepository(getGitLabRepositories.data[0].name);
     }
+    if (connectTokenToProject.isSuccess) {
+      setIsLinkedGitLab(true);
+    }
   }, [
     linkageToken.isSuccess,
-    getTokens.isSuccess,
-    getTokens.data,
-    getGitLabRepositories.isSuccess,
+    isGitLabToken,
     gitLabTokenValue,
+    getGitLabRepositories.data,
+    getTokens.isSuccess,
+    connectTokenToProject.isSuccess,
   ]);
 
   // 가지고 온 지라 프로젝트 Option 컴포넌트의 props 형태에 맞게 필터링
@@ -133,36 +134,44 @@ const index = ({ projectId }: propsType) => {
         <Notification
           width="300px"
           check={true}
-          message={'깃 리포지토리와 프로젝트가 연동되었습니다'}
+          message={'서비스와 깃 리포지토리가 연동되었습니다'}
         ></Notification>
       )}
       <StyledPadding>
-        <Sheet width="100%" height="25vh" minHeight="400px" maxWidth="2000px">
-          <StyledMarginY>
+        <Sheet width="100%" height="50vh" isShadow={true}>
+          <StyledFlexCenter>
             <InputBox
               labelName="GitLab 토큰"
               labelSize="1.3rem"
-              labelMarginBottom="20px"
+              labelMarginBottom="10px"
               isRow={false}
               useSetRecoilState={gitLabSetRecoilState}
               recoilParam={'gitLabToken'}
+              inputWidth={'100%'}
               inputValue={isGitLabToken ? gitLabTokenValue : ''}
             ></InputBox>
             <StyledMarginY>
               <StyledFlexRowEnd>
-                <Button
+                <FillButton
                   width="100px"
-                  borderColor={theme.button.gray}
-                  backgroundColor={theme.button.green}
+                  backgroundColor={theme.color.primary}
                   isHover={true}
                   clickHandler={linkageGitLabTokenHandler}
+                  hoverColor={theme.color.secondary}
                 >
                   입력
-                </Button>
+                </FillButton>
               </StyledFlexRowEnd>
             </StyledMarginY>
             {getGitLabRepositories.data && (
               <>
+                <Text
+                  isFill={false}
+                  message={'서비스와 연결할 깃 리포지토리 선택'}
+                  color={theme.color.primary}
+                  fontSize={'1.5rem'}
+                  fontWeight={'700'}
+                ></Text>
                 <StyledMarginY>
                   <Select width="100%" setState={setGitLabRepository}>
                     <Option
@@ -171,19 +180,19 @@ const index = ({ projectId }: propsType) => {
                   </Select>
                 </StyledMarginY>
                 <StyledFlexRowEnd>
-                  <Button
+                  <FillButton
                     width="150px"
-                    borderColor={theme.button.gray}
-                    backgroundColor={theme.button.green}
+                    backgroundColor={theme.color.primary}
                     isHover={true}
                     clickHandler={connectTokenToProjectHandler}
+                    hoverColor={theme.color.secondary}
                   >
                     프로젝트와 연동
-                  </Button>
+                  </FillButton>
                 </StyledFlexRowEnd>
               </>
             )}
-          </StyledMarginY>
+          </StyledFlexCenter>
         </Sheet>
       </StyledPadding>
     </>

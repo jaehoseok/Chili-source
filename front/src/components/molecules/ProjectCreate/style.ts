@@ -12,7 +12,7 @@ export const StyledFlex = styled.div`
 
 export const StyledInputBox = styled.div`
   ${tw`w-full flex flex-col justify-center`}
-  padding: 0 100px
+  padding: 50px 100px
 `;
 
 export const StyledMarginY = styled.div`

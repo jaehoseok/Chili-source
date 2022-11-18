@@ -32,6 +32,7 @@ import Button from 'components/atoms/Button';
 
 interface propsType {
   setProjectId: Dispatch<SetStateAction<number | undefined>>;
+  setIsCreated: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
@@ -40,7 +41,7 @@ interface propsType {
  *
  * @author bell
  */
-const index = ({ setProjectId }: propsType) => {
+const index = ({ setProjectId, setIsCreated }: propsType) => {
   // project-logo용 state
   const [image, setImage] = useState();
 
@@ -74,6 +75,7 @@ const index = ({ setProjectId }: propsType) => {
   useEffect(() => {
     if (createProjectData.isSuccess) {
       setProjectId(createProjectData.data);
+      setIsCreated(true);
     }
   }, [createProjectData.isSuccess]);
 
@@ -87,7 +89,7 @@ const index = ({ setProjectId }: propsType) => {
         ></Notification>
       )}
       <StyledPadding>
-        <Sheet width="100%" height="30vh" minHeight="450px" maxWidth="2000px" isShadow={true}>
+        <Sheet width="100%" isShadow={true}>
           <StyledInputBox>
             <StyledMarginY>
               <InputBox

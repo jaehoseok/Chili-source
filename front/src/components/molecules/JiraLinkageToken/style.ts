@@ -32,6 +32,11 @@ export const StyledFlexAround = styled.div`
   ${tw`flex justify-around w-full items-center`}
 `;
 
+export const StyledFlexCenter = styled.div`
+  ${tw`w-full flex flex-col justify-center`}
+  padding: 50px 100px;
+`;
+
 export const StyledWidth70 = styled.div`
   ${tw`flex items-end`}
   width: 70%;
