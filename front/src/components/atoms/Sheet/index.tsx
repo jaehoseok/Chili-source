@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, MouseEvent } from 'react';
 import { StyledSheet, styledType } from './style';
 
 interface propsType extends styledType {
