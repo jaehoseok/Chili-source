@@ -408,6 +408,7 @@ public class IssueServiceImpl implements IssueService {
         return jiraFeignClient.getIssue(jiraBase64, issueKey);
     }
 
+    @Transactional
     @Override
     public void updateIssueStatus(User user, List<String> auths, String issueKey, IssueUpdateRequest request) {
         TokenResponse jira = authServiceClient.getToken(auths, "jira");
