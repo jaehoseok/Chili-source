@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { project } from 'api/rest';
 
@@ -22,9 +22,7 @@ export const useGetProject = (projectId: number) => {
  * @author bell
  */
 export const useGetProjects = () => {
-  return useQuery(['get-projects'], () => project.getProjects(), {
-    staleTime: Infinity,
-  });
+  return useQuery(['get-projects'], () => project.getProjects());
 };
 
 /**
@@ -200,7 +198,7 @@ export const useGetGanttChart = (
   start?: string,
   end?: string,
 ) => {
-  return useQuery(['get-gantt-chart'], () =>
+  return useQuery(['get-gantt-chart', projectId], () =>
     project.getGanttChart(op, projectId, userId, start, end),
   );
 };
@@ -238,7 +236,7 @@ export const useGetGanttTasks = (
     displayOrder?: number;
   }
 
-  return useQuery(['gantt-tasks'], async () => {
+  return useQuery(['gantt-tasks', projectId], async () => {
     const resp = await project.getGanttChart(op, projectId, userId, start, end);
     const tasks: task[] = [];
     resp.map(item => {

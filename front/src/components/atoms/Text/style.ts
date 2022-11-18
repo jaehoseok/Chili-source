@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import tw from 'twin.macro';
 
 export interface styledType {
@@ -9,6 +9,7 @@ export interface styledType {
   backgroundColor?: string;
   width?: number;
   display?: string;
+  isHover?: boolean;
 }
 
 export const StyledText = styled.div<styledType>`
@@ -17,14 +18,24 @@ export const StyledText = styled.div<styledType>`
   font-size: ${({ fontSize }) => fontSize};
   font-family: ${({ fontFamily }) => fontFamily};
   display: ${({ display }) => display};
+
+  ${({ isHover }) =>
+    isHover &&
+    css`
+      cursor: pointer;
+      &:hover {
+        color: ${({ theme }) => theme.color.primary};
+        transition: color 0.2s linear;
+      }
+    `}
 `;
 
 StyledText.defaultProps = {
-  color: '#000000',
   fontWeight: '400',
   fontSize: '1rem',
   fontFamily: 'pretendard',
   display: 'inline-block',
+  isHover: false,
 };
 
 export const StyledFill = styled.div<styledType>`

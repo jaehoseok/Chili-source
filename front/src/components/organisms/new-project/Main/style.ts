@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
-  ${tw`w-8/12 h-full flex flex-col justify-center m-auto`}
-  max-width: 1500px;
+  ${tw`w-8/12 flex flex-col justify-center m-auto`}
+  max-width: 1200px;
 `;
 
 export const StyledFlex = styled.div`

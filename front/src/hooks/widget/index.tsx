@@ -191,3 +191,9 @@ export const useSetLayout = () => {
     },
   );
 };
+
+export const useGetGitlabRepositories = (tokenCodeId: string) => {
+  return useQuery(['get-repositories'], () => widget.getGitlabRepositories(tokenCodeId), {
+    enabled: false,
+  });
+};

@@ -39,8 +39,6 @@ const index = () => {
   const currentColor = myInfo()?.userColor;
   const currentImage = myInfo()?.userImage;
 
-  // console.log(getIssuesNotDone.data);
-
   const filteringIssuesByDBGanttHandler = () => {
     const arr = [];
     if (getGanttChart.data && getIssuesNotDone.data) {
@@ -60,8 +58,6 @@ const index = () => {
     return arr;
   };
 
-  filteringIssuesByDBGanttHandler();
-
   useEffect(() => {
     const draggableEl = document.getElementById('external-events');
     if (draggableEl) {
@@ -75,6 +71,7 @@ const index = () => {
           const issueSummary = eventEl.dataset.issue_summary;
           const projectId = eventEl.dataset.project_id;
           const userId = eventEl.dataset.user_id;
+          const storyPoint = eventEl.dataset.story_point;
           return {
             id,
             title,
@@ -83,6 +80,7 @@ const index = () => {
             issueSummary,
             projectId,
             userId,
+            storyPoint,
           };
         },
       });
@@ -91,13 +89,14 @@ const index = () => {
 
   return (
     <StyledJiraIssues>
-      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '700px' }}>
+      <div id="external-events" style={{ overflowY: 'scroll', maxHeight: '600px' }}>
         {getIssuesNotDone.data &&
           getGanttChart.data &&
           filteringIssuesByDBGanttHandler().map(({ id, fields, key }, idx) => (
             <div
               className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2"
               title={fields.summary.summary}
+              data-story_point={fields.customfield_10031}
               data-id={id}
               data-color={currentColor}
               data-issue_code={key}
@@ -111,16 +110,16 @@ const index = () => {
                 issueTemplateId={+id}
                 summary={fields.summary.summary}
                 issueType={
-                  fields.issuetype.name == '스토리'
-                    ? 'story'
-                    : fields.issuetype.name == '작업'
-                    ? 'task'
-                    : 'bug'
+                  fields.issuetype.id == '10001'
+                    ? 'Story'
+                    : fields.issuetype.id == '10002'
+                    ? 'Task'
+                    : 'Bug'
                 }
                 assignee={fields.assignee.displayName}
                 reporter={fields.assignee.displayName}
                 storyPoints={fields.customfield_10031}
-                epicLink={fields.parent.fields.summary}
+                epicLink={fields.parent ? fields.parent.fields.summary : '에픽 없음'}
               ></Issue>
             </div>
           ))}

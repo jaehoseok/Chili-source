@@ -1,8 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 import { user } from 'api/rest';
 
 import { AxiosError } from 'axios';
+import { ChangeEvent } from 'react';
 
 // react-query 함수는 모두 커스텀 훅으로 관장한다.
 // 모듈화하여 가독성 및 확장 수정이 훨씬 편해지며,
@@ -27,7 +28,9 @@ export const useGetUserInfoHandler = () => {
     image: string;
     name: string;
   }
-  return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo());
+  return useQuery<userInfoType, AxiosError>(['userInfo'], () => user.getUserInfo(), {
+    staleTime: Infinity,
+  });
 };
 
 /**
@@ -38,4 +41,24 @@ export const useGetUserInfoHandler = () => {
  */
 export const useGetUserSearch = (email: string) => {
   return useQuery(['get-user-search'], () => user.getUserSearch(email), { enabled: false });
+};
+
+/**
+ * @description
+ * 유저 이미지 수정을 요청하는 API 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useUpdateUserImage = () => {
+  return useMutation((image: ChangeEvent<HTMLInputElement>) => user.updateUserImage(image));
+};
+
+/**
+ * @description
+ * 유저 이름 수정을 요청하는 API 함수를 호출하는 커스텀 훅
+ *
+ * @author bell
+ */
+export const useUpdateUserName = () => {
+  return useMutation((name: string) => user.updateUserName(name));
 };
