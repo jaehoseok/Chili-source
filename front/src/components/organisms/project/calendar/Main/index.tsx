@@ -20,7 +20,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import Notification from 'components/atoms/Notification';
 
 import CalendarGantt from 'components/molecules/CalendarGantt';
-import { useUpdateIssueByIssueKey } from 'hooks/issue';
 
 interface issueType {
   ganttChartId: number;
@@ -51,7 +50,7 @@ const index = () => {
   const updateGantt = useUpdateGantt();
   const deleteGantt = useDeleteGantt();
   const getTeamForProject = useGetTeamForProject(projectId);
-  const updateIssueByIssueKey = useUpdateIssueByIssueKey();
+
   const getIssuesNotDone = useGetIssuesNotDone(projectId);
 
   // pop-up용 state
@@ -99,15 +98,7 @@ const index = () => {
       getGanttChart.refetch();
       getIssuesNotDone.refetch();
     }
-    // if (updateIssueByIssueKey.isSuccess) {
-    //   getGanttChart.refetch();
-    // }
-  }, [
-    postCreateGantt.isSuccess,
-    updateGantt.isSuccess,
-    deleteGantt.isSuccess,
-    // updateIssueByIssueKey.isSuccess,
-  ]);
+  }, [postCreateGantt.isSuccess, updateGantt.isSuccess, deleteGantt.isSuccess]);
 
   return (
     <StyledCalendar>
@@ -141,12 +132,10 @@ const index = () => {
         droppable={true}
         editable={true}
         events={renderingDBIssuesHandler()}
-        // eventClick={handleOpen}
         eventResize={({ event, el }) => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
-
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const startDateFormat = new Date(event.start).toISOString() as string;
@@ -181,7 +170,6 @@ const index = () => {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
-
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const startDateFormat = new Date(event.start).toISOString() as string;

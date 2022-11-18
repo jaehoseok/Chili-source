@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, MouseEvent } from 'react';
 import { StyledSheet, styledType } from './style';
 
 interface propsType extends styledType {
@@ -45,8 +45,11 @@ const index = ({
   flex,
   maxWidth,
   minHeight,
+  minWidth,
+  maxHeight,
   isOverflowXScroll,
   isOverflowYScroll,
+  isHover,
 }: propsType) => {
   return (
     <>
@@ -61,6 +64,9 @@ const index = ({
         minHeight={minHeight}
         isOverflowXScroll={isOverflowXScroll}
         isOverflowYScroll={isOverflowYScroll}
+        isHover={isHover}
+        minWidth={minWidth}
+        maxHeight={maxHeight}
       >
         {children}
       </StyledSheet>
