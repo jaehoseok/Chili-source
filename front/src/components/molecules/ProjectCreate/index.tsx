@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { createProjectState } from 'recoil/atoms/project/createProject';
 
@@ -10,6 +10,7 @@ import {
   StyledFlexRow,
   StyledFlexRowEnd,
   StyledWidth70,
+  StyledPadding,
 } from './style';
 import { theme } from 'styles/theme';
 
@@ -28,7 +29,10 @@ import Notification from 'components/atoms/Notification';
 import Sheet from 'components/atoms/Sheet';
 import Circle from 'components/atoms/Circle';
 import Button from 'components/atoms/Button';
-import { StyledPadding } from '../ProjectSummary/style';
+
+interface propsType {
+  setProjectId: Dispatch<SetStateAction<number | undefined>>;
+}
 
 /**
  * @description
@@ -36,7 +40,7 @@ import { StyledPadding } from '../ProjectSummary/style';
  *
  * @author bell
  */
-const index = () => {
+const index = ({ setProjectId }: propsType) => {
   // project-logo용 state
   const [image, setImage] = useState();
 
@@ -69,7 +73,7 @@ const index = () => {
 
   useEffect(() => {
     if (createProjectData.isSuccess) {
-      // setProjectId(createProjectData.data);
+      setProjectId(createProjectData.data);
     }
   }, [createProjectData.isSuccess]);
 
