@@ -42,7 +42,12 @@ interface gitLabRepositoryType {
   http_url_to_repo: string;
   web_url: string;
 }
-
+/**
+ * @description
+ * 프로젝트 생성 단계 가운데, 깃 연동을 담당하는 컴포넌트
+ *
+ * @author bell
+ */
 const index = ({ projectId, setIsLinkedGitLab }: propsType) => {
   // 현재 유저에게 연동된 토큰이 있는가 조회
   const [isGitLabToken, setGitLabToken] = useState(false);

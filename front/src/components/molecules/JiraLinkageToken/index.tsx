@@ -36,8 +36,8 @@ interface jiraProjectType {
 }
 
 /**
- *
  * @description
+ * 프로젝트 생성 단계 가운데, 지라 연동을 담당하는 컴포넌트
  *
  * @author bell
  */
