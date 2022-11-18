@@ -22,7 +22,7 @@ export const StyledFlex = styled.div`
     background-color: ${({ theme }) => theme.color.primary};
     border-radius: 5px;
     &:hover {
-      background-color: ${({ theme }) => theme.button.darkgreen};
+      background-color: ${({ theme }) => theme.color.secondary};
     }
   }
 }

@@ -2,20 +2,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useDeleteProject, useGetProjects } from 'hooks/project';
 
-import {
-  StyledContainer,
-  StyledFlexBetween,
-  StyledProjectWrapper,
-  StyledFlexColCenter,
-  StyledFlex,
-  StyledH4,
-} from './style';
+import { StyledContainer, StyledFlexColCenter, StyledFlex, StyledH4 } from './style';
 
 import { FaPlus } from 'react-icons/fa';
 
 // COMPONENTS
-import Button from 'components/atoms/Button';
-import Text from 'components/atoms/Text';
 import ProjectSummary from 'components/molecules/ProjectSummary';
 import { useEffect } from 'react';
 import Sheet from 'components/atoms/Sheet';
