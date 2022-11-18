@@ -42,9 +42,9 @@ export const CALENDAR = ({ url }: propsType) => {
   // Return
   return (
     <>
-      <StyledWidgetData ratio="1/1" height="520px" onClick={clickHandler}>
+      <StyledWidgetData ratio="1/1" height="494px" onClick={clickHandler}>
         <StyledWidgetDataLabel>달력</StyledWidgetDataLabel>
-        <StyledWidgetDataContent>1/1 {url}</StyledWidgetDataContent>
+        <StyledWidgetDataContent>{url}</StyledWidgetDataContent>
       </StyledWidgetData>
     </>
   );

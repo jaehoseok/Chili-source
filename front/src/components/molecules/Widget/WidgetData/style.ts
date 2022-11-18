@@ -18,7 +18,6 @@ export const StyledWidgetData = styled.div<styledType>`
     if (ratio) {
       const splitRatio = ratio.split('/');
       const blockWidth = (510 - 16 * Number(splitRatio[1])) / Number(splitRatio[1]);
-      console.log('뭔데', blockWidth);
       return `width: ${blockWidth * Number(splitRatio[0]) + 16 * Number(splitRatio[0]) - 16}px;`;
     }
   }}

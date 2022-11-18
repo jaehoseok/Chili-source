@@ -42,7 +42,7 @@ export const GANTT = ({ url }: propsType) => {
   // Return
   return (
     <>
-      <StyledWidgetData ratio="1/1" height="520px" onClick={clickHandler}>
+      <StyledWidgetData ratio="1/1" height="494px" onClick={clickHandler}>
         <StyledWidgetDataLabel>간트차트</StyledWidgetDataLabel>
         <StyledWidgetDataContent>{url}</StyledWidgetDataContent>
       </StyledWidgetData>
