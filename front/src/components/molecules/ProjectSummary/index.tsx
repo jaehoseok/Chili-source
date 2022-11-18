@@ -1,14 +1,12 @@
+import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  StyledFlex,
-  StyledWidth80,
-  StyledFlexItemsCenter,
-  StyledFlexColumn,
-  StyledMarginY,
-  StyledWidth100px,
+  StyledFlexColCenter,
+  StyledH2,
+  StyledFlexColumnItemsCenter,
+  StyledMarginBottom,
   StyledInlineBlock,
-  StyledFlexCenter,
 } from './style';
 
 import Sheet from 'components/atoms/Sheet';
@@ -17,6 +15,10 @@ import Text from 'components/atoms/Text';
 import Button from 'components/atoms/Button';
 
 import { useGetTeamForProject } from 'hooks/project';
+
+import { GiKing } from 'react-icons/gi';
+import { FaUserFriends } from 'react-icons/fa';
+import { BsFillTrashFill } from 'react-icons/bs';
 
 import { theme } from 'styles/theme';
 
@@ -28,7 +30,7 @@ interface propsType {
   item: {
     id: number;
     name: string;
-    descripton: string;
+    description: string;
     image: string;
     gitRepo: string | null;
     latestGanntVersion: 0;
@@ -57,7 +59,11 @@ const index = ({ idx, item, deleteProject }: propsType) => {
     }
   };
 
-  const linkToDashBoardHandler = (projectId: number) => {
+  const linkToDashBoardHandler = (e: MouseEvent<HTMLElement>, projectId: number) => {
+    const eventTarget = e.target as HTMLElement;
+    if (eventTarget.innerHTML === '') {
+      return;
+    }
     navigate(`/project/${projectId}/dashboard`);
   };
 
@@ -86,85 +92,133 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   };
 
   return (
-    <StyledFlex key={idx}>
-      <Sheet width="100%" height="25vh" minHeight="300px">
-        <StyledWidth80>
-          <StyledFlexItemsCenter>
-            <Circle height={'150px'} isImage={true} url={item.image} />
-            <StyledFlexColumn>
-              <StyledMarginY>
-                <StyledWidth100px>
-                  <Text
-                    message="프로젝트 명"
-                    isFill={false}
-                    fontSize={'1.5rem'}
-                    fontWeight={'700'}
-                  ></Text>
-                </StyledWidth100px>
-                <Text message={item.name} isFill={false}></Text>
-              </StyledMarginY>
-              <StyledMarginY>
-                <StyledFlexCenter>
-                  <StyledWidth100px>
-                    <Text
-                      message="팀장"
-                      isFill={false}
-                      fontSize={'1.5rem'}
-                      fontWeight={'700'}
-                    ></Text>
-                  </StyledWidth100px>
+    <div onClick={e => linkToDashBoardHandler(e, item.id)}>
+      <Sheet minWidth="350px" height="450px" isShadow={true} isHover={true}>
+        <StyledFlexColCenter>
+          <Circle height="100px" backgroundColor={theme.color.primary}>
+            <Circle height="90px" isImage={true} url={item && item.image}></Circle>
+          </Circle>
+          <StyledFlexColumnItemsCenter>
+            <StyledH2 className="hover-text">{item && item.name}</StyledH2>
+            <StyledMarginBottom />
+            <StyledMarginBottom />
+            <StyledMarginBottom />
+            <div>
+              <GiKing
+                className="hover-text"
+                fontSize={'2rem'}
+                style={{ position: 'relative', bottom: '3px' }}
+              ></GiKing>
+              <StyledInlineBlock>
+                <Circle
+                  height={'40px'}
+                  isImage={true}
+                  url={findProjectMasterHandler(getTeamForProject.data && getTeamForProject.data)}
+                />
+              </StyledInlineBlock>
+            </div>
+            <StyledMarginBottom />
+            <div>
+              <StyledInlineBlock>
+                <FaUserFriends className="hover-text" fontSize={'1.5rem'} />
+              </StyledInlineBlock>
+              {getTeamForProject.data &&
+                getTeamForProject.data.map(user => (
                   <StyledInlineBlock>
-                    <Circle
-                      height={'40px'}
-                      isImage={true}
-                      url={findProjectMasterHandler(
-                        getTeamForProject.data && getTeamForProject.data,
-                      )}
-                    />
+                    <Circle height={'25px'} isImage={true} url={user.userImage} />
                   </StyledInlineBlock>
-                </StyledFlexCenter>
-              </StyledMarginY>
-              <StyledMarginY>
-                <StyledFlexCenter>
-                  <StyledWidth100px>
-                    <Text
-                      message="멤버"
-                      isFill={false}
-                      fontSize={'1.5rem'}
-                      fontWeight={'700'}
-                    ></Text>
-                  </StyledWidth100px>
-                  {getTeamForProject.data &&
-                    getTeamForProject.data.map(user => (
-                      <StyledInlineBlock>
-                        <Circle height={'40px'} isImage={true} url={user.userImage} />
-                      </StyledInlineBlock>
-                    ))}
-                </StyledFlexCenter>
-              </StyledMarginY>
-            </StyledFlexColumn>
-          </StyledFlexItemsCenter>
-        </StyledWidth80>
-        <Button
-          backgroundColor={theme.color.primary}
-          isHover={true}
-          clickHandler={() => linkToDashBoardHandler(item.id)}
-          borderColor={theme.button.gray}
-        >
-          이동
-        </Button>
+                ))}
+            </div>
+          </StyledFlexColumnItemsCenter>
+        </StyledFlexColCenter>
         {isMasterHandler() && (
-          <Button
-            backgroundColor={theme.color.bug}
-            clickHandler={() => deleteProjectHandler(item.id)}
-            isHover={true}
-            borderColor={theme.button.gray}
-          >
-            삭제
-          </Button>
+          <BsFillTrashFill
+            className="hover-text"
+            style={{ position: 'relative', right: '20px', top: '15px' }}
+            // onClick={() => deleteProjectHandler(item.id)}
+          />
         )}
       </Sheet>
-    </StyledFlex>
+    </div>
+    // <StyledFlex key={idx}>
+    //   <Sheet width="100%" height="25vh" minHeight="300px">
+    //     <StyledWidth80>
+    //       <StyledFlexItemsCenter>
+    //         <Circle height={'150px'} isImage={true} url={item.image} />
+    //         <StyledFlexColumn>
+    //           <StyledMarginY>
+    //             <StyledWidth100px>
+    //               <Text
+    //                 message="프로젝트 명"
+    //                 isFill={false}
+    //                 fontSize={'1.5rem'}
+    //                 fontWeight={'700'}
+    //               ></Text>
+    //             </StyledWidth100px>
+    //             <Text message={item.name} isFill={false}></Text>
+    //           </StyledMarginY>
+    //           <StyledMarginY>
+    //             <StyledFlexCenter>
+    //               <StyledWidth100px>
+    //                 <Text
+    //                   message="팀장"
+    //                   isFill={false}
+    //                   fontSize={'1.5rem'}
+    //                   fontWeight={'700'}
+    //                 ></Text>
+    //               </StyledWidth100px>
+    //               <StyledInlineBlock>
+    //                 <Circle
+    //                   height={'40px'}
+    //                   isImage={true}
+    //                   url={findProjectMasterHandler(
+    //                     getTeamForProject.data && getTeamForProject.data,
+    //                   )}
+    //                 />
+    //               </StyledInlineBlock>
+    //             </StyledFlexCenter>
+    //           </StyledMarginY>
+    //           <StyledMarginY>
+    //             <StyledFlexCenter>
+    //               <StyledWidth100px>
+    //                 <Text
+    //                   message="멤버"
+    //                   isFill={false}
+    //                   fontSize={'1.5rem'}
+    //                   fontWeight={'700'}
+    //                 ></Text>
+    //               </StyledWidth100px>
+    //               {getTeamForProject.data &&
+    //                 getTeamForProject.data.map(user => (
+    //                   <StyledInlineBlock>
+    //                     <Circle height={'40px'} isImage={true} url={user.userImage} />
+    //                   </StyledInlineBlock>
+    //                 ))}
+    //             </StyledFlexCenter>
+    //           </StyledMarginY>
+    //         </StyledFlexColumn>
+    //       </StyledFlexItemsCenter>
+    //     </StyledWidth80>
+    //     <Button
+    //       backgroundColor={theme.color.primary}
+    //       isHover={true}
+    //       clickHandler={() => linkToDashBoardHandler(item.id)}
+    //       borderColor={theme.button.gray}
+    //     >
+    //       이동
+    //     </Button>
+    //     {isMasterHandler() && (
+    //       <Button
+    //         backgroundColor={theme.color.bug}
+    //         clickHandler={() => deleteProjectHandler(item.id)}
+    //         isHover={true}
+    //         borderColor={theme.button.gray}
+    //       >
+    //         삭제
+    //       </Button>
+    //     )}
+    //   </Sheet>
+    // </StyledFlex>
   );
 };
 

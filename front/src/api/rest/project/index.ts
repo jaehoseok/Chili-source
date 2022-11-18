@@ -126,7 +126,7 @@ export default {
     interface responseType {
       id: number;
       name: string;
-      descripton: string;
+      description: string;
       image: string;
       gitRepo: string | null;
       latestGanntVersion: 0;
