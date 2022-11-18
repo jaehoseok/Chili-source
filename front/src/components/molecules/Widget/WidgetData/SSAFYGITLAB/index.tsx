@@ -1,19 +1,28 @@
-// API & Library
-import { MouseEventHandler } from 'react';
-
 // Styles
-import { StyledWidgetData, styledType } from '../style';
+import {
+  StyledWidgetData,
+  StyledWidgetDataLabel,
+  StyledWidgetDataContent,
+  styledType,
+} from '../style';
 
 interface propsType extends styledType {
   url?: string | null;
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  path?: string;
 }
 
-export const SSAFYGITLAB = ({ url, onClick }: propsType) => {
+export const SSAFYGITLAB = ({ url }: propsType) => {
+  // Methods
+  const clickHandler = () => {
+    console.log('[GIT]: ', url);
+  };
+
+  // Return
   return (
     <>
-      <StyledWidgetData onClick={onClick}>
-        <div>* SSAFYGITLAB *</div>
+      <StyledWidgetData ratio="1/2" height="265px" onClick={clickHandler}>
+        <StyledWidgetDataLabel>깃랩</StyledWidgetDataLabel>
+        <StyledWidgetDataContent>{url}</StyledWidgetDataContent>
       </StyledWidgetData>
     </>
   );

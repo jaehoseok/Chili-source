@@ -46,7 +46,7 @@ export const WidgetListColumn = ({ id, type, path, dropHandler, children }: prop
   return (
     <StyledWidgetListColumn className="widget-list-column" ref={col} style={{ opacity }}>
       <StyledWidgetListColumnLabel className="widget-list-column-label">
-        <Widget type="label"></Widget>
+        <Widget type="LABEL"></Widget>
       </StyledWidgetListColumnLabel>
       {children
         ? children.map(({ id, type, url }, index) => {
