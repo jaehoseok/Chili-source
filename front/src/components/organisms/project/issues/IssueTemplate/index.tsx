@@ -215,7 +215,7 @@ const index = (props: any) => {
   const [type, setType] = useState<string>('Story');
   const [priority, setPriority] = useState<string>('Highest');
   const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
-  const [epicLink, setEpicLink] = useState<string>(epicList ? epicList[0] : '');
+  const [epicLink, setEpicLink] = useState<string>('');
   const changeHandler = (e: any, content: string) => {
     const value = e.target.value;
     content === 'type'
@@ -226,7 +226,6 @@ const index = (props: any) => {
       ? setEpicLink(value)
       : '';
   };
-  console.log(epicLink);
   return (
     <StyledIssueBundle>
       <StyledIssueTemplate>
@@ -294,7 +293,6 @@ const index = (props: any) => {
                 label="이슈 유형"
                 onChange={e => {
                   changeHandler(e, 'type');
-                  console.log(type);
                 }}
               >
                 <MenuItem value={'Story'}>스토리</MenuItem>
