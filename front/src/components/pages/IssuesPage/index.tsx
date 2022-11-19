@@ -13,7 +13,6 @@ export interface templateType {
   issueType: string;
   summary: string;
   description: string;
-  reporter: string;
   assignee: string;
   priority: string;
   epicLink: string;
@@ -25,10 +24,9 @@ const index = () => {
     issueTemplateId: 0,
     issueId: 0,
     projectId: 0,
-    issueType: 'story',
+    issueType: '',
     summary: '',
     description: '',
-    reporter: '',
     assignee: '',
     priority: '',
     epicLink: '',
