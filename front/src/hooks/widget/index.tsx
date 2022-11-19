@@ -67,13 +67,14 @@ export const useAddLayout = () => {
     widgetCodeId: string;
     widgetCol: number;
     widgetRow: number;
+    requestUrl?: string;
   }
 
   const queryClient = useQueryClient();
 
   return useMutation(
-    async ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
-      await widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
+    async ({ projectId, widgetCodeId, widgetCol, widgetRow, requestUrl }: requestType) =>
+      await widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow, requestUrl),
     {
       onSuccess: () => {
         // 요청이 성공한 경우

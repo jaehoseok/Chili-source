@@ -100,6 +100,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
           widgetCodeId: type,
           widgetCol: Number(columnIdx),
           widgetRow: getLayout ? getLayout[Number(columnIdx)].children.length : 0,
+          requestUrl: 'www.naver.com',
         });
 
         navigate(`/project/${projectId}/dashboard`);

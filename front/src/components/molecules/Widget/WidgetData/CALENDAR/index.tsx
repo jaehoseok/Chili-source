@@ -3,20 +3,11 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Chart } from 'react-google-charts';
 import { useGetWidgetCalendarData, useSetWidgetCalendarData } from 'hooks/widgetData';
+import { propsType } from '../../';
 
 // Styles
-import {
-  StyledWidgetData,
-  StyledWidgetDataLabel,
-  StyledWidgetDataContent,
-  styledType,
-} from '../style';
+import { StyledWidgetData, StyledWidgetDataLabel, StyledWidgetDataContent } from '../style';
 import { StyledCalendarData } from './style';
-
-interface propsType extends styledType {
-  url?: string | null;
-  path?: string;
-}
 
 export const CALENDAR = ({ url }: propsType) => {
   // Init

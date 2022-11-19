@@ -35,7 +35,7 @@ export const WidgetListItem = ({ id, type, path, url }: propsType) => {
 
   return (
     <StyledWidgetListItem className="widget-list-item" ref={item} style={{ opacity }}>
-      <Widget type={type} url={url}></Widget>
+      <Widget id={id} type={type} url={url}></Widget>
     </StyledWidgetListItem>
   );
 };

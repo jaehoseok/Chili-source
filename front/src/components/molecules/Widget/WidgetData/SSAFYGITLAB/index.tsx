@@ -1,28 +1,35 @@
+// API & Library
+import { propsType } from '../../';
+
 // Styles
-import {
-  StyledWidgetData,
-  StyledWidgetDataLabel,
-  StyledWidgetDataContent,
-  styledType,
-} from '../style';
+import { StyledWidgetData, StyledWidgetDataLabel, StyledWidgetDataContent } from '../style';
 
-interface propsType extends styledType {
-  url?: string | null;
-  path?: string;
-}
-
-export const SSAFYGITLAB = ({ url }: propsType) => {
+export const SSAFYGITLAB = ({ url, id }: propsType) => {
   // Methods
   const clickHandler = () => {
-    console.log('[GIT]: ', url);
+    console.log('[ID]: ', id);
+    console.log('[URL]: ', url);
+    window.open('https://www.naver.com', 'PopupNew', 'width=500,height=500');
   };
 
   // Return
   return (
     <>
-      <StyledWidgetData ratio="1/2" height="265px" onClick={clickHandler}>
+      <StyledWidgetData ratio="1/4" height="120px" onClick={clickHandler}>
         <StyledWidgetDataLabel>깃랩</StyledWidgetDataLabel>
-        <StyledWidgetDataContent>{url}</StyledWidgetDataContent>
+        <StyledWidgetDataContent>
+          <div
+            style={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <img src={require('assets/images/widgets/SSAFYGITLAB.png')} width={72} alt="깃랩" />
+          </div>
+        </StyledWidgetDataContent>
       </StyledWidgetData>
     </>
   );

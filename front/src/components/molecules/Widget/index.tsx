@@ -5,7 +5,8 @@ import { StyledWidget, styledType } from './style';
 import widgetData from './WidgetData';
 import Sheet from 'components/atoms/Sheet';
 
-interface propsType extends styledType {
+export interface propsType extends styledType {
+  id?: number;
   type?: string;
   path?: string;
   url?: string | null;
@@ -19,11 +20,11 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Widget = ({ type, path, url }: propsType) => {
+export const Widget = ({ type, id, url }: propsType) => {
   return (
     <>
       <StyledWidget className="widget">
-        <Sheet isShadow={true}>{widgetData[type as keyof typeof widgetData]({ url, path })}</Sheet>
+        <Sheet isShadow={true}>{widgetData[type as keyof typeof widgetData]({ id, url })}</Sheet>
       </StyledWidget>
     </>
   );
