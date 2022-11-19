@@ -11,3 +11,7 @@ export const StyledCalendar = styled.div`
     color: green;
   }
 `;
+
+export const StyledUserImages = styled.div`
+  ${tw`flex mt-3 gap-3 w-full justify-center`}
+`;

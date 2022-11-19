@@ -37,9 +37,7 @@ export const useGetTokenCodes = () => {
  * @author bell
  */
 export const useGetTokens = () => {
-  return useQuery(['get-tokens'], () => auth.getTokens(), {
-    staleTime: Infinity,
-  });
+  return useQuery(['get-tokens'], () => auth.getTokens());
 };
 
 /**

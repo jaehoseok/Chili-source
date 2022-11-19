@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
+import React, { forwardRef, ForwardedRef, useRef, useEffect } from 'react';
 import { TextArea, styledType } from './style';
 
 import { SetterOrUpdater } from 'recoil';
@@ -38,6 +38,7 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
       useSetRecoilState,
       recoilParam,
       disabled,
+      nonResize,
     },
     ref,
   ) => {
@@ -89,6 +90,7 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
         defaultValue={text}
         onChange={changeHandler}
         disabled={disabled}
+        nonResize={nonResize}
       ></TextArea>
     );
   },
