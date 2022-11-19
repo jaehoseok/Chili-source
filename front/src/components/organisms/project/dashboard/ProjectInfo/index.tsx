@@ -103,11 +103,6 @@ export const ProjectInfo = () => {
   const { projectId } = useParams();
   const getProject = useGetProject(Number(projectId)).data;
   const getTeamForProject = useGetTeamForProject(Number(projectId));
-  const getUserInfo = useGetUserInfoHandler();
-
-  console.log(getProject);
-  console.log(getTeamForProject);
-  console.log(getUserInfo);
 
   return (
     <>
