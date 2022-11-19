@@ -101,6 +101,15 @@ const index = ({ idx, item, deleteProject }: propsType) => {
     <div key={idx}>
       <Sheet minWidth="350px" height="450px" isShadow={true} isHover={true}>
         <StyledFlexColCenter>
+          {/* 마스터라는 것이 확인되면 바로 삭제할 수 있음 */}
+          {isMasterHandler() && (
+            <BsFillTrashFill
+              className="hover-text"
+              fontSize={'1.5rem'}
+              style={{ position: 'absolute', top: '20px', right: '20px' }}
+              onClick={() => deleteProjectHandler(item.id)}
+            />
+          )}
           <Circle height="100px" backgroundColor={theme.color.primary}>
             <Circle height="90px" isImage={true} url={item && item.image}></Circle>
           </Circle>
@@ -147,15 +156,6 @@ const index = ({ idx, item, deleteProject }: propsType) => {
             </FillButton>
           </StyledFlexColumnItemsCenter>
         </StyledFlexColCenter>
-        {/* 마스터라는 것이 확인되면 바로 삭제할 수 있음 */}
-        {isMasterHandler() && (
-          <BsFillTrashFill
-            className="hover-text"
-            fontSize={'1.5rem'}
-            style={{ position: 'relative', right: '30px', top: '20px' }}
-            onClick={() => deleteProjectHandler(item.id)}
-          />
-        )}
       </Sheet>
     </div>
   );

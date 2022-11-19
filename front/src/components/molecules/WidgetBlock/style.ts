@@ -16,6 +16,10 @@ export const StyledWidgetBlock = styled.div<styledType>`
   background-color: #fafafa;
   box-shadow: inset 4px 4px 10px -1px rgba(0, 0, 0, 0.25),
     inset -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
+  transition: 0.2s;
+  &:hover {
+    scale: 1.02;
+  }
 `;
 StyledWidgetBlock.defaultProps = {
   height: '180px',
@@ -27,5 +31,6 @@ export const StyledWidgetBlockLine = styled.div<styledType>`
 `;
 
 export const StyledWidgetBlockText = styled.div<styledType>`
-  ${tw`max-h-full max-w-[50%] overflow-hidden text-base font-bold`}
+  ${tw`max-h-full max-w-[50%] flex-grow-[1] overflow-hidden text-base font-bold`}
+  text-align: left;
 `;

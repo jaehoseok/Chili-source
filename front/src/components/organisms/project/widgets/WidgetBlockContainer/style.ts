@@ -7,10 +7,22 @@ export interface styledType {
 }
 
 export const StyledWidgetBlockContainer = styled.div<styledType>`
-  ${tw`flex w-full overflow-x-scroll`}
+  ${tw`w-full flex justify-center overflow-x-scroll`}
   transform:rotateX(180deg);
   -ms-transform: rotateX(180deg);
   -webkit-transform: rotateX(180deg);
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    background-clip: padding-box;
+    border-radius: 100px;
+
+    border: 2px solid transparent;
+  }
 `;
 
 export const StyledWidgetBlockBox = styled.div<styledType>`
@@ -19,4 +31,16 @@ export const StyledWidgetBlockBox = styled.div<styledType>`
   transform: rotateX(180deg);
   -ms-transform: rotateX(180deg);
   -webkit-transform: rotateX(180deg);
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray;
+    background-clip: padding-box;
+    border-radius: 100px;
+
+    border: 2px solid transparent;
+  }
 `;
