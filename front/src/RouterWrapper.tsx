@@ -26,6 +26,9 @@ import IssuesPage from 'components/pages/IssuesPage';
 import GanttChartPage from 'components/pages/GanttChartPage';
 import CalendarPage from 'components/pages/CalendarPage';
 
+// guide
+import OpenSourceGuidePage from 'components/pages/OpenSourceGuidePage';
+
 // Router navigation guard
 /**
  * @description
@@ -57,6 +60,7 @@ const RouterWrapper = () => {
         <Route path="/setting/:userId" element={guardedElement(<UserSettingPage />)} />
         <Route path="/projects" element={guardedElement(<ProjectSelectPage />)} />
         <Route path="/new-project" element={guardedElement(<ProjectCreatePage />)} />
+        <Route path="/guide/:pathId" element={guardedElement(<OpenSourceGuidePage />)} />
 
         <Route path="/project/:projectId/*">
           <Route path="dashboard" element={guardedElement(<ProjectDashBoardPage />)} />
