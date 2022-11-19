@@ -11,15 +11,16 @@ import {
 
 import { useGetIssuesNotDone } from 'hooks/issue';
 
-import { StyledCalendar } from './style';
+import { StyledCalendar, StyledUserImages } from './style';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import Notification from 'components/atoms/Notification';
-
+import Circle from 'components/atoms/Circle';
 import CalendarGantt from 'components/molecules/CalendarGantt';
+import { relative } from 'path';
 
 interface issueType {
   ganttChartId: number;
@@ -50,13 +51,7 @@ const index = () => {
   const updateGantt = useUpdateGantt();
   const deleteGantt = useDeleteGantt();
   const getTeamForProject = useGetTeamForProject(projectId);
-
   const getIssuesNotDone = useGetIssuesNotDone(projectId);
-
-  // pop-up용 state
-  // const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
-  // const handleClose = () => setOpen(false);
 
   const matchColorHandler = (userId: string) => {
     if (getTeamForProject.data) {
@@ -123,7 +118,6 @@ const index = () => {
           width={'300px'}
         ></Notification>
       )}
-
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         timeZone={'UTC'}
@@ -189,13 +183,10 @@ const index = () => {
         eventContent={({ event }) => {
           return (
             <CalendarGantt
-              // issueSummary={event.title}
               issueCode={event._def.extendedProps.issueCode}
               ganttChartId={event._def.extendedProps.ganttChartId}
               deleteGantt={deleteGantt}
               getGanttChart={getGanttChart}
-              // updateIssueByIssueKey={updateIssueByIssueKey}
-
               projectId={projectId}
             ></CalendarGantt>
           );
@@ -206,6 +197,23 @@ const index = () => {
         }}
         eventMouseLeave={e => (e.el.style.transform = 'scale(1)')}
       />
+      <StyledUserImages>
+        {getTeamForProject.data &&
+          getTeamForProject.data.map(item => (
+            <Circle height="40px" isImage={true} url={item.userImage}>
+              <div
+                style={{
+                  width: '40px',
+                  height: '6px',
+                  backgroundColor: `${item.userColor}`,
+                  position: 'relative',
+                  top: '30px',
+                  borderRadius: '10px',
+                }}
+              ></div>
+            </Circle>
+          ))}
+      </StyledUserImages>
     </StyledCalendar>
   );
 };

@@ -1,5 +1,4 @@
 // REACT
-import { MouseEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UseMutationResult } from '@tanstack/react-query';
 
@@ -24,6 +23,7 @@ import { theme } from 'styles/theme';
 
 import Sheet from 'components/atoms/Sheet';
 import Circle from 'components/atoms/Circle';
+import FillButton from 'components/atoms/FillButton';
 
 interface propsType {
   idx: number;
@@ -69,11 +69,7 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   };
 
   // project 링크 이동 함수
-  const linkToDashBoardHandler = (e: MouseEvent<HTMLElement>, projectId: number) => {
-    const eventTarget = e.target as HTMLElement;
-    if (eventTarget.innerHTML === '') {
-      return;
-    }
+  const linkToDashBoardHandler = (projectId: number) => {
     navigate(`/project/${projectId}/dashboard`);
   };
 
@@ -102,7 +98,7 @@ const index = ({ idx, item, deleteProject }: propsType) => {
   };
 
   return (
-    <div key={idx} onClick={e => linkToDashBoardHandler(e, item.id)}>
+    <div key={idx}>
       <Sheet minWidth="350px" height="450px" isShadow={true} isHover={true}>
         <StyledFlexColCenter>
           <Circle height="100px" backgroundColor={theme.color.primary}>
@@ -139,14 +135,24 @@ const index = ({ idx, item, deleteProject }: propsType) => {
                   </StyledInlineBlock>
                 ))}
             </div>
+            <StyledMarginBottom />
+            <FillButton
+              width="100px"
+              backgroundColor={theme.button.green}
+              isHover={true}
+              hoverColor={theme.button.darkgreen}
+              clickHandler={() => linkToDashBoardHandler(item.id)}
+            >
+              입장
+            </FillButton>
           </StyledFlexColumnItemsCenter>
         </StyledFlexColCenter>
         {/* 마스터라는 것이 확인되면 바로 삭제할 수 있음 */}
         {isMasterHandler() && (
           <BsFillTrashFill
             className="hover-text"
-            fontSize={'1.25rem'}
-            style={{ position: 'relative', right: '20px', top: '15px' }}
+            fontSize={'1.5rem'}
+            style={{ position: 'relative', right: '30px', top: '20px' }}
             onClick={() => deleteProjectHandler(item.id)}
           />
         )}

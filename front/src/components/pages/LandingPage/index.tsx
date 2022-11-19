@@ -12,6 +12,7 @@ import {
   StyledContainer,
   StyledDrop,
 } from './style';
+import { theme } from 'styles/theme';
 
 // Components
 import HeaderInit from 'components/organisms/common/HeaderInitNav';
@@ -24,7 +25,6 @@ const LandingPage = () => {
     navigate(`/projects`);
   };
 
-  // Return
   return (
     <>
       <StyledPage className="page">
@@ -34,7 +34,7 @@ const LandingPage = () => {
         <StyledBody className="body">
           <img src={require(`assets/images/LandingBanner.png`)} alt="" style={{ width: '100%' }} />
           <StyledSpacer />
-
+          <StyledSpacer />
           <StyledSection className="section">
             <StyledSpacer />
             <StyledContainer
@@ -67,10 +67,9 @@ const LandingPage = () => {
             <StyledSpacer />
           </StyledSection>
           <StyledSpacer />
-
+          <StyledSpacer />
           <StyledSection className="section">
             <StyledSpacer />
-
             <StyledContainer className="container" backgroundColor="transparent">
               <div
                 style={{
@@ -122,6 +121,9 @@ const LandingPage = () => {
             <StyledSpacer />
           </StyledSection>
 
+          <StyledSpacer />
+          <StyledSpacer />
+
           <StyledSection>
             <StyledSpacer />
             <StyledContainer>
@@ -130,12 +132,51 @@ const LandingPage = () => {
             <StyledSpacer />
           </StyledSection>
           <StyledSpacer />
+          <StyledSpacer />
 
           <StyledSection>
             <StyledSpacer />
-            <StyledContainer></StyledContainer>
+            <StyledContainer
+              style={{
+                height: '300px',
+                backgroundColor: theme.color.primary,
+                color: theme.button.white,
+              }}
+            >
+              <h2>이슈</h2>
+              <StyledSpacer />
+              <h3 style={{ color: theme.button.white }}>클릭 한번으로 끝나는 이슈 생성</h3>
+              <StyledSpacer />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <li>대량이 이슈를 한번에 등록해보세요</li>
+                <li>자주 쓰이는 이슈를 저장하고 관리해보세요</li>
+                <li>원하는 스프린트에 쉽고 빠르게!</li>
+              </div>
+            </StyledContainer>
             <StyledSpacer />
-            <StyledContainer></StyledContainer>
+            <StyledContainer>
+              <h2>캘린더</h2>
+              <StyledSpacer />
+              <h3 style={{ color: theme.color.primary }}>모든 팀원의 이슈를 한눈에 관리</h3>
+              <StyledSpacer />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <li>이슈를 날짜별로 등록해보세요</li>
+                <li>등록된 모든 이슈를 팀원과 공유해보세요</li>
+                <li>일정에 따라 이슈를 자유롭게 변경해보세요</li>
+              </div>
+            </StyledContainer>
+            <StyledSpacer />
+            <StyledContainer>
+              <h2>간트차트</h2>
+              <StyledSpacer />
+              <h3 style={{ color: theme.color.primary }}>팀원의 업무 진행상황을 확인</h3>
+              <StyledSpacer />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <li>이슈의 진행도를 표시해보세요</li>
+                <li>버전별로 차트를 관리하고 평가해보세요</li>
+                <li>달력과 함께 동기화하여 사용해보세요</li>
+              </div>
+            </StyledContainer>
             <StyledSpacer />
           </StyledSection>
           <StyledSpacer />

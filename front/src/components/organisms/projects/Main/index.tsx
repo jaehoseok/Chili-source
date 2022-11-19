@@ -1,17 +1,23 @@
+// LIBRARY
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+// HOOKS
 import { useDeleteProject, useGetProjects } from 'hooks/project';
 
+// STYLE
 import { StyledContainer, StyledFlexColCenter, StyledFlex, StyledH4 } from './style';
+import { theme } from 'styles/theme';
 
+// ICON
 import { FaPlus } from 'react-icons/fa';
 
 // COMPONENTS
 import ProjectSummary from 'components/molecules/ProjectSummary';
-import { useEffect } from 'react';
 import Sheet from 'components/atoms/Sheet';
 import Circle from 'components/atoms/Circle';
-import { theme } from 'styles/theme';
+import Text from 'components/atoms/Text';
+import { useGetUserInfoHandler } from 'hooks/user';
 
 /**
  * @description
@@ -25,6 +31,7 @@ const index = () => {
 
   const getProjects = useGetProjects();
   const deleteProject = useDeleteProject();
+  const getUserInfo = useGetUserInfoHandler();
 
   useEffect(() => {
     if (deleteProject.isSuccess) {
@@ -37,6 +44,14 @@ const index = () => {
 
   return (
     <StyledContainer>
+      {getProjects.data && getUserInfo.data && (
+        <Text
+          isFill={false}
+          message={`현재 ${getUserInfo.data.name} 님 께서 참여하고 있는 프로젝트는 총 ${getProjects.data.length} 개입니다.`}
+          fontSize={'2rem'}
+          fontWeight={'700'}
+        ></Text>
+      )}
       <StyledFlex className="sheet">
         <div onClick={() => navigate('/new-project')}>
           <Sheet minWidth="350px" height="450px" isShadow={true} isHover={true}>

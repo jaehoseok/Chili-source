@@ -12,6 +12,14 @@ import Circle from '../../atoms/Circle';
 import { ImBin } from 'react-icons/im';
 import { HiPencil } from 'react-icons/hi';
 
+import { FaAngleDoubleUp } from 'react-icons/fa';
+import { FaAngleUp } from 'react-icons/fa';
+import { FaMinus } from 'react-icons/fa';
+import { FaAngleDown } from 'react-icons/fa';
+import { FaAngleDoubleDown } from 'react-icons/fa';
+import { ImCross } from 'react-icons/im';
+import { IconType } from 'react-icons';
+
 interface propsType extends styledType {
   issueTemplateId: number;
   projectId?: number;
@@ -97,6 +105,7 @@ const index = ({
       iType = '에러';
       break;
   }
+
   const issueSummary = summary ? summary : '';
   const issueEpicLink = epicLink ? epicLink : '';
   const issueStoryPoints = storyPoints ? storyPoints : '';
@@ -149,7 +158,13 @@ const index = ({
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBottomElement>
             <Text isFill={true} message={issueEpicLink} width={24}></Text>
-            <Circle height={'24px'}>{priority}</Circle>
+            <Circle height={'24px'}>
+              {priority === 'Highest' && <FaAngleDoubleUp />}
+              {priority === 'High' && <FaAngleUp />}
+              {priority === 'Medium' && <FaMinus />}
+              {priority === 'Low' && <FaAngleDown />}
+              {priority == 'Lowest' && <FaAngleDoubleDown />}
+            </Circle>
             <Circle height={'24px'} isImage={true} url={userImage}></Circle>
             <Text isFill={true} message={issueStoryPoints + ''} width={24}></Text>
           </StyledIssueBottomElement>
