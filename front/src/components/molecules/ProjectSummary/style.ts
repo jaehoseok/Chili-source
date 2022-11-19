@@ -30,11 +30,11 @@ export const StyledFlexCenter = styled.div`
 `;
 
 export const StyledFlexColCenter = styled.div`
-  ${tw`flex flex-col w-full items-center justify-center h-full gap-10`}
+  ${tw`flex flex-col w-full px-3 items-center justify-center gap-10 relative`}
 `;
 
 export const StyledFlexColumnItemsCenter = styled.div`
-  ${tw`flex flex-col justify-center items-center`}
+  ${tw`flex flex-col justify-center items-center text-center`}
 `;
 
 export const StyledMarginBottom = styled.div`

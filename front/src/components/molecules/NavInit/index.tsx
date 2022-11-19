@@ -89,7 +89,7 @@ const index = () => {
               fontSize="1rem"
               fontWeight="300"
               color="#a9a9a9"
-              clickHandler={() => navigate('/guide')}
+              clickHandler={() => navigate('/guide/1')}
             ></Text>
             <Text
               isFill={false}

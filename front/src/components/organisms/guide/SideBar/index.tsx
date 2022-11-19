@@ -4,10 +4,20 @@ import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useNavigate } from 'react-router-dom';
 
-import { theme } from 'styles/theme';
+const BASICINDEX = [
+  { name: '시작하기', pathId: 1 },
+  { name: '기능 소개', pathId: 2 },
+];
+
+const SIDEINDEX = [
+  { name: '기여', pathId: 3 },
+  { name: 'FAQ', pathId: 4 },
+];
 
 const index = () => {
+  const navigate = useNavigate();
   return (
     <>
       <Box
@@ -19,20 +29,20 @@ const index = () => {
         }}
       >
         <List>
-          {['시작하기', '기능 소개'].map(text => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={text} />
+          {BASICINDEX.map(({ name, pathId }) => (
+            <ListItem key={pathId} disablePadding>
+              <ListItemButton onClick={() => navigate(`/guide/${pathId}`)}>
+                <ListItemText primary={name} />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map(text => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemText primary={text} />
+          {SIDEINDEX.map(({ name, pathId }) => (
+            <ListItem key={pathId} disablePadding>
+              <ListItemButton onClick={() => navigate(`/guide/${pathId}`)}>
+                <ListItemText primary={name} />
               </ListItemButton>
             </ListItem>
           ))}
