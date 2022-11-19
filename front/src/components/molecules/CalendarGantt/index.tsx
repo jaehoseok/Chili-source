@@ -1,5 +1,6 @@
 // REACT
 import { useEffect, useState } from 'react';
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 
 // API HOOKS
 import { useGetIssueByIssueKey, useUpdateIssueByIssueKey } from 'hooks/issue';
@@ -21,7 +22,6 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 // ETC
-import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import { AiFillCloseCircle } from 'react-icons/ai';
 
 interface propsType {
@@ -166,22 +166,6 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
             >
               진행 상황
             </Typography>
-            {/* <Input
-              type="text"
-              id="modal-moal-description"
-              defaultValue={getIssueSummary}
-              onChange={e => setIssueSummary(e.currentTarget.value)}
-              fullWidth
-              sx={{ marginBottom: '20px' }}
-            ></Input> */}
-            {/* <Select setState={setStatus}>
-              <Option
-                messages={['해야할 일', '진행 중', '완료']}
-                selected={
-                  getStatus === '10000' ? '해야할 일' : getStatus === '10001' ? '진행 중' : '완료'
-                }
-              ></Option>
-            </Select> */}
             <Select
               value={getStatus}
               autoWidth={true}
@@ -196,11 +180,6 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
               <MenuItem value={'3'}>진행 중</MenuItem>
               <MenuItem value={'10002'}>완료 됨</MenuItem>
             </Select>
-            {/* <select defaultValue={getStatus}>
-              <option value="10000">해야 할 일</option>
-              <option value="10001">진행 중</option>
-              <option value="10002">완료 됨</option>
-            </select> */}
             <StyledFlexEnd>
               <FillButton
                 width="80px"

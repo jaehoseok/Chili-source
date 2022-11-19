@@ -146,9 +146,3 @@ export const StyledDrop = styled.div<{ backgroundRGBA?: string }>`
     opacity: 0.9;
   }
 `;
-
-export const StyledHover = styled.div`
-  &:hover {
-    background-color: ${({ theme }) => theme.color.primary};
-  }
-`;

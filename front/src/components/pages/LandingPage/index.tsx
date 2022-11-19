@@ -11,7 +11,6 @@ import {
   StyledSection,
   StyledContainer,
   StyledDrop,
-  StyledHover,
 } from './style';
 import { theme } from 'styles/theme';
 
@@ -26,7 +25,6 @@ const LandingPage = () => {
     navigate(`/projects`);
   };
 
-  // Return
   return (
     <>
       <StyledPage className="page">
@@ -35,10 +33,8 @@ const LandingPage = () => {
         </StyledHeader>
         <StyledBody className="body">
           <img src={require(`assets/images/LandingBanner.png`)} alt="" style={{ width: '100%' }} />
-
           <StyledSpacer />
           <StyledSpacer />
-
           <StyledSection className="section">
             <StyledSpacer />
             <StyledContainer
@@ -70,10 +66,8 @@ const LandingPage = () => {
             </StyledContainer>
             <StyledSpacer />
           </StyledSection>
-
           <StyledSpacer />
           <StyledSpacer />
-
           <StyledSection className="section">
             <StyledSpacer />
             <StyledContainer className="container" backgroundColor="transparent">
