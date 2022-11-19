@@ -5,7 +5,7 @@ export const StyledPage = styled.div`
   ${tw`w-full flex flex-col items-center overflow-y-scroll`}
   height: calc(100vh - 66px);
   &::-webkit-scrollbar {
-    width: 10px; /*스크롤바의 너비*/
+    width: 10px;
   }
 
   &::-webkit-scrollbar-thumb {

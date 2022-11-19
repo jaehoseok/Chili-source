@@ -51,7 +51,7 @@ export const WidgetListColumn = ({ id, type, path, dropHandler, children }: prop
       {children
         ? children.map(({ id, type, url }, index) => {
             return (
-              <StyledWidgetListItemContainer key={index}>
+              <StyledWidgetListItemContainer className="widget-list-item-container" key={id}>
                 <WidgetDropSpace
                   onDrop={dropHandler}
                   type="ITEM"

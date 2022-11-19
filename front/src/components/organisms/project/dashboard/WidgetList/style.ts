@@ -35,6 +35,11 @@ export const StyledWidgetList = styled.div<styledType>`
 
     border: 2px solid transparent;
   }
+
+  &::-webkit-scrollbar-track {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
 `;
 
 export const StyledWidgetListColumnContainer = styled.div<styledType>`

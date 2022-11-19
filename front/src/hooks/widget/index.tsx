@@ -1,6 +1,6 @@
 //  API & Library
 import { useParams } from 'react-router-dom';
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { widget } from 'api/rest';
 
 /**
@@ -10,6 +10,7 @@ import { widget } from 'api/rest';
  * @author inte
  */
 export const useGetLayout = () => {
+  // Init
   interface itemType {
     id: number;
     type?: string;
@@ -20,6 +21,7 @@ export const useGetLayout = () => {
 
   const { projectId } = useParams();
 
+  // Return
   return useQuery(
     ['layout', projectId],
     async () => {
@@ -189,10 +191,7 @@ export const useSetLayout = () => {
     },
     {
       onSuccess: () => {
-        // 요청이 성공한 경우
-        console.log('[set layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 강제로 만기 시키기 -> 당장 다시 값 얻어와
-        console.log('[layout invalid]');
       },
     },
   );

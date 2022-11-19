@@ -31,5 +31,5 @@ export const StyledWidgetDataLabel = styled.div`
 `;
 
 export const StyledWidgetDataContent = styled.div`
-  ${tw`flex-grow-[1] flex flex-col justify-center items-center`}
+  ${tw`w-full flex-grow-[1] overflow-hidden`}
 `;
