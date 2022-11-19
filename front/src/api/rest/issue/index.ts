@@ -1,6 +1,7 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { templateType } from 'components/pages/IssuesPage';
+import { templateType, issueType } from 'components/pages/IssuesPage';
+
 // Init
 const issueAxios = createAxiosApi('issue-service');
 
@@ -62,9 +63,6 @@ export default {
    * @author dbcs
    */
   getIssueTemplateList: async (projectId: number) => {
-    // interface responseType {
-    //   data: any;
-    // }
     return new Promise<templateType[]>((resolve, reject) => {
       issueAxios
         .get('/', {
@@ -256,7 +254,125 @@ export default {
         });
     });
   },
-
+  getMiddleBucketList: async (projectId: number) => {
+    interface responseType {
+      middleBucketId: number;
+      name: string;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .get('/middle-buckets', {
+          params: {
+            me: true,
+            projectId: projectId,
+          },
+        })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  postCreateMiddleBucket: async (name: string, projectId: number) => {
+    interface responseType {
+      data: any;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      const data = {
+        name: name,
+        projectId: projectId,
+      };
+      issueAxios
+        .post('/middle-buckets', data)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  putEditMiddleBucket: async (middleBucketName: string, middleBucketId: number) => {
+    interface responseType {
+      name: string;
+    }
+    return new Promise<responseType[]>((resolve, reject) => {
+      issueAxios
+        .put(`/middle-buckets/${middleBucketId}`, middleBucketName)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  deleteMiddleBucket: async (middleBucketId: number) => {
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .delete(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getIssueList: async (middleBucketId: number) => {
+    interface responseType {
+      issueList: issueType[];
+      middleBucketId: number;
+      middleBucketName: string;
+    }
+    interface issueType {
+      assignee: string;
+      description: string;
+      epicLink: string;
+      issueId: number;
+      issueType: string;
+      priority: string;
+      sprint: number;
+      storyPoints: number;
+      summary: string;
+    }
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .get(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  /**
+   * @description
+   * issueKey를 통해 해당 Jira issue의 스토리 포인트와 summary를 업데이트 하는 API
+   *
+   * @author bell
+   */
+  updateIssueByIssueKey: async (
+    issueKey: string,
+    projectId: number,
+    statusId: number,
+    storyPoints: number,
+    summary: string,
+  ) => {
+    try {
+      await issueAxios.put(`/jira/issues/${issueKey}`, {
+        projectId,
+        statusId,
+        storyPoints,
+        summary,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
   /**
    * @description
    * issueKey를 통해 해당 issue 데이터 가져오기
@@ -328,29 +444,64 @@ export default {
         });
     });
   },
-
-  /**
-   * @description
-   * issueKey를 통해 해당 Jira issue의 스토리 포인트와 summary를 업데이트 하는 API
-   *
-   * @author bell
-   */
-  updateIssueByIssueKey: async (
-    issueKey: string,
-    projectId: number,
-    statusId: number,
-    storyPoints: number,
-    summary: string,
-  ) => {
-    try {
-      await issueAxios.put(`/jira/issues/${issueKey}`, {
-        projectId,
-        statusId,
-        storyPoints,
-        summary,
-      });
-    } catch (e) {
-      console.log(e);
+  postAddIssue: async (middleBucketId: number, request: any) => {
+    interface responseType {
+      data: any;
     }
+    const data = {
+      assignee: request.assignee,
+      description: request.description,
+      epicLink: request.epicLink,
+      issueType: request.issueType,
+      priority: request.priority,
+      sprint: request.sprint,
+      storyPoints: request.storyPoints,
+      summary: request.summary,
+    };
+    return new Promise<responseType>((resolve, reject) => {
+      issueAxios
+        .post(`/middle-buckets/${middleBucketId}`, data)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  deleteIssue: async (middleBucketId: number, middleBucketIssueId: number) => {
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .delete(`/middle-buckets/${middleBucketId}/${middleBucketIssueId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  postSendToJira: async (middleBucketId: number, projectId: number) => {
+    const data = {
+      middleBucketId: middleBucketId,
+      projectId: projectId,
+    };
+    return new Promise((resolve, reject) => {
+      issueAxios
+        .post(`/jira/middle-bucket`, null, {
+          params: {
+            middleBucketId: middleBucketId,
+            projectId: projectId,
+          },
+        })
+        .then(response => {
+          console.log(response.data);
+          resolve(response.data);
+        })
+        .catch(error => {
+          console.log('ㅈ됨');
+          reject(error);
+        });
+    });
   },
 };
