@@ -10,12 +10,9 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 interface propsType extends styledType {
-  issueTemplateId?: number;
   issueId?: number;
-  projectId?: number;
   summary?: string;
   description?: string;
-  reporter?: string;
   assignee?: string;
   priority?: string;
   epicLink?: string;
@@ -55,13 +52,10 @@ interface propsType extends styledType {
 const index = ({
   width,
   height,
-  issueTemplateId,
   issueId,
-  projectId,
   issueType,
   summary,
   description,
-  reporter,
   assignee,
   priority,
   epicLink,
