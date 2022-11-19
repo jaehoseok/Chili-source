@@ -31,7 +31,6 @@ import { FaLightbulb } from 'react-icons/fa';
 // Components
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
-import { useGetUserInfoHandler } from 'hooks/user';
 
 // 가이드 팁
 const guideList: JSX.Element[] = [
