@@ -25,7 +25,8 @@ const index = () => {
           border: `1px solid #e9e9e9`,
           padding: '10px',
           width: '300px',
-          height: '700px',
+          height: '100%',
+          maxHeight: '700px',
         }}
       >
         <List>
