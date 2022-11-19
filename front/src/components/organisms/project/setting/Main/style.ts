@@ -1,12 +1,40 @@
 import styled from 'styled-components';
 import tw from 'twin.macro';
 
+export const StyledWrapper = styled.div`
+  padding: 7.5px 20px;
+  margin: 30px 20px;
+  overflow-y: scroll;
+  border-radius: 20px;
+  border: 2px solid #f5f5f5;
+  background-color: #f5f5f5;
+
+  &::-webkit-scrollbar {
+    width: 7.5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.color.primary};
+    border-radius: 5px;
+    &:hover {
+      background-color: ${({ theme }) => theme.color.secondary};
+    }
+  }
+`;
 export const StyledWidthFull = styled.div`
   ${tw`w-full`}
 `;
 
 export const StyledPadding = styled.div`
   ${tw`py-10 px-20`}
+`;
+
+export const StyledPaddingSM = styled.div`
+  ${tw`py-3 px-5`}
 `;
 
 export const StyledMarginBottom = styled.div`

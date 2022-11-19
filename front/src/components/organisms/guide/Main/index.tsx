@@ -4,6 +4,7 @@ import { StyledPadding, StyledSpan } from './style';
 
 import Calendar from 'assets/images/Guide-calender.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { theme } from 'styles/theme';
 
 const index = () => {
   const location = useLocation();
@@ -21,6 +22,19 @@ const index = () => {
         border: `1px solid #e9e9e9`,
         padding: '50px',
         overflowY: 'scroll',
+        '&::-webkit-scrollbar': {
+          width: '7.5px',
+        },
+        '&::-webkit-scrollbar-track': {
+          backgroundColor: '#f5f5f5',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: theme.color.primary,
+
+          '&:hover': {
+            backgroundColor: theme.color.secondary,
+          },
+        },
       }}
     >
       {idx === 1 && (

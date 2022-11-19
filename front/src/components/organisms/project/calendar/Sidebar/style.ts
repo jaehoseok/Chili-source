@@ -7,9 +7,25 @@ export const StyledJiraIssues = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 10px 0;
+    padding: 10px 20px;
     overflow-y: scroll;
     max-height: 400px;
+
+    &::-webkit-scrollbar {
+      width: 7.5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: #f5f5f5;
+      border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: ${({ theme }) => theme.color.primary};
+      border-radius: 5px;
+      &:hover {
+        background-color: ${({ theme }) => theme.color.secondary};
+      }
+    }
   }
   .fc-h-event {
     background-color: #ffffff;
