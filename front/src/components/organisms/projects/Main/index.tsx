@@ -1,25 +1,37 @@
+// LIBRARY
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+// HOOKS
 import { useDeleteProject, useGetProjects } from 'hooks/project';
 
-import { StyledContainer, StyledFlexBetween, StyledProjectWrapper } from './style';
+// STYLE
+import { StyledContainer, StyledFlexColCenter, StyledFlex, StyledH4 } from './style';
+import { theme } from 'styles/theme';
+
+// ICON
+import { FaPlus } from 'react-icons/fa';
 
 // COMPONENTS
-import Button from 'components/atoms/Button';
-import Text from 'components/atoms/Text';
 import ProjectSummary from 'components/molecules/ProjectSummary';
-import { useEffect } from 'react';
+import Sheet from 'components/atoms/Sheet';
+import Circle from 'components/atoms/Circle';
+import Text from 'components/atoms/Text';
+import { useGetUserInfoHandler } from 'hooks/user';
 
+/**
+ * @description
+ * 프로젝트를 선택하는 페이지의 Main 영역
+ *
+ * @author bell
+ */
 const index = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const clickToProjectCreateHandler = () => {
-    navigate('/new-project');
-  };
-
   const getProjects = useGetProjects();
   const deleteProject = useDeleteProject();
+  const getUserInfo = useGetUserInfoHandler();
 
   useEffect(() => {
     if (deleteProject.isSuccess) {
@@ -32,29 +44,37 @@ const index = () => {
 
   return (
     <StyledContainer>
-      <StyledFlexBetween>
+      {getProjects.data && getUserInfo.data && (
         <Text
           isFill={false}
-          message={'프로젝트 선택'}
+          message={`현재 ${getUserInfo.data.name} 님 께서 참여하고 있는 프로젝트는 총 ${getProjects.data.length} 개입니다.`}
           fontSize={'2rem'}
-          fontWeight={'900'}
-          display={'block'}
+          fontWeight={'700'}
         ></Text>
-        <Button
-          backgroundColor="#a9a9a9"
-          width="150px"
-          height="50px"
-          clickHandler={clickToProjectCreateHandler}
-        >
-          <Text color="#ffffff" isFill={false} message={'프로젝트 생성'}></Text>
-        </Button>
-      </StyledFlexBetween>
-      <StyledProjectWrapper>
+      )}
+      <StyledFlex className="sheet">
+        <div onClick={() => navigate('/new-project')}>
+          <Sheet minWidth="350px" height="450px" isShadow={true} isHover={true}>
+            <StyledFlexColCenter>
+              <Circle height="100px" backgroundColor={theme.color.primary}>
+                <Circle height="90px" backgroundColor={theme.button.white}>
+                  <FaPlus className="hover-text" fontSize={'2rem'} color={theme.color.primary} />
+                </Circle>
+              </Circle>
+              <StyledH4 className="hover-text">
+                칠리소스와 함께,
+                <br />
+                새로운 프로젝트를 추가해보세요!
+              </StyledH4>
+            </StyledFlexColCenter>
+          </Sheet>
+        </div>
+
         {getProjects.data &&
           getProjects.data.map((item, idx) => (
             <ProjectSummary item={item} idx={idx} deleteProject={deleteProject}></ProjectSummary>
           ))}
-      </StyledProjectWrapper>
+      </StyledFlex>
     </StyledContainer>
   );
 };

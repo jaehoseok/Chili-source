@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledFlexColItemsCenter = styled.div`
-  ${tw`flex flex-col items-center justify-center`}
+  ${tw`w-full flex flex-col items-center justify-center`}
 `;
 
 export const StyledFlexRowCenter = styled.div`
@@ -33,4 +33,22 @@ export const StyledFlexRowEnd = styled.div`
 
 export const StyledOverFlowY = styled.div`
   ${tw`overflow-y-scroll w-full`}
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.button.lightgray};
+    border-radius: 0px 5px 5px 0px;
+    &:hover {
+      background-color: ${({ theme }) => theme.color.primary};
+    }
+  }
+`;
+
+export const StyledPaddingL = styled.div`
+  ${tw`pl-3`}
 `;

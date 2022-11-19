@@ -6,7 +6,7 @@ export const MiddleBucket = styled.div`
 `;
 
 export const StyledBucketHeader = styled.div`
-  ${tw`flex justify-between items-center p-2`}
+  ${tw`flex justify-between items-end p-2`}
 `;
 
 export const StyledBucketBody = styled.div`

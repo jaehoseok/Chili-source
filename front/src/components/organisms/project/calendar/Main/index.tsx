@@ -9,13 +9,18 @@ import {
   useUpdateGantt,
 } from 'hooks/project';
 
-import { StyledCalendar } from './style';
+import { useGetIssuesNotDone } from 'hooks/issue';
+
+import { StyledCalendar, StyledUserImages } from './style';
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
 import Notification from 'components/atoms/Notification';
+import Circle from 'components/atoms/Circle';
+import CalendarGantt from 'components/molecules/CalendarGantt';
+import { relative } from 'path';
 
 interface issueType {
   ganttChartId: number;
@@ -40,12 +45,13 @@ const index = () => {
 
   const projectId = +location.pathname.split('/')[2];
 
+  // react-query
   const getGanttChart = useGetGanttChart(1, projectId);
   const postCreateGantt = usePostCreateGantt();
   const updateGantt = useUpdateGantt();
   const deleteGantt = useDeleteGantt();
-
   const getTeamForProject = useGetTeamForProject(projectId);
+  const getIssuesNotDone = useGetIssuesNotDone(projectId);
 
   const matchColorHandler = (userId: string) => {
     if (getTeamForProject.data) {
@@ -85,6 +91,7 @@ const index = () => {
     }
     if (deleteGantt.isSuccess) {
       getGanttChart.refetch();
+      getIssuesNotDone.refetch();
     }
   }, [postCreateGantt.isSuccess, updateGantt.isSuccess, deleteGantt.isSuccess]);
 
@@ -120,18 +127,16 @@ const index = () => {
         editable={true}
         events={renderingDBIssuesHandler()}
         eventResize={({ event, el }) => {
-          // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
-
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const startDateFormat = new Date(event.start).toISOString() as string;
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const endDateFormat = new Date(event.end).toISOString() as string;
-          console.log(startDateFormat, endDateFormat);
+
           updateGantt.mutate({
             id: props.ganttChartId,
             issueCode: props.issueCode,
@@ -156,11 +161,9 @@ const index = () => {
           event.remove();
         }}
         eventDrop={({ event, el }) => {
-          // const startDateFormat = new Date(new Date(event.startStr).getTime()).toISOString();
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const props = el.fcSeg.eventRange.def.extendedProps;
-
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const startDateFormat = new Date(event.start).toISOString() as string;
@@ -179,17 +182,13 @@ const index = () => {
         }}
         eventContent={({ event }) => {
           return (
-            <div
-              style={{
-                padding: '2px 4px',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-              }}
-              onDoubleClick={() => deleteGantt.mutate(event._def.extendedProps.ganttChartId)}
-            >
-              {event.title}
-            </div>
+            <CalendarGantt
+              issueCode={event._def.extendedProps.issueCode}
+              ganttChartId={event._def.extendedProps.ganttChartId}
+              deleteGantt={deleteGantt}
+              getGanttChart={getGanttChart}
+              projectId={projectId}
+            ></CalendarGantt>
           );
         }}
         eventMouseEnter={e => {
@@ -198,6 +197,23 @@ const index = () => {
         }}
         eventMouseLeave={e => (e.el.style.transform = 'scale(1)')}
       />
+      <StyledUserImages>
+        {getTeamForProject.data &&
+          getTeamForProject.data.map(item => (
+            <Circle height="40px" isImage={true} url={item.userImage}>
+              <div
+                style={{
+                  width: '40px',
+                  height: '6px',
+                  backgroundColor: `${item.userColor}`,
+                  position: 'relative',
+                  top: '30px',
+                  borderRadius: '10px',
+                }}
+              ></div>
+            </Circle>
+          ))}
+      </StyledUserImages>
     </StyledCalendar>
   );
 };
