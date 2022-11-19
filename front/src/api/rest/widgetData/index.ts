@@ -19,8 +19,8 @@ export default {
       parentId: number;
     }
 
-    const startYear = 1999;
-    const endYear = 2023;
+    const startYear = new Date().getFullYear();
+    const endYear = startYear + 1;
     const calenderDataCounter = new Map<string, number>();
     const calenderData: (
       | (number | Date)[]

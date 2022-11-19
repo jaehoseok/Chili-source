@@ -12,7 +12,6 @@ export const WidgetBlockContainer = () => {
     <>
       <StyledWidgetBlockContainer>
         <StyledWidgetBlockBox>
-          <div>sd</div>
           <WidgetBlock type="GANTT"></WidgetBlock>
           <WidgetBlock type="CALENDAR"></WidgetBlock>
           <WidgetBlock type="JIRA"></WidgetBlock>

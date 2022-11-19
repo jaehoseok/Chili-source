@@ -39,7 +39,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
   let text = '';
   let src;
   let clickHandler = () => {
-    console.log('이거왜이럼');
+    console.log('-');
   };
 
   const navigate = useNavigate();
