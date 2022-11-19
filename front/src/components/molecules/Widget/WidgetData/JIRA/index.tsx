@@ -1,5 +1,7 @@
 // API & Library
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useGetWidgetJiraData } from 'hooks/widgetData';
 
 // Styles
 import {
@@ -8,6 +10,7 @@ import {
   StyledWidgetDataContent,
   styledType,
 } from '../style';
+import { StyledJiraData } from './style';
 
 interface propsType extends styledType {
   url?: string | null;
@@ -18,6 +21,7 @@ export const JIRA = ({ url }: propsType) => {
   // Init
   const navigate = useNavigate();
   const { projectId } = useParams();
+  const widgetJiraData = useGetWidgetJiraData().data;
 
   // Methods
   const clickHandler = () => {
@@ -44,7 +48,25 @@ export const JIRA = ({ url }: propsType) => {
     <>
       <StyledWidgetData ratio="1/2" height="265px" onClick={clickHandler}>
         <StyledWidgetDataLabel>미들버킷</StyledWidgetDataLabel>
-        <StyledWidgetDataContent>{url}</StyledWidgetDataContent>
+        <StyledWidgetDataContent>
+          <StyledJiraData>
+            <div
+              style={{
+                height: '80%',
+                width: '80%',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                border: '1px solid black',
+                borderRadius: '50%',
+              }}
+            >
+              <div>지라 달성률</div>
+              <h1>{widgetJiraData || 0} %</h1>
+            </div>
+          </StyledJiraData>
+        </StyledWidgetDataContent>
       </StyledWidgetData>
     </>
   );

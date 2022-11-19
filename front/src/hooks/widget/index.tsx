@@ -77,8 +77,10 @@ export const useAddLayout = () => {
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[add layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+      },
+      onError: () => {
+        alert('위젯 추가에 실패했습니다.');
       },
     },
   );

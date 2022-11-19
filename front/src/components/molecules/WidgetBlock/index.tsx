@@ -1,6 +1,5 @@
 // API & Library
 import { useNavigate, useParams } from 'react-router-dom';
-import { widget } from 'api/rest';
 import { useAddLayout, useGetLayout } from 'hooks/widget';
 
 // Styles

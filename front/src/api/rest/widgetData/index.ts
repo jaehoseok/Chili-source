@@ -5,6 +5,13 @@ import { createAxiosApi } from 'api/axios';
 const widgetDataAxios = createAxiosApi();
 
 export default {
+  /**
+   * @description
+   * 서버에서 캘린더 이슈들 얻어와서 데이터화 함
+   *
+   * @param projectId
+   * @author inte
+   */
   getWidgetCalendarData: (projectId: number) => {
     // Init
     interface responseType {
@@ -66,6 +73,36 @@ export default {
             calenderData.push([new Date(key), value]);
           });
           resolve(calenderData);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
+   * 서버에서 지라 데이터 얻어와서 데이터화 함
+   *
+   * @param projectId
+   * @author inte
+   */
+  getWidgetJiraData: (projectId: number) => {
+    // Init
+
+    // Return
+    return new Promise<number>((resolve, reject) => {
+      widgetDataAxios
+        .get(`/issue-service/jira/sprint/${projectId}`)
+        .then(async response => {
+          // const sprintId = response.data.values[response.data.values.length - 1].id;
+          const sprintId = response.data.values[0].id;
+
+          const sprintResp = await widgetDataAxios.get(
+            `/issue-service/jira/widget?projectId=${projectId}&sprintId=${sprintId}`,
+          );
+
+          resolve((100 * (sprintResp.data.done | 0)) / (sprintResp.data.total | 1));
         })
         .catch(error => {
           reject(error);
