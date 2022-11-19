@@ -76,10 +76,12 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
   useEffect(() => {
     if (
       getIssueByIssueKey.data?.fields.summary.summary &&
-      getIssueByIssueKey.data?.fields.customfield_10031
+      getIssueByIssueKey.data?.fields.customfield_10031 &&
+      getIssueByIssueKey.data?.fields.status.id
     ) {
       setIssueSummary(getIssueByIssueKey.data.fields.summary.summary);
-      setStoryPoint(getIssueByIssueKey.data?.fields.customfield_10031);
+      setStoryPoint(getIssueByIssueKey.data.fields.customfield_10031);
+      setStatus(getIssueByIssueKey.data.fields.status.id);
     }
     if (updateIssueByIssueKey.isSuccess) {
       getIssueByIssueKey.refetch();
@@ -90,6 +92,7 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
     updateIssueByIssueKey.isSuccess,
     getIssueByIssueKey.data?.fields.summary.summary,
     getIssueByIssueKey.data?.fields.customfield_10031,
+    getIssueByIssueKey.data?.fields.status.id,
   ]);
 
   return (
@@ -134,7 +137,7 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
             <Input
               type="text"
               id="modal-moal-description"
-              defaultValue={getIssueSummary}
+              defaultValue={ref_issueSummary}
               onChange={e => setIssueSummary(e.currentTarget.value)}
               fullWidth
               sx={{ marginBottom: '20px' }}
@@ -183,7 +186,9 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
               value={getStatus}
               autoWidth={true}
               sx={{ width: '100%', height: '30px' }}
-              onChange={e => setStatus(e.target.value)}
+              onChange={e => {
+                setStatus(e.target.value);
+              }}
             >
               <MenuItem value={'10000'} sx={{ width: '300px' }}>
                 해야 할 일
@@ -202,13 +207,17 @@ const index = ({ issueCode, ganttChartId, deleteGantt, projectId }: propsType) =
                 height="30px"
                 backgroundColor={theme.button.green}
                 clickHandler={() => {
-                  updateIssueByIssueKey.mutate({
-                    issueKey: issueCode,
-                    projectId,
-                    statusId: +getStatus,
-                    storyPoints: getStoryPoint as number,
-                    summary: getIssueSummary,
-                  });
+                  updateIssueByIssueKey
+                    .mutateAsync({
+                      issueKey: issueCode,
+                      projectId,
+                      statusId: getStatus === '10000' ? 11 : getStatus === '3' ? 21 : 31,
+                      storyPoints: getStoryPoint as number,
+                      summary: getIssueSummary,
+                    })
+                    .then(() => {
+                      if (getStatus === '10002') deleteGantt.mutate(ganttChartId);
+                    });
                   handleClose();
                 }}
               >
