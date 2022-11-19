@@ -3,11 +3,13 @@ import { Typography, Box, Link } from '@mui/material';
 import { StyledPadding, StyledSpan } from './style';
 
 import Calendar from 'assets/images/Guide-calender.png';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const index = () => {
   const location = useLocation();
   const idx = +location.pathname.split('/')[2];
+
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -41,18 +43,18 @@ const index = () => {
             본 가이드는 현재 총 3개의 파트로 구성이 되었습니다.
           </Typography>
           <StyledPadding />
-          <li style={{ fontSize: '1.1rem' }}>
-            <Link href="/guide/2" underline="none">
+          <li style={{ fontSize: '1.1rem', cursor: 'pointer' }}>
+            <Link onClick={() => navigate('/guide/2')} underline="none">
               <StyledSpan>칠리소스 기능 소개</StyledSpan>
             </Link>
           </li>
-          <li style={{ fontSize: '1.1rem' }}>
-            <Link href="/guide/3" underline="none">
+          <li style={{ fontSize: '1.1rem', cursor: 'pointer' }}>
+            <Link onClick={() => navigate('/guide/3')} underline="none">
               <StyledSpan>칠리소스 기여 하기</StyledSpan>
             </Link>
           </li>
-          <li style={{ fontSize: '1.1rem' }}>
-            <Link href="/guide/4" underline="none">
+          <li style={{ fontSize: '1.1rem', cursor: 'pointer' }}>
+            <Link onClick={() => navigate('/guide/4')} underline="none">
               <StyledSpan>FAQ</StyledSpan>
             </Link>
           </li>
