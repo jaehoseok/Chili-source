@@ -32,14 +32,17 @@ const index = (props: any) => {
   const getUser = useGetUserInfoHandler();
   const getEpicList = issueAxios.getEpicList();
   const [epicList, setEpicList] = useState<string[]>();
+  const [keyList, setKeyList] = useState<string[]>();
   const eList: string[] = [];
+  const kList: string[] = [];
   const pushEpicList = async () => {
     for (let i = 0; i < (await getEpicList).issues.length; i++) {
-      if (eList) {
-        eList.push((await getEpicList).issues[i].fields.summary);
-      }
+      eList.push((await getEpicList).issues[i].fields.summary);
+      kList.push((await getEpicList).issues[i].key);
     }
+    console.log(await getEpicList);
     setEpicList(eList);
+    setKeyList(kList);
   };
   const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
   const [memberList, setMemberList] = useState<string[]>();
@@ -68,6 +71,7 @@ const index = (props: any) => {
 
   useEffect(() => {
     pushEpicList();
+    console.log(eList);
     pushIssueTemplateList();
     pushTeamMemberList();
   }, []);
@@ -339,6 +343,7 @@ const index = (props: any) => {
               <Option
                 messages={epicList ? epicList : ['']}
                 selected={props.issue.epicLink}
+                keys={keyList ? keyList : ['']}
               ></Option>
             </SelectBox>
             <InputBox

@@ -339,7 +339,14 @@ export default {
       summary: string;
     }
     return new Promise<responseType>((resolve, reject) => {
-      issueAxios.get(`/middle-buckets/${middleBucketId}`);
+      issueAxios
+        .get(`/middle-buckets/${middleBucketId}`)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
     });
   },
   /**

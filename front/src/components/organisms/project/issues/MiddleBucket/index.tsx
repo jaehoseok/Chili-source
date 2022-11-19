@@ -116,8 +116,6 @@ const index = (props: any) => {
       };
 
       setIssueId(issueId + 1);
-      console.log(bucketList);
-      console.log(issue);
       issueAxios.postAddIssue(middleBucketId, request);
 
       const getIssueList = async () => {
@@ -191,15 +189,18 @@ const index = (props: any) => {
   };
   const closeModalHandler = () => {
     setModalOpen(false);
-    setAddButtonOpen(false);
-    setEditButtonOpen(false);
   };
   const inputBoxRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (!modalOpen && newMiddleBucketName) {
+      console.log(addButtonOpen);
+      console.log(editButtonOpen);
       if (addButtonOpen) addMiddleBucketHandler();
       else if (editButtonOpen) editMiddleBucketHandler();
       setNewMiddleBucketName('');
+
+      setAddButtonOpen(false);
+      setEditButtonOpen(false);
     }
   }, [modalOpen]);
   const BarList = bucketList.map(issue => (
