@@ -42,7 +42,13 @@ export default {
     });
   },
 
-  addWidget: (projectId: number, widgetCodeId: string, widgetCol: number, widgetRow: number) => {
+  addWidget: (
+    projectId: number,
+    widgetCodeId: string,
+    widgetCol: number,
+    widgetRow: number,
+    url?: string,
+  ) => {
     // Init
     interface requestType {
       name: string;
@@ -50,6 +56,7 @@ export default {
       widgetCodeId: string;
       widgetCol: number;
       widgetRow: number;
+      url: string;
     }
 
     interface responseType {
@@ -59,6 +66,7 @@ export default {
     // Data
     const payload: requestType = {
       name: '-',
+      url: url || '',
       projectId,
       widgetCodeId,
       widgetCol,
