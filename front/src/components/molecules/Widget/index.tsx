@@ -20,11 +20,13 @@ export interface propsType extends styledType {
  *
  * @author inte
  */
-export const Widget = ({ type, id, url }: propsType) => {
+export const Widget = ({ type, id, url, path }: propsType) => {
   return (
     <>
       <StyledWidget className="widget">
-        <Sheet isShadow={true}>{widgetData[type as keyof typeof widgetData]({ id, url })}</Sheet>
+        <Sheet isShadow={true}>
+          {widgetData[type as keyof typeof widgetData]({ id, url, path })}
+        </Sheet>
       </StyledWidget>
     </>
   );

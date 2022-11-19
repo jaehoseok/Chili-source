@@ -7,7 +7,7 @@ export interface styledType {
 }
 
 export const StyledWidgetBlockContainer = styled.div<styledType>`
-  ${tw`flex w-full overflow-x-scroll`}
+  ${tw`w-full flex justify-center overflow-x-scroll`}
   transform:rotateX(180deg);
   -ms-transform: rotateX(180deg);
   -webkit-transform: rotateX(180deg);

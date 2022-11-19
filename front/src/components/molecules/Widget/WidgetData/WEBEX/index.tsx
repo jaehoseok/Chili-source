@@ -1,10 +1,10 @@
 // API & Library
-import { propsType } from '../../';
+import { propsType } from '../..';
 
 // Styles
 import { StyledWidgetData, StyledWidgetDataLabel, StyledWidgetDataContent } from '../style';
 
-export const FIGMA = ({ url, id }: propsType) => {
+export const WEBEX = ({ url, id }: propsType) => {
   // Methods
   const clickHandler = () => {
     console.log('[ID]: ', id);
@@ -16,7 +16,7 @@ export const FIGMA = ({ url, id }: propsType) => {
   return (
     <>
       <StyledWidgetData ratio="1/4" height="120px" onClick={clickHandler}>
-        <StyledWidgetDataLabel>피그마</StyledWidgetDataLabel>
+        <StyledWidgetDataLabel>웹엑스</StyledWidgetDataLabel>
         <StyledWidgetDataContent>
           <div
             style={{
@@ -27,7 +27,7 @@ export const FIGMA = ({ url, id }: propsType) => {
               alignItems: 'center',
             }}
           >
-            <img src={require('assets/images/widgets/FIGMA.png')} width={72} alt="피그마" />
+            <img src={require('assets/images/widgets/WEBEX.png')} width={72} alt="웹엑스" />
           </div>
         </StyledWidgetDataContent>
       </StyledWidgetData>

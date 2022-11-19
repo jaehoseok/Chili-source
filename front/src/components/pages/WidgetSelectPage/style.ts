@@ -10,5 +10,5 @@ StyledPage.defaultProps = {};
 export const StyledHeader = styled.div``;
 
 export const StyledBody = styled.div`
-  ${tw`flex overflow-hidden`}
+  ${tw`flex justify-center overflow-hidden`}
 `;

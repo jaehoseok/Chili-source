@@ -40,7 +40,7 @@ export const JIRA = ({ url }: propsType) => {
 
     newProjectList[idx].widgetList['issues'] = true;
     localStorage.setItem('project-tab-list', JSON.stringify(newProjectList));
-    navigate(`/project/${projectId}/issuesr`);
+    navigate(`/project/${projectId}/issues`);
   };
 
   // Return
