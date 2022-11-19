@@ -9,7 +9,6 @@ import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import Option from 'components/atoms/Option';
-import { issueType } from 'components/pages/IssuesPage';
 import issueAxios from 'api/rest/issue';
 import { ImBin } from 'react-icons/im';
 import { RiSave3Fill } from 'react-icons/ri';

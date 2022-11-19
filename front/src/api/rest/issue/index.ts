@@ -1,6 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { templateType, issueType } from 'components/pages/IssuesPage';
+import { templateType } from 'components/pages/IssuesPage';
 
 // Init
 const issueAxios = createAxiosApi('issue-service');
@@ -121,7 +121,6 @@ export default {
     issueType: string,
     summary: string,
     description: string,
-    assignee: string,
     priority: string,
     epicLink: string,
     storyPoints: number,
@@ -133,7 +132,6 @@ export default {
         issueType,
         summary,
         description,
-        assignee,
         priority,
         epicLink,
         storyPoints,
