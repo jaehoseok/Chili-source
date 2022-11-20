@@ -5,6 +5,7 @@ export interface styledType {
   width?: string;
   height?: string;
   fontSize?: string;
+  margin?: string;
   backgroundColor?: string;
   borderColor?: string;
   isHover?: boolean;
@@ -18,6 +19,7 @@ export const Button = styled.button<styledType>`
   ${({ height }) => height && `height: ${height}`};
   ${({ height }) => height && `border-radius: ${+height.substring(0, height.length - 2) * 0.2}px`};
   ${({ fontSize }) => fontSize && `font-size: ${fontSize}  `};
+  ${({ margin }) => margin && `margin: ${margin}`};
   ${({ backgroundColor }) => backgroundColor && `background-color: ${backgroundColor}`};
   ${({ borderColor }) => borderColor && `border-color: ${borderColor}`};
 
@@ -52,6 +54,7 @@ Button.defaultProps = {
   width: '100px',
   height: '40px',
   fontSize: '0.85rem',
+  margin: '0px',
   backgroundColor: '#FFFFFF',
   borderColor: '#FFFFFF',
   isHover: false,

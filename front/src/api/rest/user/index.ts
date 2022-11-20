@@ -1,6 +1,6 @@
 // API & Library
 import { createAxiosApi } from 'api/axios';
-import { StringLiteral } from 'typescript';
+import { ChangeEvent } from 'react';
 
 // Init
 const userAxios = createAxiosApi('user-service');
@@ -22,26 +22,6 @@ const userAxios = createAxiosApi('user-service');
  */
 export default {
   /**
-   * @description user 서버의 token code 들을 받아옴
-   *
-   * @author inte
-   */
-  getTokenCodes: () => {
-    return new Promise((resolve, reject) => {
-      userAxios
-        .get(`/token-codes`)
-        .then(response => {
-          console.log(response);
-          resolve(response);
-        })
-        .catch(error => {
-          console.log(error);
-          reject(error);
-        });
-    });
-  },
-
-  /**
    * @description
    * user-service의 로그인 한 유저의 데이터를 가져옴
    *
@@ -57,7 +37,6 @@ export default {
     // 리턴 값을 interface화 하여 타입을 설정하기 한결 쉬워지는 듯 하다.
     try {
       const response = await userAxios.get('/users/info');
-      console.log(response.data);
       return response.data;
     } catch (e) {
       console.log(e);
@@ -87,13 +66,50 @@ export default {
       userAxios
         .get(`/users/search`, { params: { email } })
         .then(response => {
-          console.log(response);
           resolve(response.data);
         })
         .catch(error => {
-          console.log(error);
           reject(error);
         });
     });
+  },
+
+  /**
+   * @description
+   * 유저의 이미지를 수정하는 API
+   *
+   * @author bell
+   */
+  updateUserImage: async (image: ChangeEvent<HTMLInputElement>) => {
+    const formData = new FormData();
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    formData.append('image', image.target.files[0]);
+
+    try {
+      await userAxios.put(`/users/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  /**
+   * @description
+   * 유저의 이름을 수정하는 API
+   *
+   * @author bell
+   */
+  updateUserName: async (name: string) => {
+    try {
+      const response = await userAxios.put(`/users/name`, { name });
+      console.log(response.data);
+    } catch (e) {
+      console.log(e);
+    }
   },
 };

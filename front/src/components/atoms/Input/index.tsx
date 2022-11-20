@@ -13,6 +13,7 @@ interface propsType extends styledType {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useSetRecoilState?: SetterOrUpdater<any>;
   recoilParam?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -44,6 +45,7 @@ const index = forwardRef<HTMLInputElement, propsType>(
       setText,
       useSetRecoilState,
       recoilParam,
+      disabled,
     },
     ref,
   ) => {
@@ -65,7 +67,9 @@ const index = forwardRef<HTMLInputElement, propsType>(
 
     const inputRef = useForwardRef<HTMLInputElement>(ref);
     useEffect(() => {
-      setText(defaultValue);
+      if (setText) {
+        setText(defaultValue);
+      }
       changeHandler();
     }, [defaultValue]);
     useEffect(() => {
@@ -98,6 +102,7 @@ const index = forwardRef<HTMLInputElement, propsType>(
           placeholder={placeHolder}
           onChange={changeHandler}
           defaultValue={text}
+          disabled={disabled}
         ></StyledInput>
       </>
     );

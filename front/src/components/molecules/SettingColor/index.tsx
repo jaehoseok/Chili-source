@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { StyledMarginY, StyledFlexRowItemsCenter, StyledMarginL, StyledUserName } from './style';
 
 import Circle from 'components/atoms/Circle';
-import Button from 'components/atoms/Button';
+import FillButton from 'components/atoms/FillButton';
 
 import { theme } from 'styles/theme';
 import { UseMutateFunction } from '@tanstack/react-query';
@@ -60,11 +60,11 @@ const index = ({
           color={color}
         ></HexColorPicker>
         <StyledMarginL />
-        <Button
+        <FillButton
           width="70px"
-          borderColor={theme.button.gray}
           backgroundColor={theme.button.green}
           isHover={true}
+          hoverColor={theme.button.darkgreen}
           clickHandler={() => {
             updateTeamColor({
               projectId: projectId,
@@ -74,7 +74,7 @@ const index = ({
           }}
         >
           변경
-        </Button>
+        </FillButton>
       </StyledFlexRowItemsCenter>
     </StyledMarginY>
   );

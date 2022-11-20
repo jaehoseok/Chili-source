@@ -3,7 +3,6 @@ import { ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { widget } from 'api/rest';
 import { useGetLayout, useSetLayout, useDeleteLayout } from 'hooks/widget';
 
 // Styles
@@ -28,6 +27,7 @@ export interface itemType {
   id: number;
   type?: string;
   path?: string;
+  url?: string | null;
   children: itemType[];
 }
 
@@ -187,7 +187,6 @@ export const WidgetList = ({}: propsType) => {
       } else {
         // 같은 컬럼 안에서 순서만 바꾸기
         if (splitDropSpacePath[0] == splitDropItemPath[0]) {
-          console.log('순서만 바꾸기');
           const dropIndex = Number(splitDropSpacePath[0]);
           const dropItemIndex = Number(splitDropSpacePath[1]);
           const itemIndex = Number(splitDropItemPath[1]);
@@ -226,7 +225,6 @@ export const WidgetList = ({}: propsType) => {
         }
         // 다른 컬럼으로 바꿔주고 삭제하기
         else {
-          console.log('컬럼 이동');
           const dropColumnIndex = Number(splitDropSpacePath[0]);
           const dropItemIndex = Number(splitDropSpacePath[1]);
           const dropColumnChildren = [...(layout[dropColumnIndex].children || [])];
@@ -304,7 +302,6 @@ export const WidgetList = ({}: propsType) => {
 
     // 아이템 삭제
     else {
-      console.log('[delete widget]', await widget.deleteWidget(item.id));
       const splitItemPath = item.path ? item.path.split('-') : [''];
       const columnIndex = Number(splitItemPath[0]);
       const itemIndex = Number(splitItemPath[1]);
@@ -326,7 +323,6 @@ export const WidgetList = ({}: propsType) => {
 
   // LifeCycle
   useEffect(() => {
-    console.log('[프로젝트 변경]', projectId);
     setLayout([]);
   }, [projectId]);
 

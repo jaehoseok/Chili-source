@@ -21,7 +21,15 @@ import Text from 'components/atoms/Text';
 import Circle from 'components/atoms/Circle';
 
 interface propsType extends styledType {
+  color?: string;
+  img?: string;
+  name?: string;
   children?: ReactNode;
+  issueSummary?: string;
+  startTime?: Date;
+  endTime?: Date;
+  progress?: number;
+  version?: number;
 }
 
 /**
@@ -30,32 +38,43 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const GanttIssue = ({}: propsType) => {
+export const GanttIssue = ({
+  color,
+  img,
+  name,
+  version,
+  startTime,
+  endTime,
+  progress,
+  issueSummary,
+}: propsType) => {
   return (
     <>
       <StyledGanttIssue>
-        <StyledGanttIssueLabel>
-          <Circle height="30px"></Circle>
-          <div>테스크 제목</div>
-          <Circle height="30px"></Circle>
+        <StyledGanttIssueLabel color={color}>
+          <Circle height="30px">
+            <img src={img} alt="사진" />
+          </Circle>
+          <div style={{ flexGrow: 1, paddingLeft: '8px' }}>{name}</div>
+          <Circle height="30px">{version}</Circle>
         </StyledGanttIssueLabel>
-        <StyledGanttIssueDetail>설명</StyledGanttIssueDetail>
+        <StyledGanttIssueDetail>{issueSummary}</StyledGanttIssueDetail>
         <StyledGanttIssueLine></StyledGanttIssueLine>
         <StyledGanttIssueData>
           <StyledGanttIssueStart>
             <StyledGanttIssueEndLabel>
               <div>시작일</div>
             </StyledGanttIssueEndLabel>
-            <div>0000/00/00 12:00</div>
+            <div>{startTime?.toISOString().replace('T', ' ').replace(/\..*/, '')}</div>
           </StyledGanttIssueStart>
           <StyledGanttIssueProgress>
-            <Text message="10%" isFill={true}></Text>
+            <Text message={`${progress}%`} isFill={true}></Text>
           </StyledGanttIssueProgress>
           <StyledGanttIssueEnd>
             <StyledGanttIssueEndLabel>
               <div>완료일</div>
             </StyledGanttIssueEndLabel>
-            <div>0000/00/00 12:00</div>
+            <div>{endTime?.toISOString().replace('T', ' ').replace(/\..*/, '')}</div>
           </StyledGanttIssueEnd>
         </StyledGanttIssueData>
       </StyledGanttIssue>
