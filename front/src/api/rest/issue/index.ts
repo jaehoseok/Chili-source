@@ -292,13 +292,15 @@ export default {
         });
     });
   },
-  putEditMiddleBucket: async (middleBucketName: string, middleBucketId: number) => {
+  putEditMiddleBucket: (middleBucketName: string, middleBucketId: number) => {
     interface responseType {
       name: string;
     }
     return new Promise<responseType[]>((resolve, reject) => {
       issueAxios
-        .put(`/middle-buckets/${middleBucketId}`, middleBucketName)
+        .put(`/middle-buckets/${middleBucketId}`, {
+          name: middleBucketName,
+        })
         .then(response => {
           resolve(response.data);
         })

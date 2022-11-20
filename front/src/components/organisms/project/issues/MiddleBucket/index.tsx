@@ -140,13 +140,11 @@ const index = (props: any) => {
   };
 
   const addMiddleBucketHandler = () => {
-    console.log(pjtId);
     console.log(newMiddleBucketName);
     issueAxios.postCreateMiddleBucket(newMiddleBucketName, pjtId);
-    window.location.reload();
+    // window.location.reload();
   };
   const editMiddleBucketHandler = () => {
-    console.log(bucketId);
     issueAxios.putEditMiddleBucket(newMiddleBucketName, bucketId);
     window.location.reload();
   };
@@ -174,12 +172,12 @@ const index = (props: any) => {
     if (!modalOpen && newMiddleBucketName) {
       console.log(addButtonOpen);
       console.log(editButtonOpen);
-      if (addButtonOpen) addMiddleBucketHandler();
-      else if (editButtonOpen) editMiddleBucketHandler();
-      setNewMiddleBucketName('');
+      // if (addButtonOpen) addMiddleBucketHandler();
+      // else if (editButtonOpen) editMiddleBucketHandler();
+      // setNewMiddleBucketName('');
 
-      setAddButtonOpen(false);
-      setEditButtonOpen(false);
+      // setAddButtonOpen(false);
+      // setEditButtonOpen(false);
     }
   }, [modalOpen]);
   const changeHandler = (e: any, content: string) => {
@@ -223,7 +221,7 @@ const index = (props: any) => {
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              label="우선순위"
+              label="미들버킷"
               onChange={e => {
                 changeHandler(e, 'bucket');
               }}
@@ -287,7 +285,7 @@ const index = (props: any) => {
                       fontWeight={'bold'}
                     />
                   )}
-                  <Button
+                  {/* <Button
                     width={'30px'}
                     height={'30px'}
                     borderColor={theme.issue.bug}
@@ -295,7 +293,7 @@ const index = (props: any) => {
                     isHover
                   >
                     X
-                  </Button>
+                  </Button> */}
                 </StyledBetween>
               </Typography>
               <Typography id="modal-modal-inputbox" variant="h6" component="h2">
@@ -313,8 +311,10 @@ const index = (props: any) => {
                   <Button
                     borderColor={theme.issue.story}
                     clickHandler={() => {
-                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      const name = inputBoxRef.current ? inputBoxRef.current.value : '';
+                      issueAxios.postCreateMiddleBucket(name, pjtId);
                       closeModalHandler();
+                      window.location.reload();
                     }}
                     isHover
                   >
@@ -325,8 +325,12 @@ const index = (props: any) => {
                   <Button
                     borderColor={theme.issue.story}
                     clickHandler={() => {
-                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      const name = inputBoxRef.current ? inputBoxRef.current.value : '';
+                      console.log(name);
+                      console.log(bucketId);
+                      issueAxios.putEditMiddleBucket(name, bucketId);
                       closeModalHandler();
+                      window.location.reload();
                     }}
                     isHover
                   >
