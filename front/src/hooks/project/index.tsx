@@ -149,8 +149,18 @@ export const useUpdateTeamColor = () => {
     userId: number;
   }
 
-  return useMutation(({ projectId, userColor, userId }: requestType) =>
-    project.updateTeamColor(projectId, userColor, userId),
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({ projectId, userColor, userId }: requestType) =>
+      project.updateTeamColor(projectId, userColor, userId),
+    {
+      onSuccess: () => {
+        // 요청이 성공한 경우, 캘린더와 간트 데이터의 유효성을 제거한다.
+        queryClient.invalidateQueries(['gantt-tasks']);
+        queryClient.invalidateQueries(['get-gantt-chart']);
+      },
+    },
   );
 };
 
