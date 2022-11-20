@@ -2,11 +2,36 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useGetGanttTasks, useUpdateGantt, useDeleteGantt } from 'hooks/project';
-import { Gantt, Task, EventOption, StylingOption, ViewMode, DisplayOption } from 'gantt-task-react';
+import { Gantt, ViewMode } from 'gantt-task-react';
 
 // Styles
 import 'gantt-task-react/dist/index.css';
 import { StyledGanttGraph } from './style';
+
+// Init
+interface Task {
+  userId: number;
+  id: string;
+  type: 'task' | 'milestone' | 'project';
+  name: string;
+  start: Date;
+  end: Date;
+  /**
+   * From 0 to 100
+   */
+  progress: number;
+  styles?: {
+    backgroundColor?: string;
+    backgroundSelectedColor?: string;
+    progressColor?: string;
+    progressSelectedColor?: string;
+  };
+  isDisabled?: boolean;
+  project?: string;
+  dependencies?: string[];
+  hideChildren?: boolean;
+  displayOrder?: number;
+}
 
 export const GanttGraph = () => {
   // Init
