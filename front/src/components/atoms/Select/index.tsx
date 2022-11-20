@@ -4,9 +4,7 @@ import {
   SetStateAction,
   Dispatch,
   useEffect,
-  useState,
   useRef,
-  RefObject,
   forwardRef,
   ForwardedRef,
 } from 'react';
