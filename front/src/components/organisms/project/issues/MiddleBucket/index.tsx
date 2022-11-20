@@ -1,27 +1,38 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import Modal from 'react-modal';
-import { MiddleBucket, StyledBucketHeader, StyledBucketBody, StyledIssue } from './style';
+// import Modal from 'react-modal';
+import {
+  MiddleBucket,
+  StyledBucketHeader,
+  StyledBucketBody,
+  StyledIssue,
+  StyledBetween,
+  StyledCenter,
+  StyledEnd,
+} from './style';
 import IssueBar from 'components/molecules/IssueBar';
 import InputBox from 'components/molecules/InputBox';
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
+import Text from 'components/atoms/Text';
 import issueAxios from 'api/rest/issue';
 import { ImBin } from 'react-icons/im';
 import { RiSave3Fill } from 'react-icons/ri';
-import { HiPlus } from 'react-icons/hi';
+import { HiPlus, HiPencil } from 'react-icons/hi';
 import { theme } from 'styles/theme';
-import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
+import { Select, FormControl, InputLabel, MenuItem, Modal, Box, Typography } from '@mui/material';
+import { useGetUserInfoHandler } from 'hooks/user';
+import { BsCardChecklist } from 'react-icons/bs';
 const index = (props: any) => {
   const [issueId, setIssueId] = useState(0);
-  interface sprintType {
-    goal: string;
-    id: number;
-    name: string;
-    originBoardId: number;
-    state: string;
-  }
+  // interface sprintType {
+  //   goal: string;
+  //   id: number;
+  //   name: string;
+  //   originBoardId: number;
+  //   state: string;
+  // }
   interface middleBucketType {
     middleBucketId: number;
     name: string;
@@ -51,20 +62,22 @@ const index = (props: any) => {
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
+    userImage: props.issue.userImage,
   };
-
-  const getSprintList = issueAxios.getSprintList(pjtId);
+  const getUser = useGetUserInfoHandler();
+  const myImg = getUser.data ? getUser.data.image : '';
+  // const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
 
-  const [sprintId, setSprintId] = useState<number>(-1);
-  const [sprintList, setSprintList] = useState<sprintType[]>([]);
-  const pushSprintList = async () => {
-    const sList: sprintType[] = [];
-    for (let i = 0; i < (await getSprintList).values.length; i++) {
-      sList.push((await getSprintList).values[i]);
-    }
-    setSprintList(sList);
-  };
+  // const [sprintId, setSprintId] = useState<number>(-1);
+  // const [sprintList, setSprintList] = useState<sprintType[]>([]);
+  // const pushSprintList = async () => {
+  //   const sList: sprintType[] = [];
+  //   for (let i = 0; i < (await getSprintList).values.length; i++) {
+  //     sList.push((await getSprintList).values[i]);
+  //   }
+  //   setSprintList(sList);
+  // };
 
   const [bucketId, setBucketId] = useState<number>(-1);
   const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
@@ -76,25 +89,23 @@ const index = (props: any) => {
     setMiddleBucketList(mList);
   };
   useEffect(() => {
-    pushSprintList();
+    // pushSprintList();
     pushMiddleBucketList();
   }, []);
 
   const [bucketList, setBucketList] = useState<bucketType[]>([]);
-  const showMiddleBucket = () => {
+  const showMiddleBucket = async () => {
     const bList: bucketType[] = [];
-    const getIssueList = async () => {
-      const bucket = issueAxios.getIssueList(bucketId);
-      for (let i = 0; i < (await bucket).issueList.length; i++) {
-        bList.push((await bucket).issueList[i]);
-      }
-      setBucketList(bList);
-    };
-    getIssueList();
+    const bucket = issueAxios.getIssueList(bucketId);
+    for (let i = 0; i < (await bucket).issueList.length; i++) {
+      bList.push((await bucket).issueList[i]);
+    }
+    setBucketList(bList);
   };
+  const [received, setReceived] = useState(props.isInsert);
   useEffect(() => {
     if (props.isInsert) {
-      issue.sprint = sprintId;
+      // issue.sprint = sprintId;
       const request: requestType = {
         assignee: issue.assignee,
         description: issue.description,
@@ -109,14 +120,20 @@ const index = (props: any) => {
       setIssueId(issueId + 1);
       issueAxios.postAddIssue(bucketId, request);
 
-      showMiddleBucket();
+      setReceived(true);
       props.setIsInsert(false);
+      // showMiddleBucket();
     }
   }, [props.isInsert]);
   useEffect(() => {
     showMiddleBucket();
   }, [bucketId]);
-
+  useEffect(() => {
+    if (received) {
+      showMiddleBucket();
+      setReceived(false);
+    }
+  }, [received]);
   const deleteHandler = (issueId: number) => {
     setBucketList(bucketList.filter(issue => issue.issueId !== issueId));
     issueAxios.deleteIssue(bucketId, issueId);
@@ -149,6 +166,8 @@ const index = (props: any) => {
   };
   const closeModalHandler = () => {
     setModalOpen(false);
+    setAddButtonOpen(false);
+    setEditButtonOpen(false);
   };
   const inputBoxRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -165,8 +184,9 @@ const index = (props: any) => {
   }, [modalOpen]);
   const changeHandler = (e: any, content: string) => {
     const value = e.target.value;
-    content === 'bucket' ? setBucketId(value) : content === 'sprint' ? setSprintId(value) : '';
+    content === 'bucket' ? setBucketId(value) : '';
   };
+
   const BarList = bucketList.map(issue => (
     <StyledIssue>
       <Circle
@@ -190,6 +210,7 @@ const index = (props: any) => {
         priority={issue.priority}
         sprint={issue.sprint}
         storyPoints={issue.storyPoints}
+        userImage={myImg}
       />
     </StyledIssue>
   ));
@@ -197,7 +218,7 @@ const index = (props: any) => {
     <MiddleBucket>
       <StyledBucketHeader>
         <div style={{ display: 'flex', alignItems: 'end' }}>
-          <FormControl style={{ minWidth: 120 }}>
+          <FormControl style={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">미들버킷</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -229,7 +250,97 @@ const index = (props: any) => {
           >
             <HiPlus size={'1.2rem'} />
           </Button>
-          <Modal isOpen={modalOpen}>
+          <Modal
+            open={modalOpen}
+            onClose={closeModalHandler}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: 'absolute' as const,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 480,
+                bgcolor: 'background.paper',
+                p: 4,
+                outline: 'none',
+              }}
+            >
+              {' '}
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                <StyledBetween>
+                  {addButtonOpen && (
+                    <Text
+                      isFill={false}
+                      message={'Add MiddleBucket'}
+                      fontSize={'1.5rem'}
+                      fontWeight={'bold'}
+                    />
+                  )}
+                  {editButtonOpen && (
+                    <Text
+                      isFill={false}
+                      message={'Edit MiddleBucket'}
+                      fontSize={'1.5rem'}
+                      fontWeight={'bold'}
+                    />
+                  )}
+                  <Button
+                    width={'30px'}
+                    height={'30px'}
+                    borderColor={theme.issue.bug}
+                    clickHandler={closeModalHandler}
+                    isHover
+                  >
+                    X
+                  </Button>
+                </StyledBetween>
+              </Typography>
+              <Typography id="modal-modal-inputbox" variant="h6" component="h2">
+                <InputBox
+                  ref={inputBoxRef}
+                  labelName={'Bucket Name'}
+                  isRow={false}
+                  containerPadding={'0 0 16px'}
+                  inputPlaceHolder={'이름을 입력하세요'}
+                />
+              </Typography>
+              {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
+              <StyledCenter>
+                {addButtonOpen && (
+                  <Button
+                    borderColor={theme.issue.story}
+                    clickHandler={() => {
+                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      closeModalHandler();
+                    }}
+                    isHover
+                  >
+                    Add Bucket
+                  </Button>
+                )}
+                {editButtonOpen && (
+                  <Button
+                    borderColor={theme.issue.story}
+                    clickHandler={() => {
+                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      closeModalHandler();
+                    }}
+                    isHover
+                  >
+                    Edit Bucket
+                  </Button>
+                )}
+                {/* <Button borderColor={theme.issue.bug} clickHandler={closeModalHandler} isHover>
+                  Close
+                </Button> */}
+              </StyledCenter>
+              {/* </Typography> */}
+            </Box>
+          </Modal>
+          {/* <Modal isOpen={modalOpen}>
             <Button borderColor={theme.issue.bug} clickHandler={closeModalHandler} isHover>
               Close
             </Button>
@@ -263,7 +374,7 @@ const index = (props: any) => {
                 Edit Bucket
               </Button>
             )}
-          </Modal>
+          </Modal> */}
           <Button
             borderColor={theme.issue.story}
             width={'40px'}
@@ -275,7 +386,7 @@ const index = (props: any) => {
             }}
             isHover
           >
-            <RiSave3Fill size={'1.2rem'} />
+            <HiPencil size={'1.2rem'} />
           </Button>
           <Button
             borderColor={theme.issue.bug}
@@ -288,18 +399,7 @@ const index = (props: any) => {
             <ImBin size={'1rem'} />
           </Button>
         </div>
-        {/* <SelectBox
-          labelName={'Sprint'}
-          ref={sprintRef}
-          selectWidth={'160px'}
-          setState={setSprintName}
-        >
-          <Option
-            messages={sprintNameList ? sprintNameList : ['']}
-            selected={props.issue.sprint}
-          ></Option>
-        </SelectBox> */}
-        <FormControl style={{ minWidth: 120 }}>
+        {/* <FormControl style={{ minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -317,15 +417,12 @@ const index = (props: any) => {
               );
             })}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <Button
           borderColor={'#1973ee'}
           isHover
           margin={'5px'}
           clickHandler={() => {
-            // alert('미들버킷 이슈 지라로 전송');
-            // console.log(props.issue);
-            // console.log(bucketList);
             sendToJiraHandler();
           }}
         >

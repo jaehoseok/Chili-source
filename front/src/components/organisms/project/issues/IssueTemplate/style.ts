@@ -5,11 +5,11 @@ export const StyledIssueBundle = styled.div`
   ${tw`flex`}
 `;
 export const StyledIssueTemplate = styled.div`
-  ${tw`flex flex-col pl-4 items-center`}
+  ${tw`flex flex-col pl-4`}
 `;
 
 export const StyledIssueTemplateHeader = styled.div`
-  ${tw`flex py-4 items-center`};
+  ${tw`flex py-4 items-center ml-10`};
 `;
 
 export const StyledIssueTemplateBody = styled.div`
@@ -25,4 +25,32 @@ export const StyledIssueInfoHeader = styled.div`
 `;
 export const StyledIssueInfoBody = styled.div`
   ${tw`p-4`}
+`;
+export const StyledFlexCenter = styled.div`
+  ${tw`w-full flex items-center mb-5`}
+  max-width: 1200px;
+`;
+export const StyledH2 = styled.div`
+  ${tw`font-bold text-2xl`}
+`;
+export const StyledHeight = styled.div`
+  ${tw`h-full`}
+`;
+export const StyledLinkageToken = styled.div`
+  p {
+    margin-bottom: 2px;
+    color: ${({ theme }) => theme.button.darkgray};
+    font-size: 0.5rem;
+  }
+`;
+export const StyledDescription = styled.div`
+  ${tw`font-bold text-sm`}
+`;
+export const StyledBar = styled.div`
+  ${tw`w-2 h-16 ml-7 mr-4`}
+  background-color: ${({ theme }) => theme.color.primary};
+`;
+
+export const StyledText = styled.div`
+  ${tw`ml-5`}
 `;
