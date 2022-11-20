@@ -31,7 +31,6 @@ import { FaLightbulb } from 'react-icons/fa';
 // Components
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
-import { useGetUserInfoHandler } from 'hooks/user';
 
 // 가이드 팁
 const guideList: JSX.Element[] = [
@@ -103,11 +102,6 @@ export const ProjectInfo = () => {
   const { projectId } = useParams();
   const getProject = useGetProject(Number(projectId)).data;
   const getTeamForProject = useGetTeamForProject(Number(projectId));
-  const getUserInfo = useGetUserInfoHandler();
-
-  console.log(getProject);
-  console.log(getTeamForProject);
-  console.log(getUserInfo);
 
   return (
     <>

@@ -85,8 +85,21 @@ export const StyledRoleId = styled.div`
 export const StyledOverFlowX = styled.div`
   ${tw`py-3`}
   overflow-x: scroll;
+
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.button.gray};
+    border-radius: 5px;
+    &:hover {
+      background-color: ${({ theme }) => theme.button.darkgreen};
+    }
   }
 `;
 
