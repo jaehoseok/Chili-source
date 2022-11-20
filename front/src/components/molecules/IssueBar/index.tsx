@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   StyledIssueBar,
   StyledIssueBarType,
@@ -15,6 +16,7 @@ import {
   FaAngleDown,
   FaAngleDoubleDown,
 } from 'react-icons/fa';
+import issueAxios from 'api/rest/issue';
 interface propsType extends styledType {
   issueId?: number;
   summary?: string;
@@ -71,8 +73,19 @@ const index = ({
   userImage,
 }: propsType) => {
   const issueSummary = summary ? summary : '';
-  const issueEpicLink = epicLink ? epicLink : '';
+  const getEpicList = issueAxios.getEpicList();
+  const [issueEpicLink, setIssueEpicLink] = useState<string>('');
+  const mapEpicList = async () => {
+    for (let i = 0; i < (await getEpicList).issues.length; i++) {
+      if (epicLink === (await getEpicList).issues[i].key) {
+        setIssueEpicLink((await getEpicList).issues[i].fields.summary);
+      }
+    }
+  };
   const issueStoryPoints = storyPoints ? storyPoints : '';
+  useEffect(() => {
+    mapEpicList();
+  }, []);
   return (
     <>
       <StyledIssueBar width={width} height={height} issueType={issueType}>

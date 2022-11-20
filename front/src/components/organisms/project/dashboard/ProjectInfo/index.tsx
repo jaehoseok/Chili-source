@@ -83,7 +83,7 @@ const guideList: JSX.Element[] = [
     </StyledH4>
     <StyledMarginBottom />
     <StyledDescription className="hover-text">
-      칠리 소스의 간트차트애서는 이슈를 시간 단위로 표현하는 것이 가능합니다. 등록한 이슈를
+      칠리 소스의 간트차트에서는 이슈를 시간 단위로 표현하는 것이 가능합니다. 등록한 이슈를
       세분화하여 달성도를 나타내 보세요. 다른 팀원의 일정도 함께 확인이 가능하니, 일정에 맞게 이슈를
       등록해보세요.
     </StyledDescription>

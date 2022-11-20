@@ -7,6 +7,7 @@ export const MiddleBucket = styled.div`
 
 export const StyledBucketHeader = styled.div`
   ${tw`flex justify-between items-end p-2`}
+  max-width: 540px;
 `;
 
 export const StyledBucketBody = styled.div`
