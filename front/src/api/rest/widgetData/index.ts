@@ -58,7 +58,7 @@ export default {
 
             while (tempDate <= endDate) {
               const tempKey =
-                tempDate.getFullYear() + '-' + tempDate.getMonth() + '-' + tempDate.getDate();
+                tempDate.getFullYear() + '-' + (tempDate.getMonth() + 1) + '-' + tempDate.getDate();
               calenderDataCounter.set(tempKey, (calenderDataCounter.get(tempKey) || 0) + 1);
               tempDate.setDate(tempDate.getDate() + 1);
             }
@@ -143,7 +143,10 @@ export default {
             `/issue-service/jira/widget?projectId=${projectId}&sprintId=${sprintId}`,
           );
 
-          resolve((100 * (sprintResp.data.done | 0)) / (sprintResp.data.total | 1));
+          const result: number =
+            ((100 * (sprintResp.data.done | 0)) / (sprintResp.data.total | 1)) | 0;
+
+          resolve(Math.floor(result));
         })
         .catch(error => {
           reject(error);

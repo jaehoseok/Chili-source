@@ -16,7 +16,7 @@ export const GanttGraph = () => {
   const deleteGanttTask = useDeleteGantt().mutate;
 
   const [isChecked, setIsChecked] = useState(true);
-  const [view, setView] = useState<ViewMode>(ViewMode.Hour);
+  const [view, setView] = useState<ViewMode>(ViewMode.Day);
 
   let columnWidth = 65;
   if (view === ViewMode.Year) {
@@ -58,6 +58,9 @@ export const GanttGraph = () => {
       }
     }
 
+    task.start.setHours(task.start.getHours() + 9);
+    task.end.setHours(task.end.getHours() + 9);
+
     const params = {
       userId: task.displayOrder,
       id: Number(task.id),
@@ -79,6 +82,9 @@ export const GanttGraph = () => {
   };
 
   const clickHandler = (task: Task) => {
+    task.start.setHours(task.start.getHours() + 9);
+    task.end.setHours(task.end.getHours() + 9);
+
     const params = {
       userId: task.displayOrder,
       id: Number(task.id),
@@ -103,7 +109,6 @@ export const GanttGraph = () => {
             onClick={clickHandler}
             columnWidth={columnWidth}
             listCellWidth={isChecked ? '120px' : ''}
-            ganttHeight={500}
           />
         </>
       );
