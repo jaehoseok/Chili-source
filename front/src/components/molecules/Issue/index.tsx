@@ -106,15 +106,7 @@ const index = ({
   }
 
   const issueSummary = summary ? summary : '';
-  const getEpicList = issueAxios.getEpicList();
-  const [issueEpicLink, setIssueEpicLink] = useState<string>('');
-  const mapEpicList = async () => {
-    for (let i = 0; i < (await getEpicList).issues.length; i++) {
-      if (epicLink === (await getEpicList).issues[i].key) {
-        setIssueEpicLink((await getEpicList).issues[i].fields.summary);
-      }
-    }
-  };
+  const issueEpicLink = epicLink ? epicLink : '';
   const issueStoryPoints = storyPoints ? storyPoints : '';
 
   const issueData = {
@@ -129,9 +121,6 @@ const index = ({
     epicLink: epicLink,
     storyPoints: storyPoints,
   };
-  useEffect(() => {
-    mapEpicList();
-  }, []);
   return (
     <>
       <StyledIssue
