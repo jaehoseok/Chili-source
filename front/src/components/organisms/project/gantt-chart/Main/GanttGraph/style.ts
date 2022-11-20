@@ -8,4 +8,5 @@ export interface styledType {
 
 export const StyledGanttGraph = styled.div<styledType>`
   ${tw`w-full overflow-hidden`}
+  height: calc(100vh - 140px);
 `;

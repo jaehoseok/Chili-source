@@ -213,6 +213,7 @@ export const useGetGanttChart = (
 export const useGetGanttTasks = (op: number, userId?: number, start?: string, end?: string) => {
   // Init
   interface task {
+    userId: number;
     id: string;
     type: 'task' | 'milestone' | 'project';
     name: string;
@@ -246,6 +247,7 @@ export const useGetGanttTasks = (op: number, userId?: number, start?: string, en
     const tasks: task[] = [];
     resp.map(item => {
       const tempTask: task = {
+        userId: Number(item.userId),
         start: new Date(item.startTime),
         end: new Date(item.endTime),
         name: item.issueSummary,
@@ -263,7 +265,6 @@ export const useGetGanttTasks = (op: number, userId?: number, start?: string, en
       tasks.push(tempTask);
     });
 
-    // console.log('[tasks]: ', tasks);
     return tasks;
   });
 };
@@ -330,6 +331,7 @@ export const useUpdateGantt = () => {
 
   const queryClient = useQueryClient();
 
+  // Return
   return useMutation(
     ({ id, issueCode, issueSummary, userId, startTime, endTime, progress }: requestBodyType) =>
       project.updateGantt(id, issueCode, issueSummary, userId, startTime, endTime, progress),
@@ -350,5 +352,15 @@ export const useUpdateGantt = () => {
  * @author bell
  */
 export const useDeleteGantt = () => {
-  return useMutation((ganttChartId: number) => project.deleteGantt(ganttChartId));
+  // Init
+  const queryClient = useQueryClient();
+
+  // Return
+  return useMutation((ganttChartId: number) => project.deleteGantt(ganttChartId), {
+    onSuccess: () => {
+      // 요청이 성공한 경우, 캘린더와 간트 데이터의 유효성을 제거한다.
+      queryClient.invalidateQueries(['gantt-tasks']);
+      queryClient.invalidateQueries(['get-gantt-chart']);
+    },
+  });
 };

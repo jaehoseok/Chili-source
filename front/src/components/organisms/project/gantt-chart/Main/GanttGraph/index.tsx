@@ -59,6 +59,7 @@ export const GanttGraph = () => {
     }
 
     const params = {
+      userId: task.userId,
       id: Number(task.id),
       startTime: task.start.toISOString(),
       endTime: task.end.toISOString(),
@@ -79,6 +80,7 @@ export const GanttGraph = () => {
 
   const clickHandler = (task: Task) => {
     const params = {
+      userId: task.userId,
       id: Number(task.id),
       startTime: task.start.toISOString(),
       endTime: task.end.toISOString(),
@@ -100,7 +102,8 @@ export const GanttGraph = () => {
             onDoubleClick={doubleClickHandler}
             onClick={clickHandler}
             columnWidth={columnWidth}
-            listCellWidth={'20px'}
+            listCellWidth={isChecked ? '120px' : ''}
+            ganttHeight={500}
           />
         </>
       );
@@ -117,13 +120,19 @@ export const GanttGraph = () => {
   return (
     <>
       <StyledGanttGraph>
-        <div className="Wrapper">
-          <div onClick={() => setView(ViewMode.Hour)}>시간별</div>
-          <div onClick={() => setView(ViewMode.Day)}>일별</div>
-          <div onClick={() => setView(ViewMode.Month)}>달별</div>
-          <div onClick={() => setView(ViewMode.Year)}>년별</div>
-          {renderGantt()}
+        <div style={{ display: 'flex' }}>
+          <button onClick={() => setView(ViewMode.Hour)}>시간별</button>
+          <button onClick={() => setView(ViewMode.Day)}>일별</button>
+          <button onClick={() => setView(ViewMode.Month)}>달별</button>
+          <button onClick={() => setView(ViewMode.Year)}>년별</button>
+          <div>이슈 보기</div>
+          <input
+            type="checkbox"
+            defaultChecked={isChecked}
+            onClick={() => setIsChecked(!isChecked)}
+          />
         </div>
+        {renderGantt()}
       </StyledGanttGraph>
     </>
   );
