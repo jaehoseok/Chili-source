@@ -20,7 +20,6 @@ import TextAreaBox from 'components/molecules/TextAreaBox';
 import { theme } from 'styles/theme';
 import { HiPlus } from 'react-icons/hi';
 import issueAxios from 'api/rest/issue';
-import projectAxios from 'api/rest/project';
 import { useGetProject } from 'hooks/project';
 import { useGetUserInfoHandler } from 'hooks/user';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
@@ -43,16 +42,6 @@ const index = (props: any) => {
     setEpicList(eList);
     setKeyList(kList);
   };
-  const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
-  const [memberList, setMemberList] = useState<string[]>();
-  const mList: string[] = [];
-
-  const pushTeamMemberList = async () => {
-    for (let i = 0; i < (await getTeamMemberList).length; i++) {
-      mList.push((await getTeamMemberList)[i].userName);
-    }
-    setMemberList(mList);
-  };
 
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -70,9 +59,7 @@ const index = (props: any) => {
 
   useEffect(() => {
     pushEpicList();
-    console.log(eList);
     pushIssueTemplateList();
-    pushTeamMemberList();
   }, []);
 
   const issue = {
@@ -82,7 +69,7 @@ const index = (props: any) => {
     summary: props.issue.summary,
     description: props.issue.description,
     reporter: props.issue.reporter,
-    assignee: props.issue.assignee,
+    assignee: getUser.data ? getUser.data.name : '',
     priority: props.issue.priority,
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
@@ -125,21 +112,34 @@ const index = (props: any) => {
     />
   ));
 
+  useEffect(() => {
+    setType(issue.issueType);
+  }, [issue.issueType]);
+  useEffect(() => {
+    setPriority(issue.priority);
+  }, [issue.priority]);
+  useEffect(() => {
+    setEpicLink(issue.epicLink);
+  }, [issue.epicLink]);
   // IssueInfo 부분
-
-  // const iType =
-  //   props.issue.issueType === 'Story'
-  //     ? '스토리'
-  //     : props.issue.issueType === 'Task'
-  //     ? '태스크'
-  //     : props.issue.issueType === 'Bug'
-  //     ? '버그'
-  //     : '';
+  const [type, setType] = useState<string>('Story');
+  const [priority, setPriority] = useState<string>('Highest');
+  const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
+  const [epicLink, setEpicLink] = useState<string>('');
+  const changeHandler = (e: any, content: string) => {
+    const value = e.target.value;
+    content === 'type'
+      ? setType(value)
+      : content === 'priority'
+      ? setPriority(value)
+      : content === 'epicLink'
+      ? setEpicLink(value)
+      : '';
+  };
 
   const projectRef = useRef<HTMLInputElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const assigneeRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
   const [templateId, setTemplateId] = useState<number>(0);
@@ -206,25 +206,11 @@ const index = (props: any) => {
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
       epicLink: epicLink,
-      assignee: assigneeRef.current ? assigneeRef.current.value : '',
+      assignee: issue.assignee,
       priority: priority,
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
-  };
-  const [type, setType] = useState<string>('Story');
-  const [priority, setPriority] = useState<string>('Highest');
-  const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
-  const [epicLink, setEpicLink] = useState<string>('');
-  const changeHandler = (e: any, content: string) => {
-    const value = e.target.value;
-    content === 'type'
-      ? setType(value)
-      : content === 'priority'
-      ? setPriority(value)
-      : content === 'epicLink'
-      ? setEpicLink(value)
-      : '';
   };
   return (
     <StyledIssueBundle>
@@ -288,8 +274,9 @@ const index = (props: any) => {
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">이슈 유형</InputLabel>
               <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
+                labelId="inputType-Label"
+                id="inputType"
+                value={type}
                 label="이슈 유형"
                 onChange={e => {
                   changeHandler(e, 'type');
@@ -324,6 +311,7 @@ const index = (props: any) => {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
+                value={priority}
                 label="우선순위"
                 onChange={e => {
                   changeHandler(e, 'priority');
