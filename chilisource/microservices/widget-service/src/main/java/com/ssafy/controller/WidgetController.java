@@ -154,6 +154,13 @@ public class WidgetController {
 //            case GITHUB: {
 //
 //            }
+            case CLOCK:
+            case WEBEX:
+            case GATHER:
+            case ZOOM:
+            case FIGMA: {
+                return ResponseEntity.ok(widgetService.getWidgetUrl(projectId, widgetType));
+            }
             default: {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
             }

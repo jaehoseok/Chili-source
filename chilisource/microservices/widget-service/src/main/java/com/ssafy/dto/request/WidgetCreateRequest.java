@@ -12,6 +12,9 @@ public class WidgetCreateRequest {
     @ApiModelProperty(value = "위젯 이름")
     private String name;
 
+    @ApiModelProperty(value = "위젯 주소")
+    private String url;
+
     @ApiModelProperty(value = "위젯 위치(행)")
     private Long widgetRow;
 

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-@ApiModel(value = "프로젝트 정보", description = "설명")
+@ApiModel(value = "프로젝트 응답 정보", description = "설명")
 public class ProjectResponse {
     @ApiModelProperty(value = "프로젝트 pk")
     private Long id;

@@ -28,7 +28,7 @@ public class GanttChartCreateRequest {
     private String issueCode;
 
     @ApiModelProperty(value = "진행도")
-    private Float progress;
+    private Float progress = 0F;
 
     @ApiModelProperty(value = "프로젝트 pk")
     private Long projectId;
@@ -36,8 +36,11 @@ public class GanttChartCreateRequest {
     @ApiModelProperty(value = "담당자 유저 pk")
     private Long userId;
 
+    @ApiModelProperty(value = "연결된 부모 간트 pk")
+    private Long parentId;
+
     @Builder
-    public GanttChartCreateRequest(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long projectId, Long userId) {
+    public GanttChartCreateRequest(LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long projectId, Long userId, Long parentId) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.issueSummary = issueSummary;
@@ -46,5 +49,6 @@ public class GanttChartCreateRequest {
         this.progress = progress;
         this.projectId = projectId;
         this.userId = userId;
+        this.parentId = parentId;
     }
 }

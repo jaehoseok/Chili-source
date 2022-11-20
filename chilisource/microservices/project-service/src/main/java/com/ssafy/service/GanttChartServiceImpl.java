@@ -67,6 +67,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -92,6 +93,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -107,15 +109,24 @@ public class GanttChartServiceImpl implements GanttChartService {
                 .orElseThrow(() -> new NotFoundException(USER_PROJECT_NOT_FOUND));
 
         if (userProjectManager.getRole().getModify() || userId.equals(request.getUserId())) {
+            Long latestVersion = project.getLatestGanttVersion();
+            Long requestVersion = request.getVersion();
+            Long version = latestVersion;
+
+            if (requestVersion != null && requestVersion <= latestVersion && requestVersion >= 1L) {
+                version = requestVersion;
+            }    
+
             GanttChart ganttChart = GanttChart.builder()
                     .startTime(request.getStartTime())
                     .endTime(request.getEndTime())
                     .issueSummary(request.getIssueSummary())
-                    .version(request.getVersion())
+                    .version(version)
                     .issueCode(request.getIssueCode())
                     .progress(request.getProgress())
                     .project(project)
                     .userId(request.getUserId())
+                    .parentId(request.getParentId())
                     .build();
             ganttChartRepo.save(ganttChart);
         } else {
@@ -138,10 +149,11 @@ public class GanttChartServiceImpl implements GanttChartService {
                     request.getStartTime(),
                     request.getEndTime(),
                     request.getIssueSummary(),
-                    request.getVersion(),
+                    null,
                     request.getIssueCode(),
                     request.getProgress(),
-                    request.getUserId()
+                    request.getUserId(),
+                    request.getParentId()
             );
         } else {
             throw new NotAuthorizedException(MODIFY_NOT_AUTHORIZED);
@@ -193,6 +205,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .progress(oldGanttChart.getProgress())
                         .project(oldGanttChart.getProject())
                         .userId(oldGanttChart.getUserId())
+                        .parentId(oldGanttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
 
@@ -208,6 +221,7 @@ public class GanttChartServiceImpl implements GanttChartService {
                         .issueCode(ganttChart.getIssueCode())
                         .progress(ganttChart.getProgress())
                         .userId(ganttChart.getUserId())
+                        .parentId(ganttChart.getParentId())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -215,10 +229,7 @@ public class GanttChartServiceImpl implements GanttChartService {
     @Override
     @Transactional
     public void updateAllGanttChart(AllGanttChartUpdateRequest request) {
-        Project project = projectRepo.findById(request.getProjectId())
-                .orElseThrow(() -> new NotFoundException(PROJECT_NOT_FOUND));
-
-        List<GanttChart> ganttCharts = ganttChartRepo.findByProjectAndIssueCode(project, request.getIssueCode());
+        List<GanttChart> ganttCharts = ganttChartRepo.findByIssueCode(request.getIssueCode());
 
         for (GanttChart ganttChart : ganttCharts) {
             ganttChart.updateIssueSummary(request.getSummary());

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@ApiModel(value = "팀원 정보")
+@ApiModel(value = "팀원 응답 정보")
 public class UserProjectResponse {
     @ApiModelProperty(value = "팀원 색깔")
     private String userColor;

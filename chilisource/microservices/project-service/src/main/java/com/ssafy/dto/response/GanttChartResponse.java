@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@ApiModel(value = "간트 차트 내용")
+@ApiModel(value = "간트 차트 내용 응답 정보")
 public class GanttChartResponse {
     @ApiModelProperty(value = "간트 차트 내용 pk")
     private Long id;
@@ -36,8 +36,11 @@ public class GanttChartResponse {
     @ApiModelProperty(value = "담당자 유저 pk")
     private Long userId;
 
+    @ApiModelProperty(value = "연결된 부모 간트 pk")
+    private Long parentId;
+
     @Builder
-    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId) {
+    public GanttChartResponse(Long id, LocalDateTime startTime, LocalDateTime endTime, String issueSummary, Long version, String issueCode, Float progress, Long userId, Long parentId) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -46,5 +49,6 @@ public class GanttChartResponse {
         this.issueCode = issueCode;
         this.progress = progress;
         this.userId = userId;
+        this.parentId = parentId;
     }
 }
