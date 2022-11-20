@@ -82,6 +82,47 @@ export default {
 
   /**
    * @description
+   * 서버에서 당일의 간트 이슈들 얻어와서 데이터화 함
+   *
+   * @param projectId
+   * @author inte
+   */
+  getWidgetGanttData: (projectId: number) => {
+    // Init
+    interface responseType {
+      endTime: Date;
+      id: number;
+      issueCode: string;
+      issueSummary: string;
+      progress: number;
+      startTime: Date;
+      userId: number;
+      version: number;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const nextday = new Date(today);
+    nextday.setDate(nextday.getDate() + 1);
+
+    // Return
+    return new Promise<responseType[]>((resolve, reject) => {
+      widgetDataAxios
+        .get(
+          `/project-service/gantt?start=${today.toISOString()}&end=${nextday.toISOString()}&op=1&projectId=${projectId}`,
+        )
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  /**
+   * @description
    * 서버에서 지라 데이터 얻어와서 데이터화 함
    *
    * @param projectId
