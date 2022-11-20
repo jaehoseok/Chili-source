@@ -271,7 +271,7 @@ const index = (props: any) => {
               ref={projectRef}
               disabled
             />
-            <FormControl fullWidth>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
               <InputLabel id="demo-simple-select-label">이슈 유형</InputLabel>
               <Select
                 labelId="inputType-Label"
@@ -306,7 +306,7 @@ const index = (props: any) => {
               ></Option>
             </SelectBox>
             <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span> */}
-            <FormControl fullWidth>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
               <InputLabel id="demo-simple-select-label">우선순위</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
@@ -327,7 +327,7 @@ const index = (props: any) => {
               </Select>
             </FormControl>
 
-            <FormControl fullWidth>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
               <InputLabel id="demo-simple-select-label">Epic Link</InputLabel>
               <Select
                 labelId="demo-simple-select-label"

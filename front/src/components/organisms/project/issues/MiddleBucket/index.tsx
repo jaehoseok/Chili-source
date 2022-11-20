@@ -197,7 +197,7 @@ const index = (props: any) => {
     <MiddleBucket>
       <StyledBucketHeader>
         <div style={{ display: 'flex', alignItems: 'end' }}>
-          <FormControl fullWidth>
+          <FormControl style={{ minWidth: 120 }}>
             <InputLabel id="demo-simple-select-label">미들버킷</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -299,7 +299,7 @@ const index = (props: any) => {
             selected={props.issue.sprint}
           ></Option>
         </SelectBox> */}
-        <FormControl fullWidth>
+        <FormControl style={{ minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
           <Select
             labelId="demo-simple-select-label"

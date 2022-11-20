@@ -5,6 +5,7 @@ import { theme } from '../../../styles/theme';
 export interface styledType {
   width?: string;
   height?: string;
+  marginBottom?: string;
   issueType: string;
 }
 
@@ -13,6 +14,7 @@ export const StyledIssueBar = styled.div<styledType>`
 
   ${({ width }) => `width: ${width}`};
   ${({ height }) => `height: ${height}`};
+  ${({ marginBottom }) => `margin-bottom: ${marginBottom}`}
 `;
 
 export const StyledIssueBarType = styled.div<styledType>`
@@ -31,7 +33,8 @@ export const StyledIssueBarElement = styled.div`
 `;
 
 StyledIssueBar.defaultProps = {
-  width: '600px',
+  width: '450px',
   height: '40px',
+  marginBottom: '5px',
   issueType: '',
 };
