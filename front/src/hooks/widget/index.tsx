@@ -1,6 +1,6 @@
 //  API & Library
 import { useParams } from 'react-router-dom';
-import { useQueryClient, useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { widget } from 'api/rest';
 
 /**
@@ -10,15 +10,18 @@ import { widget } from 'api/rest';
  * @author inte
  */
 export const useGetLayout = () => {
+  // Init
   interface itemType {
     id: number;
     type?: string;
     path?: string;
+    url?: string | null;
     children: itemType[];
   }
 
   const { projectId } = useParams();
 
+  // Return
   return useQuery(
     ['layout', projectId],
     async () => {
@@ -26,7 +29,7 @@ export const useGetLayout = () => {
 
       const response = await widget.getWidgetList(Number(projectId));
 
-      response.map(({ id, widgetCode, widgetRow, widgetCol }) => {
+      response.map(({ id, widgetCode, widgetRow, widgetCol, requestUrl }) => {
         while (updatedLayout.length <= widgetCol) {
           updatedLayout.push({ id: 0, children: [] });
         }
@@ -34,7 +37,12 @@ export const useGetLayout = () => {
           updatedLayout[widgetCol].children.push({ id: 0, children: [] });
         }
         if (updatedLayout[widgetCol].children) {
-          updatedLayout[widgetCol].children[widgetRow] = { id, type: widgetCode, children: [] };
+          updatedLayout[widgetCol].children[widgetRow] = {
+            id,
+            type: widgetCode,
+            children: [],
+            url: requestUrl,
+          };
         }
       });
 
@@ -59,18 +67,21 @@ export const useAddLayout = () => {
     widgetCodeId: string;
     widgetCol: number;
     widgetRow: number;
+    requestUrl?: string;
   }
 
   const queryClient = useQueryClient();
 
   return useMutation(
-    async ({ projectId, widgetCodeId, widgetCol, widgetRow }: requestType) =>
-      await widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow),
+    async ({ projectId, widgetCodeId, widgetCol, widgetRow, requestUrl }: requestType) =>
+      await widget.addWidget(projectId, widgetCodeId, widgetCol, widgetRow, requestUrl),
     {
       onSuccess: () => {
         // 요청이 성공한 경우
-        console.log('[add layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 유효성 제거
+      },
+      onError: () => {
+        alert('위젯 추가에 실패했습니다.');
       },
     },
   );
@@ -183,11 +194,25 @@ export const useSetLayout = () => {
     },
     {
       onSuccess: () => {
-        // 요청이 성공한 경우
-        console.log('[set layout success]');
         queryClient.invalidateQueries(['layout']); // queryKey 강제로 만기 시키기 -> 당장 다시 값 얻어와
-        console.log('[layout invalid]');
       },
     },
+  );
+};
+
+export const useGetGitlabRepositories = (tokenCodeId: string) => {
+  return useQuery(['get-repositories'], () => widget.getGitlabRepositories(tokenCodeId), {
+    enabled: false,
+  });
+};
+
+export const useGetGitMRorCommit = (
+  branch: string | null,
+  projectId: number,
+  tokenCodeId: string,
+  widgetType: string,
+) => {
+  return useQuery(['get-git-mr-or-commit', branch ? '1' : '2'], () =>
+    widget.getGitMRorCommit(branch, projectId, tokenCodeId, widgetType),
   );
 };

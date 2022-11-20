@@ -42,7 +42,13 @@ export default {
     });
   },
 
-  addWidget: (projectId: number, widgetCodeId: string, widgetCol: number, widgetRow: number) => {
+  addWidget: (
+    projectId: number,
+    widgetCodeId: string,
+    widgetCol: number,
+    widgetRow: number,
+    url?: string,
+  ) => {
     // Init
     interface requestType {
       name: string;
@@ -50,6 +56,7 @@ export default {
       widgetCodeId: string;
       widgetCol: number;
       widgetRow: number;
+      url: string;
     }
 
     interface responseType {
@@ -59,6 +66,7 @@ export default {
     // Data
     const payload: requestType = {
       name: '-',
+      url: url || '',
       projectId,
       widgetCodeId,
       widgetCol,
@@ -96,6 +104,75 @@ export default {
         .put(`/widgets/loc`, payload)
         .then(response => {
           resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  getGitlabRepositories: (tokenCodeId: string) => {
+    interface returnType {
+      id: number;
+      description: string;
+      name: string;
+      name_with_namespace: string;
+      path: string;
+      path_with_namespace: string;
+      default_branch: string;
+      ssh_rul_to_repo: string | null;
+      http_url_to_repo: string;
+      web_url: string;
+    }
+    return new Promise<returnType[]>((resolve, reject) => {
+      widgetAxios
+        .get(`/git/repositories`, { params: { tokenCodeId } })
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+
+  getGitMRorCommit: (
+    branch: string | null,
+    projectId: number,
+    tokenCodeId: string,
+    widgetType: string,
+  ) => {
+    interface branchType {
+      name: string;
+      web_url: string;
+    }
+    interface mergeType {
+      author: {
+        id: number;
+        name: string;
+        username: string;
+        state: string;
+        avatar_url: string;
+        web_url: string;
+      };
+      description: string;
+      title: string;
+      web_url: string;
+    }
+    interface responseType {
+      branches: branchType[];
+      mergeRequestResponses: mergeType[];
+    }
+    return new Promise<responseType>((resolve, reject) => {
+      widgetAxios
+        .get(
+          `/widgets/small/${widgetType}?projectId=${projectId}&branch${
+            branch ? `=${branch}` : ''
+          }&tokenCodeId=${tokenCodeId}`,
+        )
+        .then(response => {
+          console.log(response);
+          resolve(response.data);
         })
         .catch(error => {
           reject(error);

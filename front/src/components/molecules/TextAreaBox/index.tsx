@@ -9,9 +9,11 @@ interface propsType extends styledContainerType, styledLabelType {
   textAreaValue?: string;
   textAreaWidth?: string;
   textAreaHeight?: string;
+  disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useSetRecoilState?: SetterOrUpdater<any>;
   recoilParam?: string;
+  nonResize?: boolean;
 }
 
 /**
@@ -43,7 +45,6 @@ interface propsType extends styledContainerType, styledLabelType {
  *
  * @author bell
  */
-
 const index = forwardRef<HTMLTextAreaElement, propsType>(
   (
     {
@@ -60,6 +61,8 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
       containerPadding,
       useSetRecoilState,
       recoilParam,
+      disabled,
+      nonResize,
     },
     ref,
   ) => {
@@ -106,6 +109,8 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
           setText={setText}
           useSetRecoilState={useSetRecoilState}
           recoilParam={recoilParam}
+          disabled={disabled}
+          nonResize={nonResize}
         ></TextArea>
       </StyledContainer>
     );

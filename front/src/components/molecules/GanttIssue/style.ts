@@ -8,10 +8,10 @@ export interface styledType {
 
 export const StyledGanttIssue = styled.div<styledType>`
   ${tw`flex flex-col items-center rounded-2xl overflow-hidden`};
+  background-color: white;
   height: 140px;
   min-height: 140px;
-  width: 280px;
-  min-width: 280px;
+  width: 400px;
   opacity: 1;
   box-shadow: 4px 4px 10px -1px rgba(0, 0, 0, 0.25), -4px -4px 10px -1px rgba(255, 255, 255, 0.25);
 `;
@@ -49,7 +49,6 @@ export const StyledGanttIssueStartLabel = styled.div<styledType>`
 `;
 export const StyledGanttIssueProgress = styled.div<styledType>`
   ${tw`flex flex-col justify-center`};
-  backgrouncolor: gray;
 `;
 export const StyledGanttIssueEnd = styled.div<styledType>`
   ${tw`flex flex-col items-end`};

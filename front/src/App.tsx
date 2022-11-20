@@ -1,5 +1,5 @@
 import { RecoilRoot } from 'recoil';
-
+import Modal from 'react-modal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 
@@ -15,7 +15,7 @@ const App = () => {
       },
     },
   });
-
+  Modal.setAppElement('#root');
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>

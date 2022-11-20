@@ -29,6 +29,18 @@ export const StyledFlexCenter = styled.div`
   ${tw`flex items-center`}
 `;
 
+export const StyledFlexColCenter = styled.div`
+  ${tw`flex flex-col w-full px-3 items-center justify-center gap-10 relative`}
+`;
+
+export const StyledFlexColumnItemsCenter = styled.div`
+  ${tw`flex flex-col justify-center items-center text-center`}
+`;
+
+export const StyledMarginBottom = styled.div`
+  ${tw`mb-3`}
+`;
+
 export const StyledWidth100px = styled.div`
   ${tw`inline-block`}
   width: 150px;
@@ -49,4 +61,8 @@ export const StyledProjectWrapper = styled.div`
 
 export const StyledPadding = styled.div`
   ${tw`px-5 py-10`}
+`;
+
+export const StyledH2 = styled.div`
+  ${tw`font-bold text-2xl`}
 `;

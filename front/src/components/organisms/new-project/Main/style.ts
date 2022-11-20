@@ -2,16 +2,12 @@ import styled from 'styled-components';
 import tw from 'twin.macro';
 
 export const StyledContainer = styled.div`
-  ${tw`w-8/12 h-full flex flex-col justify-center m-auto`}
-  max-width: 1500px;
-`;
-
-export const StyledFlex = styled.div`
-  ${tw`w-full mt-12`}
+  ${tw`w-8/12 flex flex-col justify-center m-auto`}
+  max-width: 1200px;
 `;
 
 export const StyledInputBox = styled.div`
-  ${tw`w-full flex flex-col justify-center`}
+  ${tw`w-full flex flex-col justify-center items-center`}
   padding: 0 100px
 `;
 
@@ -55,4 +51,25 @@ export const StyledLi = styled.li`
     background-color: ${({ theme }) => theme.color.primary};
     color: #ffffff;
   }
+`;
+
+export const StyledSliderContainer = styled.div`
+  .slick-prev:before,
+  .slick-next:before {
+    font-size: 2rem;
+    color: ${({ theme }) => theme.color.primary};
+  }
+
+  .slick-prev {
+  }
+`;
+
+export const StyledPadding = styled.div`
+  ${tw`px-10 py-20`}
+`;
+
+export const StyledFlexColCenter = styled.div`
+  ${tw`flex flex-col w-full justify-center items-center`}
+  padding: 50px 100px;
+  text-align: center;
 `;

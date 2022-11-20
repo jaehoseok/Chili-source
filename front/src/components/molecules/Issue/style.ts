@@ -4,10 +4,11 @@ import { theme } from '../../../styles/theme';
 export interface styledType extends styledIssueType {
   width?: string;
   height?: string;
+  margin?: string;
 }
 
 export interface styledIssueType {
-  type: string;
+  issueType: string;
 }
 
 export const StyledIssue = styled.div<styledType>`
@@ -15,11 +16,12 @@ export const StyledIssue = styled.div<styledType>`
 
   ${({ width }) => `width: ${width}`};
   ${({ height }) => `height: ${height}`};
+  ${({ margin }) => `margin: ${margin} 0 ${margin} 0`}
 `;
 
 export const StyledIssueTop = styled.div<styledIssueType>`
   ${tw`flex justify-between items-center text-white px-4 py-2 rounded-t-2xl`};
-  ${({ type }) => `background-color: ${theme.issue[type]}`};
+  ${({ issueType }) => `background-color: ${theme.issue[issueType.toLowerCase()]}`};
   height: 50%};
 `;
 export const StyledIssueBottom = styled.div`
@@ -38,4 +40,5 @@ export const StyledIssueBottomElement = styled.div`
 StyledIssue.defaultProps = {
   width: '400px',
   height: '90px',
+  margin: '5px',
 };

@@ -13,6 +13,7 @@ interface propsType extends styledContainerType, styledLabelType {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useSetRecoilState?: SetterOrUpdater<any>;
   recoilParam?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -62,6 +63,7 @@ const index = forwardRef<HTMLInputElement, propsType>(
       containerPadding,
       useSetRecoilState,
       recoilParam,
+      disabled,
     },
     ref,
   ) => {
@@ -109,6 +111,7 @@ const index = forwardRef<HTMLInputElement, propsType>(
           setText={setText}
           useSetRecoilState={useSetRecoilState}
           recoilParam={recoilParam}
+          disabled={disabled}
         ></Input>
       </StyledContainer>
     );

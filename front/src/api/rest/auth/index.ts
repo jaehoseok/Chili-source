@@ -84,13 +84,16 @@ export default {
       authAxios
         .get('/refresh')
         .then(response => {
-          const ACCESS_TOKEN = response.headers['authorization'];
-          console.log('[받아온 토큰] : ', response.headers['authorization']);
-          setAccessToken(ACCESS_TOKEN);
-          localStorage.setItem('Authorization', ACCESS_TOKEN || '');
-          resolve(ACCESS_TOKEN);
+          console.log('몰랑');
+          resolve(response);
+          // const ACCESS_TOKEN = response.headers['authorization'];
+          // console.log('[받아온 토큰] : ', response.headers['authorization']);
+          // setAccessToken(ACCESS_TOKEN);
+          // localStorage.setItem('Authorization', ACCESS_TOKEN || '');
+          // resolve(ACCESS_TOKEN);
         })
         .catch(error => {
+          console.log('진짜안되는건 선넘었지');
           reject(error);
         });
     });
@@ -155,11 +158,21 @@ export default {
    *
    * @author bell
    */
-  postLinkageToken: async (email: string, tokenCodeId: string, value: string) => {
+  postLinkageToken: async (tokenCodeId: string, value: string, email?: string) => {
     await authAxios.post('/tokens', {
       email,
       tokenCodeId,
       value,
     });
+  },
+
+  /**
+   * @description
+   * 사용자의 연동한 토큰을 삭제
+   *
+   * @author bell
+   */
+  deleteLinkageToken: async (tokenCodeId: string) => {
+    await authAxios.delete(`/tokens/${tokenCodeId}`);
   },
 };

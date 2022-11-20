@@ -9,10 +9,14 @@ export interface styledType {
 
 export const StyledWidget = styled.div<styledType>`
   ${tw`flex justify-center items-center`}
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    scale: 1.04;
+  }
 `;
 
 export const StyledWidgetData = styled.div<styledType>`
-  ${tw`flex justify-center items-center`}
+  ${tw`flex flex-col justify-center items-center`}
   font-size: 1.4rem;
   height: ${({ height }) => height};
   width: ${({ width }) => width};

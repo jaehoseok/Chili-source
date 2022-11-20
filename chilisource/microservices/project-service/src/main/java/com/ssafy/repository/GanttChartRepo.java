@@ -8,16 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface GanttChartRepo extends JpaRepository<GanttChart, Long>, GanttChartCustomRepo {
+public interface GanttChartRepo extends JpaRepository<GanttChart, Long> {
     List<GanttChart> findByProjectAndVersion(Project project, Long Version, Sort sort);
-
-    List<GanttChart> findByProjectAndUserIdIsNull(Project project, Sort sort);
-
-    List<GanttChart> findByProjectAndUserId(Project project, Long userId, Sort sort);
-
-    List<GanttChart> findByProjectAndUserIdIsNullAndVersion(Project project, Long version, Sort sort);
-
-    List<GanttChart> findByProjectAndUserIdAndVersion(Project project, Long userId, Long version, Sort sort);
 
     List<GanttChart> findByProjectAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(Project project, Long Version, LocalDateTime endTime, LocalDateTime startTime, Sort sort);
 
@@ -25,5 +17,5 @@ public interface GanttChartRepo extends JpaRepository<GanttChart, Long>, GanttCh
 
     List<GanttChart> findByProjectAndUserIdAndVersionAndEndTimeGreaterThanEqualAndStartTimeLessThanEqual(Project project, Long userId, Long version, LocalDateTime endTime, LocalDateTime startTime, Sort sort);
 
-    List<GanttChart> findByProjectAndIssueCode(Project project, String issueCode);
+    List<GanttChart> findByIssueCode(String issueCode);
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@ApiModel(value = "권한 정보")
+@ApiModel(value = "권한 응답 정보")
 public class RoleResponse {
     @ApiModelProperty(value = "권한 pk")
     private String id;

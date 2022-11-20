@@ -12,9 +12,10 @@ interface propsType {
   id?: number;
   type?: string;
   path?: string;
+  url?: string | null;
 }
 
-export const WidgetListItem = ({ id, type, path }: propsType) => {
+export const WidgetListItem = ({ id, type, path, url }: propsType) => {
   const item = useRef(null);
 
   const [{ isDragging }, drag] = useDrag({
@@ -34,7 +35,7 @@ export const WidgetListItem = ({ id, type, path }: propsType) => {
 
   return (
     <StyledWidgetListItem className="widget-list-item" ref={item} style={{ opacity }}>
-      <Widget type={type}>{id}</Widget>
+      <Widget id={id} type={type} url={url} path={path}></Widget>
     </StyledWidgetListItem>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, ForwardedRef, useRef, useEffect } from 'react';
+import React, { forwardRef, ForwardedRef, useRef, useEffect } from 'react';
 import { TextArea, styledType } from './style';
 
 import { SetterOrUpdater } from 'recoil';
@@ -10,6 +10,7 @@ interface propsType extends styledType {
   setText?: any;
   useSetRecoilState?: SetterOrUpdater<any>;
   recoilParam?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -27,7 +28,18 @@ interface propsType extends styledType {
 
 const index = forwardRef<HTMLTextAreaElement, propsType>(
   (
-    { width, height, placeholder, defaultValue, text, setText, useSetRecoilState, recoilParam },
+    {
+      width,
+      height,
+      placeholder,
+      defaultValue,
+      text,
+      setText,
+      useSetRecoilState,
+      recoilParam,
+      disabled,
+      nonResize,
+    },
     ref,
   ) => {
     // const [text, setText] = useState<string>(defaultValue ? defaultValue : '');
@@ -77,6 +89,8 @@ const index = forwardRef<HTMLTextAreaElement, propsType>(
         placeholder={placeholder}
         defaultValue={text}
         onChange={changeHandler}
+        disabled={disabled}
+        nonResize={nonResize}
       ></TextArea>
     );
   },

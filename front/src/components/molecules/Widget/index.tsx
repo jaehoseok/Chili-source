@@ -1,17 +1,15 @@
-// API & Library
-import { ReactNode } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
 // styles
-import { StyledWidget, StyledWidgetData, styledType } from './style';
+import { StyledWidget, styledType } from './style';
 
 // components
+import widgetData from './WidgetData';
 import Sheet from 'components/atoms/Sheet';
 
-interface propsType extends styledType {
+export interface propsType extends styledType {
+  id?: number;
   type?: string;
   path?: string;
-  children?: ReactNode;
+  url?: string | null;
 }
 
 /**
@@ -22,81 +20,12 @@ interface propsType extends styledType {
  *
  * @author inte
  */
-export const Widget = ({ type, path, children }: propsType) => {
-  // Init
-  const navigate = useNavigate();
-  const { projectId } = useParams();
-
-  const splitPath = path ? path.split('-') : ['0'];
-
-  // Methods
-  const addWidgetHandler = () => {
-    navigate(`/project/${projectId}/widgets/${splitPath[0]}/${splitPath[1]}`);
-  };
-
-  const widgetData = (type: string, children: ReactNode) => {
-    switch (type) {
-      case 'CALENDAR':
-        return (
-          <StyledWidgetData className="calendar" height="480px" width="480px">
-            <div>
-              {children}-{type}
-            </div>
-          </StyledWidgetData>
-        );
-      case 'GANTT':
-        return (
-          <StyledWidgetData className="gantt-chart" height="480px" width="480px">
-            <div>
-              {children}-{type}
-            </div>
-          </StyledWidgetData>
-        );
-      case 'JIRA':
-        return (
-          <StyledWidgetData className="jira" width="224px" height="224px">
-            <div>
-              {children}-{type}
-            </div>
-          </StyledWidgetData>
-        );
-      case 'SSAFYGITLAB':
-        return (
-          <StyledWidgetData className="ssafy-gitlab" width="224px" height="224px">
-            <div>
-              {children}-{type}
-            </div>
-          </StyledWidgetData>
-        );
-      case 'ADD':
-        return (
-          <StyledWidgetData
-            className="btn-add-widget"
-            onClick={addWidgetHandler}
-            width="440px"
-            height="40px"
-            backgroundColor="#d4d4d4"
-          >
-            +
-          </StyledWidgetData>
-        );
-      default:
-        return (
-          <StyledWidgetData
-            className="label"
-            width="400px"
-            height="4px"
-            backgroundColor="#d4d4d4"
-          ></StyledWidgetData>
-        );
-    }
-  };
-
+export const Widget = ({ type, id, url, path }: propsType) => {
   return (
     <>
       <StyledWidget className="widget">
-        <Sheet isShadow={true} height="100%" width="100%">
-          {widgetData(type || '', children)}
+        <Sheet isShadow={true}>
+          {widgetData[type as keyof typeof widgetData]({ id, url, path })}
         </Sheet>
       </StyledWidget>
     </>

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   StyledIssueTemplate,
   StyledIssueTemplateHeader,
@@ -7,6 +8,13 @@ import {
   StyledIssueInfo,
   StyledIssueInfoHeader,
   StyledIssueInfoBody,
+  StyledFlexCenter,
+  StyledH2,
+  StyledHeight,
+  StyledLinkageToken,
+  StyledDescription,
+  StyledBar,
+  StyledText,
 } from './style';
 import { templateType } from 'components/pages/IssuesPage';
 import Issue from 'components/molecules/Issue';
@@ -15,39 +23,96 @@ import Text from 'components/atoms/Text';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import InputBox from 'components/molecules/InputBox';
-import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
-import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
-
+import { HiPlus } from 'react-icons/hi';
+import issueAxios from 'api/rest/issue';
+import { useGetProject } from 'hooks/project';
+import { useGetUserInfoHandler } from 'hooks/user';
+import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 const index = (props: any) => {
-  const issue = {
-    templateId: props.issue.templateId,
-    project: props.issue.project,
-    type: props.issue.type,
-    summary: props.issue.summary,
-    description: props.issue.description,
-    reporter: props.issue.reporter,
-    assignee: props.issue.assignee,
-    rank: props.issue.rank,
-    epicLink: props.issue.epicLink,
-    sprint: props.issue.sprint,
-    storyPoints: props.issue.storyPoints,
+  interface sprintType {
+    goal: string;
+    id: number;
+    name: string;
+    originBoardId: number;
+    state: string;
+  }
+  const { projectId } = useParams();
+  const pjtId = Number(projectId);
+  const getProject = useGetProject(pjtId).data;
+  const getUser = useGetUserInfoHandler();
+  const getEpicList = issueAxios.getEpicList();
+  const [epicList, setEpicList] = useState<string[]>();
+  const [keyList, setKeyList] = useState<string[]>();
+  const eList: string[] = [];
+  const kList: string[] = [];
+  const pushEpicList = async () => {
+    for (let i = 0; i < (await getEpicList).issues.length; i++) {
+      eList.push((await getEpicList).issues[i].fields.summary);
+      kList.push((await getEpicList).issues[i].key);
+    }
+    console.log(await getEpicList);
+    setEpicList(eList);
+    setKeyList(kList);
   };
+  const myImg = getUser.data ? getUser.data.image : '';
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editNo, setEditNo] = useState(0);
   const [issues, setIssues] = useState<templateType[]>([]);
+
+  const getIssueTemplateList = issueAxios.getIssueTemplateList(pjtId);
+  const iList: templateType[] = [];
+  const pushIssueTemplateList = async () => {
+    for (let i = 0; i < (await getIssueTemplateList).length; i++) {
+      iList.push((await getIssueTemplateList)[i]);
+    }
+    setIssues(iList);
+  };
+  const getSprintList = issueAxios.getSprintList(pjtId);
+  const [sprintId, setSprintId] = useState<number>(-1);
+  const [sprintList, setSprintList] = useState<sprintType[]>([]);
+  const pushSprintList = async () => {
+    const sList: sprintType[] = [];
+    for (let i = 0; i < (await getSprintList).values.length; i++) {
+      sList.push((await getSprintList).values[i]);
+    }
+    setSprintList(sList);
+  };
+  useEffect(() => {
+    pushEpicList();
+    pushIssueTemplateList();
+    pushSprintList();
+  }, []);
+
+  const issue = {
+    issueTemplateId: props.issue.issueTemplateId,
+    projectId: props.issue.projectId,
+    issueType: props.issue.issueType,
+    summary: props.issue.summary,
+    description: props.issue.description,
+    reporter: props.issue.reporter,
+    assignee: getUser.data ? getUser.data.name : '',
+    priority: props.issue.priority,
+    epicLink: props.issue.epicLink,
+    sprint: sprintId,
+    storyPoints: props.issue.storyPoints,
+    userImage: myImg,
+  };
+
   const setInfoHandler = (issue: templateType) => {
+    console.log(issue);
     props.setIssue(issue);
   };
-  const deleteHandler = (templateId: number) => {
-    setIssues(issues.filter((issue: templateType) => issue.templateId !== templateId));
+  const deleteHandler = (issueTemplateId: number) => {
+    issueAxios.deleteIssueTemplate(issueTemplateId);
+    setIssues(issues.filter((issue: templateType) => issue.issueTemplateId !== issueTemplateId));
   };
-  const editEnableHandler = (templateId: number) => {
+  const editEnableHandler = (issueTemplateId: number) => {
     setIsEdit(true);
     setIsAdd(false);
-    setEditNo(templateId);
+    setEditNo(issueTemplateId);
   };
   const addEnableHandler = () => {
     setIsAdd(true);
@@ -56,149 +121,110 @@ const index = (props: any) => {
 
   const IssueList = issues.map((issue: templateType) => (
     <Issue
-      templateId={issue.templateId}
-      project={issue.project}
-      type={issue.type}
+      issueTemplateId={issue.issueTemplateId}
+      projectId={pjtId}
+      issueType={issue.issueType}
       summary={issue.summary}
       description={issue.description}
-      reporter={issue.reporter}
-      assignee={issue.assignee}
-      rank={issue.rank}
+      reporter={getUser.data ? getUser.data.name : ''}
+      assignee={getUser.data ? getUser.data.name : ''}
+      priority={issue.priority}
       epicLink={issue.epicLink}
-      sprint={issue.sprint}
       storyPoints={issue.storyPoints}
+      userImage={myImg}
       clickHandler={setInfoHandler}
       deleteHandler={deleteHandler}
       editEnableHandler={editEnableHandler}
     />
   ));
 
-  const issue1: templateType = {
-    templateId: 1,
-    project: '프로젝트1',
-    type: 'story',
-    summary: '이슈1',
-    description: '설명1',
-    reporter: '팀원1',
-    assignee: '팀원3',
-    rank: 'Low',
-    epicLink: '에픽1',
-    sprint: '스프린트1',
-    storyPoints: 8,
-  };
-  const issue2: templateType = {
-    templateId: 2,
-    project: '프로젝트2',
-    type: 'task',
-    summary: '이슈2',
-    description: '설명2',
-    reporter: '팀원2',
-    assignee: '팀원2',
-    rank: 'Medium',
-    epicLink: '에픽2',
-    sprint: '스프린트2',
-    storyPoints: 4,
-  };
-  const issue3: templateType = {
-    templateId: 3,
-    project: '프로젝트3',
-    type: 'bug',
-    summary: '이슈3',
-    description: '설명3',
-    reporter: '팀원3',
-    assignee: '팀원1',
-    rank: 'Highest',
-    epicLink: '에픽3',
-    sprint: '스프린트3',
-    storyPoints: 2,
-  };
   useEffect(() => {
-    setIssues([issue1, issue2, issue3]);
-  }, []);
-
+    setType(issue.issueType);
+  }, [issue.issueType]);
+  useEffect(() => {
+    setPriority(issue.priority);
+  }, [issue.priority]);
+  useEffect(() => {
+    setEpicLink(issue.epicLink);
+  }, [issue.epicLink]);
+  // useEffect(() => {
+  //   setSprintId(issue.sprint);
+  // }, [issue.sprint]);
   // IssueInfo 부분
-
-  const iType =
-    props.issue.type === 'story'
-      ? '스토리'
-      : props.issue.type === 'task'
-      ? '태스크'
-      : props.issue.type === 'bug'
-      ? '버그'
+  const [type, setType] = useState<string>('Story');
+  const [priority, setPriority] = useState<string>('Highest');
+  const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
+  const [epicLink, setEpicLink] = useState<string>('');
+  const changeHandler = (e: any, content: string) => {
+    const value = e.target.value;
+    content === 'type'
+      ? setType(value)
+      : content === 'priority'
+      ? setPriority(value)
+      : content === 'epicLink'
+      ? setEpicLink(value)
+      : content === 'sprint'
+      ? setSprintId(value)
       : '';
+  };
 
   const projectRef = useRef<HTMLInputElement>(null);
-  const typeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const reporterRef = useRef<HTMLSelectElement>(null);
-  const assigneeRef = useRef<HTMLSelectElement>(null);
-  const rankRef = useRef<HTMLSelectElement>(null);
-  const epicLinkRef = useRef<HTMLSelectElement>(null);
-  const sprintRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
-    issue.templateId = templateId;
-    issue.project = projectRef.current ? projectRef.current.value : '';
-    issue.type = typeRef.current
-      ? typeRef.current.value === '스토리'
-        ? 'story'
-        : typeRef.current.value === '태스크'
-        ? 'task'
-        : typeRef.current.value === '버그'
-        ? 'bug'
-        : 'error'
-      : '';
+    issue.issueTemplateId = templateId;
+    issue.projectId = projectId;
+    issue.issueType = type;
     issue.summary = summaryRef.current ? summaryRef.current.value : '';
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
-    issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
-    issue.reporter = reporterRef.current ? reporterRef.current.value : '';
-    issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
-    issue.rank = rankRef.current ? rankRef.current.value : '';
-    issue.sprint = sprintRef.current ? sprintRef.current.value : '';
+    issue.epicLink = epicLink;
+    issue.priority = priority;
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
-
-    projectRef.current ? (projectRef.current.value = '') : '';
-    // typeRef.current ? (typeRef.current.value = '') : '';
+    issue.userImage = myImg;
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
-    // reporterRef.current ? (reporterRef.current.value = '') : '';
-    // assigneeRef.current ? (assigneeRef.current.value = '') : '';
-    // rankRef.current ? (rankRef.current.value = '') : '';
-    // epicLinkRef.current ? (epicLinkRef.current.value = '') : '';
-    // sprintRef.current ? (sprintRef.current.value = '') : '';
     storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';
+
     setTemplateId(templateId + 1);
     issues.push(issue);
     setIssues(issues);
     setIsAdd(false);
+    issueAxios.postCreateIssueTemplate(
+      issue.projectId,
+      issue.issueType,
+      issue.summary,
+      issue.description,
+      issue.assignee,
+      issue.priority,
+      issue.epicLink,
+      issue.sprint,
+      issue.storyPoints,
+    );
   };
 
   const editTemplateHandler = () => {
     issues.forEach(issue => {
-      if (issue.templateId === editNo) {
-        projectRef.current ? (issue.project = projectRef.current.value) : '';
-        typeRef.current
-          ? (issue.type =
-              typeRef.current.value === '스토리'
-                ? 'story'
-                : typeRef.current.value === '태스크'
-                ? 'task'
-                : typeRef.current.value === '버그'
-                ? 'bug'
-                : 'error')
-          : '';
+      if (issue.issueTemplateId === editNo) {
+        issue.issueType = type;
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
-        reporterRef.current ? (issue.reporter = reporterRef.current.value) : '';
-        assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
-        rankRef.current ? (issue.rank = rankRef.current.value) : '';
-        epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
-        sprintRef.current ? (issue.sprint = sprintRef.current.value) : '';
+        issue.priority = priority;
+        issue.epicLink = epicLink;
         storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
       }
+      issueAxios.putEditIssueTemplate(
+        issue.projectId,
+        issue.issueType,
+        issue.summary,
+        issue.description,
+        issue.priority,
+        issue.epicLink,
+        issue.storyPoints,
+        issue.issueTemplateId,
+      );
     });
     setIsEdit(false);
   };
@@ -206,51 +232,81 @@ const index = (props: any) => {
   const insertIssueHandler = () => {
     props.setIssue({
       templateId: props.issue.templateId,
-      project: projectRef.current ? projectRef.current.value : '',
-      type: typeRef.current
-        ? typeRef.current.value === '스토리'
-          ? 'story'
-          : typeRef.current.value === '태스크'
-          ? 'task'
-          : typeRef.current.value === '버그'
-          ? 'bug'
-          : 'error'
-        : '',
+      projectId: projectId,
+      issueType: type,
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
-      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      reporter: reporterRef.current ? reporterRef.current.value : '',
-      assignee: assigneeRef.current ? assigneeRef.current.value : '',
-      rank: rankRef.current ? rankRef.current.value : '',
-      sprint: sprintRef.current ? sprintRef.current.value : '',
+      epicLink: epicLink,
+      assignee: issue.assignee,
+      priority: priority,
+      sprint: sprintId,
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
   };
-
   return (
     <StyledIssueBundle>
       <StyledIssueTemplate>
         <StyledIssueTemplateHeader>
-          <Circle height={'5rem'} margin={'1rem'}>
-            로고
-          </Circle>
-          <Text isFill={false} message={'프로젝트 명'} fontSize={'2.5rem'} />
+          {/* <Circle
+            height={'5rem'}
+            margin={'1rem'}
+            isImage={true}
+            url={getProject.data ? getProject.data.image : ''}
+          ></Circle>
+          <Text
+            isFill={false}
+            message={getProject.data ? getProject.data.name : ''}
+            fontSize={'2.5rem'}
+          /> */}
+          <StyledFlexCenter>
+            <Circle height="80px" backgroundColor={theme.color.primary} isInnerShadow={true}>
+              <Circle height={'70px'} isImage={true} url={getProject ? getProject.image : ''} />
+            </Circle>
+            <StyledBar className="hover-bg"></StyledBar>
+            <StyledHeight>
+              <StyledH2 className="hover-text">
+                {getProject && getProject.name ? getProject.name : '[빈 프로젝트 명]'}
+              </StyledH2>
+              <StyledDescription className="hover-text">
+                {getProject && getProject.description
+                  ? getProject.description
+                  : '[빈 프로젝트 설명]'}
+              </StyledDescription>
+              <StyledLinkageToken>
+                <p className="hover-text">
+                  {getProject && getProject.gitRepo && `gitRepository : ${getProject.gitRepo}`}
+                </p>
+                <p className="hover-text">
+                  {getProject &&
+                    getProject.jiraProject &&
+                    `jiraProject : ${getProject.jiraProject}`}
+                </p>
+              </StyledLinkageToken>
+            </StyledHeight>
+          </StyledFlexCenter>
         </StyledIssueTemplateHeader>
-        <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
-
-        <StyledIssueTemplateBody>
-          <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
-          {IssueList}
-          <Button
-            width={'400px'}
-            height={'90px'}
-            borderColor={'#d9d9d9'}
-            clickHandler={addEnableHandler}
-          >
-            +
-          </Button>
-        </StyledIssueTemplateBody>
+        {/* <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} /> */}
+        <StyledText>
+          <Text
+            isFill={false}
+            message={'Issue Templates'}
+            fontSize={'1.5rem'}
+            fontWeight={'bold'}
+          />
+        </StyledText>
+        <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
+          <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
+        </Sheet>
+        <Button
+          width={'400px'}
+          height={'90px'}
+          borderColor={'#d9d9d9'}
+          clickHandler={addEnableHandler}
+          isHover
+        >
+          <HiPlus size={'1.5rem'} />
+        </Button>
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
@@ -279,12 +335,26 @@ const index = (props: any) => {
             <InputBox
               isRow={false}
               labelName={'프로젝트'}
-              inputValue={props.issue.project}
+              inputValue={getProject ? getProject.name : ''}
               ref={projectRef}
+              disabled
             />
-            <SelectBox labelName={'이슈 유형'} ref={typeRef}>
-              <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
-            </SelectBox>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">이슈 유형</InputLabel>
+              <Select
+                labelId="inputType-Label"
+                id="inputType"
+                value={type}
+                label="이슈 유형"
+                onChange={e => {
+                  changeHandler(e, 'type');
+                }}
+              >
+                <MenuItem value={'Story'}>스토리</MenuItem>
+                <MenuItem value={'Task'}>태스크</MenuItem>
+                <MenuItem value={'Bug'}>버그</MenuItem>
+              </Select>
+            </FormControl>
             <InputBox
               isRow={false}
               labelName={'요약'}
@@ -297,37 +367,73 @@ const index = (props: any) => {
               textAreaValue={props.issue.description}
               ref={descriptionRef}
             />
-            <SelectBox labelName={'보고자'} ref={reporterRef}>
+            {/* <SelectBox labelName={'담당자'} ref={assigneeRef}>
               <Option
-                messages={['팀원1', '팀원2', '팀원3']}
-                selected={props.issue.reporter}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'담당자'} ref={assigneeRef}>
-              <Option
-                messages={['팀원1', '팀원2', '팀원3']}
+                messages={memberList ? memberList : ['']}
                 selected={props.issue.assignee}
               ></Option>
             </SelectBox>
-            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-            <SelectBox labelName={'우선순위'} ref={rankRef}>
-              <Option
-                messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
-                selected={props.issue.rank}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
-              <Option
-                messages={['에픽1', '에픽2', '에픽3', '에픽4', '에픽5']}
-                selected={props.issue.epicLink}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'Sprint'} ref={sprintRef}>
-              <Option
-                messages={['스프린트1', '스프린트2', '스프린트3', '스프린트4', '스프린트5']}
-                selected={props.issue.sprint}
-              ></Option>
-            </SelectBox>
+            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span> */}
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">우선순위</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={priority}
+                label="우선순위"
+                onChange={e => {
+                  changeHandler(e, 'priority');
+                }}
+              >
+                {priorityList.map((p, idx) => {
+                  return (
+                    <MenuItem key={idx} value={p}>
+                      {p}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">Epic Link</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={epicLink}
+                label="Epic Link"
+                onChange={e => {
+                  changeHandler(e, 'epicLink');
+                }}
+              >
+                {keyList?.map((k, idx) => {
+                  return (
+                    <MenuItem key={idx} value={k}>
+                      {epicList ? epicList[idx] : ''}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="스프린트"
+                onChange={e => {
+                  changeHandler(e, 'sprint');
+                }}
+              >
+                {sprintList.map((s, idx) => {
+                  return (
+                    <MenuItem key={idx} value={s.id}>
+                      {s.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
             <InputBox
               isRow={false}
               labelName={'Story Points'}

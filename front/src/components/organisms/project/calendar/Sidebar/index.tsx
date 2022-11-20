@@ -1,9 +1,26 @@
-import { useEffect, useState, memo } from 'react';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-import { StyledJiraIssues } from './style';
-import { Draggable } from '@fullcalendar/interaction';
+import { useGetIssuesNotDone } from 'hooks/issue';
+import { useGetUserInfoHandler } from 'hooks/user';
+import { useGetTeamForProject, useGetGanttChart } from 'hooks/project';
+
+import {
+  StyledJiraIssues,
+  StyledPadding,
+  StyledH4,
+  StyledDescription,
+  StyledMarginBottom,
+  StyledFlexColCenter,
+  StyledMarginTop,
+} from './style';
+
+import { FaLightbulb } from 'react-icons/fa';
 
 import Issue from 'components/molecules/Issue';
+import Sheet from 'components/atoms/Sheet';
+
+import { Draggable } from '@fullcalendar/interaction';
 
 /**
  * @description
@@ -12,59 +29,45 @@ import Issue from 'components/molecules/Issue';
  *
  * @author bell
  */
-const index = memo(() => {
-  const [externalEvents, setExternalEvents] = useState([
-    {
-      title: '구글 로그인 구현',
-      type: 'story',
-      reporter: '박준혁',
-      assignee: '박준혁',
-      epicLink: '개발',
-      storyPoints: 2,
-      color: '#63BA3C',
-      id: 34432,
-    },
-    {
-      title: '티 타임',
-      type: 'task',
-      reporter: '박성현',
-      assignee: '박성현',
-      epicLink: '기타',
-      storyPoints: 4,
-      color: '#4BADE8',
-      id: 323232,
-    },
-    {
-      title: '네비게이션 바 제작',
-      type: 'story',
-      reporter: '석재호',
-      assignee: '석재호',
-      epicLink: '개발',
-      storyPoints: 4,
-      color: '#63BA3C',
-      id: 1111,
-    },
-    {
-      title: '미들 버킷',
-      type: 'bug',
-      reporter: '박태이',
-      assignee: '박태이',
-      epicLink: '개발',
-      storyPoints: 2,
-      color: '#E5493A',
-      id: 432432,
-    },
-    {
-      title: '간트 차트',
-      type: 'story',
-      reporter: '최진호',
-      assignee: '최진호',
-      epicLink: '개발',
-      storyPoints: 1,
-      color: '#63BA3C',
-      id: 432123,
-    },
-  ]);
+const index = () => {
+  const location = useLocation();
+  const projectId = +location.pathname.split('/')[2];
+
+  const getIssuesNotDone = useGetIssuesNotDone(projectId);
+  const getUserInfo = useGetUserInfoHandler();
+  const getTeamForProject = useGetTeamForProject(projectId);
+  const getGanttChart = useGetGanttChart(1, projectId);
+
+  const myInfo = () => {
+    if (getTeamForProject.data && getUserInfo.data) {
+      const idx = getTeamForProject.data.findIndex(item => item.userId === getUserInfo.data.id);
+      if (idx > -1) {
+        return getTeamForProject.data[idx];
+      }
+    }
+  };
+
+  const currentColor = myInfo()?.userColor;
+  const currentImage = myInfo()?.userImage;
+
+  const filteringIssuesByDBGanttHandler = () => {
+    const arr = [];
+    if (getGanttChart.data && getIssuesNotDone.data) {
+      for (const issues of getIssuesNotDone.data) {
+        let check = true;
+        for (const event of getGanttChart.data) {
+          if (issues.key === event.issueCode) {
+            check = false;
+            break;
+          }
+        }
+        if (check) {
+          arr.push(issues);
+        }
+      }
+    }
+    return arr;
+  };
 
   useEffect(() => {
     const draggableEl = document.getElementById('external-events');
@@ -75,12 +78,20 @@ const index = memo(() => {
           const id = eventEl.dataset.id;
           const title = eventEl.getAttribute('title');
           const color = eventEl.dataset.color;
-
+          const issueCode = eventEl.dataset.issue_code;
+          const issueSummary = eventEl.dataset.issue_summary;
+          const projectId = eventEl.dataset.project_id;
+          const userId = eventEl.dataset.user_id;
+          const storyPoint = eventEl.dataset.story_point;
           return {
-            id: id,
-            title: title,
-            color: color,
-            create: true,
+            id,
+            title,
+            color,
+            issueCode,
+            issueSummary,
+            projectId,
+            userId,
+            storyPoint,
           };
         },
       });
@@ -90,35 +101,70 @@ const index = memo(() => {
   return (
     <StyledJiraIssues>
       <div id="external-events">
-        {externalEvents.map(
-          ({ title, id, color, type, storyPoints, reporter, assignee, epicLink }) => (
+        {getIssuesNotDone.data &&
+          getGanttChart.data &&
+          filteringIssuesByDBGanttHandler().map(({ id, fields, key }, idx) => (
             <div
               className="fc-event fc-h-event mb-1 fc-daygrid-event fc-daygrid-block-event p-2"
-              title={title}
+              title={fields.summary.summary}
+              data-story_point={fields.customfield_10031}
               data-id={id}
-              data-color={color}
-              key={id}
+              data-color={currentColor}
+              data-issue_code={key}
+              data-issue_summary={fields.summary.summary}
+              data-project_id={projectId}
+              data-user_id={getUserInfo.data?.id}
+              key={idx}
             >
-              {/* <div className="fc-event-main">
-              <div>
-                <strong>{event.title}</strong>
-              </div>
-            </div> */}
               <Issue
-                templateId={id}
-                summary={title}
-                type={type}
-                assignee={assignee}
-                reporter={reporter}
-                storyPoints={storyPoints}
-                epicLink={epicLink}
+                userImage={currentImage as string}
+                issueTemplateId={+id}
+                summary={fields.summary.summary}
+                issueType={
+                  fields.issuetype.id == '10001'
+                    ? 'Story'
+                    : fields.issuetype.id == '10002'
+                    ? 'Task'
+                    : 'Bug'
+                }
+                priority={fields.priority.name}
+                assignee={fields.assignee.displayName}
+                reporter={fields.assignee.displayName}
+                storyPoints={fields.customfield_10031}
+                epicLink={fields.parent ? fields.parent.fields.summary : '에픽 없음'}
               ></Issue>
             </div>
-          ),
-        )}
+          ))}
       </div>
+      <StyledMarginTop>
+        <Sheet
+          width="400px"
+          height="180px"
+          isShadow={true}
+          backgroundColor={'#fcfcfc'}
+          isHover={true}
+        >
+          <StyledPadding>
+            <StyledFlexColCenter>
+              <StyledH4 className="hover-text">
+                캘린더
+                <span className="hover-text">
+                  <FaLightbulb style={{ position: 'relative', top: '2px', left: '8px' }} />
+                </span>
+              </StyledH4>
+              <StyledMarginBottom />
+              <StyledDescription className="hover-text">
+                <li>오른쪽에 나타나는 이슈들을 원하는 날짜에 드래그 해보세요</li>
+                <li>등록된 날짜의 이슈를 양 끝을 당겨 날짜를 조정해보세요</li>
+                <li>등록된 날짜의 이슈를 클릭하시면, 이슈를 수정할 수 있어요</li>
+                <li>DONE이 된 이슈는 더이상 나타나지 않습니다</li>
+              </StyledDescription>
+            </StyledFlexColCenter>
+          </StyledPadding>
+        </Sheet>
+      </StyledMarginTop>
     </StyledJiraIssues>
   );
-});
+};
 
 export default index;

@@ -23,7 +23,18 @@ export const WidgetDropSpace = ({
   type,
 }: propsType) => {
   const [{ isOver, canDrop }, drop] = useDrop({
-    accept: ['ITEM', 'COLUMN', 'CALENDAR', 'GANTT', 'JIRA', 'SSAFYGITLAB'],
+    accept: [
+      'ITEM',
+      'COLUMN',
+      'CALENDAR',
+      'FIGMA',
+      'GANTT',
+      'GATHER',
+      'JIRA',
+      'SSAFYGITLAB',
+      'WEBEX',
+      'ZOOM',
+    ],
     drop: item => {
       const dropItem: itemType = {
         type,

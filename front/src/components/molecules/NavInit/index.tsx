@@ -1,16 +1,25 @@
 import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { auth } from 'api/rest';
 
 import { useGetTokens } from 'hooks/auth';
 import { useGetUserInfoHandler } from 'hooks/user';
 
-import { StyledContainer, StyledTap, StyledFlexWrapper, StyledText } from './style';
+import { BiPowerOff } from 'react-icons/bi';
+
+import {
+  StyledContainer,
+  StyledTap,
+  StyledFlexMaxWidth,
+  StyledFlexEvenly,
+  StyledPosition,
+  StyledPaddingL,
+} from './style';
+import { theme } from 'styles/theme';
 
 import logo from 'assets/logo/logo.png';
 import Text from 'components/atoms/Text';
-import Button from 'components/atoms/Button';
+import FillButton from 'components/atoms/FillButton';
 import Circle from 'components/atoms/Circle';
 
 /**
@@ -24,8 +33,7 @@ const index = () => {
   const isLogin = localStorage.getItem('Authorization');
 
   // 쿼리 데이터 가져오기
-  const { data } = useGetUserInfoHandler();
-  const queryClient = useQueryClient();
+  const getUserInfo = useGetUserInfoHandler();
 
   const navigate = useNavigate();
 
@@ -39,53 +47,96 @@ const index = () => {
     await auth.login('google');
   };
 
-  const clickTestHandler = async () => {
-    await auth.getTokens();
-  };
-
   const clickLogoutHandler = async () => {
     await auth.logout();
-    // 로그아웃 시 저장했던 쿼리데이터 삭제
-    await queryClient.invalidateQueries(['userInfo']);
-  };
-
-  const clickToProjectSelectHandler = () => {
-    navigate('/projects');
   };
 
   return (
     <>
       <StyledContainer>
-        <StyledFlexWrapper>
+        <StyledFlexMaxWidth>
           <StyledTap>
-            <img src={logo} width={'32px'} style={{ transform: 'translateY(10%)' }}></img>
+            <img
+              src={logo}
+              width={'32px'}
+              style={{ transform: 'translateY(7%)' }}
+              onClick={() => navigate('/')}
+            ></img>
           </StyledTap>
-          <StyledText>
+          <StyledFlexEvenly>
             <Text
               isFill={false}
-              message="+"
-              fontSize="25px"
+              isHover={true}
+              message="프로젝트 들어가기"
+              fontSize="1rem"
+              fontWeight="300"
               color="#a9a9a9"
-              fontWeight="100"
-              clickHandler={clickToProjectSelectHandler}
+              clickHandler={() => navigate('/projects')}
             ></Text>
-          </StyledText>
-        </StyledFlexWrapper>
-        {isLogin ? (
-          <StyledFlexWrapper>
-            <Circle url={data?.image} isImage={true} height={'40px'}></Circle>
-            <Button clickHandler={clickTestHandler} borderColor="red">
-              테스트버튼
-            </Button>
-            <Button clickHandler={clickLogoutHandler} borderColor="red">
-              로그아웃버튼
-            </Button>
-          </StyledFlexWrapper>
-        ) : (
-          <Button clickHandler={clickLoginHandler} borderColor="red">
-            로그인버튼
-          </Button>
-        )}
+            <Text
+              isFill={false}
+              isHover={true}
+              message="프로젝트 생성"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate(`/new-project`)}
+            ></Text>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="가이드"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate('/guide/1')}
+            ></Text>
+            <Text
+              isFill={false}
+              isHover={true}
+              message="유저 설정"
+              fontSize="1rem"
+              fontWeight="300"
+              color="#a9a9a9"
+              clickHandler={() => navigate(`/setting/${getUserInfo.data && getUserInfo.data.id}`)}
+            ></Text>
+          </StyledFlexEvenly>
+
+          {isLogin && getUserInfo.data ? (
+            <>
+              <Circle
+                url={getUserInfo.data.image}
+                isImage={true}
+                height={'40px'}
+                clickHandler={() => navigate(`/setting/${getUserInfo.data.id}`)}
+              ></Circle>
+              <StyledPosition>
+                <StyledPaddingL>
+                  <FillButton
+                    width="80px"
+                    backgroundColor={theme.button.green}
+                    height={'30px'}
+                    isHover={true}
+                    hoverColor={theme.button.red}
+                    clickHandler={clickLogoutHandler}
+                  >
+                    로그아웃
+                  </FillButton>
+                </StyledPaddingL>
+              </StyledPosition>
+            </>
+          ) : (
+            <FillButton
+              clickHandler={clickLoginHandler}
+              isHover={true}
+              hoverColor={theme.button.darkgreen}
+              width={'80px'}
+              height={'30px'}
+            >
+              로그인
+            </FillButton>
+          )}
+        </StyledFlexMaxWidth>
       </StyledContainer>
     </>
   );
