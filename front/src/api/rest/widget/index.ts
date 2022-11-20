@@ -135,4 +135,48 @@ export default {
         });
     });
   },
+
+  getGitMRorCommit: (
+    branch: string | null,
+    projectId: number,
+    tokenCodeId: string,
+    widgetType: string,
+  ) => {
+    interface branchType {
+      name: string;
+      web_url: string;
+    }
+    interface mergeType {
+      author: {
+        id: number;
+        name: string;
+        username: string;
+        state: string;
+        avatar_url: string;
+        web_url: string;
+      };
+      description: string;
+      title: string;
+      web_url: string;
+    }
+    interface responseType {
+      branches: branchType[];
+      mergeRequestResponses: mergeType[];
+    }
+    return new Promise<responseType>((resolve, reject) => {
+      widgetAxios
+        .get(
+          `/widgets/small/${widgetType}?projectId=${projectId}&branch${
+            branch ? `=${branch}` : ''
+          }&tokenCodeId=${tokenCodeId}`,
+        )
+        .then(response => {
+          console.log(response);
+          resolve(response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
 };
