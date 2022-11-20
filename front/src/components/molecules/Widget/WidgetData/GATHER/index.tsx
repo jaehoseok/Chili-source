@@ -7,9 +7,8 @@ import { StyledWidgetData, StyledWidgetDataLabel, StyledWidgetDataContent } from
 export const GATHER = ({ url, id }: propsType) => {
   // Methods
   const clickHandler = () => {
-    console.log('[ID]: ', id);
-    console.log('[URL]: ', url);
-    window.open('https://www.gather.town/', 'PopupNew', 'width=500,height=500');
+    alert('아직 개발하고 있는 기능입니다.');
+    // window.open('https://www.gather.town/', 'PopupNew', 'width=500,height=500');
   };
 
   // Return
