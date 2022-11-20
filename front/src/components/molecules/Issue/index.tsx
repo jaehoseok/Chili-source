@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   StyledIssue,
   StyledIssueTop,
@@ -10,7 +11,6 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 import { ImBin } from 'react-icons/im';
-
 import {
   FaAngleDoubleUp,
   FaAngleUp,
@@ -18,9 +18,7 @@ import {
   FaAngleDown,
   FaAngleDoubleDown,
 } from 'react-icons/fa';
-import { ImCross } from 'react-icons/im';
-import { IconType } from 'react-icons';
-
+import issueAxios from 'api/rest/issue';
 interface propsType extends styledType {
   issueTemplateId: number;
   projectId?: number;
@@ -108,7 +106,15 @@ const index = ({
   }
 
   const issueSummary = summary ? summary : '';
-  const issueEpicLink = epicLink ? epicLink : '';
+  const getEpicList = issueAxios.getEpicList();
+  const [issueEpicLink, setIssueEpicLink] = useState<string>('');
+  const mapEpicList = async () => {
+    for (let i = 0; i < (await getEpicList).issues.length; i++) {
+      if (epicLink === (await getEpicList).issues[i].key) {
+        setIssueEpicLink((await getEpicList).issues[i].fields.summary);
+      }
+    }
+  };
   const issueStoryPoints = storyPoints ? storyPoints : '';
 
   const issueData = {
@@ -123,6 +129,9 @@ const index = ({
     epicLink: epicLink,
     storyPoints: storyPoints,
   };
+  useEffect(() => {
+    mapEpicList();
+  }, []);
   return (
     <>
       <StyledIssue

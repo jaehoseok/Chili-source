@@ -52,5 +52,5 @@ export const StyledBar = styled.div`
 `;
 
 export const StyledText = styled.div`
-  ${tw`ml-5`}
+  ${tw`flex items-center my-3 ml-5`}
 `;
