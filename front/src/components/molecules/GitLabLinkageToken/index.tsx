@@ -87,7 +87,7 @@ const index = ({ projectId, setIsLinkedGitLab }: propsType) => {
       getGitLabRepositories.refetch();
     }
     if (getGitLabRepositories.data) {
-      setGitLabRepository(getGitLabRepositories.data[0].name);
+      setGitLabRepository(getGitLabRepositories.data[0].id + '');
     }
     if (connectTokenToProject.isSuccess) {
       setIsLinkedGitLab(true);
