@@ -16,15 +16,13 @@ import Text from 'components/atoms/Text';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
 import InputBox from 'components/molecules/InputBox';
-import SelectBox from 'components/molecules/SelectBox';
 import TextAreaBox from 'components/molecules/TextAreaBox';
-import Option from 'components/atoms/Option';
 import { theme } from 'styles/theme';
 import { HiPlus } from 'react-icons/hi';
 import issueAxios from 'api/rest/issue';
-import projectAxios from 'api/rest/project';
 import { useGetProject } from 'hooks/project';
 import { useGetUserInfoHandler } from 'hooks/user';
+import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 const index = (props: any) => {
   const { projectId } = useParams();
   const pjtId = Number(projectId);
@@ -44,16 +42,6 @@ const index = (props: any) => {
     setEpicList(eList);
     setKeyList(kList);
   };
-  const getTeamMemberList = projectAxios.getTeamForProject(pjtId);
-  const [memberList, setMemberList] = useState<string[]>();
-  const mList: string[] = [];
-
-  const pushTeamMemberList = async () => {
-    for (let i = 0; i < (await getTeamMemberList).length; i++) {
-      mList.push((await getTeamMemberList)[i].userName);
-    }
-    setMemberList(mList);
-  };
 
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -71,9 +59,7 @@ const index = (props: any) => {
 
   useEffect(() => {
     pushEpicList();
-    console.log(eList);
     pushIssueTemplateList();
-    pushTeamMemberList();
   }, []);
 
   const issue = {
@@ -83,7 +69,7 @@ const index = (props: any) => {
     summary: props.issue.summary,
     description: props.issue.description,
     reporter: props.issue.reporter,
-    assignee: props.issue.assignee,
+    assignee: getUser.data ? getUser.data.name : '',
     priority: props.issue.priority,
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
@@ -116,7 +102,7 @@ const index = (props: any) => {
       summary={issue.summary}
       description={issue.description}
       reporter={getUser.data ? getUser.data.name : ''}
-      assignee={issue.assignee}
+      assignee={getUser.data ? getUser.data.name : ''}
       priority={issue.priority}
       epicLink={issue.epicLink}
       storyPoints={issue.storyPoints}
@@ -126,57 +112,51 @@ const index = (props: any) => {
     />
   ));
 
+  useEffect(() => {
+    setType(issue.issueType);
+  }, [issue.issueType]);
+  useEffect(() => {
+    setPriority(issue.priority);
+  }, [issue.priority]);
+  useEffect(() => {
+    setEpicLink(issue.epicLink);
+  }, [issue.epicLink]);
   // IssueInfo 부분
-
-  const iType =
-    props.issue.issueType === 'Story'
-      ? '스토리'
-      : props.issue.issueType === 'Task'
-      ? '태스크'
-      : props.issue.issueType === 'Bug'
-      ? '버그'
+  const [type, setType] = useState<string>('Story');
+  const [priority, setPriority] = useState<string>('Highest');
+  const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
+  const [epicLink, setEpicLink] = useState<string>('');
+  const changeHandler = (e: any, content: string) => {
+    const value = e.target.value;
+    content === 'type'
+      ? setType(value)
+      : content === 'priority'
+      ? setPriority(value)
+      : content === 'epicLink'
+      ? setEpicLink(value)
       : '';
+  };
 
   const projectRef = useRef<HTMLInputElement>(null);
-  const issueTypeRef = useRef<HTMLSelectElement>(null);
   const summaryRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLTextAreaElement>(null);
-  const assigneeRef = useRef<HTMLSelectElement>(null);
-  const priorityRef = useRef<HTMLSelectElement>(null);
-  const epicLinkRef = useRef<HTMLSelectElement>(null);
   const storyPointsRef = useRef<HTMLInputElement>(null);
 
   const [templateId, setTemplateId] = useState<number>(0);
   const addTemplateHandler = () => {
     issue.issueTemplateId = templateId;
     issue.projectId = projectId;
-    issue.issueType = issueTypeRef.current
-      ? issueTypeRef.current.value === '스토리'
-        ? 'Story'
-        : issueTypeRef.current.value === '태스크'
-        ? 'Task'
-        : issueTypeRef.current.value === '버그'
-        ? 'Bug'
-        : 'Error'
-      : '';
+    issue.issueType = type;
     issue.summary = summaryRef.current ? summaryRef.current.value : '';
     issue.description = descriptionRef.current ? descriptionRef.current.value : '';
-    issue.epicLink = epicLinkRef.current ? epicLinkRef.current.value : '';
-    issue.assignee = assigneeRef.current ? assigneeRef.current.value : '';
-    issue.priority = priorityRef.current ? priorityRef.current.value : '';
+    issue.epicLink = epicLink;
+    issue.priority = priority;
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
 
-    // projectRef.current ? (projectRef.current.value = '') : '';
-    // typeRef.current ? (typeRef.current.value = '') : '';
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
-    // reporterRef.current ? (reporterRef.current.value = '') : '';
-    // assigneeRef.current ? (assigneeRef.current.value = '') : '';
-    // rankRef.current ? (rankRef.current.value = '') : '';
-    // epicLinkRef.current ? (epicLinkRef.current.value = '') : '';
-    // sprintRef.current ? (sprintRef.current.value = '') : '';
     storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';
-    console.log(issue);
+
     setTemplateId(templateId + 1);
     issues.push(issue);
     setIssues(issues);
@@ -197,21 +177,11 @@ const index = (props: any) => {
   const editTemplateHandler = () => {
     issues.forEach(issue => {
       if (issue.issueTemplateId === editNo) {
-        issueTypeRef.current
-          ? (issue.issueType =
-              issueTypeRef.current.value === '스토리'
-                ? 'Story'
-                : issueTypeRef.current.value === '태스크'
-                ? 'Task'
-                : issueTypeRef.current.value === '버그'
-                ? 'Bug'
-                : 'Error')
-          : '';
+        issue.issueType = type;
         summaryRef.current ? (issue.summary = summaryRef.current.value) : '';
         descriptionRef.current ? (issue.description = descriptionRef.current.value) : '';
-        assigneeRef.current ? (issue.assignee = assigneeRef.current.value) : '';
-        priorityRef.current ? (issue.priority = priorityRef.current.value) : '';
-        epicLinkRef.current ? (issue.epicLink = epicLinkRef.current.value) : '';
+        issue.priority = priority;
+        issue.epicLink = epicLink;
         storyPointsRef.current ? (issue.storyPoints = Number(storyPointsRef.current.value)) : '';
       }
       issueAxios.putEditIssueTemplate(
@@ -219,7 +189,6 @@ const index = (props: any) => {
         issue.issueType,
         issue.summary,
         issue.description,
-        issue.assignee,
         issue.priority,
         issue.epicLink,
         issue.storyPoints,
@@ -233,25 +202,16 @@ const index = (props: any) => {
     props.setIssue({
       templateId: props.issue.templateId,
       projectId: projectId,
-      issueType: issueTypeRef.current
-        ? issueTypeRef.current.value === '스토리'
-          ? 'Story'
-          : issueTypeRef.current.value === '태스크'
-          ? 'Task'
-          : issueTypeRef.current.value === '버그'
-          ? 'Bug'
-          : 'Error'
-        : '',
+      issueType: type,
       summary: summaryRef.current ? summaryRef.current.value : '',
       description: descriptionRef.current ? descriptionRef.current.value : '',
-      epicLink: epicLinkRef.current ? epicLinkRef.current.value : '',
-      assignee: assigneeRef.current ? assigneeRef.current.value : '',
-      priority: priorityRef.current ? priorityRef.current.value : '',
+      epicLink: epicLink,
+      assignee: issue.assignee,
+      priority: priority,
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
   };
-
   return (
     <StyledIssueBundle>
       <StyledIssueTemplate>
@@ -311,9 +271,22 @@ const index = (props: any) => {
               ref={projectRef}
               disabled
             />
-            <SelectBox labelName={'이슈 유형'} ref={issueTypeRef}>
-              <Option messages={['스토리', '태스크', '버그']} selected={iType}></Option>
-            </SelectBox>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">이슈 유형</InputLabel>
+              <Select
+                labelId="inputType-Label"
+                id="inputType"
+                value={type}
+                label="이슈 유형"
+                onChange={e => {
+                  changeHandler(e, 'type');
+                }}
+              >
+                <MenuItem value={'Story'}>스토리</MenuItem>
+                <MenuItem value={'Task'}>태스크</MenuItem>
+                <MenuItem value={'Bug'}>버그</MenuItem>
+              </Select>
+            </FormControl>
             <InputBox
               isRow={false}
               labelName={'요약'}
@@ -326,26 +299,54 @@ const index = (props: any) => {
               textAreaValue={props.issue.description}
               ref={descriptionRef}
             />
-            <SelectBox labelName={'담당자'} ref={assigneeRef}>
+            {/* <SelectBox labelName={'담당자'} ref={assigneeRef}>
               <Option
                 messages={memberList ? memberList : ['']}
                 selected={props.issue.assignee}
               ></Option>
             </SelectBox>
-            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span>
-            <SelectBox labelName={'우선순위'} ref={priorityRef}>
-              <Option
-                messages={['Highest', 'High', 'Medium', 'Low', 'Lowest']}
-                selected={props.issue.priority}
-              ></Option>
-            </SelectBox>
-            <SelectBox labelName={'Epic Link'} ref={epicLinkRef}>
-              <Option
-                messages={epicList ? epicList : ['']}
-                selected={props.issue.epicLink}
-                keys={keyList ? keyList : ['']}
-              ></Option>
-            </SelectBox>
+            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span> */}
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">우선순위</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={priority}
+                label="우선순위"
+                onChange={e => {
+                  changeHandler(e, 'priority');
+                }}
+              >
+                {priorityList.map((p, idx) => {
+                  return (
+                    <MenuItem key={idx} value={p}>
+                      {p}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">Epic Link</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={epicLink}
+                label="이슈 유형"
+                onChange={e => {
+                  changeHandler(e, 'epicLink');
+                }}
+              >
+                {keyList?.map((k, idx) => {
+                  return (
+                    <MenuItem key={idx} value={k}>
+                      {epicList ? epicList[idx] : ''}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
             <InputBox
               isRow={false}
               labelName={'Story Points'}
