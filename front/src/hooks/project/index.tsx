@@ -223,7 +223,6 @@ export const useGetGanttChart = (
 export const useGetGanttTasks = (op: number, userId?: number, start?: string, end?: string) => {
   // Init
   interface task {
-    userId: number;
     id: string;
     type: 'task' | 'milestone' | 'project';
     name: string;
@@ -257,7 +256,7 @@ export const useGetGanttTasks = (op: number, userId?: number, start?: string, en
     const tasks: task[] = [];
     resp.map(item => {
       const tempTask: task = {
-        userId: Number(item.userId),
+        displayOrder: Number(item.userId),
         start: new Date(item.startTime),
         end: new Date(item.endTime),
         name: item.issueSummary,
