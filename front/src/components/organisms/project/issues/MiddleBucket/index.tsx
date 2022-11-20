@@ -14,6 +14,7 @@ import { HiPlus } from 'react-icons/hi';
 import { theme } from 'styles/theme';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 import { useGetUserInfoHandler } from 'hooks/user';
+import { BsCardChecklist } from 'react-icons/bs';
 const index = (props: any) => {
   const [issueId, setIssueId] = useState(0);
   interface sprintType {
@@ -92,6 +93,7 @@ const index = (props: any) => {
     }
     setBucketList(bList);
   };
+  const [received, setReceived] = useState(props.isInsert);
   useEffect(() => {
     if (props.isInsert) {
       issue.sprint = sprintId;
@@ -109,14 +111,20 @@ const index = (props: any) => {
       setIssueId(issueId + 1);
       issueAxios.postAddIssue(bucketId, request);
 
-      showMiddleBucket();
+      setReceived(true);
       props.setIsInsert(false);
+      // showMiddleBucket();
     }
   }, [props.isInsert]);
   useEffect(() => {
     showMiddleBucket();
   }, [bucketId]);
-
+  useEffect(() => {
+    if (received) {
+      showMiddleBucket();
+      setReceived(false);
+    }
+  }, [received]);
   const deleteHandler = (issueId: number) => {
     setBucketList(bucketList.filter(issue => issue.issueId !== issueId));
     issueAxios.deleteIssue(bucketId, issueId);
@@ -167,6 +175,7 @@ const index = (props: any) => {
     const value = e.target.value;
     content === 'bucket' ? setBucketId(value) : content === 'sprint' ? setSprintId(value) : '';
   };
+
   const BarList = bucketList.map(issue => (
     <StyledIssue>
       <Circle

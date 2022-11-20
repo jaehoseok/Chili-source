@@ -81,7 +81,6 @@ const index = ({
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBarElement>
             <Text width={24} isFill={issueEpicLink !== ''} message={issueEpicLink}></Text>
-            <Circle height={'24px'} isImage={true} url={userImage}></Circle>
             <Circle height={'24px'}>
               {priority === 'Highest' && <FaAngleDoubleUp />}
               {priority === 'High' && <FaAngleUp />}
@@ -89,6 +88,7 @@ const index = ({
               {priority === 'Low' && <FaAngleDown />}
               {priority == 'Lowest' && <FaAngleDoubleDown />}
             </Circle>
+            <Circle height={'24px'} isImage={true} url={userImage}></Circle>
             <Text width={24} isFill={true} message={issueStoryPoints + ''}></Text>
           </StyledIssueBarElement>
         </StyledIssueBarContent>
