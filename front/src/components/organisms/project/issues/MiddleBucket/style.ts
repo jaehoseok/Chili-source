@@ -16,3 +16,13 @@ export const StyledBucketBody = styled.div`
 export const StyledIssue = styled.div`
   ${tw`flex items-center`}
 `;
+
+export const StyledBetween = styled.div`
+  ${tw`flex justify-between items-center`}
+`;
+export const StyledEnd = styled.div`
+  ${tw`flex justify-end items-center`}
+`;
+export const StyledCenter = styled.div`
+  ${tw`flex justify-center items-center`}
+`;

@@ -10,7 +10,6 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 import { ImBin } from 'react-icons/im';
-import { HiPencil } from 'react-icons/hi';
 
 import {
   FaAngleDoubleUp,
@@ -130,7 +129,10 @@ const index = ({
         width={width}
         height={height}
         issueType={issueType}
-        onClick={() => clickHandler(issueData)}
+        onClick={() => {
+          clickHandler(issueData);
+          editEnableHandler(issueTemplateId);
+        }}
       >
         <StyledIssueTop issueType={issueType}>
           <Text isFill={false} message={iType} color={'white'}></Text>
@@ -147,11 +149,6 @@ const index = ({
                 issueData.epicLink = '';
                 issueData.storyPoints = 0;
                 deleteHandler(issueTemplateId);
-              }}
-            />
-            <HiPencil
-              onClick={() => {
-                editEnableHandler(issueTemplateId);
               }}
             />
           </StyledIssueTopRight>

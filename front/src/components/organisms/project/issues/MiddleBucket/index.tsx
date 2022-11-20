@@ -1,18 +1,27 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import Modal from 'react-modal';
-import { MiddleBucket, StyledBucketHeader, StyledBucketBody, StyledIssue } from './style';
+// import Modal from 'react-modal';
+import {
+  MiddleBucket,
+  StyledBucketHeader,
+  StyledBucketBody,
+  StyledIssue,
+  StyledBetween,
+  StyledCenter,
+  StyledEnd,
+} from './style';
 import IssueBar from 'components/molecules/IssueBar';
 import InputBox from 'components/molecules/InputBox';
 import Circle from 'components/atoms/Circle';
 import Sheet from 'components/atoms/Sheet';
 import Button from 'components/atoms/Button';
+import Text from 'components/atoms/Text';
 import issueAxios from 'api/rest/issue';
 import { ImBin } from 'react-icons/im';
 import { RiSave3Fill } from 'react-icons/ri';
-import { HiPlus } from 'react-icons/hi';
+import { HiPlus, HiPencil } from 'react-icons/hi';
 import { theme } from 'styles/theme';
-import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
+import { Select, FormControl, InputLabel, MenuItem, Modal, Box, Typography } from '@mui/material';
 import { useGetUserInfoHandler } from 'hooks/user';
 import { BsCardChecklist } from 'react-icons/bs';
 const index = (props: any) => {
@@ -157,6 +166,8 @@ const index = (props: any) => {
   };
   const closeModalHandler = () => {
     setModalOpen(false);
+    setAddButtonOpen(false);
+    setEditButtonOpen(false);
   };
   const inputBoxRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -239,7 +250,97 @@ const index = (props: any) => {
           >
             <HiPlus size={'1.2rem'} />
           </Button>
-          <Modal isOpen={modalOpen}>
+          <Modal
+            open={modalOpen}
+            onClose={closeModalHandler}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box
+              sx={{
+                position: 'absolute' as const,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 480,
+                bgcolor: 'background.paper',
+                p: 4,
+                outline: 'none',
+              }}
+            >
+              {' '}
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                <StyledBetween>
+                  {addButtonOpen && (
+                    <Text
+                      isFill={false}
+                      message={'Add MiddleBucket'}
+                      fontSize={'1.5rem'}
+                      fontWeight={'bold'}
+                    />
+                  )}
+                  {editButtonOpen && (
+                    <Text
+                      isFill={false}
+                      message={'Edit MiddleBucket'}
+                      fontSize={'1.5rem'}
+                      fontWeight={'bold'}
+                    />
+                  )}
+                  <Button
+                    width={'30px'}
+                    height={'30px'}
+                    borderColor={theme.issue.bug}
+                    clickHandler={closeModalHandler}
+                    isHover
+                  >
+                    X
+                  </Button>
+                </StyledBetween>
+              </Typography>
+              <Typography id="modal-modal-inputbox" variant="h6" component="h2">
+                <InputBox
+                  ref={inputBoxRef}
+                  labelName={'Bucket Name'}
+                  isRow={false}
+                  containerPadding={'0 0 16px'}
+                  inputPlaceHolder={'이름을 입력하세요'}
+                />
+              </Typography>
+              {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
+              <StyledCenter>
+                {addButtonOpen && (
+                  <Button
+                    borderColor={theme.issue.story}
+                    clickHandler={() => {
+                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      closeModalHandler();
+                    }}
+                    isHover
+                  >
+                    Add Bucket
+                  </Button>
+                )}
+                {editButtonOpen && (
+                  <Button
+                    borderColor={theme.issue.story}
+                    clickHandler={() => {
+                      setNewMiddleBucketName(inputBoxRef.current ? inputBoxRef.current.value : '');
+                      closeModalHandler();
+                    }}
+                    isHover
+                  >
+                    Edit Bucket
+                  </Button>
+                )}
+                {/* <Button borderColor={theme.issue.bug} clickHandler={closeModalHandler} isHover>
+                  Close
+                </Button> */}
+              </StyledCenter>
+              {/* </Typography> */}
+            </Box>
+          </Modal>
+          {/* <Modal isOpen={modalOpen}>
             <Button borderColor={theme.issue.bug} clickHandler={closeModalHandler} isHover>
               Close
             </Button>
@@ -273,7 +374,7 @@ const index = (props: any) => {
                 Edit Bucket
               </Button>
             )}
-          </Modal>
+          </Modal> */}
           <Button
             borderColor={theme.issue.story}
             width={'40px'}
@@ -285,7 +386,7 @@ const index = (props: any) => {
             }}
             isHover
           >
-            <RiSave3Fill size={'1.2rem'} />
+            <HiPencil size={'1.2rem'} />
           </Button>
           <Button
             borderColor={theme.issue.bug}
