@@ -8,7 +8,13 @@ import {
 
 import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
-
+import {
+  FaAngleDoubleUp,
+  FaAngleUp,
+  FaMinus,
+  FaAngleDown,
+  FaAngleDoubleDown,
+} from 'react-icons/fa';
 interface propsType extends styledType {
   issueId?: number;
   summary?: string;
@@ -18,6 +24,7 @@ interface propsType extends styledType {
   epicLink?: string;
   sprint?: number;
   storyPoints?: number;
+  userImage?: string;
 }
 
 /**
@@ -61,6 +68,7 @@ const index = ({
   epicLink,
   sprint,
   storyPoints,
+  userImage,
 }: propsType) => {
   const issueSummary = summary ? summary : '';
   const issueEpicLink = epicLink ? epicLink : '';
@@ -73,8 +81,14 @@ const index = ({
           <Text isFill={false} message={issueSummary}></Text>
           <StyledIssueBarElement>
             <Text width={24} isFill={issueEpicLink !== ''} message={issueEpicLink}></Text>
-            <Circle height={'24px'}>{assignee}</Circle>
-            <Circle height={'24px'}>{priority}</Circle>
+            <Circle height={'24px'} isImage={true} url={userImage}></Circle>
+            <Circle height={'24px'}>
+              {priority === 'Highest' && <FaAngleDoubleUp />}
+              {priority === 'High' && <FaAngleUp />}
+              {priority === 'Medium' && <FaMinus />}
+              {priority === 'Low' && <FaAngleDown />}
+              {priority == 'Lowest' && <FaAngleDoubleDown />}
+            </Circle>
             <Text width={24} isFill={true} message={issueStoryPoints + ''}></Text>
           </StyledIssueBarElement>
         </StyledIssueBarContent>

@@ -18,6 +18,7 @@ export interface templateType {
   epicLink: string;
   sprint: number;
   storyPoints: number;
+  userImage: string;
 }
 const index = () => {
   const dummyIssue: issueType = {
@@ -32,6 +33,7 @@ const index = () => {
     epicLink: '',
     sprint: 0,
     storyPoints: 0,
+    userImage: '',
   };
   const [issue, setIssue] = useState<issueType>(dummyIssue);
   const [isInsert, setIsInsert] = useState(false);

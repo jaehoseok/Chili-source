@@ -12,11 +12,13 @@ import Circle from '../../atoms/Circle';
 import { ImBin } from 'react-icons/im';
 import { HiPencil } from 'react-icons/hi';
 
-import { FaAngleDoubleUp } from 'react-icons/fa';
-import { FaAngleUp } from 'react-icons/fa';
-import { FaMinus } from 'react-icons/fa';
-import { FaAngleDown } from 'react-icons/fa';
-import { FaAngleDoubleDown } from 'react-icons/fa';
+import {
+  FaAngleDoubleUp,
+  FaAngleUp,
+  FaMinus,
+  FaAngleDown,
+  FaAngleDoubleDown,
+} from 'react-icons/fa';
 import { ImCross } from 'react-icons/im';
 import { IconType } from 'react-icons';
 

@@ -13,6 +13,7 @@ import { RiSave3Fill } from 'react-icons/ri';
 import { HiPlus } from 'react-icons/hi';
 import { theme } from 'styles/theme';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
+import { useGetUserInfoHandler } from 'hooks/user';
 const index = (props: any) => {
   const [issueId, setIssueId] = useState(0);
   interface sprintType {
@@ -51,8 +52,10 @@ const index = (props: any) => {
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
+    userImage: props.issue.userImage,
   };
-
+  const getUser = useGetUserInfoHandler();
+  const myImg = getUser.data ? getUser.data.image : '';
   const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
 
@@ -81,16 +84,13 @@ const index = (props: any) => {
   }, []);
 
   const [bucketList, setBucketList] = useState<bucketType[]>([]);
-  const showMiddleBucket = () => {
+  const showMiddleBucket = async () => {
     const bList: bucketType[] = [];
-    const getIssueList = async () => {
-      const bucket = issueAxios.getIssueList(bucketId);
-      for (let i = 0; i < (await bucket).issueList.length; i++) {
-        bList.push((await bucket).issueList[i]);
-      }
-      setBucketList(bList);
-    };
-    getIssueList();
+    const bucket = issueAxios.getIssueList(bucketId);
+    for (let i = 0; i < (await bucket).issueList.length; i++) {
+      bList.push((await bucket).issueList[i]);
+    }
+    setBucketList(bList);
   };
   useEffect(() => {
     if (props.isInsert) {
@@ -190,6 +190,7 @@ const index = (props: any) => {
         priority={issue.priority}
         sprint={issue.sprint}
         storyPoints={issue.storyPoints}
+        userImage={myImg}
       />
     </StyledIssue>
   ));
@@ -288,17 +289,6 @@ const index = (props: any) => {
             <ImBin size={'1rem'} />
           </Button>
         </div>
-        {/* <SelectBox
-          labelName={'Sprint'}
-          ref={sprintRef}
-          selectWidth={'160px'}
-          setState={setSprintName}
-        >
-          <Option
-            messages={sprintNameList ? sprintNameList : ['']}
-            selected={props.issue.sprint}
-          ></Option>
-        </SelectBox> */}
         <FormControl style={{ minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
           <Select
@@ -323,9 +313,6 @@ const index = (props: any) => {
           isHover
           margin={'5px'}
           clickHandler={() => {
-            // alert('미들버킷 이슈 지라로 전송');
-            // console.log(props.issue);
-            // console.log(bucketList);
             sendToJiraHandler();
           }}
         >

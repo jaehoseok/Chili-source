@@ -42,7 +42,7 @@ const index = (props: any) => {
     setEpicList(eList);
     setKeyList(kList);
   };
-
+  const myImg = getUser.data ? getUser.data.image : '';
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editNo, setEditNo] = useState(0);
@@ -74,6 +74,7 @@ const index = (props: any) => {
     epicLink: props.issue.epicLink,
     sprint: props.issue.sprint,
     storyPoints: props.issue.storyPoints,
+    userImage: myImg,
   };
 
   const setInfoHandler = (issue: templateType) => {
@@ -106,6 +107,7 @@ const index = (props: any) => {
       priority={issue.priority}
       epicLink={issue.epicLink}
       storyPoints={issue.storyPoints}
+      userImage={myImg}
       clickHandler={setInfoHandler}
       deleteHandler={deleteHandler}
       editEnableHandler={editEnableHandler}
@@ -152,7 +154,7 @@ const index = (props: any) => {
     issue.epicLink = epicLink;
     issue.priority = priority;
     issue.storyPoints = storyPointsRef.current ? Number(storyPointsRef.current.value) : '';
-
+    issue.userImage = myImg;
     summaryRef.current ? (summaryRef.current.value = '') : '';
     descriptionRef.current ? (descriptionRef.current.value = '') : '';
     storyPointsRef.current ? (storyPointsRef.current.value = '0') : '';

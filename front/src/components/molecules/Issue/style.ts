@@ -4,6 +4,7 @@ import { theme } from '../../../styles/theme';
 export interface styledType extends styledIssueType {
   width?: string;
   height?: string;
+  marginBottom?: string;
 }
 
 export interface styledIssueType {
@@ -15,6 +16,7 @@ export const StyledIssue = styled.div<styledType>`
 
   ${({ width }) => `width: ${width}`};
   ${({ height }) => `height: ${height}`};
+  ${({ marginBottom }) => `margin-bottom: ${marginBottom}`}
 `;
 
 export const StyledIssueTop = styled.div<styledIssueType>`
@@ -38,4 +40,5 @@ export const StyledIssueBottomElement = styled.div`
 StyledIssue.defaultProps = {
   width: '400px',
   height: '90px',
+  marginBottom: '10px',
 };
