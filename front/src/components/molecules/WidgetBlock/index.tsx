@@ -51,7 +51,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
   switch (type) {
     case 'CALENDAR':
       label = '캘린더';
-      text = '프로젝트의 일정을 달력으로 표현하여 한 눈에 확인 할 수 있습니다.';
+      text = '프로젝트의 일정을 달력으로 표현하여 한 눈에 확인 할 수 있습니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -66,7 +66,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'FIGMA':
       label = '피그마';
-      text = '몰?루';
+      text = '클라우드 기반, 웹 UI 디자인 툴 피그마 링크를 생성합니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -81,7 +81,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'GANTT':
       label = '간트 차트';
-      text = '프로젝트에 할 일을 간편하게 생성하고 이를 간트 차트화 하여 보여줍니다.';
+      text = '프로젝트에 할 일을 간편하게 생성하고 이를 간트 차트화 하여 보여줍니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -96,7 +96,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'GATHER':
       label = '게더';
-      text = '몰?루';
+      text = '메타버스 기반의 화상회의 웹 플랫폼 게더타운의 링크를 대쉬보드에 생성합니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -112,7 +112,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
     case 'JIRA':
       label = '지라 버킷';
       text =
-        'Jira 에 이슈들의 규격을 저장하거나, 규격에 맞게 다 수의 이슈를 스프린트에 자동 생성해줍니다.';
+        'Jira 에 이슈들의 규격을 저장하거나, 규격에 맞게 다 수의 이슈를 스프린트에 자동 생성해줍니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -127,7 +127,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'SSAFYGITLAB':
       label = '깃 로그';
-      text = '깃의 커밋과 지라 이슈 내역을 연결하여 그래프로 정리하여 보여줍니다.';
+      text = '깃의 커밋과 지라 이슈 내역을 연결하여 그래프로 정리하여 보여줍니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -142,7 +142,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'WEBEX':
       label = '웹엑스';
-      text = '몰?루';
+      text = '화상 미팅 프로그램 웹엑스의 링크를 생성합니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
@@ -157,7 +157,7 @@ export const WidgetBlock = ({ height, width, type }: propsType) => {
 
     case 'ZOOM':
       label = '줌';
-      text = '몰?루dddddddddddddddddddddddddddddddddddddddddddddd';
+      text = '채팅, 그룹회의를 돕는 줌(zoom)의 링크를 생성합니다';
       clickHandler = async () => {
         addLayout({
           projectId: Number(projectId),
