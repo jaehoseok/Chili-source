@@ -8,6 +8,13 @@ import {
   StyledIssueInfo,
   StyledIssueInfoHeader,
   StyledIssueInfoBody,
+  StyledFlexCenter,
+  StyledH2,
+  StyledHeight,
+  StyledLinkageToken,
+  StyledDescription,
+  StyledBar,
+  StyledText,
 } from './style';
 import { templateType } from 'components/pages/IssuesPage';
 import Issue from 'components/molecules/Issue';
@@ -33,7 +40,7 @@ const index = (props: any) => {
   }
   const { projectId } = useParams();
   const pjtId = Number(projectId);
-  const getProject = useGetProject(pjtId);
+  const getProject = useGetProject(pjtId).data;
   const getUser = useGetUserInfoHandler();
   const getEpicList = issueAxios.getEpicList();
   const [epicList, setEpicList] = useState<string[]>();
@@ -241,17 +248,53 @@ const index = (props: any) => {
     <StyledIssueBundle>
       <StyledIssueTemplate>
         <StyledIssueTemplateHeader>
-          <Circle height={'5rem'} margin={'1rem'}>
-            로고
-          </Circle>
+          {/* <Circle
+            height={'5rem'}
+            margin={'1rem'}
+            isImage={true}
+            url={getProject.data ? getProject.data.image : ''}
+          ></Circle>
           <Text
             isFill={false}
             message={getProject.data ? getProject.data.name : ''}
             fontSize={'2.5rem'}
-          />
+          /> */}
+          <StyledFlexCenter>
+            <Circle height="80px" backgroundColor={theme.color.primary} isInnerShadow={true}>
+              <Circle height={'70px'} isImage={true} url={getProject ? getProject.image : ''} />
+            </Circle>
+            <StyledBar className="hover-bg"></StyledBar>
+            <StyledHeight>
+              <StyledH2 className="hover-text">
+                {getProject && getProject.name ? getProject.name : '[빈 프로젝트 명]'}
+              </StyledH2>
+              <StyledDescription className="hover-text">
+                {getProject && getProject.description
+                  ? getProject.description
+                  : '[빈 프로젝트 설명]'}
+              </StyledDescription>
+              <StyledLinkageToken>
+                <p className="hover-text">
+                  {getProject && getProject.gitRepo && `gitRepository : ${getProject.gitRepo}`}
+                </p>
+                <p className="hover-text">
+                  {getProject &&
+                    getProject.jiraProject &&
+                    `jiraProject : ${getProject.jiraProject}`}
+                </p>
+              </StyledLinkageToken>
+            </StyledHeight>
+          </StyledFlexCenter>
         </StyledIssueTemplateHeader>
-        <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} />
-        <Text isFill={false} message={'이슈 템플릿'} fontSize={'1.5rem'} fontWeight={'bold'} />
+        {/* <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} /> */}
+        <StyledText>
+          <Text
+            isFill={false}
+            message={'Issue Templates'}
+            fontSize={'1.5rem'}
+            fontWeight={'bold'}
+          />
+        </StyledText>
         <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
           <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
         </Sheet>
@@ -292,7 +335,7 @@ const index = (props: any) => {
             <InputBox
               isRow={false}
               labelName={'프로젝트'}
-              inputValue={getProject.data ? getProject.data.name : ''}
+              inputValue={getProject ? getProject.name : ''}
               ref={projectRef}
               disabled
             />
