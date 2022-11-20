@@ -1,8 +1,9 @@
 import { ChangeEvent } from 'react';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { project } from 'api/rest';
+import { useParams } from 'react-router-dom';
 
 /**
  * @description
@@ -148,8 +149,18 @@ export const useUpdateTeamColor = () => {
     userId: number;
   }
 
-  return useMutation(({ projectId, userColor, userId }: requestType) =>
-    project.updateTeamColor(projectId, userColor, userId),
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    ({ projectId, userColor, userId }: requestType) =>
+      project.updateTeamColor(projectId, userColor, userId),
+    {
+      onSuccess: () => {
+        // 요청이 성공한 경우, 캘린더와 간트 데이터의 유효성을 제거한다.
+        queryClient.invalidateQueries(['gantt-tasks']);
+        queryClient.invalidateQueries(['get-gantt-chart']);
+      },
+    },
   );
 };
 
@@ -207,15 +218,10 @@ export const useGetGanttChart = (
  * @description
  * 이미 db에 있는 간트 데이터를 API에 적합하게 변형하는 커스텀 훅
  *
- * @author bell
+ * @author inte
  */
-export const useGetGanttTasks = (
-  op: number,
-  projectId: number,
-  userId?: number,
-  start?: string,
-  end?: string,
-) => {
+export const useGetGanttTasks = (op: number, userId?: number, start?: string, end?: string) => {
+  // Init
   interface task {
     id: string;
     type: 'task' | 'milestone' | 'project';
@@ -235,24 +241,39 @@ export const useGetGanttTasks = (
     hideChildren?: boolean;
     displayOrder?: number;
   }
+  const { projectId } = useParams();
 
   return useQuery(['gantt-tasks', projectId], async () => {
-    const resp = await project.getGanttChart(op, projectId, userId, start, end);
+    // 컬러 팔레트
+    const teamData = await project.getTeamForProject(Number(projectId));
+    const colorPalette = new Map<number, string>();
+    teamData.map(({ userId, userColor }) => {
+      colorPalette.set(userId, userColor);
+    });
+
+    const resp = await project.getGanttChart(op, Number(projectId), userId, start, end);
+
     const tasks: task[] = [];
     resp.map(item => {
       const tempTask: task = {
+        displayOrder: Number(item.userId),
         start: new Date(item.startTime),
         end: new Date(item.endTime),
         name: item.issueSummary,
         id: String(item.id),
-        progress: 25,
+        progress: item.progress,
         type: 'task',
+        styles: {
+          backgroundColor: colorPalette.get(Number(item.userId)),
+          backgroundSelectedColor: colorPalette.get(Number(item.userId)),
+          progressColor: '#aeb8c2',
+          progressSelectedColor: '#aeb8c2',
+        },
       };
 
       tasks.push(tempTask);
     });
 
-    console.log('[tasks]: v', tasks);
     return tasks;
   });
 };
@@ -306,6 +327,7 @@ export const usePostCreateGantt = () => {
  * @author bell
  */
 export const useUpdateGantt = () => {
+  // Init
   interface requestBodyType {
     id: number;
     issueCode?: string;
@@ -316,9 +338,19 @@ export const useUpdateGantt = () => {
     progress?: number;
   }
 
+  const queryClient = useQueryClient();
+
+  // Return
   return useMutation(
     ({ id, issueCode, issueSummary, userId, startTime, endTime, progress }: requestBodyType) =>
       project.updateGantt(id, issueCode, issueSummary, userId, startTime, endTime, progress),
+    {
+      onSuccess: () => {
+        // 요청이 성공한 경우, 캘린더와 간트 데이터의 유효성을 제거한다.
+        queryClient.invalidateQueries(['gantt-tasks']);
+        queryClient.invalidateQueries(['get-gantt-chart']);
+      },
+    },
   );
 };
 
@@ -329,5 +361,15 @@ export const useUpdateGantt = () => {
  * @author bell
  */
 export const useDeleteGantt = () => {
-  return useMutation((ganttChartId: number) => project.deleteGantt(ganttChartId));
+  // Init
+  const queryClient = useQueryClient();
+
+  // Return
+  return useMutation((ganttChartId: number) => project.deleteGantt(ganttChartId), {
+    onSuccess: () => {
+      // 요청이 성공한 경우, 캘린더와 간트 데이터의 유효성을 제거한다.
+      queryClient.invalidateQueries(['gantt-tasks']);
+      queryClient.invalidateQueries(['get-gantt-chart']);
+    },
+  });
 };

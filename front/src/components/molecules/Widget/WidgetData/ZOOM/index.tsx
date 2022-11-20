@@ -9,7 +9,7 @@ export const ZOOM = ({ url, id }: propsType) => {
   const clickHandler = () => {
     console.log('[ID]: ', id);
     console.log('[URL]: ', url);
-    window.open('https://www.naver.com', 'PopupNew', 'width=500,height=500');
+    window.open('https://zoom.us/', 'PopupNew', 'width=500,height=500');
   };
 
   // Return

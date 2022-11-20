@@ -205,3 +205,14 @@ export const useGetGitlabRepositories = (tokenCodeId: string) => {
     enabled: false,
   });
 };
+
+export const useGetGitMRorCommit = (
+  branch: string | null,
+  projectId: number,
+  tokenCodeId: string,
+  widgetType: string,
+) => {
+  return useQuery(['get-git-mr-or-commit', branch ? '1' : '2'], () =>
+    widget.getGitMRorCommit(branch, projectId, tokenCodeId, widgetType),
+  );
+};

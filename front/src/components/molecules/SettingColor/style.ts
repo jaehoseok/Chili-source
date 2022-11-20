@@ -50,7 +50,7 @@ export const StyledFlexRow = styled.div`
 `;
 
 export const StyledFlexRowItemsCenter = styled.div`
-  ${tw`flex justify-center items-center w-full`}
+  ${tw`flex justify-center items-center w-full gap-2`}
 `;
 
 export const StyledFlexAround = styled.div`
