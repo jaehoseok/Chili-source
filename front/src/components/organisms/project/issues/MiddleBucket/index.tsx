@@ -17,13 +17,13 @@ import { useGetUserInfoHandler } from 'hooks/user';
 import { BsCardChecklist } from 'react-icons/bs';
 const index = (props: any) => {
   const [issueId, setIssueId] = useState(0);
-  interface sprintType {
-    goal: string;
-    id: number;
-    name: string;
-    originBoardId: number;
-    state: string;
-  }
+  // interface sprintType {
+  //   goal: string;
+  //   id: number;
+  //   name: string;
+  //   originBoardId: number;
+  //   state: string;
+  // }
   interface middleBucketType {
     middleBucketId: number;
     name: string;
@@ -57,18 +57,18 @@ const index = (props: any) => {
   };
   const getUser = useGetUserInfoHandler();
   const myImg = getUser.data ? getUser.data.image : '';
-  const getSprintList = issueAxios.getSprintList(pjtId);
+  // const getSprintList = issueAxios.getSprintList(pjtId);
   const getMiddleBucketList = issueAxios.getMiddleBucketList(pjtId);
 
-  const [sprintId, setSprintId] = useState<number>(-1);
-  const [sprintList, setSprintList] = useState<sprintType[]>([]);
-  const pushSprintList = async () => {
-    const sList: sprintType[] = [];
-    for (let i = 0; i < (await getSprintList).values.length; i++) {
-      sList.push((await getSprintList).values[i]);
-    }
-    setSprintList(sList);
-  };
+  // const [sprintId, setSprintId] = useState<number>(-1);
+  // const [sprintList, setSprintList] = useState<sprintType[]>([]);
+  // const pushSprintList = async () => {
+  //   const sList: sprintType[] = [];
+  //   for (let i = 0; i < (await getSprintList).values.length; i++) {
+  //     sList.push((await getSprintList).values[i]);
+  //   }
+  //   setSprintList(sList);
+  // };
 
   const [bucketId, setBucketId] = useState<number>(-1);
   const [middleBucketList, setMiddleBucketList] = useState<middleBucketType[]>([]);
@@ -80,7 +80,7 @@ const index = (props: any) => {
     setMiddleBucketList(mList);
   };
   useEffect(() => {
-    pushSprintList();
+    // pushSprintList();
     pushMiddleBucketList();
   }, []);
 
@@ -96,7 +96,7 @@ const index = (props: any) => {
   const [received, setReceived] = useState(props.isInsert);
   useEffect(() => {
     if (props.isInsert) {
-      issue.sprint = sprintId;
+      // issue.sprint = sprintId;
       const request: requestType = {
         assignee: issue.assignee,
         description: issue.description,
@@ -173,7 +173,7 @@ const index = (props: any) => {
   }, [modalOpen]);
   const changeHandler = (e: any, content: string) => {
     const value = e.target.value;
-    content === 'bucket' ? setBucketId(value) : content === 'sprint' ? setSprintId(value) : '';
+    content === 'bucket' ? setBucketId(value) : '';
   };
 
   const BarList = bucketList.map(issue => (
@@ -207,7 +207,7 @@ const index = (props: any) => {
     <MiddleBucket>
       <StyledBucketHeader>
         <div style={{ display: 'flex', alignItems: 'end' }}>
-          <FormControl style={{ minWidth: 120 }}>
+          <FormControl style={{ minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">미들버킷</InputLabel>
             <Select
               labelId="demo-simple-select-label"
@@ -298,7 +298,7 @@ const index = (props: any) => {
             <ImBin size={'1rem'} />
           </Button>
         </div>
-        <FormControl style={{ minWidth: 120 }}>
+        {/* <FormControl style={{ minWidth: 120 }}>
           <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
           <Select
             labelId="demo-simple-select-label"
@@ -316,7 +316,7 @@ const index = (props: any) => {
               );
             })}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <Button
           borderColor={'#1973ee'}
           isHover

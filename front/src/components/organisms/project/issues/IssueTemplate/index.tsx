@@ -24,6 +24,13 @@ import { useGetProject } from 'hooks/project';
 import { useGetUserInfoHandler } from 'hooks/user';
 import { Select, FormControl, InputLabel, MenuItem } from '@mui/material';
 const index = (props: any) => {
+  interface sprintType {
+    goal: string;
+    id: number;
+    name: string;
+    originBoardId: number;
+    state: string;
+  }
   const { projectId } = useParams();
   const pjtId = Number(projectId);
   const getProject = useGetProject(pjtId);
@@ -56,10 +63,20 @@ const index = (props: any) => {
     }
     setIssues(iList);
   };
-
+  const getSprintList = issueAxios.getSprintList(pjtId);
+  const [sprintId, setSprintId] = useState<number>(-1);
+  const [sprintList, setSprintList] = useState<sprintType[]>([]);
+  const pushSprintList = async () => {
+    const sList: sprintType[] = [];
+    for (let i = 0; i < (await getSprintList).values.length; i++) {
+      sList.push((await getSprintList).values[i]);
+    }
+    setSprintList(sList);
+  };
   useEffect(() => {
     pushEpicList();
     pushIssueTemplateList();
+    pushSprintList();
   }, []);
 
   const issue = {
@@ -72,7 +89,7 @@ const index = (props: any) => {
     assignee: getUser.data ? getUser.data.name : '',
     priority: props.issue.priority,
     epicLink: props.issue.epicLink,
-    sprint: props.issue.sprint,
+    sprint: sprintId,
     storyPoints: props.issue.storyPoints,
     userImage: myImg,
   };
@@ -123,6 +140,9 @@ const index = (props: any) => {
   useEffect(() => {
     setEpicLink(issue.epicLink);
   }, [issue.epicLink]);
+  // useEffect(() => {
+  //   setSprintId(issue.sprint);
+  // }, [issue.sprint]);
   // IssueInfo 부분
   const [type, setType] = useState<string>('Story');
   const [priority, setPriority] = useState<string>('Highest');
@@ -136,6 +156,8 @@ const index = (props: any) => {
       ? setPriority(value)
       : content === 'epicLink'
       ? setEpicLink(value)
+      : content === 'sprint'
+      ? setSprintId(value)
       : '';
   };
 
@@ -210,6 +232,7 @@ const index = (props: any) => {
       epicLink: epicLink,
       assignee: issue.assignee,
       priority: priority,
+      sprint: sprintId,
       storyPoints: storyPointsRef.current ? Number(storyPointsRef.current.value) : '',
     });
     props.setIsInsert(true);
@@ -335,7 +358,7 @@ const index = (props: any) => {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={epicLink}
-                label="이슈 유형"
+                label="Epic Link"
                 onChange={e => {
                   changeHandler(e, 'epicLink');
                 }}
@@ -344,6 +367,25 @@ const index = (props: any) => {
                   return (
                     <MenuItem key={idx} value={k}>
                       {epicList ? epicList[idx] : ''}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
+              <InputLabel id="demo-simple-select-label">스프린트</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                label="스프린트"
+                onChange={e => {
+                  changeHandler(e, 'sprint');
+                }}
+              >
+                {sprintList.map((s, idx) => {
+                  return (
+                    <MenuItem key={idx} value={s.id}>
+                      {s.name}
                     </MenuItem>
                   );
                 })}
