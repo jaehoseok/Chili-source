@@ -3,7 +3,12 @@ import { StyledIssuesPage, StyledHeader, StyledBody } from './style';
 import IssueTemplate from 'components/organisms/project/issues/IssueTemplate';
 import MiddleBucket from 'components/organisms/project/issues/MiddleBucket';
 import HeaderNav from 'components/organisms/common/HeaderServiceNav';
-
+interface epicType {
+  fields: {
+    summary: string;
+  };
+  key: string;
+}
 export interface issueType extends templateType {
   issueId: number;
 }

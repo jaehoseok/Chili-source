@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   StyledIssue,
   StyledIssueTop,
@@ -10,7 +11,6 @@ import Text from '../../atoms/Text';
 import Circle from '../../atoms/Circle';
 
 import { ImBin } from 'react-icons/im';
-
 import {
   FaAngleDoubleUp,
   FaAngleUp,
@@ -18,9 +18,7 @@ import {
   FaAngleDown,
   FaAngleDoubleDown,
 } from 'react-icons/fa';
-import { ImCross } from 'react-icons/im';
-import { IconType } from 'react-icons';
-
+import issueAxios from 'api/rest/issue';
 interface propsType extends styledType {
   issueTemplateId: number;
   projectId?: number;

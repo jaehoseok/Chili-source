@@ -121,6 +121,9 @@ const index = (props: any) => {
 
   const IssueList = issues.map((issue: templateType) => (
     <Issue
+      width={'380px'}
+      marginX={'5px'}
+      marginY={`5px`}
       issueTemplateId={issue.issueTemplateId}
       projectId={pjtId}
       issueType={issue.issueType}
@@ -147,10 +150,7 @@ const index = (props: any) => {
   useEffect(() => {
     setEpicLink(issue.epicLink);
   }, [issue.epicLink]);
-  // useEffect(() => {
-  //   setSprintId(issue.sprint);
-  // }, [issue.sprint]);
-  // IssueInfo 부분
+
   const [type, setType] = useState<string>('Story');
   const [priority, setPriority] = useState<string>('Highest');
   const priorityList = ['Highest', 'High', 'Medium', 'Low', 'Lowest'];
@@ -248,17 +248,6 @@ const index = (props: any) => {
     <StyledIssueBundle>
       <StyledIssueTemplate>
         <StyledIssueTemplateHeader>
-          {/* <Circle
-            height={'5rem'}
-            margin={'1rem'}
-            isImage={true}
-            url={getProject.data ? getProject.data.image : ''}
-          ></Circle>
-          <Text
-            isFill={false}
-            message={getProject.data ? getProject.data.name : ''}
-            fontSize={'2.5rem'}
-          /> */}
           <StyledFlexCenter>
             <Circle height="80px" backgroundColor={theme.color.primary} isInnerShadow={true}>
               <Circle height={'70px'} isImage={true} url={getProject ? getProject.image : ''} />
@@ -286,27 +275,31 @@ const index = (props: any) => {
             </StyledHeight>
           </StyledFlexCenter>
         </StyledIssueTemplateHeader>
-        {/* <hr style={{ backgroundColor: 'gray', borderColor: 'lightgray', width: '400px' }} /> */}
-        <StyledText>
-          <Text
-            isFill={false}
-            message={'Issue Templates'}
-            fontSize={'1.5rem'}
-            fontWeight={'bold'}
-          />
-        </StyledText>
-        <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
-          <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
+        <Sheet isShadow={true} width={'400px'}>
+          <StyledIssueTemplateBody>
+            <StyledText>
+              <Text
+                isFill={false}
+                message={'Issue Templates'}
+                fontSize={'1.5rem'}
+                fontWeight={'bold'}
+              />
+              <Button
+                width={'40px'}
+                height={'40px'}
+                margin={'0 0 0 10px'}
+                borderColor={'#d9d9d9'}
+                clickHandler={addEnableHandler}
+                isHover
+              >
+                <HiPlus size={'1.5rem'} />
+              </Button>
+            </StyledText>
+            <Sheet borderColor={'transparent'} flex={'column'} isOverflowYScroll>
+              <StyledIssueTemplateBody>{IssueList}</StyledIssueTemplateBody>
+            </Sheet>
+          </StyledIssueTemplateBody>
         </Sheet>
-        <Button
-          width={'400px'}
-          height={'90px'}
-          borderColor={'#d9d9d9'}
-          clickHandler={addEnableHandler}
-          isHover
-        >
-          <HiPlus size={'1.5rem'} />
-        </Button>
       </StyledIssueTemplate>
       <StyledIssueInfo>
         <StyledIssueInfoHeader>
@@ -314,6 +307,7 @@ const index = (props: any) => {
             borderColor={theme.issue.bug}
             isDisabled={!isAdd}
             isHover
+            margin={'0 0 0 10px'}
             clickHandler={addTemplateHandler}
           >
             Add Template
@@ -322,15 +316,21 @@ const index = (props: any) => {
             borderColor={theme.issue.story}
             isDisabled={!isEdit}
             isHover
+            margin={'0 0 0 10px'}
             clickHandler={editTemplateHandler}
           >
             Edit Template
           </Button>
-          <Button borderColor={theme.issue.task} isHover clickHandler={insertIssueHandler}>
+          <Button
+            borderColor={theme.issue.task}
+            isHover
+            margin={'0 0 0 10px'}
+            clickHandler={insertIssueHandler}
+          >
             Insert to Bucket
           </Button>
         </StyledIssueInfoHeader>
-        <Sheet isShadow={false} flex={'column'} height={'90%'} isOverflowYScroll={true}>
+        <Sheet isShadow={true} flex={'column'} height={'90%'} isOverflowYScroll={true}>
           <StyledIssueInfoBody>
             <InputBox
               isRow={false}
@@ -366,14 +366,8 @@ const index = (props: any) => {
               labelName={'설명'}
               textAreaValue={props.issue.description}
               ref={descriptionRef}
+              nonResize
             />
-            {/* <SelectBox labelName={'담당자'} ref={assigneeRef}>
-              <Option
-                messages={memberList ? memberList : ['']}
-                selected={props.issue.assignee}
-              ></Option>
-            </SelectBox>
-            <span style={{ color: '#4BADE8', cursor: 'pointer' }}>나에게 할당</span> */}
             <FormControl fullWidth style={{ margin: '5px 0 5px 0', padding: '0 5px 0 5px' }}>
               <InputLabel id="demo-simple-select-label">우선순위</InputLabel>
               <Select

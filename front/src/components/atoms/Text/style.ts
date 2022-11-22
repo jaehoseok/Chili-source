@@ -18,7 +18,6 @@ export const StyledText = styled.div<styledType>`
   font-size: ${({ fontSize }) => fontSize};
   font-family: ${({ fontFamily }) => fontFamily};
   display: ${({ display }) => display};
-
   ${({ isHover }) =>
     isHover &&
     css`
@@ -27,7 +26,7 @@ export const StyledText = styled.div<styledType>`
         color: ${({ theme }) => theme.color.primary};
         transition: color 0.2s linear;
       }
-    `}
+    `};
 `;
 
 StyledText.defaultProps = {

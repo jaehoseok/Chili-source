@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   StyledIssueBar,
   StyledIssueBarType,
@@ -15,6 +16,7 @@ import {
   FaAngleDown,
   FaAngleDoubleDown,
 } from 'react-icons/fa';
+import issueAxios from 'api/rest/issue';
 interface propsType extends styledType {
   issueId?: number;
   summary?: string;

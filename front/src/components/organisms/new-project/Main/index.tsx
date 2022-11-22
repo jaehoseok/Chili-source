@@ -13,6 +13,7 @@ import {
   StyledPadding,
   StyledFlexColCenter,
   StyledMarginY,
+  StyledFlex,
 } from './style';
 import { theme } from 'styles/theme';
 
@@ -70,7 +71,7 @@ const index = () => {
           ></GitLabLinkageToken>
           <StyledPadding>
             <Sheet width="100%" height={'50vh'} isShadow={true}>
-              <StyledPadding>
+              <StyledPadding style={{ width: '100%' }}>
                 <StyledFlexColCenter>
                   {isCreated && isLinkedJira && isLinkedGitLab ? (
                     <>
@@ -97,10 +98,12 @@ const index = () => {
                     </>
                   ) : (
                     <>
-                      <h2>
-                        프로젝트 생성 혹은 지라 프로젝트, 깃 리포지토리 연동 도중 문제가
-                        발생하였습니다.
-                      </h2>
+                      <StyledFlex>
+                        <h2>
+                          프로젝트 생성 혹은 지라 프로젝트, 깃 리포지토리 연동 도중 문제가
+                          발생하였습니다.
+                        </h2>
+                      </StyledFlex>
                       <StyledMarginY />
                       <StyledMarginY />
                       <FillButton
