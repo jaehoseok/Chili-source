@@ -6,6 +6,10 @@ export const StyledContainer = styled.div`
   max-width: 1200px;
 `;
 
+export const StyledFlex = styled.div`
+  ${tw`flex justify-center w-full`}
+`;
+
 export const StyledInputBox = styled.div`
   ${tw`w-full flex flex-col justify-center items-center`}
   padding: 0 100px
