@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://k7b2072.p.ssafy.io:3306/token?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: B207
-    password: B207user!
+    url: jdbc:mysql://{주소}:3306/token?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: 
+    password: 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false
@@ -12,23 +12,23 @@ spring:
       format_sql: true
       ddl-auto: none
   redis:
-    host: k7b2072.p.ssafy.io
+    host: 
     port: 6379
 
   OAuth2:
     google:
       url : https://accounts.google.com/o/oauth2/v2/auth
       client-id : 772414000810-4sp08rireoj3p28fvpklud1cf142vcbg.apps.googleusercontent.com
-      client-secret : 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
-      callback-url : https://k7b207.p.ssafy.io/user
+      client-secret : 
+      callback-url : 
       scope: https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile
 
 token:
   access_token:
     # 12시간
-    expiration_time: 43200000
+    expiration_time: 
   refresh_token:
     # 7일
-    expiration_time: 604800000
-  secret: secretKey
-  refresh: refreshKey
+    expiration_time: 
+  secret: 
+  refresh: 
